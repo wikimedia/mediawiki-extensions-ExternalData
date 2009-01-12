@@ -1,0 +1,40 @@
+External Data extension
+
+        Version 0.1
+        Yaron Koren
+
+This is free software licensed under the GNU General Public License. Please
+see http://www.gnu.org/copyleft/gpl.html for further details, including the
+full text and terms of the license.
+
+== Overview ==
+
+External Data is an extension to MediaWiki that allows for creating
+variables from an external XML or CSV file. It defines two parser functions,
+#get_external_data and #external_value:
+
+#get_external_data retrieves the data from a URL that holds XML or CSV,
+and assigns it to variables on the page.
+
+#external_value displays the value of any such variable.
+
+For more information, see the extension homepage at:
+http://www.mediawiki.org/wiki/Extension:External_Data
+
+== Requirements ==
+
+This version of the External Data extension requires MediaWiki 1.8 or higher.
+
+== Installation ==
+
+To install the extension, place the entire 'ExternalData' directory
+within your MediaWiki 'extensions' directory, then add the following
+line to your 'LocalSettings.php' file:
+
+     require_once( "$IP/extensions/ExternalData/ED_Settings.php" );
+
+== Contact ==
+
+Comments, questions, suggestions and bug reports are welcome, and can
+be placed on the Talk page for the extension, or sent to Yaron at
+yaron57@gmail.com.
