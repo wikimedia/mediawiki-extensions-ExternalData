@@ -37,7 +37,7 @@ class EDParserFunctions {
 		xml_set_element_handler( $xml_parser, "EDParserFunctions::startElement", "EDParserFunctions::endElement" );
 		xml_set_character_data_handler( $xml_parser, "EDParserFunctions::getContent" );
 		if (!xml_parse($xml_parser, $xml, true)) {
-			die(sprintf("XML error: %s at line %d",
+			echo(sprintf("XML error: %s at line %d",
 			xml_error_string(xml_get_error_code($xml_parser)),
 			xml_get_current_line_number($xml_parser)));
 		}
@@ -45,14 +45,36 @@ class EDParserFunctions {
 		return $edgXMLValues;
 	}
 
-	static function getCSVData ( $csv ) {
+	static function getCSVData( $csv ) {
 		// regular expression copied from http://us.php.net/fgetcsv
 		$csv_vals = preg_split('/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv); 
 		// start with a null value so that the real values start with
 		// an index of 1 instead of 0
-		$values = array(null);
+		$values = array( null );
 		foreach ( $csv_vals as $csv_val ) {
 			$values[] = trim( $csv_val, '"' );
+		}
+		return $values;
+	}
+
+	/**
+	 * Recursive function for use by getJSONData()
+	 */
+	static function parseTree( $tree, &$retrieved_values ) {
+		foreach ($tree as $key => $val) {
+			if (is_array( $val )) {
+				self::parseTree( $val, &$retrieved_values );
+			} else {
+				$retrieved_values[$key] = $val;
+			}
+		}
+	}
+
+	static function getJSONData( $json ) {
+		$json_tree = json_decode($json, true);
+		$values = array();
+		if ( is_array( $json_tree ) ) {
+			self::parseTree( $json_tree, &$values );
 		}
 		return $values;
 	}
@@ -72,6 +94,8 @@ class EDParserFunctions {
 			$external_values = self::getXMLData( $url_contents );
 		} elseif ($format == 'csv') {
 			$external_values = self::getCSVData( $url_contents );
+		} elseif ($format == 'json') {
+			$external_values = self::getJSONData( $url_contents );
 		}
 		// for each external variable name specified in the function
 		// call, get its value (if one exists), and attach it to the

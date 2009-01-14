@@ -11,10 +11,10 @@ if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['parserhook'][]= array(
 	'name'	=> 'External Data',
-	'version'	=> '0.1',
+	'version'	=> '0.2',
 	'author'	=> 'Yaron Koren',
 	'url'	=> 'http://www.mediawiki.org/wiki/Extension:External_Data',
-	'description'	=>  'Allows creating variables from an external XML or CSV file',
+	'description'	=>  'Allows creating variables from an external XML, CSV or JSON file',
 );
 
 $wgExtensionFunctions[] = 'edgParserFunctions';
