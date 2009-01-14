@@ -34,8 +34,8 @@ class EDParserFunctions {
 		$edgXMLValues = array();
 
 		$xml_parser = xml_parser_create();
-		xml_set_element_handler( $xml_parser, "EDParserFunctions::startElement", "EDParserFunctions::endElement" );
-		xml_set_character_data_handler( $xml_parser, "EDParserFunctions::getContent" );
+		xml_set_element_handler( $xml_parser, array( 'EDParserFunctions', 'startElement' ), array( 'EDParserFunctions', 'endElement' ) );
+		xml_set_character_data_handler( $xml_parser, array( 'EDParserFunctions', 'getContent' ) );
 		if (!xml_parse($xml_parser, $xml, true)) {
 			echo(sprintf("XML error: %s at line %d",
 			xml_error_string(xml_get_error_code($xml_parser)),
@@ -63,7 +63,7 @@ class EDParserFunctions {
 	static function parseTree( $tree, &$retrieved_values ) {
 		foreach ($tree as $key => $val) {
 			if (is_array( $val )) {
-				self::parseTree( $val, &$retrieved_values );
+				self::parseTree( $val, $retrieved_values );
 			} else {
 				$retrieved_values[$key] = $val;
 			}
@@ -71,10 +71,15 @@ class EDParserFunctions {
 	}
 
 	static function getJSONData( $json ) {
+		// escape if json_decode() isn't supported
+		if ( ! function_exists( 'json_decode' ) ) {
+			echo( "Error: json_decode() is not supported in this version of PHP" );
+			return array();
+		}
 		$json_tree = json_decode($json, true);
 		$values = array();
 		if ( is_array( $json_tree ) ) {
-			self::parseTree( $json_tree, &$values );
+			self::parseTree( $json_tree, $values );
 		}
 		return $values;
 	}
