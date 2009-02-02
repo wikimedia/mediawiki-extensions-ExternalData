@@ -10,7 +10,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
  * @author Yaron Koren
  */
 class EDParserFunctions {
-
+	//how many times to try an http request: 
+	private $http_number_of_tries=3;
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
@@ -92,7 +93,9 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
-		$url_contents = file_get_contents( $url );
+		
+		$url_contents = EDParserFunctions::doRequest( $url );
+		
 		$format = array_shift( $params );
 		$external_values = array();
 		if ($format == 'xml') {
@@ -125,5 +128,39 @@ class EDParserFunctions {
 			return $edgValues[$local_var];
 		else
 			return '';
+	}
+	
+	static function doRequest( $url, $post_vars = array(), $get_fresh=false, $try_count=1 ) {
+		$dbr = wfGetDB( DB_SLAVE );		
+		//do any special variable replace (right now just sunlight api key)
+		global $mvSunlightAPIKey;
+		$url = str_replace('$$SLAPIKEY', $mvSunlightAPIKey, $url );
+		
+		// check the cache (only the first 254 chars of the url) 
+		$res = $dbr->select( 'mv_url_cache', '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
+		// @@todo check date
+		if ( $res->numRows() == 0 || $get_fresh) {
+			//echo "do web request: " . $url . "\n";			 
+			$page = @file_get_contents( $url );
+			if ( $page === false ) {
+				//echo( "error getting url retrying (".$try_count." of $this->http_number_of_tries)" );
+				sleep( 1 );
+				if( $try_count >= $this->http_number_of_tries ){
+					echo "could not get url after $this->http_number_of_tries \n\n";
+					return '';
+				}				
+				$try_count++;
+				return $this->doRequest( $url, $post_vars, $get_fresh, $try_count );
+			}
+			if ( $page != '' ) {
+				$dbw = wfGetDB( DB_MASTER );
+				// insert back into the db:
+				$dbw->insert( 'mv_url_cache', array( 'url' => substr($url,0,254), 'result' => $page, 'req_time' => time() ) );
+				return $page;
+			}
+		} else {
+			$row = $dbr->fetchObject( $res );
+			return $row->result;
+		}
 	}
 }
