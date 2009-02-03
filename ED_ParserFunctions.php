@@ -144,7 +144,7 @@ class EDParserFunctions {
 		// @@todo check date
 		if ( $res->numRows() == 0 || $get_fresh) {
 			//echo "do web request: " . $url . "\n";			 
-			$page = @file_get_contents( $url );
+			$page = Http::get( $url );
 			if ( $page === false ) {
 				//echo( "error getting url retrying (".$try_count." of $this->http_number_of_tries)" );
 				sleep( 1 );
