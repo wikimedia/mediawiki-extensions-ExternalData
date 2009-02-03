@@ -1,8 +1,7 @@
 External Data extension
 
-        Version 0.2
-        Yaron Koren
-        Michael Dale (quick add of url cache)
+        Version 0.3
+        Yaron Koren and Michael Dale
 
 This is free software licensed under the GNU General Public License. Please
 see http://www.gnu.org/copyleft/gpl.html for further details, including the
@@ -33,10 +32,17 @@ within your MediaWiki 'extensions' directory, then add the following
 line to your 'LocalSettings.php' file:
 
      require_once( "$IP/extensions/ExternalData/ED_Settings.php" );
-     //some vars: 
-     $edCacheTable = 'ed_url_cache';
-     //if your using the sunlight api: 
-     $edSunlightAPIKey = your sunlight api key
+
+To cache the data from the URLs being accessed, you can call the contents
+of ExternalData.sql in your database, then add the following to
+LocalSettings.php:
+
+     $edgCacheTable = 'ed_url_cache';
+
+Finally, you can also set for string replacements to be done on the URLs you
+call, for instance to hide API keys:
+
+     $edgStringReplacements['MY_API_KEY'] = 'abcd1324';
 
 == Contact ==
 
