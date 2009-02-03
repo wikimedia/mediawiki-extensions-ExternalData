@@ -8,10 +8,12 @@ if ( !defined( 'MEDIAWIKI' ) ) {
  * Class for handling the parser functions for External Data
  *
  * @author Yaron Koren
+ * @author Michael Dale
  */
 class EDParserFunctions {
-	//how many times to try an http request: 
+	// how many times to try an HTTP request
 	private $http_number_of_tries=3;
+
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
@@ -132,24 +134,26 @@ class EDParserFunctions {
 	
 	static function doRequest( $url, $post_vars = array(), $get_fresh=false, $try_count=1 ) {
 		$dbr = wfGetDB( DB_SLAVE );		
-		//do any special variable replace (right now just sunlight api key)
-		global $edSunlightAPIKey, $edCacheTable;
-		$url = str_replace('$$SLAPIKEY', $edSunlightAPIKey, $url );
-		
-		if( !isset($edCacheTable) )
+		global $edgStringReplacements, $edgCacheTable;
+
+		// do any special variable replacements in the URLs, for
+		// secret API keys and the like
+		foreach ( $edgStringReplacements as $key => $value ) {
+			$url = str_replace( $key, $value, $url );
+		}
+
+		if( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) )
 			return @file_get_contents( $url );
-			
+
 		// check the cache (only the first 254 chars of the url) 
-		$res = $dbr->select( $edCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
+		$res = $dbr->select( $edgCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
 		// @@todo check date
 		if ( $res->numRows() == 0 || $get_fresh) {
-			//echo "do web request: " . $url . "\n";			 
 			$page = Http::get( $url );
 			if ( $page === false ) {
-				//echo( "error getting url retrying (".$try_count." of $this->http_number_of_tries)" );
 				sleep( 1 );
 				if( $try_count >= $this->http_number_of_tries ){
-					echo "could not get url after $this->http_number_of_tries \n\n";
+					echo "could not get URL after {$this->http_number_of_tries} tries.\n\n";
 					return '';
 				}				
 				$try_count++;
@@ -157,8 +161,8 @@ class EDParserFunctions {
 			}
 			if ( $page != '' ) {
 				$dbw = wfGetDB( DB_MASTER );
-				// insert back into the db:
-				$dbw->insert( $edCacheTable, array( 'url' => substr($url,0,254), 'result' => $page, 'req_time' => time() ) );
+				// insert contents into the cache table
+				$dbw->insert( $edgCacheTable, array( 'url' => substr($url,0,254), 'result' => $page, 'req_time' => time() ) );
 				return $page;
 			}
 		} else {
