@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `mv_url_cache` (
+CREATE TABLE IF NOT EXISTS `ed_url_cache` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `url` varchar(255) NOT NULL,
   `post_vars` text,

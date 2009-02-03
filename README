@@ -33,6 +33,10 @@ within your MediaWiki 'extensions' directory, then add the following
 line to your 'LocalSettings.php' file:
 
      require_once( "$IP/extensions/ExternalData/ED_Settings.php" );
+     //some vars: 
+     $edCacheTable = 'ed_url_cache';
+     //if your using the sunlight api: 
+     $edSunlightAPIKey = your sunlight api key
 
 == Contact ==
 

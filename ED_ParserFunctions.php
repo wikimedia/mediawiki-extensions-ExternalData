@@ -133,11 +133,14 @@ class EDParserFunctions {
 	static function doRequest( $url, $post_vars = array(), $get_fresh=false, $try_count=1 ) {
 		$dbr = wfGetDB( DB_SLAVE );		
 		//do any special variable replace (right now just sunlight api key)
-		global $mvSunlightAPIKey;
-		$url = str_replace('$$SLAPIKEY', $mvSunlightAPIKey, $url );
+		global $edSunlightAPIKey, $edCacheTable;
+		$url = str_replace('$$SLAPIKEY', $edSunlightAPIKey, $url );
 		
+		if( !isset($edCacheTable) )
+			return @file_get_contents( $url );
+			
 		// check the cache (only the first 254 chars of the url) 
-		$res = $dbr->select( 'mv_url_cache', '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
+		$res = $dbr->select( $edCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
 		// @@todo check date
 		if ( $res->numRows() == 0 || $get_fresh) {
 			//echo "do web request: " . $url . "\n";			 
@@ -155,7 +158,7 @@ class EDParserFunctions {
 			if ( $page != '' ) {
 				$dbw = wfGetDB( DB_MASTER );
 				// insert back into the db:
-				$dbw->insert( 'mv_url_cache', array( 'url' => substr($url,0,254), 'result' => $page, 'req_time' => time() ) );
+				$dbw->insert( $edCacheTable, array( 'url' => substr($url,0,254), 'result' => $page, 'req_time' => time() ) );
 				return $page;
 			}
 		} else {
