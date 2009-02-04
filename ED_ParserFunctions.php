@@ -143,7 +143,7 @@ class EDParserFunctions {
 		}
 
 		if( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) )
-			return @file_get_contents( $url );
+			return Http::get( $url );
 
 		// check the cache (only the first 254 chars of the url) 
 		$res = $dbr->select( $edgCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDParserFunctions::doRequest' );
