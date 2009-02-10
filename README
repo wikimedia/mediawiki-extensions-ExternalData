@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 0.3
+        Version 0.4
         Yaron Koren and Michael Dale
 
 This is free software licensed under the GNU General Public License. Please
@@ -9,14 +9,24 @@ full text and terms of the license.
 
 == Overview ==
 
-External Data is an extension to MediaWiki that allows for creating
-variables from an external XML, CSV or JSON file. It defines two parser
-functions, #get_external_data and #external_value:
+External Data is an extension to MediaWiki that allows for retrieving data
+in CSV, JSON and XML formats from both external URLs and local wiki pages.
+
+The extension defines three parser functions, #get_external_data,
+#external_value and #for_external_table:
 
 #get_external_data retrieves the data from a URL that holds XML, CSV or
-JSON, and assigns it to variables on the page.
+JSON, and assigns it to local variables or arrays.
 
-#external_value displays the value of any such variable.
+#external_value displays the value of any retrieved variable, or the
+first value if it's an array.
+
+#for_external_table applies processing onto multiple rows retrieved by
+#get_external_data.
+
+In addition, the extension defines a new special page, 'GetData', that
+exports selected rows from a wiki page that holds CSV data, in a format that
+is readable by #get_external_data.
 
 For more information, see the extension homepage at:
 http://www.mediawiki.org/wiki/Extension:External_Data
