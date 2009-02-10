@@ -72,7 +72,7 @@ class EDParserFunctions {
 	}
  
 	/**
-	 * Render the #get_external_table parser function
+	 * Render the #for_external_table parser function
 	 */
 	static function doForExternalTable( &$parser, $expression = '' ) {
 		global $edgValues;
