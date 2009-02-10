@@ -10,11 +10,12 @@
 if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['parserhook'][]= array(
-	'name'	=> 'External Data',
-	'version'	=> '0.4',
-	'author'	=> array('Yaron Koren', 'Michael Dale'),
-	'url'	=> 'http://www.mediawiki.org/wiki/Extension:External_Data',
-	'description'	=>  'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
+	'name'           => 'External Data',
+	'version'        => '0.4',
+	'author'         => array( 'Yaron Koren', 'Michael Dale' ),
+	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
+	'description'    => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
+	'descriptionmsg' => 'externaldata-desc',
 );
 $edgIP = $IP . '/extensions/ExternalData';
 
