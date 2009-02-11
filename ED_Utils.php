@@ -14,9 +14,16 @@ class EDUtils {
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
-		global $edgCurrentXMLTag;
+		global $edgCurrentXMLTag, $edgXMLValues;
 		// set to all lowercase to avoid casing issues
-		$edgCurrentXMLTag = strtolower($name);
+		$edgCurrentXMLTag = strtolower( $name );
+		foreach( $attrs as $attr => $value ) {
+			$attr = strtolower( $attr );
+			if ( array_key_exists( $attr, $edgXMLValues ) )
+				$edgXMLValues[$attr][] = $value;
+			else
+				$edgXMLValues[$attr] = array( $value );
+		}
 	}
 
 	static function endElement( $parser, $name ) {
@@ -26,7 +33,10 @@ class EDUtils {
 
 	static function getContent ( $parser, $content ) {
 		global $edgCurrentXMLTag, $edgXMLValues;
-		$edgXMLValues[$edgCurrentXMLTag] = $content;
+		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) )
+			$edgXMLValues[$edgCurrentXMLTag][] = $content;
+		else
+			$edgXMLValues[$edgCurrentXMLTag] = array( $content );
 	}
 
 	static function getXMLData ( $xml ) {
