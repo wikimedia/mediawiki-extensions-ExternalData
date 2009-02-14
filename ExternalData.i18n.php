@@ -32,6 +32,15 @@ $messages['arz'] = array(
 	'externaldata-desc' => 'يسمح باسترجاع البيانات بصيغة CSV، JSON و XML من مسارات خارجية وصفحات الويكى المحلية',
 );
 
+/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
+ * @author EugeneZelenko
+ * @author Jim-by
+ */
+$messages['be-tarask'] = array(
+	'getdata' => 'Атрымаць зьвесткі',
+	'externaldata-desc' => 'Дазваляе атрымліваць зьвесткі ў фарматах CSV, JSON і XML з вонкавых крыніц і лякальных старонак вікі',
+);
+
 /** German (Deutsch)
  * @author Purodha
  * @author Umherirrender
@@ -47,6 +56,13 @@ $messages['de'] = array(
 $messages['dsb'] = array(
 	'getdata' => 'Daty wobstaraś',
 	'externaldata-desc' => 'Zmóžnja wótwołanje datow w formatach CSV, JSON a XML ako z eksternych URL tak teke lokalnych wikijowych bokow',
+);
+
+/** Spanish (Español)
+ * @author Crazymadlover
+ */
+$messages['es'] = array(
+	'getdata' => 'Obtener datos',
 );
 
 /** French (Français)
@@ -134,6 +150,14 @@ $messages['oc'] = array(
  * @author Waldir
  */
 $messages['pt'] = array(
+	'getdata' => 'Obter dados',
+	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
+);
+
+/** Brazilian Portuguese (Português do Brasil)
+ * @author Eduardo.mps
+ */
+$messages['pt-br'] = array(
 	'getdata' => 'Obter dados',
 	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
 );
