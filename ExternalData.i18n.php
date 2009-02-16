@@ -170,6 +170,14 @@ $messages['sk'] = array(
 	'externaldata-desc' => 'Umožňuje získavanie údajov vo formátoch CSV, JSON a XML z externých URL aj z lokálnych wiki stránok',
 );
 
+/** Swedish (Svenska)
+ * @author Najami
+ */
+$messages['sv'] = array(
+	'getdata' => 'Hämta data',
+	'externaldata-desc' => 'Tillåter att hämta data i formaten CSV, JSON och XML från både externa URL:er och lokala wikisidor',
+);
+
 /** Tagalog (Tagalog)
  * @author AnakngAraw
  */
