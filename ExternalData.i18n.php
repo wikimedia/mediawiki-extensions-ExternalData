@@ -16,6 +16,13 @@ $messages['en'] = array(
 	'externaldata-desc' => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
 );
 
+/** Message documentation (Message documentation)
+ * @author Dead3y3
+ */
+$messages['qqq'] = array(
+	'externaldata-desc' => 'Description of Mediawiki extension External Data',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  */
@@ -41,6 +48,14 @@ $messages['be-tarask'] = array(
 	'externaldata-desc' => 'Дазваляе атрымліваць зьвесткі ў фарматах CSV, JSON і XML з вонкавых крыніц і лякальных старонак вікі',
 );
 
+/** Bosnian (Bosanski)
+ * @author CERminator
+ */
+$messages['bs'] = array(
+	'getdata' => 'Uzmi podatke',
+	'externaldata-desc' => 'Omogućuje za preuzimanje podataka u formatima CSV, JSON i XML za vanjske URLove i lokalnu wiki',
+);
+
 /** German (Deutsch)
  * @author Purodha
  * @author Umherirrender
@@ -58,11 +73,21 @@ $messages['dsb'] = array(
 	'externaldata-desc' => 'Zmóžnja wótwołanje datow w formatach CSV, JSON a XML ako z eksternych URL tak teke lokalnych wikijowych bokow',
 );
 
+/** Greek (Ελληνικά)
+ * @author Dead3y3
+ */
+$messages['el'] = array(
+	'getdata' => 'Πάρε δεδομένα',
+	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki',
+);
+
 /** Spanish (Español)
  * @author Crazymadlover
+ * @author Sanbec
  */
 $messages['es'] = array(
 	'getdata' => 'Obtener datos',
+	'externaldata-desc' => 'Permite la recuperación de datos en formatos CSV, JSON y XML a partir de URL externos y de páginas wiki locales',
 );
 
 /** French (Français)
