@@ -123,6 +123,14 @@ $messages['hsb'] = array(
 	'externaldata-desc' => 'Zmóžnja wotwołanje datow we formatach CSV, JSON a XML z eksternych URL kaž tež lokalnych wikijowych stronow',
 );
 
+/** Italian (Italiano)
+ * @author Pietrodn
+ */
+$messages['it'] = array(
+	'getdata' => 'Ottieni dati',
+	'externaldata-desc' => 'Consente di recuperare dati nei formati CSV, XML e JSON sia da URL esterni sia da pagine wiki locali',
+);
+
 /** Japanese (日本語)
  * @author Fryed-peach
  */
