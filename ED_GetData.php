@@ -45,7 +45,8 @@ class EDGetData extends SpecialPage {
 				}
 			}
 		}
-		$text = '';
+		// include header in output
+		$text = $page_lines[0];
 		foreach( $page_lines as $i => $line) {
 			if ($i == 0) continue;
 			$row_values = EDUtils::getValuesFromCSVLine( $line );
