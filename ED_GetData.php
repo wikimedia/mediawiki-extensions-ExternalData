@@ -40,6 +40,7 @@ class EDGetData extends SpecialPage {
 		$queried_headers = array();
 		foreach( $wgRequest->getValues() as $key => $value ) {
 			foreach( $headers as $header_index => $header_value ) {
+				$header_value = str_replace( ' ', '_', $header_value );
 				if( $key == $header_value ) {
 					$queried_headers[$header_index] = $value;
 				}
@@ -51,8 +52,9 @@ class EDGetData extends SpecialPage {
 			if ($i == 0) continue;
 			$row_values = EDUtils::getValuesFromCSVLine( $line );
 			$found_match = true;
-			foreach( $queried_headers as $i => $value ) {
-				if ( $row_values[$i] != $value ) {
+			foreach( $queried_headers as $i => $query_value ) {
+				$single_value = str_replace( ' ', '_', $row_values[$i] );
+				if ( $single_value != $query_value ) {
 					$found_match = false;
 				}
 			}
