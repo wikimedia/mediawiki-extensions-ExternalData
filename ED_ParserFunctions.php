@@ -20,30 +20,78 @@ class EDParserFunctions {
 		
 		$url_contents = EDUtils::fetchURL( $url );
 		
-		$format = array_shift( $params );
+		$format = strtolower( array_shift( $params ) ); // make case-insensitive
 		$external_values = array();
 		if ( $format == 'xml' ) {
 			$external_values = EDUtils::getXMLData( $url_contents );
 		} elseif ( $format == 'csv' ) {
-			$external_values = EDUtils::getCSVData( $url_contents );
+			$external_values = EDUtils::getCSVData( $url_contents, false );
+		} elseif ( $format == 'csv with header' ) {
+			$external_values = EDUtils::getCSVData( $url_contents, true );
 		} elseif ( $format == 'json' ) {
 			$external_values = EDUtils::getJSONData( $url_contents );
 		}
-		// for each external variable name specified in the function
-		// call, get its value (if one exists), and attach it to the
-		// local variable name
+		// get set of filters and set of mappings, determining each
+		// one by whether there's a double or single equals sign,
+		// respectively
+		$filters = array();
+		$mappings = array();
 		foreach ( $params as $param ) {
-			list( $local_var, $external_var ) = explode( '=', $param );
-			// set to all lowercase to avoid casing issues
-			$external_var = strtolower( $external_var );
-			if ( array_key_exists( $external_var, $external_values ) )
+			if ( strpos( $param, '==' ) ) {
+				list( $external_var, $value ) = explode( '==', $param );
+				$filters[$external_var] = $value;
+			} else {
+				list( $local_var, $external_var ) = explode( '=', $param );
+				// set to all lowercase to avoid casing issues
+				$external_var = strtolower( $external_var );
+				$mappings[$local_var] = $external_var;
+			}
+		}
+		foreach ( $filters as $filter_var => $filter_value ) {
+			// find the entry of $external_values that matches
+			// the filter variable; if none exists, just ignore
+			// the filter
+			if ( array_key_exists( $filter_var, $external_values ) ) {
+				if ( is_array( $external_values[$filter_var] ) ) {
+					$column_values = $external_values[$filter_var];
+					foreach ( $column_values as $i => $single_value ) {
+						// if a value doesn't match
+						// the filter value, remove
+						// the value from this row for
+						// all columns
+						if ( $single_value != $filter_value ) {
+							foreach ( $external_values as $external_var => $external_value ) {
+								unset( $external_values[$external_var][$i] );
+							}
+						}
+					}
+				} else {
+					// if we have only one row of values,
+					// and the filter doesn't match, just
+					// keep the results array blank and
+					// return
+					if ( $external_values[$filter_var] != $filter_value ) {
+						return;
+					}
+				}
+			}
+		}
+		// for each external variable name specified in the function
+		// call, get its value or values (if any exist), and attach it
+		// or them to the local variable name
+		foreach ( $mappings as $local_var => $external_var ) {
+			if ( array_key_exists( $external_var, $external_values ) ) {
 				if ( is_array( $external_values[$external_var] ) )
-					$edgValues[$local_var] = $external_values[$external_var];
+					// array_values() restores regular
+					// 1, 2, 3 indexes to array, after unset()
+					// in filtering may have removed some
+					$edgValues[$local_var] = array_values( $external_values[$external_var] );
 				else
 					$edgValues[$local_var][] = $external_values[$external_var];
+			}
 		}
 
-		return '';
+		return;
 	}
 
 	/**
