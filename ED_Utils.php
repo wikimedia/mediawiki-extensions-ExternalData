@@ -64,17 +64,26 @@ class EDUtils {
 		return $vals2;
 	}
 
-	static function getCSVData( $csv ) {
+	static function getCSVData( $csv, $has_header ) {
 		$page_lines = split( "\n", $csv );
+		if ($has_header) {
+			$header = array_shift( $page_lines );
+			$header_vals = self::getValuesFromCSVLine($header);
+		}
 		$values = array();
 		foreach( $page_lines as $line ) {
-			$csv_vals = self::getValuesFromCSVLine($line);
-			foreach( $csv_vals as $i => $csv_val ) {
-				// start with an index of 1 instead of 0
-				if( array_key_exists( $i + 1, $values ) )
-					$values[$i + 1][] = $csv_val;
+			$row_vals = self::getValuesFromCSVLine($line);
+			foreach( $row_vals as $i => $row_val ) {
+				if ($has_header) {
+					$column = strtolower( $header_vals[$i] );
+				} else {
+					// start with an index of 1 instead of 0
+					$column = $i + 1;
+				}
+				if( array_key_exists( $column, $values ) )
+					$values[$column][] = $row_val;
 				else
-					$values[$i + 1] = array( $csv_val );
+					$values[$column] = array( $row_val );
 			}
 		}
 		return $values;
