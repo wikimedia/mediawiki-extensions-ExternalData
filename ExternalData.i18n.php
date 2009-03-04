@@ -123,6 +123,14 @@ $messages['hsb'] = array(
 	'externaldata-desc' => 'Zmóžnja wotwołanje datow we formatach CSV, JSON a XML z eksternych URL kaž tež lokalnych wikijowych stronow',
 );
 
+/** Interlingua (Interlingua)
+ * @author McDutchie
+ */
+$messages['ia'] = array(
+	'getdata' => 'Obtener datos',
+	'externaldata-desc' => 'Permitte recuperar datos in le formatos CSV, JSON e XML, e ab adresses URL externe e ab paginas wiki local',
+);
+
 /** Italian (Italiano)
  * @author Pietrodn
  */
@@ -195,6 +203,13 @@ $messages['pt-br'] = array(
 	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
 );
 
+/** Tarandíne (Tarandíne)
+ * @author Joetaras
+ */
+$messages['roa-tara'] = array(
+	'getdata' => 'Pigghie le date',
+);
+
 /** Slovak (Slovenčina)
  * @author Helix84
  */
@@ -224,5 +239,13 @@ $messages['tl'] = array(
  */
 $messages['tr'] = array(
 	'getdata' => 'Veri al',
+);
+
+/** Vietnamese (Tiếng Việt)
+ * @author Vinhtantran
+ */
+$messages['vi'] = array(
+	'getdata' => 'Lấy dữ liệu',
+	'externaldata-desc' => 'Cho phép truy xuất dữ liệu theo định dạng CSV, JSON và XML từ cả URL bên ngoài lẫn các trang wiki bên trong',
 );
 
