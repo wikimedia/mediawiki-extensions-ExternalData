@@ -115,6 +115,14 @@ $messages['gsw'] = array(
 	'externaldata-desc' => 'Erlaubt Daten abzruefe im CSV, JSON un XML Format vu extärne URL un lokale Wikisyte',
 );
 
+/** Hebrew (עברית)
+ * @author YaronSh
+ */
+$messages['he'] = array(
+	'getdata' => 'אחזור נתונים',
+	'externaldata-desc' => 'מתן האפשרות לאיחזור נתונים בפורמטים: CSV, JSON ו־XML גם מכתובות חיצוניות וגם מדפי ויקי מקומיים',
+);
+
 /** Upper Sorbian (Hornjoserbsce)
  * @author Michawiki
  */
