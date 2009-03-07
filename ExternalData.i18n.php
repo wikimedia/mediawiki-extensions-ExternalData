@@ -116,11 +116,12 @@ $messages['gsw'] = array(
 );
 
 /** Hebrew (עברית)
+ * @author Rotemliss
  * @author YaronSh
  */
 $messages['he'] = array(
-	'getdata' => 'אחזור נתונים',
-	'externaldata-desc' => 'מתן האפשרות לאיחזור נתונים בפורמטים: CSV, JSON ו־XML גם מכתובות חיצוניות וגם מדפי ויקי מקומיים',
+	'getdata' => 'קבלת נתונים',
+	'externaldata-desc' => 'אפשרות לקבלת נתונים בפורמטים: CSV, JSON ו־XML, גם מכתובות חיצוניות וגם מדפי ויקי מקומיים',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
