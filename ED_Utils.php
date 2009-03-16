@@ -65,15 +65,30 @@ class EDUtils {
 	}
 
 	static function getCSVData( $csv, $has_header ) {
-		$page_lines = split( "\n", $csv );
-		if ($has_header) {
-			$header = array_shift( $page_lines );
-			$header_vals = self::getValuesFromCSVLine($header);
+		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
+		// str_getcsv() is a function that was only added in PHP 5.3.0,
+		// so use the much older fgetcsv() if it's not there
+		if (function_exists('str_getcsv')) {
+			$table = str_getcsv( $csv );
+		} else {
+			$fiveMBs = 5 * 1024 * 1024;
+			$fp = fopen("php://temp/maxmemory:$fiveMBs", 'r+');
+			fputs( $fp, $csv );
+			rewind( $fp );
+			$table = array();
+			while ($line = fgetcsv( $fp )) {
+				array_push( $table, $line );
+			}
+			fclose($fp);
+		}
+		// now "flip" the data, turning it into a column-by-column
+		// array, instead of row-by-row
+		if ( $has_header ) {
+			$header_vals = array_shift( $table );
 		}
 		$values = array();
-		foreach( $page_lines as $line ) {
-			$row_vals = self::getValuesFromCSVLine($line);
-			foreach( $row_vals as $i => $row_val ) {
+		foreach( $table as $line ) {
+			foreach( $line as $i => $row_val ) {
 				if ($has_header) {
 					$column = strtolower( $header_vals[$i] );
 				} else {
