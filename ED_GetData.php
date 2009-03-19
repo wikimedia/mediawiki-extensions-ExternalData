@@ -25,6 +25,8 @@ class EDGetData extends SpecialPage {
 		$title = Title::newFromText( $page_name );
 		if( is_null( $title ) )
 			return;
+		if( ! $title->userCanRead() )
+			return;
 		$article = new Article( $title );
 		$page_text = $article->fetchContent();
 		// Remove <noinclude> sections and <includeonly> tags from text
