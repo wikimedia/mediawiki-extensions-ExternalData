@@ -196,6 +196,14 @@ $messages['oc'] = array(
 	'externaldata-desc' => "Permet de recuperar de donadas en CSV, JSON e XML dempuèi d'URL extèrnas e de paginas del wiki",
 );
 
+/** Polish (Polski)
+ * @author Leinad
+ */
+$messages['pl'] = array(
+	'getdata' => 'Pobierz dane',
+	'externaldata-desc' => 'Umożliwia pobieranie danych w formatach CSV, JSON lub XML zarówno z zewnętrznych adresów URL jak i lokalnych stron wiki',
+);
+
 /** Portuguese (Português)
  * @author Waldir
  */
