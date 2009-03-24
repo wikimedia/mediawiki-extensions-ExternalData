@@ -14,6 +14,9 @@ class EDParserFunctions {
 	 */
 	static function doGetExternalData( &$parser ) {
 		global $edgValues;
+		
+		$edgValues=array();
+		
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
@@ -90,7 +93,6 @@ class EDParserFunctions {
 					$edgValues[$local_var][] = $external_values[$external_var];
 			}
 		}
-
 		return;
 	}
 
