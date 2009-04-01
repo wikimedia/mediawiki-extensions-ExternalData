@@ -258,6 +258,13 @@ $messages['tr'] = array(
 	'getdata' => 'Veri al',
 );
 
+/** Veps (Vepsan kel')
+ * @author Игорь Бродский
+ */
+$messages['vep'] = array(
+	'getdata' => 'Sada andmused',
+);
+
 /** Vietnamese (Tiếng Việt)
  * @author Vinhtantran
  */
