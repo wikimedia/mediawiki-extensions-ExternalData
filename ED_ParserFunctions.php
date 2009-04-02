@@ -13,10 +13,16 @@ class EDParserFunctions {
 	 * Render the #get_external_data parser function
 	 */
 	static function doGetExternalData( &$parser ) {
-		global $edgValues;
-		
-		$edgValues=array();
-		
+		global $wgTitle, $edgCurPageName, $edgValues;
+
+		// if we're handling multiple pages, reset $edgValues
+		// when we move from one page to another
+		$cur_page_name = $wgTitle->getText();
+		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
