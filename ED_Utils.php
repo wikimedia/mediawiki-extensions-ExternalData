@@ -112,7 +112,10 @@ class EDUtils {
 			if (is_array( $val )) {
 				self::parseTree( $val, $retrieved_values );
 			} else {
-				$retrieved_values[$key] = $val;
+				if( array_key_exists( $key, $retrieved_values ) )
+					$retrieved_values[$key][] = $val;
+				else
+					$retrieved_values[$key] = array( $val );
 			}
 		}
 	}
@@ -151,8 +154,8 @@ class EDUtils {
 			$page = Http::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
-				if( $try_count >= self::$http_number_of_tries){
-					echo "could not get URL after {self::$http_number_of_tries} tries.\n\n";
+				if( $try_count >= $this->http_number_of_tries ){
+					echo "could not get URL after {$this->http_number_of_tries} tries.\n\n";
 					return '';
 				}				
 				$try_count++;
