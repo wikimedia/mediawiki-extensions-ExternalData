@@ -225,6 +225,7 @@ $messages['pt-br'] = array(
  */
 $messages['roa-tara'] = array(
 	'getdata' => 'Pigghie le date',
+	'externaldata-desc' => "Permette de repigghià le data jndr'à le formate CSV, JSON e XML da URL fore a Uicchipèdie e da pàggene locale de Uicchipèdie",
 );
 
 /** Slovak (Slovenčina)
