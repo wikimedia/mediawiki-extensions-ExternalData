@@ -236,6 +236,14 @@ $messages['sk'] = array(
 	'externaldata-desc' => 'Umožňuje získavanie údajov vo formátoch CSV, JSON a XML z externých URL aj z lokálnych wiki stránok',
 );
 
+/** Serbian Cyrillic ekavian (ћирилица)
+ * @author Михајло Анђелковић
+ */
+$messages['sr-ec'] = array(
+	'getdata' => 'Преузми податке',
+	'externaldata-desc' => 'Омогућава преузимање података у CSV, JSON и XML форматима, како преко спољашњих веза, тако и са локалних вики-страна',
+);
+
 /** Swedish (Svenska)
  * @author Najami
  */
