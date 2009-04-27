@@ -10,6 +10,7 @@
 if (!defined('MEDIAWIKI')) die();
 
 $wgExtensionCredits['parserhook'][]= array(
+	'path'           => __FILE__,
 	'name'           => 'External Data',
 	'version'        => '0.6',
 	'author'         => array( 'Yaron Koren', 'Michael Dale' ),
