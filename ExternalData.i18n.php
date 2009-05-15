@@ -56,6 +56,13 @@ $messages['bs'] = array(
 	'externaldata-desc' => 'Omogućuje za preuzimanje podataka u formatima CSV, JSON i XML za vanjske URLove i lokalnu wiki',
 );
 
+/** Catalan (Català)
+ * @author Solde
+ */
+$messages['ca'] = array(
+	'getdata' => 'Obtenir dades',
+);
+
 /** German (Deutsch)
  * @author Purodha
  * @author Umherirrender
