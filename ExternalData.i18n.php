@@ -195,6 +195,14 @@ $messages['nn'] = array(
 	'externaldata-desc' => 'Gjev høve til å lasta inn data i formata CSV, JSON og XML frå både eksterne nettadresser og lokale wikisider',
 );
 
+/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+ * @author Nghtwlkr
+ */
+$messages['no'] = array(
+	'getdata' => 'Hent data',
+	'externaldata-desc' => 'Gir mulighet til å hente data i formatene CSV, JSON og XML fra både eksterne nettadresser og lokale wikisider',
+);
+
 /** Occitan (Occitan)
  * @author Cedric31
  */
