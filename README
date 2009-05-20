@@ -41,7 +41,7 @@ To install the extension, place the entire 'ExternalData' directory
 within your MediaWiki 'extensions' directory, then add the following
 line to your 'LocalSettings.php' file:
 
-     require_once( "$IP/extensions/ExternalData/ED_Settings.php" );
+     require_once( "$IP/extensions/ExternalData/ExternalData.php" );
 
 To cache the data from the URLs being accessed, you can call the contents
 of ExternalData.sql in your database, then add the following to
