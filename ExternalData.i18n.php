@@ -122,6 +122,14 @@ $messages['gsw'] = array(
 	'externaldata-desc' => 'Erlaubt Daten abzruefe im CSV, JSON un XML Format vu extärne URL un lokale Wikisyte',
 );
 
+/** Gujarati (ગુજરાતી)
+ * @author Ashok modhvadia
+ */
+$messages['gu'] = array(
+	'getdata' => 'માહિતી પ્રાપ્ત કરો',
+	'externaldata-desc' => 'બાહ્ય કડીઓ અને સ્થાનિક વિકિ પાનાઓ પરથી CSV, JSON અને XML શૈલીમાં માહિતીની પુન:પ્રાપ્તિની છુટ',
+);
+
 /** Hebrew (עברית)
  * @author Rotemliss
  * @author YaronSh
