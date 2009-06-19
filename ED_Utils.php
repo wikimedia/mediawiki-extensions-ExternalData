@@ -9,7 +9,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 class EDUtils {
 	// how many times to try an HTTP request
-	private $http_number_of_tries=3;
+	private static $http_number_of_tries=3;
 
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
@@ -37,6 +37,146 @@ class EDUtils {
 			$edgXMLValues[$edgCurrentXMLTag][] = $content;
 		else
 			$edgXMLValues[$edgCurrentXMLTag] = array( $content );
+	}
+
+	static function parseParams( $params ) {
+		$args = Array();
+		foreach ($params as $param) {
+			$param = preg_replace ( "/\s\s+/" , " " , $param ); //whitespace
+			list($name, $value) = split("=", $param, 2);
+			$args[$name] = $value;
+		}
+		return $args;
+	}
+
+	// This function parses the data argument
+	static function parseMappings( $dataArg ) {
+		$dataArg = preg_replace ( "/\s\s+/" , " " , $dataArg ); //whitespace
+		$rawMappings = split(",", $dataArg);
+		$mappings = Array();
+		foreach ($rawMappings as $rawMapping) {
+			$vals = split("=", $rawMapping, 2);
+			if (count($vals) == 2) {
+				$intValue = trim($vals[0]);
+				$extValue = trim($vals[1]);
+				$mappings[$intValue] = $extValue;
+			}
+		}
+		return $mappings;
+	}
+
+	static function getLDAPData ($filter, $domain, $params) {
+		global $edgLDAPServer;
+		global $edgLDAPUser;
+		global $edgLDAPPass;
+
+		$ds = EDUtils::connectLDAP($edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain]);
+		$results = EDUtils::searchLDAP($ds, $domain, $filter, $params);
+
+		return $results;
+	}
+
+	static function connectLDAP($server, $username, $password) {
+		$ds = ldap_connect($server);
+		if ($ds) {
+			// these options for Active Directory only?
+			ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION,3);
+			ldap_set_option($ds, LDAP_OPT_REFERRALS, 0);
+
+			if ($username) {
+				$r = ldap_bind($ds, $username, $password);
+			} else {
+				# no username, so do anonymous bind
+				$r = ldap_bind($ds);
+			}
+
+			# should check the result of the bind here
+			return $ds;
+		} else {
+			echo "Unable to connect to $server\n";
+		}
+	}
+
+	static function searchLDAP($ds, $domain, $filter, $attributes) {
+		global $edgLDAPBaseDN;
+
+		$sr = ldap_search($ds, $edgLDAPBaseDN[$domain], $filter, $attributes);
+		$results = ldap_get_entries($ds, $sr);
+		return $results;
+	}
+
+	static function getDBData ($server_id, $from, $where, $columns) {
+		global $edgDBServerType;
+		global $edgDBServer;
+		global $edgDBName;
+		global $edgDBUser;
+		global $edgDBPass;
+
+		if ((! array_key_exists($server_id, $edgDBServerType)) ||
+		    (! array_key_exists($server_id, $edgDBServer)) ||
+		    (! array_key_exists($server_id, $edgDBName)) ||
+		    (! array_key_exists($server_id, $edgDBUser)) ||
+		    (! array_key_exists($server_id, $edgDBPass))) {
+			echo "<p>ERROR: Incomplete information for this server ID.</p>\n";
+			return;
+		}
+			
+
+		$db_type = $edgDBServerType[$server_id];
+		$db_server = $edgDBServer[$server_id];
+		$db_name = $edgDBName[$server_id];
+		$db_username = $edgDBUser[$server_id];
+		$db_password = $edgDBPass[$server_id];
+
+		if ($db_type == "mysql") {
+			$db = new Database($db_server, $db_username, $db_password, $db_name);
+		} elseif ($db_type == "postgres") {
+			$db = new DatabasePostgres($db_server, $db_username, $db_password, $db_name);
+		} elseif ($db_type == "mssql") {
+			$db = new DatabaseMssql($db_server, $db_username, $db_password, $db_name);
+		} else {
+			echo "<p>ERROR: Unknown database type.</p>\n";
+			return;
+		}
+		if (! $db->isOpen()) {
+			echo "<p>ERROR: Could not connect to database.</p>\n";
+			return;
+		}
+
+		if (count($columns) == 0) {
+			echo "<p>ERROR: No return values specified.</p>\n";
+			return;
+		}
+
+		$rows = EDUtils::searchDB($db, $from, $where, $columns);
+		$db->close();
+		
+		$values = Array();
+		foreach ($rows as $row) {
+			foreach ($columns as $column) {
+				$values[$column][] = $row[$column];
+			}
+		}
+
+		return $values;
+	}
+
+	static function searchDB ($db, $from, $where, $columns) {
+		$sql = "SELECT " . implode(",", $columns) . " ";
+		$sql .= "FROM " . $from . " ";
+		$sql .= "WHERE " . $where;
+
+		$result = $db->query($sql);
+		if (!$result) {
+			echo "Invalid query.";
+			return false;
+		} else {
+			$rows = Array();
+			while ($row = $db->fetchRow($result)) {
+				$rows[] = $row;
+			}
+			return $rows;
+		}
 	}
 
 	static function getXMLData ( $xml ) {
@@ -154,8 +294,8 @@ class EDUtils {
 			$page = Http::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
-				if( $try_count >= $this->http_number_of_tries ){
-					echo "could not get URL after {$this->http_number_of_tries} tries.\n\n";
+				if( $try_count >= self::$http_number_of_tries ){
+					echo "could not get URL after " . self::$http_number_of_tries . " tries.\n\n";
 					return '';
 				}				
 				$try_count++;
