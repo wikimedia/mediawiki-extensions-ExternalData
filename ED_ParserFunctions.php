@@ -102,6 +102,69 @@ class EDParserFunctions {
 		return;
 	}
 
+ 	/**
+	 * Render the #get_ldap_data parser function
+	 */
+	static function doGetLDAPData( &$parser ) {
+	       global $wgTitle, $edgCurPageName, $edgValues;
+
+		// if we're handling multiple pages, reset $edgValues
+		// when we move from one page to another
+		$cur_page_name = $wgTitle->getText();
+		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams($params); // parse params into name-value pairs
+		$mappings = EDUtils::parseMappings($args['data']); // parse the data arg into mappings
+
+		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values($mappings) );
+
+		// Build $edgValues
+		foreach ( $mappings as $local_var => $external_var ) {
+			$edgValues[$local_var][] = $external_values[0][$external_var][0];
+		}
+		return;
+	}
+
+	/**
+	 * Render the #get_db_data parser function
+	 */
+	static function doGetDBData( &$parser ) {
+	       global $wgTitle, $edgCurPageName, $edgValues;
+
+		// if we're handling multiple pages, reset $edgValues
+		// when we move from one page to another
+		$cur_page_name = $wgTitle->getText();
+		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams($params); // parse params into name-value pairs
+		$mappings = EDUtils::parseMappings($args['data']); // parse the data arg into mappings
+
+		$external_values = EDUtils::getDBData( $args['server'], $args['from'], $args['where'], array_values($mappings) );
+		// handle error cases
+		if (is_null($external_values))
+			return;
+
+		// Build $edgValues
+		foreach ( $mappings as $local_var => $external_var ) {
+			if ( array_key_exists( $external_var, $external_values ) ) {
+				foreach ($external_values[$external_var] as $value) {
+					$edgValues[$local_var][] = $value;
+				}
+			}
+		}
+		return;
+	}
+
 	/**
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by #get_external_data
