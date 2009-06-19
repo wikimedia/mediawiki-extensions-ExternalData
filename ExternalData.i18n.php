@@ -253,9 +253,11 @@ $messages['roa-tara'] = array(
 
 /** Russian (Русский)
  * @author Ferrer
+ * @author Александр Сигачёв
  */
 $messages['ru'] = array(
 	'getdata' => 'Получить данные',
+	'externaldata-desc' => 'Позволяет получение данных в форматах CSV, JSON и XML, как с внешних адресов, так и с локальных вики-страниц.',
 );
 
 /** Slovak (Slovenčina)
