@@ -155,6 +155,14 @@ $messages['ia'] = array(
 	'externaldata-desc' => 'Permitte recuperar datos in le formatos CSV, JSON e XML, e ab adresses URL externe e ab paginas wiki local',
 );
 
+/** Indonesian (Bahasa Indonesia)
+ * @author Bennylin
+ */
+$messages['id'] = array(
+	'getdata' => 'Ambil data',
+	'externaldata-desc' => 'Mengijinkan data untuk diunduh dalam format CSV, JSON, dan XML dari pranala luar maupun dari halaman wiki',
+);
+
 /** Italian (Italiano)
  * @author Pietrodn
  */
