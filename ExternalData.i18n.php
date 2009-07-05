@@ -179,6 +179,13 @@ $messages['ja'] = array(
 	'externaldata-desc' => '外部URLやローカルのウィキページから、CSV・JSON・XML形式のデータを取得できるようにする',
 );
 
+/** Khmer (ភាសាខ្មែរ)
+ * @author វ័ណថារិទ្ធ
+ */
+$messages['km'] = array(
+	'getdata' => 'យក​ទិន្នន័យ',
+);
+
 /** Ripoarisch (Ripoarisch)
  * @author Purodha
  */
