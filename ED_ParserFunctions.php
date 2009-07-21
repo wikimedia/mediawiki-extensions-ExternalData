@@ -26,6 +26,7 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
+		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		
 		$url_contents = EDUtils::fetchURL( $url );
 		
@@ -48,6 +49,8 @@ class EDParserFunctions {
 		foreach ( $params as $param ) {
 			if ( strpos( $param, '==' ) ) {
 				list( $external_var, $value ) = explode( '==', $param );
+				// set to all lowercase to avoid casing issues
+				$external_var = strtolower( $external_var );
 				$filters[$external_var] = $value;
 			} else {
 				list( $local_var, $external_var ) = explode( '=', $param );
