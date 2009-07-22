@@ -18,9 +18,10 @@ $messages['en'] = array(
 
 /** Message documentation (Message documentation)
  * @author Dead3y3
+ * @author Fryed-peach
  */
 $messages['qqq'] = array(
-	'externaldata-desc' => 'Description of Mediawiki extension External Data',
+	'externaldata-desc' => '{{desc}}',
 );
 
 /** Arabic (العربية)
