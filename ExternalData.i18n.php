@@ -98,6 +98,13 @@ $messages['es'] = array(
 	'externaldata-desc' => 'Permite la recuperación de datos en formatos CSV, JSON y XML a partir de URL externos y de páginas wiki locales',
 );
 
+/** Basque (Euskara)
+ * @author Kobazulo
+ */
+$messages['eu'] = array(
+	'getdata' => 'Datuak eskuratu',
+);
+
 /** French (Français)
  * @author Crochet.david
  * @author IAlex
