@@ -2,7 +2,7 @@
 /**
  * Utility functions for External Data
  */
- 
+
 if ( !defined( 'MEDIAWIKI' ) ) {
 	die( 'This file is a MediaWiki extension; it is not a valid entry point' );
 }
@@ -120,7 +120,7 @@ class EDUtils {
 			echo "<p>ERROR: Incomplete information for this server ID.</p>\n";
 			return;
 		}
-			
+
 
 		$db_type = $edgDBServerType[$server_id];
 		$db_server = $edgDBServer[$server_id];
@@ -150,7 +150,7 @@ class EDUtils {
 
 		$rows = EDUtils::searchDB($db, $from, $where, $columns);
 		$db->close();
-		
+
 		$values = Array();
 		foreach ($rows as $row) {
 			foreach ($columns as $column) {
@@ -197,7 +197,7 @@ class EDUtils {
 
 	static function getValuesFromCSVLine( $csv_line ) {
 		// regular expression copied from http://us.php.net/fgetcsv
-		$vals = preg_split( '/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv_line ); 
+		$vals = preg_split( '/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv_line );
 		$vals2 = array();
 		foreach( $vals as $val )
 			$vals2[] = trim( $val, '"' );
@@ -273,10 +273,10 @@ class EDUtils {
 		}
 		return $values;
 	}
- 
+
 	static function fetchURL( $url, $post_vars = array(), $get_fresh=false, $try_count=1 ) {
-		$dbr = wfGetDB( DB_SLAVE );		
-		global $edgStringReplacements, $edgCacheTable;
+		$dbr = wfGetDB( DB_SLAVE );
+		global $edgStringReplacements, $edgCacheTable, $edgCacheExpireTime;
 
 		// do any special variable replacements in the URLs, for
 		// secret API keys and the like
@@ -287,17 +287,22 @@ class EDUtils {
 		if( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) )
 			return Http::get( $url );
 
-		// check the cache (only the first 254 chars of the url) 
-		$res = $dbr->select( $edgCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDUtils::fetchURL' );
+		// check the cache (only the first 254 chars of the url)
+		$row = $dbr->selectRow( $edgCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDUtils::fetchURL' );
+
+		if($row && ( (time() - $row->req_time) > $edgCacheExpireTime )){
+			$get_fresh = true;
+		}
+
 		// @@todo check date
-		if ( $res->numRows() == 0 || $get_fresh) {
+		if ( !$row || $get_fresh) {
 			$page = Http::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
 				if( $try_count >= self::$http_number_of_tries ){
 					echo "could not get URL after " . self::$http_number_of_tries . " tries.\n\n";
 					return '';
-				}				
+				}
 				$try_count++;
 				return self::fetchURL( $url, $post_vars, $get_fresh, $try_count );
 			}

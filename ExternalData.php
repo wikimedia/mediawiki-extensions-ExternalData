@@ -35,6 +35,9 @@ $edgValues = array();
 $edgStringReplacements = array();
 $edgCacheTable = null;
 
+//(in seconds) set to one week:
+$edgCacheExpireTime = 60*60*24 * 7
+
 function edgParserFunctions() {
 	global $wgHooks, $wgParser;
 	if( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
