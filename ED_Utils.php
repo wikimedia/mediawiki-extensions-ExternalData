@@ -300,7 +300,7 @@ class EDUtils {
 			if ( $page === false ) {
 				sleep( 1 );
 				if( $try_count >= self::$http_number_of_tries ){
-					echo ( wfMsg( "externaldata-db-could-not-get-url", self::$http_number_of_tries ) );
+					echo ( wfMsgExt( 'externaldata-db-could-not-get-url', array('parsemag'), self::$http_number_of_tries ) );
 					return '';
 				}
 				$try_count++;
