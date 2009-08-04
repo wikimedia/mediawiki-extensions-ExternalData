@@ -14,6 +14,15 @@ $messages['en'] = array(
 	// user messages
 	'getdata' => 'Get data',
 	'externaldata-desc' => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
+	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1\n',
+	'externaldata-json-decode-not-supported' => 'Error: json_decode() is not supported in this version of PHP',
+	'externaldata-xml-error' => 'XML error: $1 at line $2',
+	'externaldata-db-incomplete-information' => '<p>ERROR: Incomplete information for this server ID.</p>\n',
+	'externaldata-db-could-not-get-url' => 'Could not get URL after $1 tries.\n\n',
+	'externaldata-db-unknown-type' => '<p>ERROR: Unknown database type.</p>\n',
+	'externaldata-db-could-not-connect' => '<p>ERROR: Could not connect to database.</p>\n',
+	'externaldata-db-no-return-values' => '<p>ERROR: No return values specified.</p>\n',
+	'externaldata-db-invalid-query' => 'Invalid query.',
 );
 
 /** Message documentation (Message documentation)

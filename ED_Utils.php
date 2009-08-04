@@ -93,7 +93,7 @@ class EDUtils {
 			# should check the result of the bind here
 			return $ds;
 		} else {
-			echo "Unable to connect to $server\n";
+			echo ( wfMsg( "externaldata-ldap-unable-to-connect", $server ) );
 		}
 	}
 
@@ -117,7 +117,7 @@ class EDUtils {
 		    (! array_key_exists($server_id, $edgDBName)) ||
 		    (! array_key_exists($server_id, $edgDBUser)) ||
 		    (! array_key_exists($server_id, $edgDBPass))) {
-			echo "<p>ERROR: Incomplete information for this server ID.</p>\n";
+			echo ( wfMsg( "externaldata-db-incomplete-information" ) );
 			return;
 		}
 
@@ -135,16 +135,16 @@ class EDUtils {
 		} elseif ($db_type == "mssql") {
 			$db = new DatabaseMssql($db_server, $db_username, $db_password, $db_name);
 		} else {
-			echo "<p>ERROR: Unknown database type.</p>\n";
+			echo ( wfMsg( "externaldata-db-unknown-type" ) );
 			return;
 		}
 		if (! $db->isOpen()) {
-			echo "<p>ERROR: Could not connect to database.</p>\n";
+			echo ( wfMsg( "externaldata-db-could-not-connect" ) );
 			return;
 		}
 
 		if (count($columns) == 0) {
-			echo "<p>ERROR: No return values specified.</p>\n";
+			echo ( wfMsg( "externaldata-db-no-return-values" ) );
 			return;
 		}
 
@@ -168,7 +168,7 @@ class EDUtils {
 
 		$result = $db->query($sql);
 		if (!$result) {
-			echo "Invalid query.";
+			echo ( wfMsg( "externaldata-db-invalid-query" ) );
 			return false;
 		} else {
 			$rows = Array();
@@ -187,9 +187,9 @@ class EDUtils {
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
 		xml_set_character_data_handler( $xml_parser, array( 'EDUtils', 'getContent' ) );
 		if (!xml_parse($xml_parser, $xml, true)) {
-			echo(sprintf("XML error: %s at line %d",
+			echo ( wfMsg( 'externaldata-xml-error',
 			xml_error_string(xml_get_error_code($xml_parser)),
-			xml_get_current_line_number($xml_parser)));
+			xml_get_current_line_number($xml_parser)) );
 		}
 		xml_parser_free( $xml_parser );
 		return $edgXMLValues;
@@ -263,7 +263,7 @@ class EDUtils {
 	static function getJSONData( $json ) {
 		// escape if json_decode() isn't supported
 		if ( ! function_exists( 'json_decode' ) ) {
-			echo( "Error: json_decode() is not supported in this version of PHP" );
+			echo ( wfMsg( "externaldata-json-decode-not-supported" ) );
 			return array();
 		}
 		$json_tree = json_decode($json, true);
@@ -300,7 +300,7 @@ class EDUtils {
 			if ( $page === false ) {
 				sleep( 1 );
 				if( $try_count >= self::$http_number_of_tries ){
-					echo "could not get URL after " . self::$http_number_of_tries . " tries.\n\n";
+					echo ( wfMsg( "externaldata-db-could-not-get-url", self::$http_number_of_tries ) );
 					return '';
 				}
 				$try_count++;
