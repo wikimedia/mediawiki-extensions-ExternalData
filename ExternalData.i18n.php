@@ -9,20 +9,19 @@ $messages = array();
 
 /** English
  * @author Yaron Koren
- * @author Purodha
  */
 $messages['en'] = array(
 	// user messages
 	'getdata' => 'Get data',
 	'externaldata-desc' => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
 	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1\n',
-	'externaldata-json-decode-not-supported' => '<span style="text-transform: uppercase">Error:</span> json_decode() is not supported in this version of PHP',
+	'externaldata-json-decode-not-supported' => 'Error: json_decode() is not supported in this version of PHP',
 	'externaldata-xml-error' => 'XML error: $1 at line $2',
-	'externaldata-db-incomplete-information' => '<p><span style="text-transform: uppercase">Error:</span> Incomplete information for this server ID.</p>\n',
+	'externaldata-db-incomplete-information' => '<p>Error: Incomplete information for this server ID.</p>\n',
 	'externaldata-db-could-not-get-url' => 'Could not get URL after $1 tries.\n\n',
-	'externaldata-db-unknown-type' => '<p><span style="text-transform: uppercase">Error:</span> Unknown database type.</p>\n',
-	'externaldata-db-could-not-connect' => '<p><span style="text-transform: uppercase">Error:</span> Could not connect to database.</p>\n',
-	'externaldata-db-no-return-values' => '<p><span style="text-transform: uppercase">Error:</span> No return values specified.</p>\n',
+	'externaldata-db-unknown-type' => '<p>Error: Unknown database type.</p>\n',
+	'externaldata-db-could-not-connect' => '<p>Error: Could not connect to database.</p>\n',
+	'externaldata-db-no-return-values' => '<p>Error: No return values specified.</p>\n',
 	'externaldata-db-invalid-query' => 'Invalid query.',
 );
 
