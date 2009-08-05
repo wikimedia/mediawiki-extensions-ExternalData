@@ -56,6 +56,15 @@ $messages['arz'] = array(
 $messages['be-tarask'] = array(
 	'getdata' => 'Атрымаць зьвесткі',
 	'externaldata-desc' => 'Дазваляе атрымліваць зьвесткі ў фарматах CSV, JSON і XML з вонкавых крыніц і лякальных старонак вікі',
+	'externaldata-ldap-unable-to-connect' => 'Немагчыма далучыцца да $1\\n',
+	'externaldata-json-decode-not-supported' => 'Памылка: json_decode() не падтрымліваецца ў гэтай вэрсіі PHP',
+	'externaldata-xml-error' => 'Памылка XML: $1 у радку $2',
+	'externaldata-db-incomplete-information' => '<p>Памылка: Няпоўная інфармацыя для гэтага ідэнтыфікатара сэрвэра. </p>\\n',
+	'externaldata-db-could-not-get-url' => 'Немагчыма атрымаць URL-адрас пасьля $1 {{PLURAL:$1|спробы|спробаў|спробаў}}.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>Памылка: Невядомы тып базы зьвестак.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Памылка: Немагчыма далучыцца да базы зьвестак.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Памылка: Не пазначаныя выніковыя значэньні.</p>\\n',
+	'externaldata-db-invalid-query' => 'Няслушны запыт.',
 );
 
 /** Bosnian (Bosanski)
@@ -121,6 +130,15 @@ $messages['eu'] = array(
 $messages['fr'] = array(
 	'getdata' => 'Obtenir des données',
 	'externaldata-desc' => 'Permet de récupérer des données en CSV, JSON et XML depuis des URL externes et des pages du wiki',
+	'externaldata-ldap-unable-to-connect' => 'Impossible de se connecter à $1\\n',
+	'externaldata-json-decode-not-supported' => "Erreur : json_decode() n'est pas supportée dans cette version de PHP",
+	'externaldata-xml-error' => 'Erreur XML : $1 à la ligne $2',
+	'externaldata-db-incomplete-information' => '<p>Erreur : Informations incomplètes pour cet identifiant de serveur.</p>\\n',
+	'externaldata-db-could-not-get-url' => "Impossible d'obtenir l'URL après $1 essais.\\n\\n",
+	'externaldata-db-unknown-type' => '<p>ERREUR: Type de base de données inconnu.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Erreur : Impossible de se connecteur à la base de données.</p>\\n',
+	'externaldata-db-no-return-values' => "<p>Erreur : Aucune valeur de retour n'a été spécifiée.</p>\\n",
+	'externaldata-db-invalid-query' => 'Requête invalide.',
 );
 
 /** Galician (Galego)
@@ -194,6 +212,15 @@ $messages['it'] = array(
 $messages['ja'] = array(
 	'getdata' => 'データ取得',
 	'externaldata-desc' => '外部URLやローカルのウィキページから、CSV・JSON・XML形式のデータを取得できるようにする',
+	'externaldata-ldap-unable-to-connect' => '$1 に接続できません\\n',
+	'externaldata-json-decode-not-supported' => 'エラー: json_decode() はこのバージョンの PHP ではサポートされていません',
+	'externaldata-xml-error' => 'XMLエラー: 行$2で$1',
+	'externaldata-db-incomplete-information' => '<p>エラー: このサーバーIDに対する情報が不十分です。</p>\\n',
+	'externaldata-db-could-not-get-url' => '$1回の試行を行いましたが URL を取得できませんでした。\\n\\n',
+	'externaldata-db-unknown-type' => '<p>エラー: データベースの種類が不明です。</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>エラー: データベースに接続できませんでした。</p>\\n',
+	'externaldata-db-no-return-values' => '<p>エラー: 戻り値が指定されていません。</p>\\n',
+	'externaldata-db-invalid-query' => '不正なクエリー',
 );
 
 /** Khmer (ភាសាខ្មែរ)
@@ -209,6 +236,15 @@ $messages['km'] = array(
 $messages['ksh'] = array(
 	'getdata' => 'Date holle!',
 	'externaldata-desc' => 'Äloup, Date em <i lang="en">CSV</i> Fomaat, em <i lang="en">JSON</i> Fomaat, un em <i lang="en">XML</i> Fomaat fun <i lang="en">URLs</i> un vun Wiki-Sigge ze holle.',
+	'externaldata-ldap-unable-to-connect' => 'Kann nit noh $1 verbenge\\n',
+	'externaldata-json-decode-not-supported' => '<span style="text-transform: uppercase">Fähler:</span> De Fungxuhn <code lang="en">json_decode()</code> weedt vun heh dä Version vun <i lang="en">PHP</i> nit ongerschtöz.',
+	'externaldata-xml-error' => 'Fähler em XML, op Reih $2: $1',
+	'externaldata-db-incomplete-information' => '<p><span style="text-transform: uppercase">Fähler:</span> De Enfomazjuhne vör di ßööver Kännong sin nit kumplätt.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Kunnt {{PLURAL:$1|noh eimohl Versöhke|och noh $1 Mohl Versöhke|ohne enne Versöhk}} nix vun däm <i lang="en">URL</i> krijje.\\n\\n',
+	'externaldata-db-unknown-type' => '<p><span style="text-transform: uppercase">Fähler:</span> Di Zoot Datebangk es unbikannt.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p><span style="text-transform: uppercase">Fähler:</span> Kunnt kein Verbendung noh dä Datebangk krijje.</p>\\n',
+	'externaldata-db-no-return-values' => '<p><span style="text-transform: uppercase">Fähler:</span> Kein Wääte för Zerökzeävve aanjejovve.</p>\\n',
+	'externaldata-db-invalid-query' => 'Onjöltesch Frooch aan de Datebangk.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -249,6 +285,7 @@ $messages['no'] = array(
 $messages['oc'] = array(
 	'getdata' => 'Obténer de donadas',
 	'externaldata-desc' => "Permet de recuperar de donadas en CSV, JSON e XML dempuèi d'URL extèrnas e de paginas del wiki",
+	'externaldata-xml-error' => 'Error XML : $1 a la linha $2',
 );
 
 /** Polish (Polski)
@@ -297,6 +334,15 @@ $messages['roa-tara'] = array(
 $messages['ru'] = array(
 	'getdata' => 'Получить данные',
 	'externaldata-desc' => 'Позволяет получение данных в форматах CSV, JSON и XML, как с внешних адресов, так и с локальных вики-страниц.',
+	'externaldata-ldap-unable-to-connect' => 'Не удаётся подключиться к $1\\n',
+	'externaldata-json-decode-not-supported' => 'Ошибка. json_decode() не поддерживается в данной версии PHP',
+	'externaldata-xml-error' => 'Ошибка XML. $1 в строке $2',
+	'externaldata-db-incomplete-information' => '<p>ОШИБКА. Неполная информация для этого ID сервера.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Не удалось получить URL после $1 попыток.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>ОШИБКА. Неизвестный тип базы данных.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>ОШИБКА. Не удаётся подключиться к базе данных.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>ОШИБКА. Не указаны возвращаемые значение.</p>\\n',
+	'externaldata-db-invalid-query' => 'Ошибочный запрос.',
 );
 
 /** Slovak (Slovenčina)
