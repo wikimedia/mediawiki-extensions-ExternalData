@@ -180,6 +180,15 @@ $messages['he'] = array(
 $messages['hsb'] = array(
 	'getdata' => 'Daty wobstarać',
 	'externaldata-desc' => 'Zmóžnja wotwołanje datow we formatach CSV, JSON a XML z eksternych URL kaž tež lokalnych wikijowych stronow',
+	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwjazać\\n',
+	'externaldata-json-decode-not-supported' => 'Zmylk: json_decode() so w tutej wersiji PHP njepodpěruje',
+	'externaldata-xml-error' => 'Zmylk XML: $1 na lince $2',
+	'externaldata-db-incomplete-information' => "'''Zmylk: Njedospołne informacije za ID tutoho serwera.'''\\n",
+	'externaldata-db-could-not-get-url' => 'Njebě móžno URL po $1 {{PLURAL:$1|pospyće|pospytomaj|pospytach|pospytach}} dóstać.\\n\\n',
+	'externaldata-db-unknown-type' => "'''Zmylk: Njeznaty typ datoweje banki.'''\\n",
+	'externaldata-db-could-not-connect' => "'''Zmylk: Njemóžno z datowej banku zwjazać.'''\\n",
+	'externaldata-db-no-return-values' => "'''Zmylk: Žane hódnoty wróćenja podate.'''\\n",
+	'externaldata-db-invalid-query' => 'Njepłaćiwe naprašowanje.',
 );
 
 /** Interlingua (Interlingua)
@@ -261,6 +270,15 @@ $messages['lb'] = array(
 $messages['nl'] = array(
 	'getdata' => 'Gegevens ophalen',
 	'externaldata-desc' => "Maakt het mogelijk gegevens in CSV, JSON en XML op te halen van zowel externe URL's als lokale wikipagina's",
+	'externaldata-ldap-unable-to-connect' => 'Het was niet mogelijk te verbinden met $1',
+	'externaldata-json-decode-not-supported' => 'Fout: json_decode() wordt niet ondersteund in deze versie van PHP',
+	'externaldata-xml-error' => 'XML-fout: $1 op regel $2',
+	'externaldata-db-incomplete-information' => '<p>Fout: Onvolledige informatie voor dit servernummer.</p>',
+	'externaldata-db-could-not-get-url' => 'Na $1 {{PLURAL:$1|poging|pogingen}} gaf de URL geen resultaat.',
+	'externaldata-db-unknown-type' => '<p>Fout: onbekend databasetype.</p>',
+	'externaldata-db-could-not-connect' => '<p>Fout: het was niet mogelijk met de database te verbinden.</p>',
+	'externaldata-db-no-return-values' => '<p>Fout: er zijn geen return-waarden ingesteld.</p>',
+	'externaldata-db-invalid-query' => 'Ongeldige zoekopdracht.',
 );
 
 /** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
@@ -285,7 +303,15 @@ $messages['no'] = array(
 $messages['oc'] = array(
 	'getdata' => 'Obténer de donadas',
 	'externaldata-desc' => "Permet de recuperar de donadas en CSV, JSON e XML dempuèi d'URL extèrnas e de paginas del wiki",
+	'externaldata-ldap-unable-to-connect' => 'Impossible de se connectar a $1\\n',
+	'externaldata-json-decode-not-supported' => 'Error : json_decode() es pas suportada dins aquesta version de PHP',
 	'externaldata-xml-error' => 'Error XML : $1 a la linha $2',
+	'externaldata-db-incomplete-information' => '<p>Error : Informacions incompletas per aqueste identificant de servidor.</p>\\n',
+	'externaldata-db-could-not-get-url' => "Impossible d'obténer l'URL aprèp $1 {{PLURAL:$1|ensag|ensages}}.\\n\\n",
+	'externaldata-db-unknown-type' => '<p>ERROR: Tipe de banca de donadas desconegut.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Error : Impossible de se connectar a la banca de donadas.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Error : Cap de valor de retorn es pas estada especificada.</p>\\n',
+	'externaldata-db-invalid-query' => 'Requèsta invalida.',
 );
 
 /** Polish (Polski)
