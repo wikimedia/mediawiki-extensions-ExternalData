@@ -377,6 +377,15 @@ $messages['ru'] = array(
 $messages['sk'] = array(
 	'getdata' => 'Získať dáta',
 	'externaldata-desc' => 'Umožňuje získavanie údajov vo formátoch CSV, JSON a XML z externých URL aj z lokálnych wiki stránok',
+	'externaldata-ldap-unable-to-connect' => 'Nepodarilo sa pripojiť k $1\\n',
+	'externaldata-json-decode-not-supported' => 'Chyba: táto verzia PHP nepodporuje json_decode()',
+	'externaldata-xml-error' => 'Chyba XML: $1 na riadku $2',
+	'externaldata-db-incomplete-information' => '<p>Chyba: Nekompletné informácie s týmto ID servera.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Nepodarilo sa získať URL po $1 {{PLURAL:$1|pokuse|pokusoch}}.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>Chyba: Neznámy typ databázy.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Chyba: Nepodarilo sa pripojiť k databáze.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Chyba: Neboli zadané žiadne návratové hodnoty.</p>\\n',
+	'externaldata-db-invalid-query' => 'Neplatná požiadavka.',
 );
 
 /** Serbian Cyrillic ekavian (ћирилица)
