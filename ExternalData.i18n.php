@@ -97,6 +97,15 @@ $messages['de'] = array(
 $messages['dsb'] = array(
 	'getdata' => 'Daty wobstaraś',
 	'externaldata-desc' => 'Zmóžnja wótwołanje datow w formatach CSV, JSON a XML ako z eksternych URL tak teke lokalnych wikijowych bokow',
+	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwězaś\\n',
+	'externaldata-json-decode-not-supported' => 'Zmólka: json_decode() njepódpěra se w toś tej wersiji PHP',
+	'externaldata-xml-error' => 'Zmólka XML: $1 na smužce $2',
+	'externaldata-db-incomplete-information' => "'''Zmólka: Njedopołne informacije za toś ten serwerowy ID.'''\\n",
+	'externaldata-db-could-not-get-url' => 'Njemóžno URL pó $1 {{PLURAL:$1|wopyśe|wopytoma|wopytach|wopytach}} dostaś.\\n\\n',
+	'externaldata-db-unknown-type' => "'''Zmólka: Njeznata datowa banka.'''\\n",
+	'externaldata-db-could-not-connect' => "'''Zmólka: Njemóžno z datoweju banku zwězaś.'''\\n",
+	'externaldata-db-no-return-values' => "'''Zmólka: Žedne gódnoty slědkdaśa pódane.'''\\n",
+	'externaldata-db-invalid-query' => 'Njepłaśiwe napšašowanje.',
 );
 
 /** Greek (Ελληνικά)
