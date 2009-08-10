@@ -35,10 +35,20 @@ $messages['qqq'] = array(
 
 /** Arabic (العربية)
  * @author Meno25
+ * @author OsamaK
  */
 $messages['ar'] = array(
 	'getdata' => 'الحصول على البيانات',
 	'externaldata-desc' => 'يسمح باسترجاع البيانات بصيغة CSV، JSON و XML من مسارات خارجية وصفحات الويكي المحلية',
+	'externaldata-ldap-unable-to-connect' => 'تعذّر الاتصال ب$1\\n',
+	'externaldata-json-decode-not-supported' => 'خطأ: json_decode() غير مدعوم في نسخة PHP هذه',
+	'externaldata-xml-error' => 'خطأ XML: $1 عند السطر $2',
+	'externaldata-db-incomplete-information' => '<p>خطأ: معلومات غير كاملة عن هوية هذا الخادوم.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'تعذّر الحصول على المسار بعد {{PLURAL:$1||محاولة واحدة|محاوتين|$1 محاولات|$1 محاولة }}.\\n\\',
+	'externaldata-db-unknown-type' => '<p>خطأ: نوع قاعدة بيانات غير معروف.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>خطأ: تعذّر الاتصال بقاعدة البيانات.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>خطأ: لم تحدد أي قيم عائدة.</p>\\n',
+	'externaldata-db-invalid-query' => 'استعلام غير صالح.',
 );
 
 /** Egyptian Spoken Arabic (مصرى)
@@ -110,10 +120,12 @@ $messages['dsb'] = array(
 
 /** Greek (Ελληνικά)
  * @author Dead3y3
+ * @author Omnipaedista
  */
 $messages['el'] = array(
 	'getdata' => 'Πάρε δεδομένα',
 	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki',
+	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
 );
 
 /** Spanish (Español)
@@ -130,6 +142,14 @@ $messages['es'] = array(
  */
 $messages['eu'] = array(
 	'getdata' => 'Datuak eskuratu',
+);
+
+/** Finnish (Suomi)
+ * @author Silvonen
+ */
+$messages['fi'] = array(
+	'externaldata-xml-error' => 'XML-virhe: $1 rivillä $2',
+	'externaldata-db-unknown-type' => '<p>Virhe: Tuntematon tietokantatyyppi.</p>\\n',
 );
 
 /** French (Français)
@@ -164,6 +184,15 @@ $messages['gl'] = array(
 $messages['gsw'] = array(
 	'getdata' => 'Date hole',
 	'externaldata-desc' => 'Erlaubt Daten abzruefe im CSV, JSON un XML Format vu extärne URL un lokale Wikisyte',
+	'externaldata-ldap-unable-to-connect' => 'Cha kei Verbindig härstellen zue $1\\n',
+	'externaldata-json-decode-not-supported' => 'Fähler: json_decode() wird nit unterstitzt in däre Version vu PHP',
+	'externaldata-xml-error' => 'XML-Fähler: $1 in dr Zyyle $2',
+	'externaldata-db-incomplete-information' => '<p>Fähler: Nit vollständigi Information fir die Server-ID.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Cha d URL nit finde no $1 {{PLURAL:$1|Versuech|Versuech}}.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>Fähler: Nit bekannte Datebanktyp.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Fähler: Cha kei Verbindig härstelle zue dr Datebank.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Fähler: Kei Ruckgabewärt spezifiziert.</p>\\n',
+	'externaldata-db-invalid-query' => 'Nit giltigi Umfrog.',
 );
 
 /** Gujarati (ગુજરાતી)
@@ -214,6 +243,15 @@ $messages['ia'] = array(
 $messages['id'] = array(
 	'getdata' => 'Ambil data',
 	'externaldata-desc' => 'Mengijinkan data untuk diunduh dalam format CSV, JSON, dan XML dari pranala luar maupun dari halaman wiki',
+	'externaldata-ldap-unable-to-connect' => 'Tidak dapat terhubung ke $1\\n',
+	'externaldata-json-decode-not-supported' => 'Galat: json_decode() tidak didukung oleh versi PHP ini',
+	'externaldata-xml-error' => 'Galat XML: $1 pada baris $2',
+	'externaldata-db-incomplete-information' => '<p>Galat: Informasi tak lengkap untuk ID peladen ini.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Tidak dapat mengambil URL setelah dicoba {{PLURAL:$1||}}$1 kali.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>Galat: Jenis basis data tidak diketahui.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Galat: Tidak dapat terhubung ke basis data.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Galat: Nilai pengembalian tidak dispesifikasi.</p>\\n',
+	'externaldata-db-invalid-query' => 'Kueri tidak sah.',
 );
 
 /** Italian (Italiano)
@@ -271,6 +309,9 @@ $messages['ksh'] = array(
 $messages['lb'] = array(
 	'getdata' => 'Donnéeë kréien',
 	'externaldata-desc' => 'Erlaabt et Donnéeën an de Formater CSV, JSON an XML vun externen URLen a lokale Wiki-Säiten ze verschaffen',
+	'externaldata-xml-error' => 'XML Feeler: $1 an der Linn $2',
+	'externaldata-db-unknown-type' => '<p>Feeler: Onbekannten Datebank-Typ.</p>\\n',
+	'externaldata-db-could-not-connect' => "<p>Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.</p>\\n",
 );
 
 /** Dutch (Nederlands)
@@ -348,9 +389,11 @@ $messages['pt-br'] = array(
 );
 
 /** Romanian (Română)
+ * @author Firilacroco
  * @author KlaudiuMihaila
  */
 $messages['ro'] = array(
+	'getdata' => 'Obţine date',
 	'externaldata-desc' => 'Permite obţinerea datelor în format CSV, JSON şi XML din atât adrese URL externe, cât şi pagini wiki locale',
 );
 
@@ -403,6 +446,14 @@ $messages['sk'] = array(
 $messages['sr-ec'] = array(
 	'getdata' => 'Преузми податке',
 	'externaldata-desc' => 'Омогућава преузимање података у CSV, JSON и XML форматима, како преко спољашњих веза, тако и са локалних вики-страна',
+);
+
+/** latinica (latinica)
+ * @author Michaello
+ */
+$messages['sr-el'] = array(
+	'getdata' => 'Preuzmi podatke',
+	'externaldata-desc' => 'Omogućava preuzimanje podataka u CSV, JSON i XML formatima, kako preko spoljašnjih veza, tako i sa lokalnih viki-strana',
 );
 
 /** Swedish (Svenska)
