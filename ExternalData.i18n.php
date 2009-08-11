@@ -146,8 +146,11 @@ $messages['eu'] = array(
 
 /** Finnish (Suomi)
  * @author Silvonen
+ * @author Str4nd
  */
 $messages['fi'] = array(
+	'externaldata-ldap-unable-to-connect' => 'Ei voitu yhdistää palvelimelle $1\\n',
+	'externaldata-json-decode-not-supported' => 'Virhe: json_decode() ei ole tuettu tässä PHP:n versiossa',
 	'externaldata-xml-error' => 'XML-virhe: $1 rivillä $2',
 	'externaldata-db-unknown-type' => '<p>Virhe: Tuntematon tietokantatyyppi.</p>\\n',
 );
