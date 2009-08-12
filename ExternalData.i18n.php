@@ -95,12 +95,14 @@ $messages['ca'] = array(
 );
 
 /** German (Deutsch)
+ * @author MF-Warburg
  * @author Purodha
  * @author Umherirrender
  */
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
 	'externaldata-desc' => 'Erlaubt das Einfügen von Daten der Formate CSV, JSON und XML sowohl von externer URL als auch von lokalen Wikiseite',
+	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
 );
 
 /** Lower Sorbian (Dolnoserbski)
