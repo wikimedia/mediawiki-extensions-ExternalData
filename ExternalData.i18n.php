@@ -95,6 +95,7 @@ $messages['ca'] = array(
 );
 
 /** German (Deutsch)
+ * @author Imre
  * @author MF-Warburg
  * @author Purodha
  * @author Umherirrender
@@ -102,6 +103,7 @@ $messages['ca'] = array(
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
 	'externaldata-desc' => 'Erlaubt das Einfügen von Daten der Formate CSV, JSON und XML sowohl von externer URL als auch von lokalen Wikiseite',
+	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
 );
 
@@ -402,6 +404,9 @@ $messages['pt-br'] = array(
 $messages['ro'] = array(
 	'getdata' => 'Obţine date',
 	'externaldata-desc' => 'Permite obţinerea datelor în format CSV, JSON şi XML din atât adrese URL externe, cât şi pagini wiki locale',
+	'externaldata-xml-error' => 'Eroare XML: $1 la linia $2',
+	'externaldata-db-unknown-type' => '<p>Eroare: Tipul bazei de date necunoscut.</p>\\n',
+	'externaldata-db-invalid-query' => 'Interogare invalidă.',
 );
 
 /** Tarandíne (Tarandíne)
