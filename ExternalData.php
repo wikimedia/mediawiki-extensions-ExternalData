@@ -12,7 +12,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['parserhook'][]= array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '0.7.1',
+	'version'        => '0.8.0',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'description'    => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
@@ -22,7 +22,6 @@ $edgIP = $IP . '/extensions/ExternalData';
 
 $wgExtensionFunctions[] = 'edgParserFunctions';
 $wgExtensionMessagesFiles['ExternalData'] = $edgIP . '/ExternalData.i18n.php';
-$wgHooks['LanguageGetMagic'][] = 'edgLanguageGetMagic';
 
 // register all special pages and other classes
 $wgAutoloadClasses['EDUtils'] = $edgIP . '/ED_Utils.php';
@@ -58,16 +57,4 @@ function edgRegisterParser(&$parser) {
 	$parser->setFunctionHook( 'for_external_table', array('EDParserFunctions','doForExternalTable') );
 
 	return true; // always return true, in order not to stop MW's hook processing!
-}
-
-function edgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
-	switch ( $langCode ) {
-	default:
-		$magicWords['get_external_data'] = array ( 0, 'get_external_data' );
-		$magicWords['get_ldap_data'] = array ( 0, 'get_ldap_data' );
-		$magicWords['get_db_data'] = array ( 0, 'get_db_data' );
-		$magicWords['external_value'] = array ( 0, 'external_value' );
-		$magicWords['for_external_table'] = array ( 0, 'for_external_table' );
-	}
-	return true;
 }
