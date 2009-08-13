@@ -108,7 +108,11 @@ $messages['ca'] = array(
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
 	'externaldata-desc' => 'Erlaubt das Einfügen von Daten der Formate CSV, JSON und XML sowohl von externer URL als auch von lokalen Wikiseite',
+	'externaldata-ldap-unable-to-connect' => 'Keine Verbindung zu $1\\n',
+	'externaldata-json-decode-not-supported' => 'Fehler: json_decode() wird nicht von dieser PHP-Version unterstützt',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
+	'externaldata-db-unknown-type' => '<p>Fehler: Unbekannter Datenbanktyp.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Fehler: Keine Verbindung zur Datenbank.</p>\\n',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
 );
 
