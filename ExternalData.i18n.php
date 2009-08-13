@@ -88,10 +88,15 @@ $messages['bs'] = array(
 );
 
 /** Catalan (Català)
+ * @author Paucabot
  * @author Solde
  */
 $messages['ca'] = array(
 	'getdata' => 'Obtenir dades',
+	'externaldata-xml-error' => 'Error XML: $1 a la línia $2',
+	'externaldata-db-unknown-type' => '<p>Error: Tipus de base de dades desconegut.</p>\\n',
+	'externaldata-db-could-not-connect' => "<p>Error: No s'ha pogut connectar a la base de dades.</p>\\n",
+	'externaldata-db-invalid-query' => 'Consulta no vàlida.',
 );
 
 /** German (Deutsch)
@@ -219,6 +224,11 @@ $messages['gu'] = array(
 $messages['he'] = array(
 	'getdata' => 'קבלת נתונים',
 	'externaldata-desc' => 'אפשרות לקבלת נתונים בפורמטים: CSV, JSON ו־XML, גם מכתובות חיצוניות וגם מדפי ויקי מקומיים',
+	'externaldata-ldap-unable-to-connect' => 'לא ניתן להתחבר אל $1\\n',
+	'externaldata-xml-error' => 'שגיאת XML: $1 בשורה $2',
+	'externaldata-db-could-not-connect' => '<p>שגיאה: לא ניתן להתחבר אל בסיס הנתונים.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>שגיאה: לא הוגדרו ערכים להחזרה.</p>\\n',
+	'externaldata-db-invalid-query' => 'שאילתה בלתי תקינה.',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
