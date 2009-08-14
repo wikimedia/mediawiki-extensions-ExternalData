@@ -111,8 +111,11 @@ $messages['de'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Keine Verbindung zu $1\\n',
 	'externaldata-json-decode-not-supported' => 'Fehler: json_decode() wird nicht von dieser PHP-Version unterstützt',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
+	'externaldata-db-incomplete-information' => '<p>Fehler: Unvollständige Informationen für diese Server-ID.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'URL konnte nach $1 {{PLURAL:$1|Versuch|Versuchen}} nicht abgerufen werden.\\n\\n',
 	'externaldata-db-unknown-type' => '<p>Fehler: Unbekannter Datenbanktyp.</p>\\n',
 	'externaldata-db-could-not-connect' => '<p>Fehler: Keine Verbindung zur Datenbank.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Fehler: Keine Rückgabewerte festgelegt.</p>\\n',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
 );
 
@@ -396,11 +399,16 @@ $messages['pl'] = array(
 );
 
 /** Portuguese (Português)
+ * @author Giro720
  * @author Waldir
  */
 $messages['pt'] = array(
 	'getdata' => 'Obter dados',
 	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
+	'externaldata-ldap-unable-to-connect' => 'Não foi possível conectar-se a $1\\n',
+	'externaldata-xml-error' => 'erro no XML: $1 na linha $2',
+	'externaldata-db-could-not-get-url' => 'Não foi possível obter o URL após $1 {{PLURAL:$1|tentativa|tentativas}}.\\n\\n',
+	'externaldata-db-could-not-connect' => '<p>Erro: Não foi possível conectar-se ao banco de dados.</p>\\n',
 );
 
 /** Brazilian Portuguese (Português do Brasil)
