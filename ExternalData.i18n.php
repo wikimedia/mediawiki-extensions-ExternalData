@@ -295,7 +295,7 @@ $messages['ja'] = array(
 	'getdata' => 'データ取得',
 	'externaldata-desc' => '外部URLやローカルのウィキページから、CSV・JSON・XML形式のデータを取得できるようにする',
 	'externaldata-ldap-unable-to-connect' => '$1 に接続できません\\n',
-	'externaldata-json-decode-not-supported' => 'エラー: json_decode() はこのバージョンの PHP ではサポートされていません',
+	'externaldata-json-decode-not-supported' => 'エラー: json_decode（） はこのバージョンの PHP ではサポートされていません',
 	'externaldata-xml-error' => 'XMLエラー: 行$2で$1',
 	'externaldata-db-incomplete-information' => '<p>エラー: このサーバーIDに対する情報が不十分です。</p>\\n',
 	'externaldata-db-could-not-get-url' => '$1回の試行を行いましたが URL を取得できませんでした。\\n\\n',
@@ -392,10 +392,20 @@ $messages['oc'] = array(
 
 /** Polish (Polski)
  * @author Leinad
+ * @author Sp5uhe
  */
 $messages['pl'] = array(
 	'getdata' => 'Pobierz dane',
 	'externaldata-desc' => 'Umożliwia pobieranie danych w formatach CSV, JSON lub XML zarówno z zewnętrznych adresów URL jak i lokalnych stron wiki',
+	'externaldata-ldap-unable-to-connect' => 'Nie można połączyć się z $1\\n',
+	'externaldata-json-decode-not-supported' => 'Błąd – json_decode() nie jest obsługiwana w tej wersji PHP',
+	'externaldata-xml-error' => 'Błąd XML – $1 w wierszu $2',
+	'externaldata-db-incomplete-information' => '<p>Błąd – niepełne informacje o tym identyfikatorze serwera.</p>\\n',
+	'externaldata-db-could-not-get-url' => 'Nie można uzyskać adresu URL po $1 {{PLURAL:$1|próbie|próbach}}.\\n\\n',
+	'externaldata-db-unknown-type' => '<p>Błąd: Nieznany typ bazy danych.</p>\\n',
+	'externaldata-db-could-not-connect' => '<p>Błąd: Nie można połączyć się z bazą danych.</p>\\n',
+	'externaldata-db-no-return-values' => '<p>Błąd – nie określono zwracanej wartości.</p>\\n',
+	'externaldata-db-invalid-query' => 'Nieprawidłowe zapytanie.',
 );
 
 /** Portuguese (Português)
