@@ -5,8 +5,6 @@
  * @addtogroup Extensions
  */
 
-require_once( dirname(__FILE__) . '/ExternalData.i18n.magic.php' );
-
 $messages = array();
 
 /** English
