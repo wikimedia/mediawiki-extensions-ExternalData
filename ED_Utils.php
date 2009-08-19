@@ -93,7 +93,7 @@ class EDUtils {
 			# should check the result of the bind here
 			return $ds;
 		} else {
-			echo ( wfMsg( "externaldata-ldap-unable-to-connect", $server ) );
+			echo ( wfMsgHtml( "externaldata-ldap-unable-to-connect", $server ) );
 		}
 	}
 
@@ -117,7 +117,7 @@ class EDUtils {
 		    (! array_key_exists($server_id, $edgDBName)) ||
 		    (! array_key_exists($server_id, $edgDBUser)) ||
 		    (! array_key_exists($server_id, $edgDBPass))) {
-			echo ( wfMsg( "externaldata-db-incomplete-information" ) );
+			echo ( wfMsgHtml( "externaldata-db-incomplete-information" ) );
 			return;
 		}
 
@@ -135,16 +135,16 @@ class EDUtils {
 		} elseif ($db_type == "mssql") {
 			$db = new DatabaseMssql($db_server, $db_username, $db_password, $db_name);
 		} else {
-			echo ( wfMsg( "externaldata-db-unknown-type" ) );
+			echo ( wfMsgHtml( "externaldata-db-unknown-type" ) );
 			return;
 		}
 		if (! $db->isOpen()) {
-			echo ( wfMsg( "externaldata-db-could-not-connect" ) );
+			echo ( wfMsgHtml( "externaldata-db-could-not-connect" ) );
 			return;
 		}
 
 		if (count($columns) == 0) {
-			echo ( wfMsg( "externaldata-db-no-return-values" ) );
+			echo ( wfMsgHtml( "externaldata-db-no-return-values" ) );
 			return;
 		}
 
@@ -168,7 +168,7 @@ class EDUtils {
 
 		$result = $db->query($sql);
 		if (!$result) {
-			echo ( wfMsg( "externaldata-db-invalid-query" ) );
+			echo ( wfMsgHtml( "externaldata-db-invalid-query" ) );
 			return false;
 		} else {
 			$rows = Array();
@@ -187,7 +187,7 @@ class EDUtils {
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
 		xml_set_character_data_handler( $xml_parser, array( 'EDUtils', 'getContent' ) );
 		if (!xml_parse($xml_parser, $xml, true)) {
-			echo ( wfMsg( 'externaldata-xml-error',
+			echo ( wfMsgHtml( 'externaldata-xml-error',
 			xml_error_string(xml_get_error_code($xml_parser)),
 			xml_get_current_line_number($xml_parser)) );
 		}
@@ -263,7 +263,7 @@ class EDUtils {
 	static function getJSONData( $json ) {
 		// escape if json_decode() isn't supported
 		if ( ! function_exists( 'json_decode' ) ) {
-			echo ( wfMsg( "externaldata-json-decode-not-supported" ) );
+			echo ( wfMsgHtml( "externaldata-json-decode-not-supported" ) );
 			return array();
 		}
 		$json_tree = json_decode($json, true);
@@ -300,7 +300,7 @@ class EDUtils {
 			if ( $page === false ) {
 				sleep( 1 );
 				if( $try_count >= self::$http_number_of_tries ){
-					echo ( wfMsgExt( 'externaldata-db-could-not-get-url', array('parsemag'), self::$http_number_of_tries ) );
+					echo ( wfMsgHtmlExt( 'externaldata-db-could-not-get-url', array('parsemag'), self::$http_number_of_tries ) );
 					return '';
 				}
 				$try_count++;
