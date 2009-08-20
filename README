@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 0.7.1
+        Version 0.8.1
         Yaron Koren, Michael Dale and David Macdonald
 
 This is free software licensed under the GNU General Public License. Please
@@ -55,6 +55,11 @@ of ExternalData.sql in your database, then add the following to
 LocalSettings.php:
 
      $edgCacheTable = 'ed_url_cache';
+
+You should also add a line like the following, to set the expiration time
+of the cache, in seconds; this line will cache data for a week:
+
+     $edgCacheExpireTime = 7 * 24 * 60 * 60; 
 
 You can also set for string replacements to be done on the URLs you call,
 for instance to hide API keys:
