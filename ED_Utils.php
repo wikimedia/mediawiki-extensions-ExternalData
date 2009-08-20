@@ -294,7 +294,6 @@ class EDUtils {
 			$get_fresh = true;
 		}
 
-		// @@todo check date
 		if ( !$row || $get_fresh) {
 			$page = Http::get( $url );
 			if ( $page === false ) {
