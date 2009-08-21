@@ -22,3 +22,11 @@ $magicWords['nl'] = array(
 	'external_value'       => array( '0', 'externe_waarde', 'external_value' ),
 	'for_external_table'   => array( '0', 'voor_externe_tabel', 'for_external_table' ),
 );
+
+$magicWords['ru'] = array(
+	'get_external_data'    => array( '0', 'получить_внешние_данные', 'get_external_data' ),
+	'get_ldap_data'        => array( '0', 'получить_данные_ldap', 'get_ldap_data' ),
+	'get_db_data'          => array( '0', 'получить_данные_db', 'get_db_data' ),
+	'external_value'       => array( '0', 'внешнее_значение', 'external_value' ),
+	'for_external_table'   => array( '0', 'для_внешней_таблицы', 'for_external_table' ),
+);
