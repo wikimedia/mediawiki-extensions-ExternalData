@@ -83,6 +83,15 @@ $messages['be-tarask'] = array(
 $messages['bs'] = array(
 	'getdata' => 'Uzmi podatke',
 	'externaldata-desc' => 'Omogućuje za preuzimanje podataka u formatima CSV, JSON i XML za vanjske URLove i lokalnu wiki',
+	'externaldata-ldap-unable-to-connect' => 'Ne može se spojiti na $1',
+	'externaldata-json-decode-not-supported' => 'Greška: json_decode() nije podržan u ovoj PHP verziji',
+	'externaldata-xml-error' => 'XML greška: $1 na liniji $2',
+	'externaldata-db-incomplete-information' => 'Greška: Nepotpune informacije za ovaj ID servera.',
+	'externaldata-db-could-not-get-url' => 'Nije pronađen URL nakon $1 {{PLURAL:$1|pokušaja|pokušaja}}.',
+	'externaldata-db-unknown-type' => 'Greška: Nepoznat tip baze podataka.',
+	'externaldata-db-could-not-connect' => 'Greška: Ne može se spojiti na bazu podataka.',
+	'externaldata-db-no-return-values' => 'Greška: Nije navedena povratna vrijednost.',
+	'externaldata-db-invalid-query' => 'Nevaljan upit.',
 );
 
 /** Catalan (Català)
@@ -195,6 +204,15 @@ $messages['fr'] = array(
 $messages['gl'] = array(
 	'getdata' => 'Obter os datos',
 	'externaldata-desc' => 'Permite a recuperación de datos en formatos CSV, JSON e XML a partir dos enderezos URL externos e mais das páxinas wiki locais',
+	'externaldata-ldap-unable-to-connect' => 'Non se pode conectar a $1',
+	'externaldata-json-decode-not-supported' => 'Erro: json_decode() non está soportado nesta versión de PHP',
+	'externaldata-xml-error' => 'Erro XML: $1 na liña $2',
+	'externaldata-db-incomplete-information' => 'Erro: información incompleta para este ID de servidor.',
+	'externaldata-db-could-not-get-url' => 'Non se puido obter o enderezo URL despois de $1 {{PLURAL:$1|intento|intentos}}.',
+	'externaldata-db-unknown-type' => 'Erro: tipo de base de datos descoñecido.',
+	'externaldata-db-could-not-connect' => 'Erro: non se puido conectar á base de datos.',
+	'externaldata-db-no-return-values' => 'Erro: non se especificou ningún valor de retorno.',
+	'externaldata-db-invalid-query' => 'Consulta non válida.',
 );
 
 /** Swiss German (Alemannisch)
