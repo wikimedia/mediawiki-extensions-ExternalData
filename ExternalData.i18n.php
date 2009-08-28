@@ -538,6 +538,13 @@ $messages['sv'] = array(
 	'externaldata-desc' => 'Tillåter att hämta data i formaten CSV, JSON och XML från både externa URL:er och lokala wikisidor',
 );
 
+/** Telugu (తెలుగు)
+ * @author Kiranmayee
+ */
+$messages['te'] = array(
+	'getdata' => 'విషయములు తీసుకునిరా',
+);
+
 /** Tagalog (Tagalog)
  * @author AnakngAraw
  */
