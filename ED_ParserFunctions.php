@@ -76,11 +76,14 @@ class EDParserFunctions {
 				// set to all lowercase to avoid casing issues
 				$external_var = strtolower( $external_var );
 				$filters[$external_var] = $value;
-			} else {
+			} elseif ( strpos( $param, '=' ) ) {
 				list( $local_var, $external_var ) = explode( '=', $param );
 				// set to all lowercase to avoid casing issues
 				$external_var = strtolower( $external_var );
 				$mappings[$local_var] = $external_var;
+			} else {
+				// if the parameter contains no equals signs,
+				// do nothing
 			}
 		}
 		foreach ( $filters as $filter_var => $filter_value ) {
