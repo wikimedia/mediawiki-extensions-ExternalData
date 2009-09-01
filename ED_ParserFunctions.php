@@ -27,8 +27,32 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
+		// check whether this URL is allowed - code based on
+		// Parser::maybeMakeExternalImage()
+		global $edgAllowExternalDataFrom;
+		$data_from = $edgAllowExternalDataFrom;
+		$text = false;
+		if ( empty($data_from) ) {
+			$url_match = true;
+		} elseif ( is_array( $data_from ) ) {
+			$url_match = false;
+			foreach( $data_from as $match ) {
+				if( strpos( $url, $match ) === 0 ) {
+					$url_match = true;
+					break;
+				}
+			}
+		} else {
+			$url_match = (strpos( $url, $data_from ) === 0);
+		}
+		if ( ! $url_match )
+			return;
 		
+		// now, get the contents of the URL - exit if there's nothing
+		// there
 		$url_contents = EDUtils::fetchURL( $url );
+		if ( empty( $url_contents ) )
+			return;
 		
 		$format = strtolower( array_shift( $params ) ); // make case-insensitive
 		$external_values = array();

@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 0.8.1
+        Version 0.9
         Yaron Koren, Michael Dale and David Macdonald
 
 This is free software licensed under the GNU General Public License. Please
@@ -65,6 +65,13 @@ You can also set for string replacements to be done on the URLs you call,
 for instance to hide API keys:
 
      $edgStringReplacements['MY_API_KEY'] = 'abcd1324';
+
+You can create a "whitelist" to allow retrieval of data only from trusted
+sites, in the manner of MediaWiki's $wgAllowExternalImagesFrom - if you
+are hiding API keys, it is very much recommended to create such a
+whitelist, to prevent users from being able to discover theire values:
+
+     $edgAllowExternalDataFrom = array('http://example.com/api');
 
 Finally, to use the database or LDAP retrieval capabilities, you need to
 set connection settings as well - see the online documentation for more
