@@ -20,7 +20,7 @@ $wgExtensionCredits['parserhook'][]= array(
 );
 $edgIP = $IP . '/extensions/ExternalData';
 
-$wgExtensionFunctions[] = 'edgParserFunctions';
+$wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
 $wgExtensionMessagesFiles['ExternalData'] = $edgIP . '/ExternalData.i18n.php';
 
 if( version_compare( $wgVersion, '1.16alpha', '>=' ) ) {
@@ -43,18 +43,6 @@ $edgCacheTable = null;
 
 //(in seconds) set to one week:
 $edgCacheExpireTime = 60*60*24 * 7;
-
-function edgParserFunctions() {
-	global $wgHooks, $wgParser;
-	if( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
-		$wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
-	} else {
-		if ( class_exists( 'StubObject' ) && !StubObject::isRealObject( $wgParser ) ) {
-			$wgParser->_unstub();
-		}
-		edgRegisterParser( $wgParser );
-	}
-}
 
 function edgRegisterParser(&$parser) {
 	$parser->setFunctionHook( 'get_external_data', array('EDParserFunctions','doGetExternalData') );
