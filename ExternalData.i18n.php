@@ -150,6 +150,7 @@ $messages['dsb'] = array(
 $messages['el'] = array(
 	'getdata' => 'Πάρε δεδομένα',
 	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki',
+	'externaldata-xml-error' => 'Σφάλμα XML : $1 στη γραμμή $2',
 	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
 );
 
