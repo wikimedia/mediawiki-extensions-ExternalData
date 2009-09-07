@@ -430,6 +430,22 @@ $messages['pl'] = array(
 	'externaldata-db-invalid-query' => 'Nieprawidłowe zapytanie.',
 );
 
+/** Piedmontese (Piemontèis)
+ * @author Dragonòt
+ */
+$messages['pms'] = array(
+	'getdata' => 'Oten dij dat',
+	'externaldata-ldap-unable-to-connect' => 'A peul pa coleghesse a $1',
+	'externaldata-json-decode-not-supported' => "Eror: json_decode() a l'é pa suportà an sta vërsion ëd PHP",
+	'externaldata-xml-error' => 'Eror XML: $1 a la linia $2',
+	'externaldata-db-incomplete-information' => 'Eror: Anformassion pa completa për sto server ID-sì.',
+	'externaldata-db-could-not-get-url' => "A peul pa oten-e l'URL d'apress ëd $1 {{PLURAL:$1|preuva|preuve}}.",
+	'externaldata-db-unknown-type' => 'Eror: Sòrt ëd database pa conossùa',
+	'externaldata-db-could-not-connect' => 'Eror: a peul pa coleghesse al database.',
+	'externaldata-db-no-return-values' => "Eror: Pa gnun valor d'artorn spessifià.",
+	'externaldata-db-invalid-query' => 'Ciamà pa bon-a.',
+);
+
 /** Portuguese (Português)
  * @author Giro720
  * @author Waldir
