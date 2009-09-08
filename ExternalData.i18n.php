@@ -435,6 +435,7 @@ $messages['pl'] = array(
  */
 $messages['pms'] = array(
 	'getdata' => 'Oten dij dat',
+	'externaldata-desc' => "A përmëtt d'arcuperé dat an formà CSV, JSON e XML da pàgine ëd wiki esterne e locaj",
 	'externaldata-ldap-unable-to-connect' => 'A peul pa coleghesse a $1',
 	'externaldata-json-decode-not-supported' => "Eror: json_decode() a l'é pa suportà an sta vërsion ëd PHP",
 	'externaldata-xml-error' => 'Eror XML: $1 a la linia $2',
