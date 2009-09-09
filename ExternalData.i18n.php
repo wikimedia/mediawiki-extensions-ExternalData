@@ -358,8 +358,10 @@ $messages['lb'] = array(
 	'externaldata-desc' => 'Erlaabt et Donnéeën an de Formater CSV, JSON an XML vun externen URLen a lokale Wiki-Säiten ze verschaffen',
 	'externaldata-ldap-unable-to-connect' => 'Onméiglech sech op $1 ze connectéieren',
 	'externaldata-xml-error' => 'XML Feeler: $1 an der Linn $2',
+	'externaldata-db-could-not-get-url' => "D'URL konnt no {{PLURAL:$1|enger Kéier|$1 Versich}} net opgemaach ginn.",
 	'externaldata-db-unknown-type' => 'Feeler: Onbekannten Datebank-Typ.',
 	'externaldata-db-could-not-connect' => "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
+	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
 );
 
 /** Dutch (Nederlands)
