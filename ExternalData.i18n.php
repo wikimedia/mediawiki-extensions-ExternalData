@@ -276,6 +276,13 @@ $messages['hsb'] = array(
 	'externaldata-db-invalid-query' => 'Njepłaćiwe naprašowanje.',
 );
 
+/** Hungarian (Magyar)
+ * @author Glanthor Reviol
+ */
+$messages['hu'] = array(
+	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
+);
+
 /** Interlingua (Interlingua)
  * @author McDutchie
  */
