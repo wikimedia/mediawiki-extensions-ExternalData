@@ -280,6 +280,11 @@ $messages['hsb'] = array(
  * @author Glanthor Reviol
  */
 $messages['hu'] = array(
+	'externaldata-ldap-unable-to-connect' => 'Sikertelen csatlakozás a következőhöz: $1',
+	'externaldata-xml-error' => '$1 XML hiba, $2. sor',
+	'externaldata-db-unknown-type' => 'Hiba: ismeretlen adatbázis típus.',
+	'externaldata-db-could-not-connect' => 'Hiba: nem sikerült csatlakozni az adatbázishoz.',
+	'externaldata-db-no-return-values' => 'Hiba: nem lettek megadva visszatérési értékek.',
 	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
 );
 
