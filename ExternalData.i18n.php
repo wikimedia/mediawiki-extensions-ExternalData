@@ -280,8 +280,13 @@ $messages['hsb'] = array(
  * @author Glanthor Reviol
  */
 $messages['hu'] = array(
+	'getdata' => 'Adatok lekérése',
+	'externaldata-desc' => 'Adatok lekérése CSV, JSON és XML formátumban külső URL-ekről vagy helyi wiki lapokról egyaránt',
 	'externaldata-ldap-unable-to-connect' => 'Sikertelen csatlakozás a következőhöz: $1',
+	'externaldata-json-decode-not-supported' => 'Hiba: a json_decode() nem támogatott ebben a PHP verzióban',
 	'externaldata-xml-error' => '$1 XML hiba, $2. sor',
+	'externaldata-db-incomplete-information' => 'Hiba: hiányos információ a szerver azonosítóhoz.',
+	'externaldata-db-could-not-get-url' => 'Nem sikerült lekérni az URL-t {{PLURAL:$1|egy|$1}} próbálkozás alatt.',
 	'externaldata-db-unknown-type' => 'Hiba: ismeretlen adatbázis típus.',
 	'externaldata-db-could-not-connect' => 'Hiba: nem sikerült csatlakozni az adatbázishoz.',
 	'externaldata-db-no-return-values' => 'Hiba: nem lettek megadva visszatérési értékek.',
