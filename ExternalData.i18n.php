@@ -612,3 +612,10 @@ $messages['vi'] = array(
 	'externaldata-desc' => 'Cho phép truy xuất dữ liệu theo định dạng CSV, JSON và XML từ cả URL bên ngoài lẫn các trang wiki bên trong',
 );
 
+/** Yiddish (ייִדיש)
+ * @author פוילישער
+ */
+$messages['yi'] = array(
+	'getdata' => 'באַקומען דאַטן',
+);
+
