@@ -12,7 +12,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['parserhook'][]= array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '0.9',
+	'version'        => '0.9.1',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'description'    => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
@@ -40,6 +40,7 @@ $wgSpecialPageGroups['GetData'] = 'pagetools';
 $edgValues = array();
 $edgStringReplacements = array();
 $edgCacheTable = null;
+$edgAllowSSL = false;
 
 //(in seconds) set to one week:
 $edgCacheExpireTime = 60*60*24 * 7;
