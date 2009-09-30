@@ -276,7 +276,8 @@ class EDUtils {
 
 	static function fetchURL( $url, $post_vars = array(), $get_fresh=false, $try_count=1 ) {
 		$dbr = wfGetDB( DB_SLAVE );
-		global $edgStringReplacements, $edgCacheTable, $edgCacheExpireTime;
+		global $edgStringReplacements, $edgCacheTable,
+			$edgCacheExpireTime, $edgAllowSSL;
 
 		// do any special variable replacements in the URLs, for
 		// secret API keys and the like
@@ -284,8 +285,13 @@ class EDUtils {
 			$url = str_replace( $key, $value, $url );
 		}
 
-		if( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) )
-			return Http::get( $url );
+		if( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
+			if ($edgAllowSSL) {
+				return Http::get( $url, 'default', array(CURLOPT_SSL_VERIFYPEER => false) );
+			} else {
+				return Http::get( $url );
+			}
+		}
 
 		// check the cache (only the first 254 chars of the url)
 		$row = $dbr->selectRow( $edgCacheTable, '*', array( 'url' => substr($url,0,254) ), 'EDUtils::fetchURL' );
@@ -295,7 +301,11 @@ class EDUtils {
 		}
 
 		if ( !$row || $get_fresh) {
-			$page = Http::get( $url );
+			if ($edgAllowSSL) {
+				$page = Http::get( $url, 'default', array(CURLOPT_SSL_VERIFYPEER => false) );
+			} else {
+				$page = Http::get( $url );
+			}
 			if ( $page === false ) {
 				sleep( 1 );
 				if( $try_count >= self::$http_number_of_tries ){
