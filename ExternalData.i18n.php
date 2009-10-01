@@ -299,6 +299,11 @@ $messages['hu'] = array(
 $messages['ia'] = array(
 	'getdata' => 'Obtener datos',
 	'externaldata-desc' => 'Permitte recuperar datos in le formatos CSV, JSON e XML, e ab adresses URL externe e ab paginas wiki local',
+	'externaldata-ldap-unable-to-connect' => 'Impossibile connecter se a $1',
+	'externaldata-json-decode-not-supported' => 'Error: json_decode() non es supportate in iste version de PHP',
+	'externaldata-xml-error' => 'Error de XML: $1 al linea $2',
+	'externaldata-db-incomplete-information' => 'Error: Information incomplete pro iste ID de servitor.',
+	'externaldata-db-could-not-get-url' => 'Non poteva obtener le URL post $1 {{PLURAL:$1|tentativa|tentativas}}.',
 );
 
 /** Indonesian (Bahasa Indonesia)
