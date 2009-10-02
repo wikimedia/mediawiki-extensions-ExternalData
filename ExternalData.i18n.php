@@ -184,6 +184,7 @@ $messages['fi'] = array(
 /** French (Français)
  * @author Crochet.david
  * @author IAlex
+ * @author McDutchie
  */
 $messages['fr'] = array(
 	'getdata' => 'Obtenir des données',
@@ -194,7 +195,7 @@ $messages['fr'] = array(
 	'externaldata-db-incomplete-information' => 'Erreur : Informations incomplètes pour cet identifiant de serveur.',
 	'externaldata-db-could-not-get-url' => "Impossible d'obtenir l'URL après $1 essai{{PLURAL:$1|s|s}}.",
 	'externaldata-db-unknown-type' => 'ERREUR: Type de base de données inconnu.',
-	'externaldata-db-could-not-connect' => 'Erreur : Impossible de se connecteur à la base de données.',
+	'externaldata-db-could-not-connect' => 'Erreur : Impossible de se connecter à la base de données.',
 	'externaldata-db-no-return-values' => "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	'externaldata-db-invalid-query' => 'Requête invalide.',
 );
@@ -304,6 +305,10 @@ $messages['ia'] = array(
 	'externaldata-xml-error' => 'Error de XML: $1 al linea $2',
 	'externaldata-db-incomplete-information' => 'Error: Information incomplete pro iste ID de servitor.',
 	'externaldata-db-could-not-get-url' => 'Non poteva obtener le URL post $1 {{PLURAL:$1|tentativa|tentativas}}.',
+	'externaldata-db-unknown-type' => 'Error: Typo de base de datos incognite.',
+	'externaldata-db-could-not-connect' => 'Error: Impossibile connecter se al base de datos.',
+	'externaldata-db-no-return-values' => 'Error: Nulle valor de retorno specificate.',
+	'externaldata-db-invalid-query' => 'Consulta invalide.',
 );
 
 /** Indonesian (Bahasa Indonesia)
