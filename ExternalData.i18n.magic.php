@@ -15,6 +15,12 @@ $magicWords['ar'] = array(
 	'for_external_table'   => array( '0', 'لجدول_خارجي', 'for_external_table' ),
 );
 
+$magicWords['mr'] = array(
+	'get_external_data'    => array( '0', 'मिळवा बाह्य विदा', 'get_external_data' ),
+	'get_ldap_data'        => array( '0', 'मिळवा _एलडॅप_विदा', 'get_ldap_data' ),
+	'for_external_table'   => array( '0', 'बाह्य_सारणी_करिता', 'for_external_table' ),
+);
+
 $magicWords['nl'] = array(
 	'get_external_data'    => array( '0', 'externe_gegevens_ophalen', 'get_external_data' ),
 	'get_ldap_data'        => array( '0', 'ldap_gegevens_ophalen', 'get_ldap_data' ),
