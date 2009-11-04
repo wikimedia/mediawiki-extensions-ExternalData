@@ -77,6 +77,14 @@ $messages['be-tarask'] = array(
 	'externaldata-db-invalid-query' => 'Няслушны запыт.',
 );
 
+/** Breton (Brezhoneg)
+ * @author Fohanno
+ */
+$messages['br'] = array(
+	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
+	'externaldata-db-invalid-query' => 'Reked direizh.',
+);
+
 /** Bosnian (Bosanski)
  * @author CERminator
  */
