@@ -21,6 +21,14 @@ $magicWords['mr'] = array(
 	'for_external_table'   => array( '0', 'बाह्य_सारणी_करिता', 'for_external_table' ),
 );
 
+$magicWords['nds-nl'] = array(
+	'get_external_data'    => array( '0', 'externe_gegevens_ophaolen', 'externe_gegevens_ophalen', 'get_external_data' ),
+	'get_ldap_data'        => array( '0', 'ldap-gegevens_ophaolen', 'ldap_gegevens_ophalen', 'get_ldap_data' ),
+	'get_db_data'          => array( '0', 'db-gegevens_ophaolen', 'db_gegevens_ophalen', 'get_db_data' ),
+	'external_value'       => array( '0', 'externe_weerde', 'externe_waarde', 'external_value' ),
+	'for_external_table'   => array( '0', 'veur_externe_tebel', 'voor_externe_tabel', 'for_external_table' ),
+);
+
 $magicWords['nl'] = array(
 	'get_external_data'    => array( '0', 'externe_gegevens_ophalen', 'get_external_data' ),
 	'get_ldap_data'        => array( '0', 'ldap_gegevens_ophalen', 'get_ldap_data' ),
