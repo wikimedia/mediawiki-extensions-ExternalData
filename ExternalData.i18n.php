@@ -402,6 +402,23 @@ $messages['lb'] = array(
 	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
 );
 
+/** Macedonian (Македонски)
+ * @author Bjankuloski06
+ */
+$messages['mk'] = array(
+	'getdata' => 'Земи податоци',
+	'externaldata-desc' => 'Овозможува преземање на податоци во CSV, JSON и XML формат од надворешни URL адреси и од локални вики-страници',
+	'externaldata-ldap-unable-to-connect' => 'Не можам да се поврзам со  $1',
+	'externaldata-json-decode-not-supported' => 'Грешка: json_decode() не е поддржан во оваа верзија на PHP',
+	'externaldata-xml-error' => 'XML грешка: $1 во ред $2',
+	'externaldata-db-incomplete-information' => 'Грешка: Нецелосни информации за овој серверски ид. бр.',
+	'externaldata-db-could-not-get-url' => 'Не можев да ја добијам URL адресата по $1 {{PLURAL:$1|обид|обиди}}.',
+	'externaldata-db-unknown-type' => 'Грешка: Непознат тип на база на податоци.',
+	'externaldata-db-could-not-connect' => 'Грешка: Не можев да се поврзам со базата на податоци.',
+	'externaldata-db-no-return-values' => 'Грешка: Нема назначено повратни вредности.',
+	'externaldata-db-invalid-query' => 'Грешно барање.',
+);
+
 /** Dutch (Nederlands)
  * @author Siebrand
  */
@@ -489,15 +506,21 @@ $messages['pms'] = array(
 
 /** Portuguese (Português)
  * @author Giro720
+ * @author Hamilton Abreu
  * @author Waldir
  */
 $messages['pt'] = array(
 	'getdata' => 'Obter dados',
 	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
-	'externaldata-ldap-unable-to-connect' => 'Não foi possível conectar-se a $1',
-	'externaldata-xml-error' => 'erro no XML: $1 na linha $2',
-	'externaldata-db-could-not-get-url' => 'Não foi possível obter o URL após $1 {{PLURAL:$1|tentativa|tentativas}}.',
-	'externaldata-db-could-not-connect' => 'Erro: Não foi possível conectar-se ao banco de dados.',
+	'externaldata-ldap-unable-to-connect' => 'Não foi possível estabelecer ligação a $1',
+	'externaldata-json-decode-not-supported' => 'Erro: json_decode() não é suportado nesta versão do PHP',
+	'externaldata-xml-error' => 'Erro XML: $1 na linha $2',
+	'externaldata-db-incomplete-information' => 'Erro: Informação incompleta para o ID deste servidor.',
+	'externaldata-db-could-not-get-url' => 'Não foi possível importar a URL após {{PLURAL:$1|uma tentativa|$1 tentativas}}.',
+	'externaldata-db-unknown-type' => 'Erro: Tipo de base de dados desconhecido.',
+	'externaldata-db-could-not-connect' => 'Erro: Não foi possível estabelecer ligação à base de dados.',
+	'externaldata-db-no-return-values' => 'Erro: Nenhum valor de retorno especificado.',
+	'externaldata-db-invalid-query' => "''Query'' inválida.",
 );
 
 /** Brazilian Portuguese (Português do Brasil)
