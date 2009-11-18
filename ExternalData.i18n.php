@@ -81,6 +81,7 @@ $messages['be-tarask'] = array(
  * @author Fohanno
  */
 $messages['br'] = array(
+	'getdata' => 'Tapout roadennoù',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
 );
