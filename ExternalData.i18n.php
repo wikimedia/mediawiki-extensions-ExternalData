@@ -83,6 +83,9 @@ $messages['be-tarask'] = array(
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
+	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
+	'externaldata-db-unknown-type' => 'Fazi : Seurt diaz roadennoù dianav',
+	'externaldata-db-could-not-connect' => "Fazi : Ne c'haller ket kevreañ ouzh an diaz roadennoù.",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
 );
 
