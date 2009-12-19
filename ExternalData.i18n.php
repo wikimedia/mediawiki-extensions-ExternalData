@@ -454,6 +454,15 @@ $messages['nn'] = array(
 $messages['no'] = array(
 	'getdata' => 'Hent data',
 	'externaldata-desc' => 'Gir mulighet til å hente data i formatene CSV, JSON og XML fra både eksterne nettadresser og lokale wikisider',
+	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
+	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikke støttet i denne versjonen av PHP',
+	'externaldata-xml-error' => 'XML feil: $1 på linje $2',
+	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tjener-IDen.',
+	'externaldata-db-could-not-get-url' => 'Kunne ikke hente URL etter {{PLURAL:$1|ett forsøk|$1 forsøk}}.',
+	'externaldata-db-unknown-type' => 'Feil: Ukjent databasetype.',
+	'externaldata-db-could-not-connect' => 'Feil: Kunne ikke koble til database.',
+	'externaldata-db-no-return-values' => 'Feil: Ingen returverdi spesifisert.',
+	'externaldata-db-invalid-query' => 'Ugyldig spørring.',
 );
 
 /** Occitan (Occitan)
