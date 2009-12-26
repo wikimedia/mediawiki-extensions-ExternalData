@@ -79,13 +79,17 @@ $messages['be-tarask'] = array(
 
 /** Breton (Brezhoneg)
  * @author Fohanno
+ * @author Y-M D
  */
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
+	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer.',
+	'externaldata-db-could-not-get-url' => "N'eo ket posubl tapout an URL goude $1 taol-esae{{PLURAL:$1||}}.",
 	'externaldata-db-unknown-type' => 'Fazi : Seurt diaz roadennoù dianav',
 	'externaldata-db-could-not-connect' => "Fazi : Ne c'haller ket kevreañ ouzh an diaz roadennoù.",
+	'externaldata-db-no-return-values' => "Fazi : N'eo bet lakaet talvoudenn distro ebet",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
 );
 
