@@ -172,11 +172,14 @@ $messages['el'] = array(
 
 /** Spanish (Español)
  * @author Crazymadlover
+ * @author Imre
  * @author Sanbec
  */
 $messages['es'] = array(
 	'getdata' => 'Obtener datos',
 	'externaldata-desc' => 'Permite la recuperación de datos en formatos CSV, JSON y XML a partir de URL externos y de páginas wiki locales',
+	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
+	'externaldata-db-invalid-query' => 'Consulta inválida.',
 );
 
 /** Basque (Euskara)
