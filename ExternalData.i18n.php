@@ -170,6 +170,13 @@ $messages['el'] = array(
 	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
 );
 
+/** Esperanto (Esperanto)
+ * @author Yekrats
+ */
+$messages['eo'] = array(
+	'externaldata-db-invalid-query' => 'Malvalida serĉomendo.',
+);
+
 /** Spanish (Español)
  * @author Crazymadlover
  * @author Imre
