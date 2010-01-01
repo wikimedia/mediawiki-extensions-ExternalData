@@ -663,9 +663,14 @@ $messages['tl'] = array(
 
 /** Turkish (Türkçe)
  * @author Karduelis
+ * @author Vito Genovese
  */
 $messages['tr'] = array(
 	'getdata' => 'Veri al',
+	'externaldata-db-unknown-type' => 'Hata: Bilinmeyen veritabanı türü.',
+	'externaldata-db-could-not-connect' => 'Hata: Veritabanına bağlanılamıyor.',
+	'externaldata-db-no-return-values' => 'Hata: Dönüş değeri belirtilmedi.',
+	'externaldata-db-invalid-query' => 'Geçersiz sorgu.',
 );
 
 /** Veps (Vepsan kel')
