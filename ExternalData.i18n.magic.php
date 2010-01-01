@@ -11,6 +11,17 @@ $magicWords['en'] = array(
 );
 
 $magicWords['ar'] = array(
+	'get_external_data'    => array( '0', 'عرض_بيانات_خارجية', 'get_external_data' ),
+	'get_ldap_data'        => array( '0', 'عرض_بيانات_لداب', 'get_ldap_data' ),
+	'get_db_data'          => array( '0', 'عرض_بيانات_قب', 'get_db_data' ),
+	'external_value'       => array( '0', 'قيمة_خارجية', 'external_value' ),
+	'for_external_table'   => array( '0', 'لجدول_خارجي', 'for_external_table' ),
+);
+
+$magicWords['arz'] = array(
+	'get_external_data'    => array( '0', 'عرض_بيانات_خارجية', 'get_external_data' ),
+	'get_ldap_data'        => array( '0', 'عرض_بيانات_لداب', 'get_ldap_data' ),
+	'get_db_data'          => array( '0', 'عرض_بيانات_قب', 'get_db_data' ),
 	'external_value'       => array( '0', 'قيمة_خارجية', 'external_value' ),
 	'for_external_table'   => array( '0', 'لجدول_خارجي', 'for_external_table' ),
 );
