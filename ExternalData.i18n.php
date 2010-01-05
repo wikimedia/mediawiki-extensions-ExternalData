@@ -65,7 +65,7 @@ $messages['arz'] = array(
  */
 $messages['be-tarask'] = array(
 	'getdata' => 'Атрымаць зьвесткі',
-	'externaldata-desc' => 'Дазваляе атрымліваць зьвесткі ў фарматах CSV, JSON і XML з вонкавых крыніц і лякальных старонак вікі',
+	'externaldata-desc' => 'Дазваляе атрымліваць структураваныя зьвесткі з вонкавых URL-адрасоў, базаў зьвестак і іншых крыніц',
 	'externaldata-ldap-unable-to-connect' => 'Немагчыма далучыцца да $1',
 	'externaldata-json-decode-not-supported' => 'Памылка: json_decode() не падтрымліваецца ў гэтай вэрсіі PHP',
 	'externaldata-xml-error' => 'Памылка XML: $1 у радку $2',
@@ -98,7 +98,7 @@ $messages['br'] = array(
  */
 $messages['bs'] = array(
 	'getdata' => 'Uzmi podatke',
-	'externaldata-desc' => 'Omogućuje za preuzimanje podataka u formatima CSV, JSON i XML za vanjske URLove i lokalnu wiki',
+	'externaldata-desc' => 'Omogućuje za preuzimanje strukturnih podataka iz vanjskih URLova, baza podataka i drugih izvora',
 	'externaldata-ldap-unable-to-connect' => 'Ne može se spojiti na $1',
 	'externaldata-json-decode-not-supported' => 'Greška: json_decode() nije podržan u ovoj PHP verziji',
 	'externaldata-xml-error' => 'XML greška: $1 na liniji $2',
@@ -147,7 +147,7 @@ $messages['de'] = array(
  */
 $messages['dsb'] = array(
 	'getdata' => 'Daty wobstaraś',
-	'externaldata-desc' => 'Zmóžnja wótwołanje datow w formatach CSV, JSON a XML ako z eksternych URL tak teke lokalnych wikijowych bokow',
+	'externaldata-desc' => 'Zmóžnja wótwołowanje strukturěrowanych datow z eksternych URL, datowych bankow a drugich žrědłow',
 	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwězaś',
 	'externaldata-json-decode-not-supported' => 'Zmólka: json_decode() njepódpěra se w toś tej wersiji PHP',
 	'externaldata-xml-error' => 'Zmólka XML: $1 na smužce $2',
@@ -231,7 +231,7 @@ $messages['fr'] = array(
  */
 $messages['gl'] = array(
 	'getdata' => 'Obter os datos',
-	'externaldata-desc' => 'Permite a recuperación de datos en formatos CSV, JSON e XML a partir dos enderezos URL externos e mais das páxinas wiki locais',
+	'externaldata-desc' => 'Permite a recuperación de datos estruturados a partir de enderezos URL externos, bases de datos e outras fontes',
 	'externaldata-ldap-unable-to-connect' => 'Non se pode conectar a $1',
 	'externaldata-json-decode-not-supported' => 'Erro: json_decode() non está soportado nesta versión de PHP',
 	'externaldata-xml-error' => 'Erro XML: $1 na liña $2',
@@ -291,7 +291,7 @@ $messages['he'] = array(
  */
 $messages['hsb'] = array(
 	'getdata' => 'Daty wobstarać',
-	'externaldata-desc' => 'Zmóžnja wotwołanje datow we formatach CSV, JSON a XML z eksternych URL kaž tež lokalnych wikijowych stronow',
+	'externaldata-desc' => 'Zmóžnja wotwołowanje strukturowanych datow z eksternych URL, datowych bankow a druhich žórłow',
 	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwjazać',
 	'externaldata-json-decode-not-supported' => 'Zmylk: json_decode() so w tutej wersiji PHP njepodpěruje',
 	'externaldata-xml-error' => 'Zmylk XML: $1 na lince $2',
@@ -442,7 +442,7 @@ $messages['mk'] = array(
  */
 $messages['nl'] = array(
 	'getdata' => 'Gegevens ophalen',
-	'externaldata-desc' => "Maakt het mogelijk gegevens in CSV, JSON en XML op te halen van zowel externe URL's als lokale wikipagina's",
+	'externaldata-desc' => "Maakt het mogelijk gegevens van externe URL's, database en andere externe bronnen op te halen",
 	'externaldata-ldap-unable-to-connect' => 'Het was niet mogelijk te verbinden met $1',
 	'externaldata-json-decode-not-supported' => 'Fout: json_decode() wordt niet ondersteund in deze versie van PHP',
 	'externaldata-xml-error' => 'XML-fout: $1 op regel $2',
@@ -584,7 +584,7 @@ $messages['ro'] = array(
  */
 $messages['roa-tara'] = array(
 	'getdata' => 'Pigghie le date',
-	'externaldata-desc' => "Permette de repigghià le data jndr'à le formate CSV, JSON e XML da URL fore a Uicchipèdie e da pàggene locale de Uicchipèdie",
+	'externaldata-desc' => 'Permette de repigghià data strutturate da URL fore a Uicchipèdie, database e otre sorgende',
 );
 
 /** Russian (Русский)
