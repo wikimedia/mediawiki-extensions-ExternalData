@@ -13,7 +13,7 @@ $messages = array();
 $messages['en'] = array(
 	// user messages
 	'getdata' => 'Get data',
-	'externaldata-desc' => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
+	'externaldata-desc' => 'Allows for retrieving structured data from external URLs, databases and other sources',
 	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1',
 	'externaldata-json-decode-not-supported' => 'Error: json_decode() is not supported in this version of PHP',
 	'externaldata-xml-error' => 'XML error: $1 at line $2',

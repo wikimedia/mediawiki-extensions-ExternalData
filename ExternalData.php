@@ -15,7 +15,7 @@ $wgExtensionCredits['parserhook'][]= array(
 	'version'        => '0.9.1',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
-	'description'    => 'Allows for retrieving data in CSV, JSON and XML formats from both external URLs and local wiki pages',
+	'description'    => 'Allows for retrieving structured data from external URLs, databases and other sources',
 	'descriptionmsg' => 'externaldata-desc',
 );
 $edgIP = $IP . '/extensions/ExternalData';
