@@ -45,6 +45,12 @@ $edgAllowSSL = false;
 //(in seconds) set to one week:
 $edgCacheExpireTime = 60*60*24 * 7;
 
+$edgDBServer = array();
+$edgDBServerType = array();
+$edgDBName = array();
+$edgDBUser = array();
+$edgDBPass = array();
+
 function edgRegisterParser(&$parser) {
 	$parser->setFunctionHook( 'get_external_data', array('EDParserFunctions','doGetExternalData') );
 	$parser->setFunctionHook( 'get_ldap_data', array('EDParserFunctions','doGetLDAPData') );
