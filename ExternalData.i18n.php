@@ -181,11 +181,16 @@ $messages['eo'] = array(
  * @author Crazymadlover
  * @author Imre
  * @author Sanbec
+ * @author Translationista
  */
 $messages['es'] = array(
 	'getdata' => 'Obtener datos',
 	'externaldata-desc' => 'Permite la recuperación de datos en formatos CSV, JSON y XML a partir de URL externos y de páginas wiki locales',
+	'externaldata-ldap-unable-to-connect' => 'No se pudo conectar con $1',
 	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
+	'externaldata-db-incomplete-information' => 'Error: Información incompleta para este ID de servidor.',
+	'externaldata-db-unknown-type' => 'Error: Tipo de base de datos desconocido.',
+	'externaldata-db-could-not-connect' => 'Error: No se pudo lograr conexión con la base de datos.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
 );
 
@@ -211,10 +216,11 @@ $messages['fi'] = array(
  * @author Crochet.david
  * @author IAlex
  * @author McDutchie
+ * @author PieRRoMaN
  */
 $messages['fr'] = array(
 	'getdata' => 'Obtenir des données',
-	'externaldata-desc' => 'Permet de récupérer des données en CSV, JSON et XML depuis des URL externes et des pages du wiki',
+	'externaldata-desc' => "Permet de récupérer des données structurées à partir d'URL externes, de bases de données et d'autres sources",
 	'externaldata-ldap-unable-to-connect' => 'Impossible de se connecter à $1',
 	'externaldata-json-decode-not-supported' => "Erreur : json_decode() n'est pas supportée dans cette version de PHP",
 	'externaldata-xml-error' => 'Erreur XML : $1 à la ligne $2',
@@ -593,7 +599,7 @@ $messages['roa-tara'] = array(
  */
 $messages['ru'] = array(
 	'getdata' => 'Получить данные',
-	'externaldata-desc' => 'Позволяет получение данных в форматах CSV, JSON и XML, как с внешних адресов, так и с локальных вики-страниц.',
+	'externaldata-desc' => 'Позволяет получать структурированные данные с внешних адресов, баз данных и других источников',
 	'externaldata-ldap-unable-to-connect' => 'Не удаётся подключиться к $1',
 	'externaldata-json-decode-not-supported' => 'Ошибка. json_decode() не поддерживается в данной версии PHP',
 	'externaldata-xml-error' => 'Ошибка XML. $1 в строке $2',
