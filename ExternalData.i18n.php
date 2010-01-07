@@ -254,7 +254,7 @@ $messages['gl'] = array(
  */
 $messages['gsw'] = array(
 	'getdata' => 'Date hole',
-	'externaldata-desc' => 'Erlaubt Daten abzruefe im CSV, JSON un XML Format vu extärne URL un lokale Wikisyte',
+	'externaldata-desc' => 'Erlaubt strukturierti Daten abzruefe vu extärne URL un andre Quälle',
 	'externaldata-ldap-unable-to-connect' => 'Cha kei Verbindig härstellen zue $1',
 	'externaldata-json-decode-not-supported' => 'Fähler: json_decode() wird nit unterstitzt in däre Version vu PHP',
 	'externaldata-xml-error' => 'XML-Fähler: $1 in dr Zyyle $2',
@@ -370,10 +370,11 @@ $messages['it'] = array(
 
 /** Japanese (日本語)
  * @author Fryed-peach
+ * @author 青子守歌
  */
 $messages['ja'] = array(
 	'getdata' => 'データ取得',
-	'externaldata-desc' => '外部URLやローカルのウィキページから、CSV・JSON・XML形式のデータを取得できるようにする',
+	'externaldata-desc' => '外部URLやデータベース、その他のソースからデータを取得できるようにする',
 	'externaldata-ldap-unable-to-connect' => '$1 に接続できません',
 	'externaldata-json-decode-not-supported' => 'エラー: json_decode() はこのバージョンの PHP ではサポートされていません',
 	'externaldata-xml-error' => 'XMLエラー: 行$2で$1',
@@ -431,7 +432,7 @@ $messages['lb'] = array(
  */
 $messages['mk'] = array(
 	'getdata' => 'Земи податоци',
-	'externaldata-desc' => 'Овозможува преземање на податоци во CSV, JSON и XML формат од надворешни URL адреси и од локални вики-страници',
+	'externaldata-desc' => 'Овозможува добивање структурирани податоци од надворешни URL-адреси, бази на податоци и други извори',
 	'externaldata-ldap-unable-to-connect' => 'Не можам да се поврзам со  $1',
 	'externaldata-json-decode-not-supported' => 'Грешка: json_decode() не е поддржан во оваа верзија на PHP',
 	'externaldata-xml-error' => 'XML грешка: $1 во ред $2',
@@ -473,7 +474,7 @@ $messages['nn'] = array(
  */
 $messages['no'] = array(
 	'getdata' => 'Hent data',
-	'externaldata-desc' => 'Gir mulighet til å hente data i formatene CSV, JSON og XML fra både eksterne nettadresser og lokale wikisider',
+	'externaldata-desc' => 'Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder',
 	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
 	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikke støttet i denne versjonen av PHP',
 	'externaldata-xml-error' => 'XML feil: $1 på linje $2',
