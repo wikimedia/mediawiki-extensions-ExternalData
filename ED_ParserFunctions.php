@@ -233,6 +233,9 @@ class EDParserFunctions {
 		$variables = $matches[1];
 		$num_loops = 0;
 		foreach ($variables as $variable) {
+			// ignore the presence of '.urlencode' - it's a command,
+			// not part of the actual variable name
+			$variable = str_replace('.urlencode', '', $variable);
 			if ( array_key_exists( $variable, $edgValues ) ) {
 				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
 			}
@@ -241,7 +244,16 @@ class EDParserFunctions {
 		for ($i = 0; $i < $num_loops; $i++) {
 			$cur_expression = $expression;
 			foreach ($variables as $variable) {
-				$cur_expression = str_replace( '{{{' . $variable . '}}}', self::getIndexedValue( $variable , $i ), $cur_expression );
+				// if variable name ends with a ".urlencode",
+				// that's a command - URL-encode the value of
+				// the actual variable
+				if ( strrpos( $variable, '.urlencode' ) == strlen( $variable ) - strlen( '.urlencode' ) ) {
+					$real_var = str_replace( '.urlencode', '', $variable );
+					$value = urlencode( self::getIndexedValue( $real_var , $i ) );
+				} else {
+					$value = self::getIndexedValue( $variable , $i );
+				}
+				$cur_expression = str_replace( '{{{' . $variable . '}}}', $value, $cur_expression );
 			}
 			$text .= $cur_expression;
 		}
