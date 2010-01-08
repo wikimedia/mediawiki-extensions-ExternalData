@@ -252,6 +252,7 @@ class EDUtils {
 			if (is_array( $val )) {
 				self::parseTree( $val, $retrieved_values );
 			} else {
+				$key = strtolower( $key );
 				if( array_key_exists( $key, $retrieved_values ) )
 					$retrieved_values[$key][] = $val;
 				else
