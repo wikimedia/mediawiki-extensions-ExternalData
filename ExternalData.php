@@ -12,7 +12,7 @@ if (!defined('MEDIAWIKI')) die();
 $wgExtensionCredits['parserhook'][]= array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '0.9.1',
+	'version'        => '0.9.2',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'description'    => 'Allows for retrieving structured data from external URLs, databases and other sources',
