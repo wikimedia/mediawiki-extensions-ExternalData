@@ -545,7 +545,7 @@ $messages['pms'] = array(
  */
 $messages['pt'] = array(
 	'getdata' => 'Obter dados',
-	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML tanto a partir de URLs externos como de páginas wiki locais',
+	'externaldata-desc' => 'Permite a importação de dados estruturados a partir de URLs, bases de dados e outras fontes externas',
 	'externaldata-ldap-unable-to-connect' => 'Não foi possível estabelecer ligação a $1',
 	'externaldata-json-decode-not-supported' => 'Erro: json_decode() não é suportado nesta versão do PHP',
 	'externaldata-xml-error' => 'Erro XML: $1 na linha $2',
