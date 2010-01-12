@@ -314,7 +314,7 @@ $messages['hsb'] = array(
  */
 $messages['hu'] = array(
 	'getdata' => 'Adatok lekérése',
-	'externaldata-desc' => 'Adatok lekérése CSV, JSON és XML formátumban külső URL-ekről vagy helyi wiki lapokról egyaránt',
+	'externaldata-desc' => 'Strukturált adatok lekérése külső URL-ekről, adatbázisokból vagy más forrásokból',
 	'externaldata-ldap-unable-to-connect' => 'Sikertelen csatlakozás a következőhöz: $1',
 	'externaldata-json-decode-not-supported' => 'Hiba: a json_decode() nem támogatott ebben a PHP verzióban',
 	'externaldata-xml-error' => '$1 XML hiba, $2. sor',
@@ -647,10 +647,19 @@ $messages['sr-el'] = array(
 
 /** Swedish (Svenska)
  * @author Najami
+ * @author Per
  */
 $messages['sv'] = array(
 	'getdata' => 'Hämta data',
 	'externaldata-desc' => 'Tillåter att hämta data i formaten CSV, JSON och XML från både externa URL:er och lokala wikisidor',
+	'externaldata-ldap-unable-to-connect' => 'Kunde inte koppla till $1',
+	'externaldata-xml-error' => 'XML-fel: $1 på rad $2',
+	'externaldata-db-incomplete-information' => 'Fel: Informationen för server-ID inte komplett.',
+	'externaldata-db-could-not-get-url' => 'Kunde inte hämta URL på $1 {{PLURAL:$1|försök|försök}}.',
+	'externaldata-db-unknown-type' => 'Fel: Okänd databastyp.',
+	'externaldata-db-could-not-connect' => 'Fel: Kunde inte koppla till databasen.',
+	'externaldata-db-no-return-values' => 'Fel: Inga returvärden specificerade.',
+	'externaldata-db-invalid-query' => 'Ogiltig fråga.',
 );
 
 /** Telugu (తెలుగు)
