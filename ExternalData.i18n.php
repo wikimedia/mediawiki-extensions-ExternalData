@@ -331,7 +331,7 @@ $messages['hu'] = array(
  */
 $messages['ia'] = array(
 	'getdata' => 'Obtener datos',
-	'externaldata-desc' => 'Permitte recuperar datos in le formatos CSV, JSON e XML, e ab adresses URL externe e ab paginas wiki local',
+	'externaldata-desc' => 'Permitte recuperar datos structurate ab adresses URL, bases de datos e altere fontes externe',
 	'externaldata-ldap-unable-to-connect' => 'Impossibile connecter se a $1',
 	'externaldata-json-decode-not-supported' => 'Error: json_decode() non es supportate in iste version de PHP',
 	'externaldata-xml-error' => 'Error de XML: $1 al linea $2',
@@ -463,10 +463,17 @@ $messages['nl'] = array(
 
 /** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
  * @author Gunnernett
+ * @author Harald Khan
  */
 $messages['nn'] = array(
 	'getdata' => 'Hent data',
 	'externaldata-desc' => 'Gjev høve til å lasta inn data i formata CSV, JSON og XML frå både eksterne nettadresser og lokale wikisider',
+	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tenar-ID-en.',
+	'externaldata-db-could-not-get-url' => 'Kunne ikkje henta URL etter {{PLURAL:$1|eitt forsøk|$1 forsøk}}.',
+	'externaldata-db-unknown-type' => 'Feil: Ukjend databasetype.',
+	'externaldata-db-could-not-connect' => 'Feil: Kunne ikkje kopla til databasen.',
+	'externaldata-db-no-return-values' => 'Feil: Ingen returverdiar oppgjevne.',
+	'externaldata-db-invalid-query' => 'Ugyldig spørjing.',
 );
 
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
