@@ -39,7 +39,7 @@ $messages['qqq'] = array(
  */
 $messages['ar'] = array(
 	'getdata' => 'الحصول على البيانات',
-	'externaldata-desc' => 'يسمح باسترجاع البيانات بصيغة CSV، JSON و XML من مسارات خارجية وصفحات الويكي المحلية',
+	'externaldata-desc' => 'يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى',
 	'externaldata-ldap-unable-to-connect' => 'تعذّر الاتصال ب$1',
 	'externaldata-json-decode-not-supported' => 'خطأ: json_decode() غير مدعوم في نسخة PHP هذه',
 	'externaldata-xml-error' => 'خطأ XML: $1 عند السطر $2',
@@ -56,7 +56,7 @@ $messages['ar'] = array(
  */
 $messages['arz'] = array(
 	'getdata' => 'الحصول على البيانات',
-	'externaldata-desc' => 'يسمح باسترجاع البيانات بصيغة CSV، JSON و XML من مسارات خارجية وصفحات الويكى المحلية',
+	'externaldata-desc' => 'يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى',
 );
 
 /** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
