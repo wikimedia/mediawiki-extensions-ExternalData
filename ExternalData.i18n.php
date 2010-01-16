@@ -467,7 +467,10 @@ $messages['nl'] = array(
  */
 $messages['nn'] = array(
 	'getdata' => 'Hent data',
-	'externaldata-desc' => 'Gjev høve til å lasta inn data i formata CSV, JSON og XML frå både eksterne nettadresser og lokale wikisider',
+	'externaldata-desc' => 'Gjev høve til å henta strukturerte data frå eksterne URL-ar, databasar og andre kjelder',
+	'externaldata-ldap-unable-to-connect' => 'Kunne ikkje kopla til $1',
+	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikkje stødd i denne versjonen av PHP',
+	'externaldata-xml-error' => 'XML-feil: $1 på line $2',
 	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tenar-ID-en.',
 	'externaldata-db-could-not-get-url' => 'Kunne ikkje henta URL etter {{PLURAL:$1|eitt forsøk|$1 forsøk}}.',
 	'externaldata-db-unknown-type' => 'Feil: Ukjend databasetype.',
@@ -477,6 +480,7 @@ $messages['nn'] = array(
 );
 
 /** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+ * @author Harald Khan
  * @author Nghtwlkr
  */
 $messages['no'] = array(
@@ -484,7 +488,7 @@ $messages['no'] = array(
 	'externaldata-desc' => 'Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder',
 	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
 	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikke støttet i denne versjonen av PHP',
-	'externaldata-xml-error' => 'XML feil: $1 på linje $2',
+	'externaldata-xml-error' => 'XML-feil: $1 på linje $2',
 	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tjener-IDen.',
 	'externaldata-db-could-not-get-url' => 'Kunne ikke hente URL etter {{PLURAL:$1|ett forsøk|$1 forsøk}}.',
 	'externaldata-db-unknown-type' => 'Feil: Ukjent databasetype.',
