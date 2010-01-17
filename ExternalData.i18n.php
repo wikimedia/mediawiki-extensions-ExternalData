@@ -502,7 +502,7 @@ $messages['no'] = array(
  */
 $messages['oc'] = array(
 	'getdata' => 'Obténer de donadas',
-	'externaldata-desc' => "Permet de recuperar de donadas en CSV, JSON e XML dempuèi d'URL extèrnas e de paginas del wiki",
+	'externaldata-desc' => "Permet de recuperar de donadas estructuradas a partir d'URL extèrnas, de bancas de donadas e d'autras fonts",
 	'externaldata-ldap-unable-to-connect' => 'Impossible de se connectar a $1',
 	'externaldata-json-decode-not-supported' => 'Error : json_decode() es pas suportada dins aquesta version de PHP',
 	'externaldata-xml-error' => 'Error XML : $1 a la linha $2',
@@ -628,7 +628,7 @@ $messages['ru'] = array(
  */
 $messages['sk'] = array(
 	'getdata' => 'Získať dáta',
-	'externaldata-desc' => 'Umožňuje získavanie údajov vo formátoch CSV, JSON a XML z externých URL aj z lokálnych wiki stránok',
+	'externaldata-desc' => 'Umožňuje získavanie štrukturovaných údajov z externých URL, databáz a iných zdrojov',
 	'externaldata-ldap-unable-to-connect' => 'Nepodarilo sa pripojiť k $1',
 	'externaldata-json-decode-not-supported' => 'Chyba: táto verzia PHP nepodporuje json_decode()',
 	'externaldata-xml-error' => 'Chyba XML: $1 na riadku $2',
