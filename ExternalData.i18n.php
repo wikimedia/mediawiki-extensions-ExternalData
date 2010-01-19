@@ -84,6 +84,7 @@ $messages['be-tarask'] = array(
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
+	'externaldata-json-decode-not-supported' => "Fazi : json_decode() n'eo ket skoret er stumm-mañ eus PHP",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
 	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer.',
 	'externaldata-db-could-not-get-url' => "N'eo ket posubl tapout an URL goude $1 taol-esae{{PLURAL:$1||}}.",
@@ -537,7 +538,7 @@ $messages['pl'] = array(
  */
 $messages['pms'] = array(
 	'getdata' => 'Oten dij dat',
-	'externaldata-desc' => "A përmëtt d'arcuperé dat an formà CSV, JSON e XML da pàgine ëd wiki esterne e locaj",
+	'externaldata-desc' => "A përmëtt d'arcuperé dat struturà da URL esterne, database e àutre sorziss",
 	'externaldata-ldap-unable-to-connect' => 'A peul pa coleghesse a $1',
 	'externaldata-json-decode-not-supported' => "Eror: json_decode() a l'é pa suportà an sta vërsion ëd PHP",
 	'externaldata-xml-error' => 'Eror XML: $1 a la linia $2',
