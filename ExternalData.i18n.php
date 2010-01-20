@@ -416,7 +416,7 @@ $messages['ksh'] = array(
  */
 $messages['lb'] = array(
 	'getdata' => 'Donnéeë kréien',
-	'externaldata-desc' => 'Erlaabt et Donnéeën an de Formater CSV, JSON an XML vun externen URLen a lokale Wiki-Säiten ze verschaffen',
+	'externaldata-desc' => 'Erlaabt et Donnéeën vun externen URLen, Datebanken an anere Quellen ze verschaffen',
 	'externaldata-ldap-unable-to-connect' => 'Onméiglech sech op $1 ze connectéieren',
 	'externaldata-json-decode-not-supported' => 'Feeler: json_decode() gëtt an dëser Versioun vu PHP net ënnerstëtzt',
 	'externaldata-xml-error' => 'XML Feeler: $1 an der Linn $2',
@@ -534,11 +534,12 @@ $messages['pl'] = array(
 );
 
 /** Piedmontese (Piemontèis)
+ * @author Borichèt
  * @author Dragonòt
  */
 $messages['pms'] = array(
 	'getdata' => 'Oten dij dat',
-	'externaldata-desc' => "A përmëtt d'arcuperé dat struturà da URL esterne, database e àutre sorziss",
+	'externaldata-desc' => "A përmët d'arcuperé dat struturà da adrësse dl'aragnà esterne, base ëd dàit e d'àutre sorgiss",
 	'externaldata-ldap-unable-to-connect' => 'A peul pa coleghesse a $1',
 	'externaldata-json-decode-not-supported' => "Eror: json_decode() a l'é pa suportà an sta vërsion ëd PHP",
 	'externaldata-xml-error' => 'Eror XML: $1 a la linia $2',
