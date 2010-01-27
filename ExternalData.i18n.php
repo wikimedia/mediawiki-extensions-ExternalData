@@ -33,6 +33,17 @@ $messages['qqq'] = array(
 	'externaldata-desc' => '{{desc}}',
 );
 
+/** Afrikaans (Afrikaans)
+ * @author Naudefj
+ */
+$messages['af'] = array(
+	'getdata' => 'Kry data',
+	'externaldata-xml-error' => 'XML-fout: $1 op reël $2',
+	'externaldata-db-unknown-type' => 'Fout: onbekende databasistipe.',
+	'externaldata-db-could-not-connect' => "Fout: kon nie 'n verbinding met databasis bewerkstellig nie.",
+	'externaldata-db-invalid-query' => 'Ongeldige navraag.',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  * @author OsamaK
