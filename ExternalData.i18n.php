@@ -197,12 +197,13 @@ $messages['eo'] = array(
  */
 $messages['es'] = array(
 	'getdata' => 'Obtener datos',
-	'externaldata-desc' => 'Permite la recuperación de datos en formatos CSV, JSON y XML a partir de URL externos y de páginas wiki locales',
+	'externaldata-desc' => 'Permite la recuperación de datos estructurados a partir de direcciones URL externas, bases de datos y otras fuentes',
 	'externaldata-ldap-unable-to-connect' => 'No se pudo conectar con $1',
 	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
 	'externaldata-db-incomplete-information' => 'Error: Información incompleta para este ID de servidor.',
 	'externaldata-db-unknown-type' => 'Error: Tipo de base de datos desconocido.',
 	'externaldata-db-could-not-connect' => 'Error: No se pudo lograr conexión con la base de datos.',
+	'externaldata-db-no-return-values' => 'Error: No se ha especificado valores de retorno.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
 );
 
