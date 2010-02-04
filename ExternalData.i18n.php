@@ -215,14 +215,23 @@ $messages['eu'] = array(
 );
 
 /** Finnish (Suomi)
+ * @author Centerlink
+ * @author Crt
  * @author Silvonen
  * @author Str4nd
  */
 $messages['fi'] = array(
+	'getdata' => 'Hae data',
+	'externaldata-desc' => 'Mahdollistaa muotoillun datan noutamisen ulkoisista verkko-osoitteista, tietokannoista ja muista lähteistä.',
 	'externaldata-ldap-unable-to-connect' => 'Ei voitu yhdistää palvelimelle $1',
 	'externaldata-json-decode-not-supported' => 'Virhe: json_decode() ei ole tuettu tässä PHP:n versiossa',
 	'externaldata-xml-error' => 'XML-virhe: $1 rivillä $2',
+	'externaldata-db-incomplete-information' => 'Virhe: Vaillinaiset tiedot tälle palvelintunnukselle.',
+	'externaldata-db-could-not-get-url' => 'Ei voitu hakea verkko-osoitetta $1 {{PLURAL:$1|yrityksen|yrityksen}} jälkeen.',
 	'externaldata-db-unknown-type' => 'Virhe: Tuntematon tietokantatyyppi.',
+	'externaldata-db-could-not-connect' => 'Virhe: Ei yhteyttä tietokantaan.',
+	'externaldata-db-no-return-values' => 'Virhe: Paluuarvoja ei ole annettu.',
+	'externaldata-db-invalid-query' => 'Virheellinen kysely.',
 );
 
 /** French (Français)
