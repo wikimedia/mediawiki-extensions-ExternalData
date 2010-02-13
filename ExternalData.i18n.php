@@ -63,11 +63,12 @@ $messages['ar'] = array(
 );
 
 /** Egyptian Spoken Arabic (مصرى)
+ * @author Dudi
  * @author Meno25
  */
 $messages['arz'] = array(
 	'getdata' => 'الحصول على البيانات',
-	'externaldata-desc' => 'يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى',
+	'externaldata-desc' => 'بيسمح بإنك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
 );
 
 /** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
