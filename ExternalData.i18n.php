@@ -193,6 +193,7 @@ $messages['eo'] = array(
 /** Spanish (Español)
  * @author Crazymadlover
  * @author Imre
+ * @author Manuelt15
  * @author Sanbec
  * @author Translationista
  */
@@ -203,7 +204,7 @@ $messages['es'] = array(
 	'externaldata-json-decode-not-supported' => 'Error: json_decode() no es compatible con esta versión de PHP',
 	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
 	'externaldata-db-incomplete-information' => 'Error: Información incompleta para este ID de servidor.',
-	'externaldata-db-could-not-get-url' => 'No se pudo obtener la URL después de $1 ((PLURAL:$1|intento|intentos)).',
+	'externaldata-db-could-not-get-url' => 'No se pudo obtener la URL después de $1 {{PLURAL:$1|intento|intentos}}.',
 	'externaldata-db-unknown-type' => 'Error: Tipo de base de datos desconocido.',
 	'externaldata-db-could-not-connect' => 'Error: No se pudo lograr conexión con la base de datos.',
 	'externaldata-db-no-return-values' => 'Error: No se ha especificado valores de retorno.',
