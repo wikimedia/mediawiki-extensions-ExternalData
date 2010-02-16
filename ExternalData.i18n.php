@@ -68,7 +68,7 @@ $messages['ar'] = array(
  */
 $messages['arz'] = array(
 	'getdata' => 'الحصول على البيانات',
-	'externaldata-desc' => 'بيسمح بإنك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
+	'externaldata-desc' => 'بيسمح انك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
 );
 
 /** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
