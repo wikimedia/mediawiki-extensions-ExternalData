@@ -26,6 +26,12 @@ $magicWords['arz'] = array(
 	'for_external_table'   => array( '0', 'لجدول_خارجي', 'for_external_table' ),
 );
 
+$magicWords['es'] = array(
+	'get_external_data'    => array( '0', 'obtener_datos_externos', 'get_external_data' ),
+	'get_db_data'          => array( '0', 'obtener_datos_db', 'get_db_data' ),
+	'external_value'       => array( '0', 'valor_externo', 'external_value' ),
+);
+
 $magicWords['mr'] = array(
 	'get_external_data'    => array( '0', 'मिळवा बाह्य विदा', 'get_external_data' ),
 	'get_ldap_data'        => array( '0', 'मिळवा _एलडॅप_विदा', 'get_ldap_data' ),
