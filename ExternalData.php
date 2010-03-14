@@ -7,9 +7,9 @@
  * @author Yaron Koren
  */
 
-if (!defined('MEDIAWIKI')) die();
+if ( !defined( 'MEDIAWIKI' ) ) die();
 
-$wgExtensionCredits['parserhook'][]= array(
+$wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
 	'version'        => '0.9.2',
@@ -22,7 +22,7 @@ $edgIP = $IP . '/extensions/ExternalData';
 $wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
 $wgExtensionMessagesFiles['ExternalData'] = $edgIP . '/ExternalData.i18n.php';
 
-if( version_compare( $wgVersion, '1.16alpha', '>=' ) ) {
+if ( version_compare( $wgVersion, '1.16alpha', '>=' ) ) {
 	$wgExtensionMessagesFiles['ExternalDataMagic'] = $edgIP . '/ExternalData.i18n.magic.php';
 } else {
 	// Pre 1.16alpha backward compatibility for magic words
@@ -41,8 +41,8 @@ $edgStringReplacements = array();
 $edgCacheTable = null;
 $edgAllowSSL = false;
 
-//(in seconds) set to one week:
-$edgCacheExpireTime = 60*60*24 * 7;
+// (in seconds) set to one week:
+$edgCacheExpireTime = 60 * 60 * 24 * 7;
 
 $edgDBServer = array();
 $edgDBServerType = array();
@@ -50,12 +50,12 @@ $edgDBName = array();
 $edgDBUser = array();
 $edgDBPass = array();
 
-function edgRegisterParser(&$parser) {
-	$parser->setFunctionHook( 'get_external_data', array('EDParserFunctions','doGetExternalData') );
-	$parser->setFunctionHook( 'get_ldap_data', array('EDParserFunctions','doGetLDAPData') );
-	$parser->setFunctionHook( 'get_db_data', array('EDParserFunctions','doGetDBData') );
-	$parser->setFunctionHook( 'external_value', array('EDParserFunctions','doExternalValue') );
-	$parser->setFunctionHook( 'for_external_table', array('EDParserFunctions','doForExternalTable') );
+function edgRegisterParser( &$parser ) {
+	$parser->setFunctionHook( 'get_external_data', array( 'EDParserFunctions', 'doGetExternalData' ) );
+	$parser->setFunctionHook( 'get_ldap_data', array( 'EDParserFunctions', 'doGetLDAPData' ) );
+	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
+	$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
+	$parser->setFunctionHook( 'for_external_table', array( 'EDParserFunctions', 'doForExternalTable' ) );
 
 	return true; // always return true, in order not to stop MW's hook processing!
 }

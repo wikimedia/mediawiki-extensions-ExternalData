@@ -18,7 +18,7 @@ class EDParserFunctions {
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
 		$cur_page_name = $wgTitle->getText();
-		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
 		}
@@ -32,18 +32,18 @@ class EDParserFunctions {
 		global $edgAllowExternalDataFrom;
 		$data_from = $edgAllowExternalDataFrom;
 		$text = false;
-		if ( empty($data_from) ) {
+		if ( empty( $data_from ) ) {
 			$url_match = true;
 		} elseif ( is_array( $data_from ) ) {
 			$url_match = false;
-			foreach( $data_from as $match ) {
-				if( strpos( $url, $match ) === 0 ) {
+			foreach ( $data_from as $match ) {
+				if ( strpos( $url, $match ) === 0 ) {
 					$url_match = true;
 					break;
 				}
 			}
 		} else {
-			$url_match = (strpos( $url, $data_from ) === 0);
+			$url_match = ( strpos( $url, $data_from ) === 0 );
 		}
 		if ( ! $url_match )
 			return;
@@ -141,17 +141,17 @@ class EDParserFunctions {
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
 		$cur_page_name = $wgTitle->getText();
-		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
 		}
 
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams($params); // parse params into name-value pairs
-		$mappings = EDUtils::parseMappings($args['data']); // parse the data arg into mappings
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		$mappings = EDUtils::parseMappings( $args['data'] ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values($mappings) );
+		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
 
 		// Build $edgValues
 		foreach ( $mappings as $local_var => $external_var ) {
@@ -169,25 +169,25 @@ class EDParserFunctions {
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
 		$cur_page_name = $wgTitle->getText();
-		if (! isset($edgCurPageName) || $edgCurPageName != $cur_page_name) {
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
 		}
 
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams($params); // parse params into name-value pairs
-		$mappings = EDUtils::parseMappings($args['data']); // parse the data arg into mappings
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		$mappings = EDUtils::parseMappings( $args['data'] ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $args['server'], $args['from'], $args['where'], array_values($mappings) );
+		$external_values = EDUtils::getDBData( $args['server'], $args['from'], $args['where'], array_values( $mappings ) );
 		// handle error cases
-		if (is_null($external_values))
+		if ( is_null( $external_values ) )
 			return;
 
 		// Build $edgValues
 		foreach ( $mappings as $local_var => $external_var ) {
 			if ( array_key_exists( $external_var, $external_values ) ) {
-				foreach ($external_values[$external_var] as $value) {
+				foreach ( $external_values[$external_var] as $value ) {
 					$edgValues[$local_var][] = $value;
 				}
 			}
@@ -232,18 +232,18 @@ class EDParserFunctions {
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
 		$variables = $matches[1];
 		$num_loops = 0;
-		foreach ($variables as $variable) {
+		foreach ( $variables as $variable ) {
 			// ignore the presence of '.urlencode' - it's a command,
 			// not part of the actual variable name
-			$variable = str_replace('.urlencode', '', $variable);
+			$variable = str_replace( '.urlencode', '', $variable );
 			if ( array_key_exists( $variable, $edgValues ) ) {
 				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
 			}
 		}
 		$text = "";
-		for ($i = 0; $i < $num_loops; $i++) {
+		for ( $i = 0; $i < $num_loops; $i++ ) {
 			$cur_expression = $expression;
-			foreach ($variables as $variable) {
+			foreach ( $variables as $variable ) {
 				// if variable name ends with a ".urlencode",
 				// that's a command - URL-encode the value of
 				// the actual variable
