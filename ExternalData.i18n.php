@@ -138,12 +138,13 @@ $messages['ca'] = array(
 /** German (Deutsch)
  * @author Imre
  * @author MF-Warburg
+ * @author Merlissimo
  * @author Purodha
  * @author Umherirrender
  */
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
-	'externaldata-desc' => 'Erlaubt das Einfügen von Daten der Formate CSV, JSON und XML sowohl von externer URL als auch von lokalen Wikiseite',
+	'externaldata-desc' => 'Erlaubt das Einfügen von strukturierten Daten aus externen URLs, Datenbanken und anderen Quellen',
 	'externaldata-ldap-unable-to-connect' => 'Keine Verbindung zu $1',
 	'externaldata-json-decode-not-supported' => 'Fehler: json_decode() wird nicht von dieser PHP-Version unterstützt',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
