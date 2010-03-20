@@ -91,10 +91,12 @@ $messages['be-tarask'] = array(
 
 /** Breton (Brezhoneg)
  * @author Fohanno
+ * @author Fulup
  * @author Y-M D
  */
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
+	'externaldata-desc' => 'Talvezout a ra da adtapout roadennoù frammet adalek URLoù diavaez, diazoù titouroù ha mammennoù all.',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-json-decode-not-supported' => "Fazi : json_decode() n'eo ket skoret er stumm-mañ eus PHP",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
