@@ -17,7 +17,7 @@ $wgExtensionCredits['parserhook'][] = array(
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
 );
-$edgIP = $IP . '/extensions/ExternalData';
+$edgIP = dirname(__FILE__);
 
 $wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
 $wgExtensionMessagesFiles['ExternalData'] = $edgIP . '/ExternalData.i18n.php';
