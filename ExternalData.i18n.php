@@ -374,10 +374,11 @@ $messages['ia'] = array(
 
 /** Indonesian (Bahasa Indonesia)
  * @author Bennylin
+ * @author Iwan Novirion
  */
 $messages['id'] = array(
 	'getdata' => 'Ambil data',
-	'externaldata-desc' => 'Mengijinkan data untuk diunduh dalam format CSV, JSON, dan XML dari pranala luar maupun dari halaman wiki',
+	'externaldata-desc' => 'Memungkinkan untuk mengambil data terstruktur dari URL eksternal, database dan sumber lainnya',
 	'externaldata-ldap-unable-to-connect' => 'Tidak dapat terhubung ke $1',
 	'externaldata-json-decode-not-supported' => 'Galat: json_decode() tidak didukung oleh versi PHP ini',
 	'externaldata-xml-error' => 'Galat XML: $1 pada baris $2',
