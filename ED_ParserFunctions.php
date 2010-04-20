@@ -98,7 +98,7 @@ class EDParserFunctions {
 						// the filter value, remove
 						// the value from this row for
 						// all columns
-						if ( $single_value != $filter_value ) {
+						if ( trim( $single_value ) != trim( $filter_value ) ) {
 							foreach ( $external_values as $external_var => $external_value ) {
 								unset( $external_values[$external_var][$i] );
 							}
