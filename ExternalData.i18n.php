@@ -423,7 +423,7 @@ $messages['km'] = array(
 	'getdata' => 'យក​ទិន្នន័យ',
 );
 
-/** Ripoarisch (Ripoarisch)
+/** Colognian (Ripoarisch)
  * @author Purodha
  */
 $messages['ksh'] = array(
