@@ -474,6 +474,13 @@ $messages['mk'] = array(
 	'externaldata-db-invalid-query' => 'Грешно барање.',
 );
 
+/** Erzya (Эрзянь)
+ * @author Botuzhaleny-sodamo
+ */
+$messages['myv'] = array(
+	'getdata' => 'Дата мельга',
+);
+
 /** Dutch (Nederlands)
  * @author Siebrand
  */
