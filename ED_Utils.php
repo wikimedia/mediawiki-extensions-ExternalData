@@ -43,7 +43,11 @@ class EDUtils {
 		$args = Array();
 		foreach ( $params as $param ) {
 			$param = preg_replace ( "/\s\s+/" , " " , $param ); // whitespace
-			list( $name, $value ) = split( "=", $param, 2 );
+			$param_parts = split( "=", $param, 2 );
+			if ( count( $param_parts ) < 2 ) {
+				continue;
+			}
+			list( $name, $value ) = $param_parts;
 			$args[$name] = $value;
 		}
 		return $args;
@@ -208,9 +212,13 @@ class EDUtils {
 		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
 		// str_getcsv() is a function that was only added in PHP 5.3.0,
 		// so use the much older fgetcsv() if it's not there
-		if ( function_exists( 'str_getcsv' ) ) {
-			$table = str_getcsv( $csv );
-		} else {
+
+		// actually, for now, always use fgetcsv(), since this call to
+		// str_getcsv() doesn't work, and I can't test/debug it at the
+		// moment
+		//if ( function_exists( 'str_getcsv' ) ) {
+		//	$table = str_getcsv( $csv );
+		//} else {
 			$fiveMBs = 5 * 1024 * 1024;
 			$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
 			fputs( $fp, $csv );
@@ -220,7 +228,7 @@ class EDUtils {
 				array_push( $table, $line );
 			}
 			fclose( $fp );
-		}
+		//}
 		// now "flip" the data, turning it into a column-by-column
 		// array, instead of row-by-row
 		if ( $has_header ) {
