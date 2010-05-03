@@ -12,7 +12,7 @@ if ( !defined( 'MEDIAWIKI' ) ) die();
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '0.9.2',
+	'version'        => '1.0',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
@@ -56,6 +56,7 @@ function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
 	$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
 	$parser->setFunctionHook( 'for_external_table', array( 'EDParserFunctions', 'doForExternalTable' ) );
+	$parser->setFunctionHook( 'store_external_table', array( 'EDParserFunctions', 'doStoreExternalTable' ) );
 
 	return true; // always return true, in order not to stop MW's hook processing!
 }
@@ -69,6 +70,7 @@ function edgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
 		$magicWords['get_db_data'] = array ( 0, 'get_db_data' );
 		$magicWords['external_value'] = array ( 0, 'external_value' );
 		$magicWords['for_external_table'] = array ( 0, 'for_external_table' );
+		$magicWords['store_external_table'] = array ( 0, 'store_external_table' );
 	}
 	return true;
 }

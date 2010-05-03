@@ -259,4 +259,59 @@ class EDParserFunctions {
 		}
 		return $text;
 	}
+ 
+	/**
+	 * Render the #store_external_table parser function
+	 */
+	static function doStoreExternalTable( &$parser ) {
+		if ( ! class_exists( 'SIOHandler' ) ) {
+			return 'Semantic Internal Objects is not installed';
+		}
+		global $edgValues;
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser...
+
+		// get the variables used in this expression, get the number
+		// of values for each, and loop through 
+		$expression = implode( '|', $params );
+		$matches = array();
+		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
+		$variables = $matches[1];
+		$num_loops = 0;
+		foreach ( $variables as $variable ) {
+			// ignore the presence of '.urlencode' - it's a command,
+			// not part of the actual variable name
+			$variable = str_replace( '.urlencode', '', $variable );
+			if ( array_key_exists( $variable, $edgValues ) ) {
+				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
+			}
+		}
+		$text = "";
+		for ( $i = 0; $i < $num_loops; $i++ ) {
+			// re-get $params
+			$params = func_get_args();
+			array_shift( $params );
+			foreach ( $params as $j => $param ) {
+				foreach ( $variables as $variable ) {
+					// if variable name ends with a ".urlencode",
+					// that's a command - URL-encode the value of
+					// the actual variable
+					if ( strrpos( $variable, '.urlencode' ) == strlen( $variable ) - strlen( '.urlencode' ) ) {
+						$real_var = str_replace( '.urlencode', '', $variable );
+						$value = urlencode( self::getIndexedValue( $real_var , $i ) );
+					} else {
+						$value = self::getIndexedValue( $variable , $i );
+					}
+					$params[$j] = str_replace( '{{{' . $variable . '}}}', $value, $params[$j] );
+				}
+			}
+			// add $parser to the beginning of the $params array,
+			// and pass the whole thing in as arguments to
+			// doSetInternal, to mimic a call to #set_internal
+			array_unshift( $params, $parser );
+			call_user_func_array('SIOHandler::doSetInternal', $params );
+		}
+		return null;
+	}
 }
