@@ -629,8 +629,8 @@ $messages['pt-br'] = array(
  * @author KlaudiuMihaila
  */
 $messages['ro'] = array(
-	'getdata' => 'Obţine date',
-	'externaldata-desc' => 'Permite obţinerea datelor în format CSV, JSON şi XML din atât adrese URL externe, cât şi pagini wiki locale',
+	'getdata' => 'Obține date',
+	'externaldata-desc' => 'Permite obținerea datelor în format CSV, JSON și XML din atât adrese URL externe, cât și pagini wiki locale',
 	'externaldata-xml-error' => 'Eroare XML: $1 la linia $2',
 	'externaldata-db-unknown-type' => 'Eroare: Tipul bazei de date necunoscut.',
 	'externaldata-db-invalid-query' => 'Interogare invalidă.',
