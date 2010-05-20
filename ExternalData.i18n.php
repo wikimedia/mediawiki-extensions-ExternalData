@@ -44,6 +44,23 @@ $messages['af'] = array(
 	'externaldata-db-invalid-query' => 'Ongeldige navraag.',
 );
 
+/** Gheg Albanian (Gegë)
+ * @author Mdupont
+ */
+$messages['aln'] = array(
+	'getdata' => 'Merr të dhëna',
+	'externaldata-desc' => 'Lejon retrieving të dhënat e strukturuar nga URL jashtme, bazat e të dhënave dhe burimet tjera',
+	'externaldata-ldap-unable-to-connect' => "Në pamundësi për t'u lidhur tek $1",
+	'externaldata-json-decode-not-supported' => 'Gabim: json_decode() nuk është i mbështetur në këtë version të PHP',
+	'externaldata-xml-error' => 'XML error: $1 tek $2 linjë',
+	'externaldata-db-incomplete-information' => 'Gabim: informata jo të plota për këtë server të identitetit.',
+	'externaldata-db-could-not-get-url' => 'Nuk mund te merrni URL pasi $1 {{PLURAL:$1|provoni|përpiqet}}.',
+	'externaldata-db-unknown-type' => 'Gabim: Lloj i panjohur bazës së të dhënave.',
+	'externaldata-db-could-not-connect' => 'Gabim: Nuk mund të lidheni me bazën e të dhënave.',
+	'externaldata-db-no-return-values' => 'Gabim: Nuk ka kthim vlerat e caktuara.',
+	'externaldata-db-invalid-query' => 'pyetje e pavlefshme.',
+);
+
 /** Arabic (العربية)
  * @author Meno25
  * @author OsamaK
