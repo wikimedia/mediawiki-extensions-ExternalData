@@ -738,10 +738,16 @@ $messages['te'] = array(
 
 /** Tagalog (Tagalog)
  * @author AnakngAraw
+ * @author Sky Harbor
  */
 $messages['tl'] = array(
 	'getdata' => 'Kunin ang dato',
-	'externaldata-desc' => 'Nagpapahintulot sa muling pagkuha ng datong nasa mga anyong CSV, JSON at XML na kapwa mula sa panlabas na mga URL at pampook na mga pahina ng wiki',
+	'externaldata-desc' => 'Nagpapahintulot sa pagkuha ng nakabalangkas na datos mula sa panlabas na mga URL, mga kalipunan ng datos at sa ibang mga pinagmulan',
+	'externaldata-json-decode-not-supported' => 'Kamalian: hindi sinusuporta ang json_decode() sa bersyong ito ng PHP',
+	'externaldata-xml-error' => 'Kamalian sa XML: $1 sa linyang $2',
+	'externaldata-db-incomplete-information' => 'Kamalian: Hindi-kumpletong impormasyon para sa itong ID ng serbidor.',
+	'externaldata-db-could-not-get-url' => 'Hindi makuha ang URL pagkatapos ng $1 {{PLURAL:$1|pagsubok|pagsubok}}',
+	'externaldata-db-unknown-type' => 'Kamalian: Hindi-kilalang uri ng kalipunan ng datos.',
 );
 
 /** Turkish (Türkçe)
