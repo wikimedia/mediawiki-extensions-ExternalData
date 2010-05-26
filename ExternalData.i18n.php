@@ -408,11 +408,21 @@ $messages['id'] = array(
 );
 
 /** Italian (Italiano)
+ * @author Beta16
  * @author Pietrodn
  */
 $messages['it'] = array(
 	'getdata' => 'Ottieni dati',
-	'externaldata-desc' => 'Consente di recuperare dati nei formati CSV, XML e JSON sia da URL esterni sia da pagine wiki locali',
+	'externaldata-desc' => 'Consente di recuperare dati strutturati da URL esterni, database o altre sorgenti',
+	'externaldata-ldap-unable-to-connect' => 'Impossibile connettersi a $1',
+	'externaldata-json-decode-not-supported' => 'Errore: json_decode() non è supportato in questa versione di PHP',
+	'externaldata-xml-error' => 'Errore XML: $1 alla linea $2',
+	'externaldata-db-incomplete-information' => 'Errore: informazioni incomplete per questo server ID.',
+	'externaldata-db-could-not-get-url' => "Impossibile raggiungere l'URL dopo $1 {{PLURAL:$1|tentativo|tentativi}}.",
+	'externaldata-db-unknown-type' => 'Errore: tipo di database sconosciuto.',
+	'externaldata-db-could-not-connect' => 'Errore: impossibile connettersi al database.',
+	'externaldata-db-no-return-values' => 'Errore: non è stato specificato alcun valore di ritorno.',
+	'externaldata-db-invalid-query' => 'Query non valida.',
 );
 
 /** Japanese (日本語)
