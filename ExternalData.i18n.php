@@ -707,11 +707,21 @@ $messages['sk'] = array(
 );
 
 /** Serbian Cyrillic ekavian (Српски (ћирилица))
+ * @author Charmed94
  * @author Михајло Анђелковић
  */
 $messages['sr-ec'] = array(
 	'getdata' => 'Преузми податке',
-	'externaldata-desc' => 'Омогућава преузимање података у CSV, JSON и XML форматима, како преко спољашњих веза, тако и са локалних вики-страна',
+	'externaldata-desc' => 'Омогућава преузимање података из спољашњих адреса, бази података и других извора',
+	'externaldata-ldap-unable-to-connect' => 'Повезивање на $1 није успело',
+	'externaldata-json-decode-not-supported' => 'Грешка: json_decode() није подржан у овом издању PHP-а',
+	'externaldata-xml-error' => 'XML грешка: $1 по линији $2',
+	'externaldata-db-incomplete-information' => 'Грешка: Непотпуни подаци за овај ID сервера.',
+	'externaldata-db-could-not-get-url' => 'Преузимање адресе после $1 {{PLURAL:$1|try|покушаја}} није успело.',
+	'externaldata-db-unknown-type' => 'Грешка: Непозната врста базе података.',
+	'externaldata-db-could-not-connect' => 'Грешка: Повезивање с базом података није успело.',
+	'externaldata-db-no-return-values' => 'Грешка: Повратне вредности нису одређене.',
+	'externaldata-db-invalid-query' => 'Неисправан упит.',
 );
 
 /** Serbian Latin ekavian (Srpski (latinica))
