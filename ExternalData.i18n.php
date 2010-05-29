@@ -733,6 +733,7 @@ $messages['sr-el'] = array(
 );
 
 /** Swedish (Svenska)
+ * @author Ainali
  * @author Najami
  * @author Per
  */
@@ -740,6 +741,7 @@ $messages['sv'] = array(
 	'getdata' => 'Hämta data',
 	'externaldata-desc' => 'Tillåter att hämta data i formaten CSV, JSON och XML från både externa URL:er och lokala wikisidor',
 	'externaldata-ldap-unable-to-connect' => 'Kunde inte koppla till $1',
+	'externaldata-json-decode-not-supported' => 'Fel: json_decode() stöds inte i denna version av PHP',
 	'externaldata-xml-error' => 'XML-fel: $1 på rad $2',
 	'externaldata-db-incomplete-information' => 'Fel: Informationen för server-ID inte komplett.',
 	'externaldata-db-could-not-get-url' => 'Kunde inte hämta URL på $1 {{PLURAL:$1|försök|försök}}.',
