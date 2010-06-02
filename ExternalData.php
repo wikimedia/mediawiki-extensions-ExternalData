@@ -17,23 +17,22 @@ $wgExtensionCredits['parserhook'][] = array(
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
 );
-$edgIP = dirname(__FILE__);
 
 $wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
-$wgExtensionMessagesFiles['ExternalData'] = $edgIP . '/ExternalData.i18n.php';
+$wgExtensionMessagesFiles['ExternalData'] = dirname(__FILE__) . '/ExternalData.i18n.php';
 
 if ( version_compare( $wgVersion, '1.16alpha', '>=' ) ) {
-	$wgExtensionMessagesFiles['ExternalDataMagic'] = $edgIP . '/ExternalData.i18n.magic.php';
+	$wgExtensionMessagesFiles['ExternalDataMagic'] = dirname(__FILE__) . '/ExternalData.i18n.magic.php';
 } else {
 	// Pre 1.16alpha backward compatibility for magic words
 	$wgHooks['LanguageGetMagic'][] = 'edgLanguageGetMagic';
 }
 
 // register all special pages and other classes
-$wgAutoloadClasses['EDUtils'] = $edgIP . '/ED_Utils.php';
-$wgAutoloadClasses['EDParserFunctions'] = $edgIP . '/ED_ParserFunctions.php';
+$wgAutoloadClasses['EDUtils'] = dirname(__FILE__) . '/ED_Utils.php';
+$wgAutoloadClasses['EDParserFunctions'] = dirname(__FILE__) . '/ED_ParserFunctions.php';
 $wgSpecialPages['GetData'] = 'EDGetData';
-$wgAutoloadClasses['EDGetData'] = $edgIP . '/ED_GetData.php';
+$wgAutoloadClasses['EDGetData'] = dirname(__FILE__) . '/ED_GetData.php';
 $wgSpecialPageGroups['GetData'] = 'pagetools';
 
 $edgValues = array();
