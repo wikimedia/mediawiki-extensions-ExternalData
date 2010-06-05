@@ -796,11 +796,13 @@ $messages['vep'] = array(
 );
 
 /** Vietnamese (Tiếng Việt)
+ * @author Minh Nguyen
  * @author Vinhtantran
  */
 $messages['vi'] = array(
 	'getdata' => 'Lấy dữ liệu',
-	'externaldata-desc' => 'Cho phép truy xuất dữ liệu theo định dạng CSV, JSON và XML từ cả URL bên ngoài lẫn các trang wiki bên trong',
+	'externaldata-desc' => 'Cho phép truy xuất dữ liệu từ các địa chỉ URL bên ngoài, cơ sở dữ liệu, và nguồn khác',
+	'externaldata-xml-error' => 'Lỗi XML ở dòng $2: $1',
 );
 
 /** Yiddish (ייִדיש)
