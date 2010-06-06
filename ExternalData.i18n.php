@@ -2,8 +2,7 @@
 /**
  * Internationalization file for the External Data extension
  *
- * @file
- * @ingroup Extensions
+ * @addtogroup Extensions
  */
 
 $messages = array();
