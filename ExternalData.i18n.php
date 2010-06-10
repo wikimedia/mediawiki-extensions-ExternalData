@@ -729,7 +729,16 @@ $messages['sr-ec'] = array(
  */
 $messages['sr-el'] = array(
 	'getdata' => 'Preuzmi podatke',
-	'externaldata-desc' => 'Omogućava preuzimanje podataka u CSV, JSON i XML formatima, kako preko spoljašnjih veza, tako i sa lokalnih viki-strana',
+	'externaldata-desc' => 'Omogućava preuzimanje podataka iz spoljašnjih adresa, bazi podataka i drugih izvora',
+	'externaldata-ldap-unable-to-connect' => 'Povezivanje na $1 nije uspelo',
+	'externaldata-json-decode-not-supported' => 'Greška: json_decode() nije podržan u ovom izdanju PHP-a',
+	'externaldata-xml-error' => 'XML greška: $1 po liniji $2',
+	'externaldata-db-incomplete-information' => 'Greška: Nepotpuni podaci za ovaj ID servera.',
+	'externaldata-db-could-not-get-url' => 'Preuzimanje adrese posle $1 {{PLURAL:$1|try|pokušaja}} nije uspelo.',
+	'externaldata-db-unknown-type' => 'Greška: Nepoznata vrsta baze podataka.',
+	'externaldata-db-could-not-connect' => 'Greška: Povezivanje s bazom podataka nije uspelo.',
+	'externaldata-db-no-return-values' => 'Greška: Povratne vrednosti nisu određene.',
+	'externaldata-db-invalid-query' => 'Neispravan upit.',
 );
 
 /** Swedish (Svenska)
