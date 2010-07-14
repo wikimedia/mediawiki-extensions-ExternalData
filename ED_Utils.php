@@ -138,6 +138,8 @@ class EDUtils {
 			$db = new DatabasePostgres( $db_server, $db_username, $db_password, $db_name );
 		} elseif ( $db_type == "mssql" ) {
 			$db = new DatabaseMssql( $db_server, $db_username, $db_password, $db_name );
+		} elseif ( $db_type == "oracle" ) {
+			$db = new DatabaseOracle( $db_server, $db_username, $db_password, $db_name );
 		} else {
 			echo ( wfMsgExt( "externaldata-db-unknown-type", array( 'parse', 'escape' ) ) );
 			return;
@@ -296,7 +298,7 @@ class EDUtils {
 
 		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
 			if ( $edgAllowSSL ) {
-				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false ) );
+				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false, 'followRedirects' => false ) );
 			} else {
 				return Http::get( $url );
 			}
