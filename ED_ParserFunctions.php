@@ -310,7 +310,7 @@ class EDParserFunctions {
 			// and pass the whole thing in as arguments to
 			// doSetInternal, to mimic a call to #set_internal
 			array_unshift( $params, $parser );
-			call_user_func_array('SIOHandler::doSetInternal', $params );
+			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $params );
 		}
 		return null;
 	}
