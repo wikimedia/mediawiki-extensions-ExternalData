@@ -455,7 +455,7 @@ $messages['km'] = array(
  */
 $messages['ksh'] = array(
 	'getdata' => 'Date holle!',
-	'externaldata-desc' => 'Äloup, Date em <i lang="en">CSV</i> Fomaat, em <i lang="en">JSON</i> Fomaat, un em <i lang="en">XML</i> Fomaat fun <i lang="en">URLs</i> un vun Wiki-Sigge ze holle.',
+	'externaldata-desc' => 'Määt et müjjelich, Date en beshtemmpte Fomaate fun främbde <i lang="en">URLs</i>, Daatebangke, un ander Quälle ze holle.',
 	'externaldata-ldap-unable-to-connect' => 'Kann nit noh $1 verbenge',
 	'externaldata-json-decode-not-supported' => '<span style="text-transform: uppercase">Fähler:</span> De Fungxuhn <code lang="en">json_decode()</code> weedt vun heh dä Version vun <i lang="en">PHP</i> nit ongerschtöz.',
 	'externaldata-xml-error' => 'Fähler em XML, op Reih $2: $1',
