@@ -117,11 +117,11 @@ $messages['br'] = array(
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-json-decode-not-supported' => "Fazi : json_decode() n'eo ket skoret er stumm-mañ eus PHP",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
-	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer.',
-	'externaldata-db-could-not-get-url' => "N'eo ket posupl tapout an URL goude $1 taol-esae{{PLURAL:$1||}}.",
+	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer-mañ.',
+	'externaldata-db-could-not-get-url' => 'Dibosupl eo tapout an URL goude $1 {{PLURAL:$1|taol-esae|taol-esae}}.',
 	'externaldata-db-unknown-type' => 'Fazi : Seurt diaz roadennoù dianav',
 	'externaldata-db-could-not-connect' => "Fazi : Ne c'haller ket kevreañ ouzh an diaz roadennoù.",
-	'externaldata-db-no-return-values' => "Fazi : N'eo bet lakaet talvoudenn distro ebet",
+	'externaldata-db-no-return-values' => "Fazi : N'eus bet resisaet talvoud distro ebet.",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
 );
 
