@@ -179,7 +179,17 @@ class EDUtils {
 		} else {
 			$rows = Array();
 			while ( $row = $db->fetchRow( $result ) ) {
-				$rows[] = $row;
+				// Create a new row object, that uses the
+				// passed-in column names as keys, so that
+				// there's always an exact match between
+				// what's in the query and what's in the
+				// return value (so that "a.b", for instance,
+				// doesn't get chopped off to just "b").
+				$new_row = array();
+				foreach ($columns as $i => $column_name) {
+					$new_row[$column_name] = $row[$i];
+				}
+				$rows[] = $new_row;
 			}
 			return $rows;
 		}
