@@ -12,7 +12,7 @@ class EDGetData extends SpecialPage {
 	 * Constructor
 	 */
 	function __construct() {
-		SpecialPage::SpecialPage( 'GetData' );
+		parent::__construct( 'GetData' );
 		wfLoadExtensionMessages( 'ExternalData' );
 	}
 
