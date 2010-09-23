@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 1.0.1
+        Version 1.1
         Yaron Koren, Michael Dale and David Macdonald
 
 This is free software licensed under the GNU General Public License. Please
@@ -10,15 +10,15 @@ full text and terms of the license.
 == Overview ==
 
 External Data is an extension to MediaWiki that allows for retrieving data
-from various sources: external URLs and local wiki pages (in CSV, JSON and
-XML formats), database tables, and LDAP servers.
+from various sources: external URLs and local wiki pages (in CSV, GFF, JSON
+and XML formats), database tables, and LDAP servers.
 
 The extension defines six parser functions - #get_external_data,
 #get_db_data, #get_ldap_data, #external_value, #for_external_table and
 #store_external_table. They are described below:
 
-* #get_external_data retrieves the data from a URL that holds XML, CSV or
-JSON, and assigns it to local variables or arrays.
+* #get_external_data retrieves the data from a URL that holds CSV, GFF,
+JSON or XML, and assigns it to local variables or arrays.
 
 * #get_db_data retrieves data from a database, using a SQL query, and
 assigns it to local variables or arrays.
