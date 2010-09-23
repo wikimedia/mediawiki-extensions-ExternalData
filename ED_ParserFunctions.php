@@ -64,6 +64,8 @@ class EDParserFunctions {
 			$external_values = EDUtils::getCSVData( $url_contents, true );
 		} elseif ( $format == 'json' ) {
 			$external_values = EDUtils::getJSONData( $url_contents );
+		} elseif ( $format == 'gff' ) {
+			$external_values = EDUtils::getGFFData( $url_contents );
 		}
 		// get set of filters and set of mappings, determining each
 		// one by whether there's a double or single equals sign,
@@ -247,7 +249,8 @@ class EDParserFunctions {
 				// if variable name ends with a ".urlencode",
 				// that's a command - URL-encode the value of
 				// the actual variable
-				if ( strrpos( $variable, '.urlencode' ) == strlen( $variable ) - strlen( '.urlencode' ) ) {
+				$loc_of_urlencode =  strrpos( $variable, '.urlencode' );
+				if ( ( $loc_of_urlencode > 0 ) && ( $loc_of_urlencode == strlen( $variable ) - strlen( '.urlencode' ) ) ) {
 					$real_var = str_replace( '.urlencode', '', $variable );
 					$value = urlencode( self::getIndexedValue( $real_var , $i ) );
 				} else {
