@@ -265,6 +265,81 @@ class EDUtils {
 	}
 
 	/**
+	 * This function handles version 3 of the genomic-data format GFF,
+	 * defined here:
+	 * http://www.sequenceontology.org/gff3.shtml
+	 */
+	static function getGFFData( $gff ) {
+		// use an fgetcsv() call, similar to the one in getCSVData()
+		// (fgetcsv() can handle delimiters other than commas, in this
+		// case a tab)
+		$fiveMBs = 5 * 1024 * 1024;
+		$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
+		fputs( $fp, $gff );
+		rewind( $fp );
+		$table = array();
+		while ( $line = fgetcsv( $fp, null, "\t" ) ) {
+			// ignore comment lines
+			if ( strpos( $line[0], '##' ) !== 0 ) {
+				// special handling for final 'attributes' column
+				if ( array_key_exists( 8, $line ) ) {
+					$attributes = explode( ';', $line[8] );
+					foreach ( $attributes as $attribute ) {
+						$keyAndValue = explode( '=', $attribute, 2 );
+						if ( count( $keyAndValue ) == 2 ) {
+							$key = strtolower( $keyAndValue[0] );
+							$value = $keyAndValue[1];
+							$line[$key] = $value;
+						}
+					}
+				}
+				array_push( $table, $line );
+			}
+		}
+		fclose( $fp );
+		// now "flip" the data, turning it into a column-by-column
+		// array, instead of row-by-row
+		if ( $has_header ) {
+			$header_vals = array_shift( $table );
+		}
+		$values = array();
+		foreach ( $table as $line ) {
+			foreach ( $line as $i => $row_val ) {
+				// each of the columns in GFF have a
+				// pre-defined name - even the last column
+				// has its own name, "attributes"
+				if ( $i === 0 ) {
+					$column = 'seqid';
+				} elseif ( $i == 1 ) {
+					$column = 'source';
+				} elseif ( $i == 2 ) {
+					$column = 'type';
+				} elseif ( $i == 3 ) {
+					$column = 'start';
+				} elseif ( $i == 4 ) {
+					$column = 'end';
+				} elseif ( $i == 5 ) {
+					$column = 'score';
+				} elseif ( $i == 6 ) {
+					$column = 'strand';
+				} elseif ( $i == 7 ) {
+					$column = 'phase';
+				} elseif ( $i == 8 ) {
+					$column = 'attributes';
+				} else {
+					// this is hopefully an attribute key
+					$column = $i;
+				}
+				if ( array_key_exists( $column, $values ) )
+					$values[$column][] = $row_val;
+				else
+					$values[$column] = array( $row_val );
+			}
+		}
+		return $values;
+	}
+
+	/**
 	 * Recursive function for use by getJSONData()
 	 */
 	static function parseTree( $tree, &$retrieved_values ) {
