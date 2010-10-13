@@ -53,20 +53,28 @@ class EDUtils {
 		return $args;
 	}
 
-	// This function parses the data argument
-	static function parseMappings( $dataArg ) {
-		$dataArg = preg_replace ( "/\s\s+/" , " " , $dataArg ); // whitespace
-		$rawMappings = split( ",", $dataArg );
-		$mappings = Array();
-		foreach ( $rawMappings as $rawMapping ) {
-			$vals = split( "=", $rawMapping, 2 );
-			if ( count( $vals ) == 2 ) {
-				$intValue = trim( $vals[0] );
-				$extValue = trim( $vals[1] );
-				$mappings[$intValue] = $extValue;
+	/**
+	 * Parses an argument of the form "a=b,c=d,..." into an array
+	 */
+	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
+		$arg = preg_replace ( "/\s\s+/" , " " , $arg ); // whitespace
+		$keyValuePairs = split( ",", $arg );
+		$returnArray = Array();
+		foreach ( $keyValuePairs as $keyValuePair ) {
+			$keyAndValue = split( "=", $keyValuePair, 2 );
+			if ( count( $keyAndValue ) == 2 ) {
+				$key = trim( $keyAndValue[0] );
+				if ( $lowercaseKeys ) {
+					$key = strtolower( $key );
+				}
+				$value = trim( $keyAndValue[1] );
+				if ( $lowercaseValues ) {
+					$value = strtolower( $value );
+				}
+				$returnArray[$key] = $value;
 			}
 		}
-		return $mappings;
+		return $returnArray;
 	}
 
 	static function getLDAPData ( $filter, $domain, $params ) {
@@ -422,4 +430,54 @@ class EDUtils {
 			return $row->result;
 		}
 	}
+
+	/**
+	 * Checks whether this URL is allowed, based on the
+	 * $edgAllowExternalDataFrom whitelist
+	 */
+	static public function isURLAllowed( $url ) {
+		// this code is based on Parser::maybeMakeExternalImage()
+		global $edgAllowExternalDataFrom;
+		$data_from = $edgAllowExternalDataFrom;
+		$text = false;
+		if ( empty( $data_from ) ) {
+			return true;
+		} elseif ( is_array( $data_from ) ) {
+			foreach ( $data_from as $match ) {
+				if ( strpos( $url, $match ) === 0 ) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			if ( strpos( $url, $data_from ) === 0 ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// we shouldn't ever get here, but just in case...
+		return false;
+	}
+
+	static public function getDataFromURL( $url, $format ) {
+		$url_contents = EDUtils::fetchURL( $url );
+		// exit if there's nothing there
+		if ( empty( $url_contents ) )
+			return array();
+
+		if ( $format == 'xml' ) {
+			return self::getXMLData( $url_contents );
+		} elseif ( $format == 'csv' ) {
+			return self::getCSVData( $url_contents, false );
+		} elseif ( $format == 'csv with header' ) {
+			return self::getCSVData( $url_contents, true );
+		} elseif ( $format == 'json' ) {
+			return self::getJSONData( $url_contents );
+		} elseif ( $format == 'gff' ) {
+			return self::getGFFData( $url_contents );
+		}
+		return array();
+	}
+
 }
