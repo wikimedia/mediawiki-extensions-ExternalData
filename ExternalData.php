@@ -51,6 +51,7 @@ $edgDBPass = array();
 
 function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'get_external_data', array( 'EDParserFunctions', 'doGetExternalData' ) );
+	$parser->setFunctionHook( 'get_web_data', array( 'EDParserFunctions', 'doGetWebData' ) );
 	$parser->setFunctionHook( 'get_ldap_data', array( 'EDParserFunctions', 'doGetLDAPData' ) );
 	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
 	$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
@@ -65,6 +66,7 @@ function edgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
 	switch ( $langCode ) {
 	default:
 		$magicWords['get_external_data'] = array ( 0, 'get_external_data' );
+		$magicWords['get_web_data'] = array ( 0, 'get_web_data' );
 		$magicWords['get_ldap_data'] = array ( 0, 'get_ldap_data' );
 		$magicWords['get_db_data'] = array ( 0, 'get_db_data' );
 		$magicWords['external_value'] = array ( 0, 'external_value' );

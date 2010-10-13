@@ -13,12 +13,15 @@ External Data is an extension to MediaWiki that allows for retrieving data
 from various sources: external URLs and local wiki pages (in CSV, GFF, JSON
 and XML formats), database tables, and LDAP servers.
 
-The extension defines six parser functions - #get_external_data,
-#get_db_data, #get_ldap_data, #external_value, #for_external_table and
-#store_external_table. They are described below:
+The extension defines seven parser functions - #get_web_data,
+#get_external_data, #get_db_data, #get_ldap_data, #external_value,
+#for_external_table and #store_external_table. They are described below:
 
-* #get_external_data retrieves the data from a URL that holds CSV, GFF,
+* #get_web_data retrieves the data from a URL that holds CSV, GFF,
 JSON or XML, and assigns it to local variables or arrays.
+
+* #get_external_data is an earlier version of #get_web_data that does
+the same thing; it is currently deprecated.
 
 * #get_db_data retrieves data from a database, using a SQL query, and
 assigns it to local variables or arrays.
@@ -30,16 +33,16 @@ local variables.
 first value if it's an array.
 
 * #for_external_table applies processing onto multiple rows retrieved by
-#get_external_data.
+any of the #get_*_data functions
 
 * #store_external_table mimics a call to the Semantic Internal Objects
 extension's #set_internal parser function onto each row retrieved by
-#get_external_data, in order to store the entire array of data
-semantically.
+any of the #get_*_data functions, in order to store the entire array
+of data semantically.
 
 In addition, the extension defines a new special page, 'GetData', that
-exports selected rows from a wiki page that holds CSV data, in a format that
-is readable by #get_external_data.
+exports selected rows from a wiki page that holds CSV data, in a format
+that is readable by #get_web_data.
 
 For more information, see the extension homepage at:
 http://www.mediawiki.org/wiki/Extension:External_Data

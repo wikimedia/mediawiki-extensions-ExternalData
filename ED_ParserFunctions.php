@@ -11,6 +11,7 @@ class EDParserFunctions {
  
 	/**
 	 * Render the #get_external_data parser function
+	 * @deprecated
 	 */
 	static function doGetExternalData( &$parser ) {
 		global $wgTitle, $edgCurPageName, $edgValues;
@@ -27,46 +28,17 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$url = array_shift( $params );
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
-		// check whether this URL is allowed - code based on
-		// Parser::maybeMakeExternalImage()
-		global $edgAllowExternalDataFrom;
-		$data_from = $edgAllowExternalDataFrom;
-		$text = false;
-		if ( empty( $data_from ) ) {
-			$url_match = true;
-		} elseif ( is_array( $data_from ) ) {
-			$url_match = false;
-			foreach ( $data_from as $match ) {
-				if ( strpos( $url, $match ) === 0 ) {
-					$url_match = true;
-					break;
-				}
-			}
-		} else {
-			$url_match = ( strpos( $url, $data_from ) === 0 );
+		// if the URL isn't allowed (based on a whitelist), exit
+		if ( ! EDUtils::isURLAllowed( $url ) ) {
+			return;
 		}
-		if ( ! $url_match )
-			return;
-		
-		// now, get the contents of the URL - exit if there's nothing
-		// there
-		$url_contents = EDUtils::fetchURL( $url );
-		if ( empty( $url_contents ) )
-			return;
-		
+
 		$format = strtolower( array_shift( $params ) ); // make case-insensitive
-		$external_values = array();
-		if ( $format == 'xml' ) {
-			$external_values = EDUtils::getXMLData( $url_contents );
-		} elseif ( $format == 'csv' ) {
-			$external_values = EDUtils::getCSVData( $url_contents, false );
-		} elseif ( $format == 'csv with header' ) {
-			$external_values = EDUtils::getCSVData( $url_contents, true );
-		} elseif ( $format == 'json' ) {
-			$external_values = EDUtils::getJSONData( $url_contents );
-		} elseif ( $format == 'gff' ) {
-			$external_values = EDUtils::getGFFData( $url_contents );
+		$external_values = EDUtils::getDataFromURL( $url, $format );
+		if ( count( $external_values ) == 0 ) {
+			return;
 		}
+
 		// get set of filters and set of mappings, determining each
 		// one by whether there's a double or single equals sign,
 		// respectively
@@ -88,6 +60,16 @@ class EDParserFunctions {
 				// do nothing
 			}
 		}
+		self::setGlobalValuesArray( $external_values, $filters, $mappings );
+	}
+
+	/**
+	 * A helper function, since it's called by both doGetExternalData()
+	 * and doGetWebData() - the former is deprecated.
+	 */
+	static public function setGlobalValuesArray( $external_values, $filters, $mappings ) {
+		global $edgValues;
+
 		foreach ( $filters as $filter_var => $filter_value ) {
 			// find the entry of $external_values that matches
 			// the filter variable; if none exists, just ignore
@@ -131,7 +113,60 @@ class EDParserFunctions {
 					$edgValues[$local_var][] = $external_values[$external_var];
 			}
 		}
-		return;
+	}
+
+	/**
+	 * Render the #get_web_data parser function
+	 */
+	static function doGetWebData( &$parser ) {
+	       global $wgTitle, $edgCurPageName, $edgValues;
+
+		// if we're handling multiple pages, reset $edgValues
+		// when we move from one page to another
+		$cur_page_name = $wgTitle->getText();
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		if ( array_key_exists( 'url', $args ) ) {
+			$url = $args['url'];
+		} else {
+			return;
+		}
+		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
+		// if the URL isn't allowed (based on a whitelist), exit
+		if ( ! EDUtils::isURLAllowed( $url ) ) {
+			return;
+		}
+
+		if ( array_key_exists( 'format', $args ) ) {
+			$format = strtolower( $args['format'] );
+		} else {
+			$format = '';
+		}
+		$external_values = EDUtils::getDataFromURL( $url, $format );
+		if ( count( $external_values ) == 0 ) {
+			return;
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			// parse the 'data' arg into mappings
+			$mappings = EDUtils::paramToArray( $args['data'], false, true );
+		} else {
+			return;
+		}
+		if ( array_key_exists( 'filters', $args ) ) {
+			// parse the 'filters' arg
+			$filters = EDUtils::paramToArray( $args['filters'], true, false );
+		} else {
+			$filters = array();
+		}
+
+		self::setGlobalValuesArray( $external_values, $filters, $mappings );
 	}
 
  	/**
@@ -151,7 +186,7 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		$mappings = EDUtils::parseMappings( $args['data'] ); // parse the data arg into mappings
+		$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 
 		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
 
@@ -179,7 +214,7 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		$mappings = EDUtils::parseMappings( $args['data'] ); // parse the data arg into mappings
+		$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 
 		$external_values = EDUtils::getDBData( $args['server'], $args['from'], $args['where'], array_values( $mappings ) );
 		// handle error cases
