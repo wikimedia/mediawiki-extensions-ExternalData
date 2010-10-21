@@ -800,6 +800,18 @@ $messages['tr'] = array(
 	'externaldata-db-invalid-query' => 'Geçersiz sorgu.',
 );
 
+/** Ukrainian (Українська)
+ * @author Тест
+ */
+$messages['uk'] = array(
+	'getdata' => 'Отримати дані',
+	'externaldata-ldap-unable-to-connect' => 'Не вдається підключитися до $1',
+	'externaldata-xml-error' => 'Помилка XML: $1 в рядку $2',
+	'externaldata-db-could-not-get-url' => 'Не вдалося отримати URL після $1 {{PLURAL:$1|спроби|спроб}}.',
+	'externaldata-db-unknown-type' => 'Помилка: Невідомий тип бази даних.',
+	'externaldata-db-could-not-connect' => 'Помилка: не вдалося підключитися до бази даних.',
+);
+
 /** Veps (Vepsan kel')
  * @author Игорь Бродский
  */
