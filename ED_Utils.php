@@ -42,7 +42,7 @@ class EDUtils {
 	static function parseParams( $params ) {
 		$args = Array();
 		foreach ( $params as $param ) {
-			$param = preg_replace ( "/\s\s+/" , " " , $param ); // whitespace
+			$param = preg_replace ( "/\s\s+/", ' ', $param ); // whitespace
 			$param_parts = explode( "=", $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
 				continue;
@@ -57,7 +57,7 @@ class EDUtils {
 	 * Parses an argument of the form "a=b,c=d,..." into an array
 	 */
 	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
-		$arg = preg_replace ( "/\s\s+/" , ' ', $arg ); // whitespace
+		$arg = preg_replace ( "/\s\s+/", ' ', $arg ); // whitespace
 		$keyValuePairs = explode( ',', $arg );
 		$returnArray = Array();
 		foreach ( $keyValuePairs as $keyValuePair ) {
@@ -426,7 +426,6 @@ class EDUtils {
 				return $page;
 			}
 		} else {
-			$row = $dbr->fetchObject( $res );
 			return $row->result;
 		}
 	}
