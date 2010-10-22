@@ -32,7 +32,7 @@ class EDGetData extends SpecialPage {
 		// Remove <noinclude> sections and <includeonly> tags from text
 		$page_text = StringUtils::delimiterReplace( '<noinclude>', '</noinclude>', '', $page_text );
 		$page_text = strtr( $page_text, array( '<includeonly>' => '', '</includeonly>' => '' ) );
-		$orig_lines = split( "\n", $page_text );
+		$orig_lines = explode( "\n", $page_text );
 		// ignore lines that are either blank or start with a semicolon
 		$page_lines = array();
 		foreach ( $orig_lines as $i => $line )

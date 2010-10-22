@@ -43,7 +43,7 @@ class EDUtils {
 		$args = Array();
 		foreach ( $params as $param ) {
 			$param = preg_replace ( "/\s\s+/" , " " , $param ); // whitespace
-			$param_parts = split( "=", $param, 2 );
+			$param_parts = explode( "=", $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
 				continue;
 			}
@@ -57,11 +57,11 @@ class EDUtils {
 	 * Parses an argument of the form "a=b,c=d,..." into an array
 	 */
 	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
-		$arg = preg_replace ( "/\s\s+/" , " " , $arg ); // whitespace
-		$keyValuePairs = split( ",", $arg );
+		$arg = preg_replace ( "/\s\s+/" , ' ', $arg ); // whitespace
+		$keyValuePairs = explode( ',', $arg );
 		$returnArray = Array();
 		foreach ( $keyValuePairs as $keyValuePair ) {
-			$keyAndValue = split( "=", $keyValuePair, 2 );
+			$keyAndValue = explode( '=', $keyValuePair, 2 );
 			if ( count( $keyAndValue ) == 2 ) {
 				$key = trim( $keyAndValue[0] );
 				if ( $lowercaseKeys ) {
