@@ -662,6 +662,7 @@ $messages['ro'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Nu se poate conecta la $1',
 	'externaldata-xml-error' => 'Eroare XML: $1 la linia $2',
 	'externaldata-db-unknown-type' => 'Eroare: Tipul bazei de date necunoscut.',
+	'externaldata-db-could-not-connect' => 'Eroare: Nu s-a putut conecta la baza de date.',
 	'externaldata-db-invalid-query' => 'Interogare invalidă.',
 );
 
