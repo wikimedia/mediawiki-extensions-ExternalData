@@ -154,6 +154,22 @@ $messages['ca'] = array(
 	'externaldata-db-invalid-query' => 'Consulta no vàlida.',
 );
 
+/** Czech (Česky)
+ * @author Jkjk
+ */
+$messages['cs'] = array(
+	'getdata' => 'Získat data',
+	'externaldata-desc' => 'Umožňuje získávání strukturovaných dat z externích webových stránek, databází a jiných zdrojů',
+	'externaldata-ldap-unable-to-connect' => 'Nepodařilo se spojit s $1',
+	'externaldata-json-decode-not-supported' => 'Chyba:tato verzie PHP nepodporuje json_decode()',
+	'externaldata-xml-error' => 'Chyba XML: $1 na řádku $2',
+	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru',
+	'externaldata-db-unknown-type' => 'Chyba: Neznámý typ databáze.',
+	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
+	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.',
+	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
+);
+
 /** German (Deutsch)
  * @author Imre
  * @author MF-Warburg
