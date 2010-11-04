@@ -455,8 +455,6 @@ class EDUtils {
 				return false;
 			}
 		}
-		// we shouldn't ever get here, but just in case...
-		return false;
 	}
 
 	static public function getDataFromURL( $url, $format ) {
