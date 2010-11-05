@@ -13,6 +13,7 @@ class EDGetData extends SpecialPage {
 	 */
 	function __construct() {
 		parent::__construct( 'GetData' );
+		wfLoadExtensionMessages( 'ExternalData' );
 	}
 
 	function execute( $query ) {
