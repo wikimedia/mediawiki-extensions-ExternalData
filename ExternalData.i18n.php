@@ -342,7 +342,7 @@ $messages['gu'] = array(
  */
 $messages['he'] = array(
 	'getdata' => 'קבלת נתונים',
-	'externaldata-desc' => 'אפשרות לקבלת נתונים בפורמטים: CSV, JSON ו־XML, גם מכתובות חיצוניות וגם מדפי ויקי מקומיים',
+	'externaldata-desc' => 'אפשרות לקבלת נתונים במבנים מכתובות חיצוניות, מסדי נתונים ומקורות אחרים',
 	'externaldata-ldap-unable-to-connect' => 'לא ניתן להתחבר ל־$1',
 	'externaldata-json-decode-not-supported' => 'שגיאה: הפקודה json_decode() אינה נתמכת בגרסה זו של PHP',
 	'externaldata-xml-error' => 'שגיאת XML: $1 בשורה $2',
