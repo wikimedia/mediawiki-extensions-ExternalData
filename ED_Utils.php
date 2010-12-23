@@ -207,6 +207,10 @@ class EDUtils {
 		global $edgXMLValues;
 		$edgXMLValues = array();
 
+		// Remove comments from XML - for some reason, xml_parse()
+		// can't handle them.
+		$xml = preg_replace( '/<!--.*?-->/', '', $xml );
+
 		$xml_parser = xml_parser_create();
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
 		xml_set_character_data_handler( $xml_parser, array( 'EDUtils', 'getContent' ) );
