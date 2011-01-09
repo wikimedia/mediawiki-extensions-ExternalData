@@ -344,11 +344,18 @@ class EDParserFunctions {
 					$params[$j] = str_replace( '{{{' . $variable . '}}}', $value, $params[$j] );
 				}
 			}
-			// add $parser to the beginning of the $params array,
+			// Add $parser to the beginning of the $params array,
 			// and pass the whole thing in as arguments to
-			// doSetInternal, to mimic a call to #set_internal
+			// doSetInternal, to mimic a call to #set_internal.
 			array_unshift( $params, $parser );
-			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $params );
+			// As of PHP 5.3.1, call_user_func_array() requires that
+			// the function params be references. Workaround via
+			// http://stackoverflow.com/questions/2045875/pass-by-reference-problem-with-php-5-3-1
+			$refParams = array();
+			foreach ( $params as $key => $value ) {
+				$refParams[$key] = &$params[$key];
+			}
+			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
 		}
 		return null;
 	}
