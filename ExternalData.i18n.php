@@ -88,7 +88,7 @@ $messages['arz'] = array(
 	'externaldata-desc' => 'بيسمح انك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
 );
 
-/** Belarusian (Taraškievica orthography) (Беларуская (тарашкевіца))
+/** Belarusian (Taraškievica orthography) (‪Беларуская (тарашкевіца)‬)
  * @author EugeneZelenko
  * @author Jim-by
  */
@@ -725,7 +725,7 @@ $messages['sk'] = array(
 	'externaldata-db-invalid-query' => 'Neplatná požiadavka.',
 );
 
-/** Serbian Cyrillic ekavian (Српски (ћирилица))
+/** Serbian Cyrillic ekavian (‪Српски (ћирилица)‬)
  * @author Charmed94
  * @author Михајло Анђелковић
  */
@@ -743,7 +743,7 @@ $messages['sr-ec'] = array(
 	'externaldata-db-invalid-query' => 'Неисправан упит.',
 );
 
-/** Serbian Latin ekavian (Srpski (latinica))
+/** Serbian Latin ekavian (‪Srpski (latinica)‬)
  * @author Michaello
  */
 $messages['sr-el'] = array(
