@@ -395,7 +395,9 @@ class EDUtils {
 
 		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
 			if ( $edgAllowSSL ) {
-				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false, 'followRedirects' => false ) );
+				// The hardcoded 'CURLOPT_SSL_VERIFYPEER' is
+				// needed for MW < 1.17
+				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false, 'sslVerifyCert' => false, 'followRedirects' => false ) );
 			} else {
 				return Http::get( $url );
 			}
