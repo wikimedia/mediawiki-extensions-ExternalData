@@ -12,7 +12,7 @@ if ( !defined( 'MEDIAWIKI' ) ) die();
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '1.2.2',
+	'version'        => '1.2.3',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
@@ -38,7 +38,7 @@ $wgSpecialPageGroups['GetData'] = 'pagetools';
 $edgValues = array();
 $edgStringReplacements = array();
 $edgCacheTable = null;
-$edgAllowSSL = false;
+$edgAllowSSL = true;
 
 // (in seconds) set to one week:
 $edgCacheExpireTime = 60 * 60 * 24 * 7;
