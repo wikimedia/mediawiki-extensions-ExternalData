@@ -133,22 +133,17 @@ class EDUtils {
 			return;
 		}
 
-
 		$db_type = $edgDBServerType[$server_id];
-		$db_server = $edgDBServer[$server_id];
-		$db_name = $edgDBName[$server_id];
-		$db_username = $edgDBUser[$server_id];
-		$db_password = $edgDBPass[$server_id];
 
-		if ( $db_type == "mysql" ) {
-			$db = new Database( $db_server, $db_username, $db_password, $db_name );
-		} elseif ( $db_type == "postgres" ) {
-			$db = new DatabasePostgres( $db_server, $db_username, $db_password, $db_name );
-		} elseif ( $db_type == "mssql" ) {
-			$db = new DatabaseMssql( $db_server, $db_username, $db_password, $db_name );
-		} elseif ( $db_type == "oracle" ) {
-			$db = new DatabaseOracle( $db_server, $db_username, $db_password, $db_name );
-		} else {
+		$db = DatabaseBase::newFromType( $db_type,
+			array(
+				'host' => $edgDBServer[$server_id],
+				'user' => $edgDBUser[$server_id],
+				'password' => $edgDBPass[$server_id],
+				'dbname' => $edgDBName[$server_id],
+			) );
+
+		if ( $db == null ) {
 			echo ( wfMsgExt( "externaldata-db-unknown-type", array( 'parse', 'escape' ) ) );
 			return;
 		}
