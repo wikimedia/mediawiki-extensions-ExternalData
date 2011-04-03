@@ -134,14 +134,34 @@ class EDUtils {
 		}
 
 		$db_type = $edgDBServerType[$server_id];
-
-		$db = DatabaseBase::newFromType( $db_type,
-			array(
-				'host' => $edgDBServer[$server_id],
-				'user' => $edgDBUser[$server_id],
-				'password' => $edgDBPass[$server_id],
-				'dbname' => $edgDBName[$server_id],
-			) );
+		$db_server = $edgDBServer[$server_id];
+		$db_name = $edgDBName[$server_id];
+		$db_username = $edgDBUser[$server_id];
+		$db_password = $edgDBPass[$server_id];
+ 
+		// DatabaseBase::newFromType() was added in MW 1.18
+		if ( method_exists( 'DatabaseBase', 'newFromType' ) ) {
+			$db = DatabaseBase::newFromType( $db_type,
+				array(
+					'host' => $db_server,
+					'user' => $db_username,
+					'password' => $db_password,
+					'dbname' => $db_name,
+				)
+			);
+		} else {
+			if ( $db_type == "mysql" ) {
+				$db = new Database( $db_server, $db_username, $db_password, $db_name );
+			} elseif ( $db_type == "postgres" ) {
+				$db = new DatabasePostgres( $db_server, $db_username, $db_password, $db_name );
+			} elseif ( $db_type == "mssql" ) {
+				$db = new DatabaseMssql( $db_server, $db_username, $db_password, $db_name );
+			} elseif ( $db_type == "oracle" ) {
+				$db = new DatabaseOracle( $db_server, $db_username, $db_password, $db_name );
+			} else {
+				$db = null;
+			}
+		}
 
 		if ( $db == null ) {
 			echo ( wfMsgExt( "externaldata-db-unknown-type", array( 'parse', 'escape' ) ) );
