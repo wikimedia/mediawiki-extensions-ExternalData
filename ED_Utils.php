@@ -140,7 +140,8 @@ class EDUtils {
 		$db_password = $edgDBPass[$server_id];
  
 		// DatabaseBase::newFromType() was added in MW 1.18
-		if ( method_exists( 'DatabaseBase', 'newFromType' ) ) {
+		$realFunction = array( 'DatabaseBase', 'newFromType' );
+		if ( is_callable( $realFunction ) ) {
 			$db = DatabaseBase::newFromType( $db_type,
 				array(
 					'host' => $db_server,
