@@ -133,7 +133,10 @@ class EDUtils {
 		global $edgDBName;
 		global $edgDBUser;
 		global $edgDBPass;
+		global $edgDBFlags;
+		global $edgDBTablePrefix;
 
+		// Mandatory parameters
 		if ( ( ! array_key_exists( $server_id, $edgDBServerType ) ) ||
 		    ( ! array_key_exists( $server_id, $edgDBServer ) ) ||
 		    ( ! array_key_exists( $server_id, $edgDBName ) ) ||
@@ -149,7 +152,19 @@ class EDUtils {
 		$db_username = $edgDBUser[$server_id];
 		$db_password = $edgDBPass[$server_id];
 
-		// DatabaseBase::newFromType() was added in MW 1.18
+		// Optional parameters
+		if ( array_key_exists( $server_id, $edgDBFlags ) ) {
+			$db_flags = $edgDBFlags[$server_id];
+		} else {
+			$db_flags = DBO_DEFAULT;
+		}		
+		if ( array_key_exists( $server_id, $edgDBTablePrefix ) ) {
+			$db_tableprefix = $edgDBTablePrefix[$server_id];
+		} else {
+			$db_tableprefix = '';
+		}
+
+		// DatabaseBase::newFromType() was added in MW 1.17
 		$realFunction = array( 'DatabaseBase', 'newFromType' );
 		if ( is_callable( $realFunction ) ) {
 			$db = DatabaseBase::newFromType( $db_type,
@@ -158,9 +173,16 @@ class EDUtils {
 					'user' => $db_username,
 					'password' => $db_password,
 					'dbname' => $db_name,
+					'flags' => $db_flags,
+					'tableprefix' => $db_tableprefix,
 				)
 			);
 		} else {
+			if ( ( $db_flags !== DBO_DEFAULT ) || ( $db_tableprefix !== '' ) ) {
+				print wfMsg( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>'  );
+				return;
+			}
+
 			if ( $db_type == "mysql" ) {
 				$db = new Database( $db_server, $db_username, $db_password, $db_name );
 			} elseif ( $db_type == "postgres" ) {

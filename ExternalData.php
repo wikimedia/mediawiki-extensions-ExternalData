@@ -48,6 +48,8 @@ $edgDBServerType = array();
 $edgDBName = array();
 $edgDBUser = array();
 $edgDBPass = array();
+$edgDBFlags = array();
+$edgDBTablePrefix = array();
 
 function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'get_external_data', array( 'EDParserFunctions', 'doGetExternalData' ) );
