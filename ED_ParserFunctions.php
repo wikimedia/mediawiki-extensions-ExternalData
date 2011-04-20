@@ -119,7 +119,7 @@ class EDParserFunctions {
 	 * Render the #get_web_data parser function
 	 */
 	static function doGetWebData( &$parser ) {
-	       global $wgTitle, $edgCurPageName, $edgValues;
+		global $wgTitle, $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
@@ -173,7 +173,7 @@ class EDParserFunctions {
 	 * Render the #get_ldap_data parser function
 	 */
 	static function doGetLDAPData( &$parser ) {
-	       global $wgTitle, $edgCurPageName, $edgValues;
+		global $wgTitle, $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
@@ -201,7 +201,7 @@ class EDParserFunctions {
 	 * Render the #get_db_data parser function
 	 */
 	static function doGetDBData( &$parser ) {
-	       global $wgTitle, $edgCurPageName, $edgValues;
+		global $wgTitle, $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
@@ -214,9 +214,16 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
+		$data = ( array_key_exists( 'data', $args ) ) ? $args['data'] : null;
+		$server = ( array_key_exists( 'server', $args ) ) ? $args['server'] : null;
+		$table = ( array_key_exists( 'from', $args ) ) ? $args['from'] : null;
+		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
+		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
+		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
+		$options = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy );
+		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $args['server'], $args['from'], $args['where'], array_values( $mappings ) );
+		$external_values = EDUtils::getDBData( $server, $table, array_values( $mappings ), $conds, $options );
 		// handle error cases
 		if ( is_null( $external_values ) )
 			return;
@@ -284,7 +291,7 @@ class EDParserFunctions {
 				// if variable name ends with a ".urlencode",
 				// that's a command - URL-encode the value of
 				// the actual variable
-				$loc_of_urlencode =  strrpos( $variable, '.urlencode' );
+				$loc_of_urlencode = strrpos( $variable, '.urlencode' );
 				if ( ( $loc_of_urlencode > 0 ) && ( $loc_of_urlencode == strlen( $variable ) - strlen( '.urlencode' ) ) ) {
 					$real_var = str_replace( '.urlencode', '', $variable );
 					$value = urlencode( self::getIndexedValue( $real_var , $i ) );
@@ -367,5 +374,4 @@ class EDParserFunctions {
 		global $edgValues;
 		$edgValues = null;
 	}
-
 }
