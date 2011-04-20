@@ -39,9 +39,9 @@ class EDParserFunctions {
 			return;
 		}
 
-		// get set of filters and set of mappings, determining each
+		// Get set of filters and set of mappings, determining each
 		// one by whether there's a double or single equals sign,
-		// respectively
+		// respectively.
 		$filters = array();
 		$mappings = array();
 		foreach ( $params as $param ) {
@@ -71,9 +71,9 @@ class EDParserFunctions {
 		global $edgValues;
 
 		foreach ( $filters as $filter_var => $filter_value ) {
-			// find the entry of $external_values that matches
+			// Find the entry of $external_values that matches
 			// the filter variable; if none exists, just ignore
-			// the filter
+			// the filter.
 			if ( array_key_exists( $filter_var, $external_values ) ) {
 				if ( is_array( $external_values[$filter_var] ) ) {
 					$column_values = $external_values[$filter_var];
@@ -121,8 +121,8 @@ class EDParserFunctions {
 	static function doGetWebData( &$parser ) {
 		global $wgTitle, $edgCurPageName, $edgValues;
 
-		// if we're handling multiple pages, reset $edgValues
-		// when we move from one page to another
+		// If we're handling multiple pages, reset $edgValues
+		// when we move from one page to another.
 		$cur_page_name = $wgTitle->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
