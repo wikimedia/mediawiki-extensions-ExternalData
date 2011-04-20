@@ -23,6 +23,7 @@ $messages['en'] = array(
 	'externaldata-db-could-not-connect' => 'Error: Could not connect to database.',
 	'externaldata-db-no-return-values' => 'Error: No return values specified.',
 	'externaldata-db-invalid-query' => 'Invalid query.',
+	'externaldata-db-option-unsupported' => 'Error: Parameters $1 and $2 are not supported in this version of MediaWiki.',
 );
 
 /** Message documentation (Message documentation)
@@ -292,6 +293,7 @@ $messages['fr'] = array(
 	'externaldata-db-could-not-connect' => 'Erreur : Impossible de se connecter à la base de données.',
 	'externaldata-db-no-return-values' => "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	'externaldata-db-invalid-query' => 'Requête invalide.',
+	'externaldata-db-option-unsupported' => 'Erreur: Les paramètres $1 et $2 ne sont pas supportés dans cette version de MediaWiki.',
 );
 
 /** Galician (Galego)
