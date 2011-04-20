@@ -41,7 +41,7 @@ class EDUtils {
 		$edgCurrentXMLTag = "";
 	}
 
-	static function getContent ( $parser, $content ) {
+	static function getContent( $parser, $content ) {
 		global $edgCurrentXMLTag, $edgXMLValues;
 		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) )
 			$edgXMLValues[$edgCurrentXMLTag][] = $content;
@@ -87,7 +87,7 @@ class EDUtils {
 		return $returnArray;
 	}
 
-	static function getLDAPData ( $filter, $domain, $params ) {
+	static function getLDAPData( $filter, $domain, $params ) {
 		global $edgLDAPServer;
 		global $edgLDAPUser;
 		global $edgLDAPPass;
@@ -127,7 +127,7 @@ class EDUtils {
 		return $results;
 	}
 
-	static function getDBData ( $server_id, $from, $where, $columns ) {
+	static function getDBData( $server_id, $from, $columns, $where, $options ) {
 		global $edgDBServerType;
 		global $edgDBServer;
 		global $edgDBName;
@@ -148,7 +148,7 @@ class EDUtils {
 		$db_name = $edgDBName[$server_id];
 		$db_username = $edgDBUser[$server_id];
 		$db_password = $edgDBPass[$server_id];
- 
+
 		// DatabaseBase::newFromType() was added in MW 1.18
 		$realFunction = array( 'DatabaseBase', 'newFromType' );
 		if ( is_callable( $realFunction ) ) {
@@ -178,6 +178,7 @@ class EDUtils {
 			echo ( wfMsgExt( "externaldata-db-unknown-type", array( 'parse', 'escape' ) ) );
 			return;
 		}
+
 		if ( ! $db->isOpen() ) {
 			echo ( wfMsgExt( "externaldata-db-could-not-connect", array( 'parse', 'escape' ) ) );
 			return;
@@ -188,7 +189,7 @@ class EDUtils {
 			return;
 		}
 
-		$rows = EDUtils::searchDB( $db, $from, $where, $columns );
+		$rows = self::searchDB( $db, $from, $columns, $where, $options );
 		$db->close();
 
 		$values = Array();
@@ -201,12 +202,8 @@ class EDUtils {
 		return $values;
 	}
 
-	static function searchDB ( $db, $from, $where, $columns ) {
-		$sql = "SELECT " . implode( ",", $columns ) . " ";
-		$sql .= "FROM " . $from . " ";
-		$sql .= "WHERE " . $where;
-
-		$result = $db->query( $sql );
+	static function searchDB( $db, $table, $vars, $conds, $options ) {
+		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
 		if ( !$result ) {
 			echo ( wfMsgExt( "externaldata-db-invalid-query", array( 'parse', 'escape' ) ) );
 			return false;
@@ -220,7 +217,7 @@ class EDUtils {
 				// return value (so that "a.b", for instance,
 				// doesn't get chopped off to just "b").
 				$new_row = array();
-				foreach ($columns as $i => $column_name) {
+				foreach ( $vars as $i => $column_name ) {
 					$new_row[$column_name] = $row[$i];
 				}
 				$rows[] = $new_row;
@@ -229,7 +226,7 @@ class EDUtils {
 		}
 	}
 
-	static function getXMLData ( $xml ) {
+	static function getXMLData( $xml ) {
 		global $edgXMLValues;
 		$edgXMLValues = array();
 
