@@ -173,6 +173,7 @@ $messages['cs'] = array(
 
 /** German (Deutsch)
  * @author Imre
+ * @author Kghbln
  * @author MF-Warburg
  * @author Merlissimo
  * @author Purodha
@@ -180,9 +181,9 @@ $messages['cs'] = array(
  */
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
-	'externaldata-desc' => 'Erlaubt das Einfügen von strukturierten Daten aus externen URLs, Datenbanken und anderen Quellen',
+	'externaldata-desc' => 'Ermöglicht das Einfügen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen',
 	'externaldata-ldap-unable-to-connect' => 'Keine Verbindung zu $1',
-	'externaldata-json-decode-not-supported' => 'Fehler: json_decode() wird nicht von dieser PHP-Version unterstützt',
+	'externaldata-json-decode-not-supported' => 'Fehler: json_decode() wird nicht von dieser PHP-Version unterstützt.',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
 	'externaldata-db-incomplete-information' => 'Fehler: Unvollständige Informationen für diese Server-ID.',
 	'externaldata-db-could-not-get-url' => 'URL konnte nach $1 {{PLURAL:$1|Versuch|Versuchen}} nicht abgerufen werden.',
@@ -190,6 +191,7 @@ $messages['de'] = array(
 	'externaldata-db-could-not-connect' => 'Fehler: Keine Verbindung zur Datenbank.',
 	'externaldata-db-no-return-values' => 'Fehler: Keine Rückgabewerte festgelegt.',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
+	'externaldata-db-option-unsupported' => 'Fehler: Die  Parameter $1 und $2 werden nicht von dieser MediaWiki-Version unterstützt.',
 );
 
 /** Lower Sorbian (Dolnoserbski)
@@ -541,6 +543,7 @@ $messages['nl'] = array(
 	'externaldata-db-could-not-connect' => 'Fout: het was niet mogelijk met de database te verbinden.',
 	'externaldata-db-no-return-values' => 'Fout: er zijn geen return-waarden ingesteld.',
 	'externaldata-db-invalid-query' => 'Ongeldige zoekopdracht.',
+	'externaldata-db-option-unsupported' => 'Fout: de parameters $1 en $2 worden niet ondersteund in deze versie van MediaWiki.',
 );
 
 /** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
