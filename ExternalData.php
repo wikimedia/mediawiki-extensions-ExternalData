@@ -57,6 +57,7 @@ function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
 	$parser->setFunctionHook( 'for_external_table', array( 'EDParserFunctions', 'doForExternalTable' ) );
 	$parser->setFunctionHook( 'store_external_table', array( 'EDParserFunctions', 'doStoreExternalTable' ) );
+	$parser->setFunctionHook( 'clear_external_data', array( 'EDParserFunctions', 'doClearExternalData' ) );
 
 	return true; // always return true, in order not to stop MW's hook processing!
 }
@@ -72,6 +73,7 @@ function edgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
 		$magicWords['external_value'] = array ( 0, 'external_value' );
 		$magicWords['for_external_table'] = array ( 0, 'for_external_table' );
 		$magicWords['store_external_table'] = array ( 0, 'store_external_table' );
+		$magicWords['clear_external_data'] = array ( 0, 'clear_external_data' );
 	}
 	return true;
 }

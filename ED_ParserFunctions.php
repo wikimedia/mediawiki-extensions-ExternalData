@@ -359,4 +359,13 @@ class EDParserFunctions {
 		}
 		return null;
 	}
+
+	/**
+	 * Render the #clear_external_data parser function
+	 */
+	static function doClearExternalData( &$parser ) {
+		global $edgValues;
+		$edgValues = null;
+	}
+
 }
