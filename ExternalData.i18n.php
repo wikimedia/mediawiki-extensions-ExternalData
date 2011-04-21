@@ -105,6 +105,7 @@ $messages['be-tarask'] = array(
 	'externaldata-db-could-not-connect' => 'Памылка: Немагчыма далучыцца да базы зьвестак.',
 	'externaldata-db-no-return-values' => 'Памылка: Не пазначаныя выніковыя значэньні.',
 	'externaldata-db-invalid-query' => 'Няслушны запыт.',
+	'externaldata-db-option-unsupported' => 'Памылка: Парамэтры $1 і $2 не падтрымліваюцца ў гэтай вэрсіі MediaWiki.',
 );
 
 /** Breton (Brezhoneg)
@@ -519,6 +520,7 @@ $messages['mk'] = array(
 	'externaldata-db-could-not-connect' => 'Грешка: Не можев да се поврзам со базата на податоци.',
 	'externaldata-db-no-return-values' => 'Грешка: Нема назначено повратни вредности.',
 	'externaldata-db-invalid-query' => 'Грешно барање.',
+	'externaldata-db-option-unsupported' => 'Грешка: Параметрите $1 и $2 не се поддржани во оваа верзија на МедијаВики.',
 );
 
 /** Erzya (Эрзянь)
@@ -808,6 +810,7 @@ $messages['tl'] = array(
 	'externaldata-db-could-not-connect' => 'Kamalian: Hindi makakunekta sa talaan ng dato.',
 	'externaldata-db-no-return-values' => 'Kamalian: Walang tinukoy na halagang pabalik.',
 	'externaldata-db-invalid-query' => 'Hindi tanggap na katanungan.',
+	'externaldata-db-option-unsupported' => 'Kamalian: Ang mga parametrong $1 at $2 ay hindi tinatangkilik sa bersyong ito MediaWiki.',
 );
 
 /** Turkish (Türkçe)
