@@ -225,6 +225,10 @@ class EDUtils {
 	}
 
 	static function searchDB( $db, $table, $vars, $conds, $options ) {
+		// Add on a space at the beginning of $table so that
+		// $db->select() will treat it as a literal, instead of
+		// putting quotes around it or otherwise trying to parse it.
+		$table = ' ' . $table;
 		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
 		if ( !$result ) {
 			echo ( wfMsgExt( "externaldata-db-invalid-query", array( 'parse', 'escape' ) ) );
