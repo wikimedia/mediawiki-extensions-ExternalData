@@ -12,7 +12,7 @@ if ( !defined( 'MEDIAWIKI' ) ) die();
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '1.2.3',
+	'version'        => '1.3',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
 	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
@@ -24,11 +24,11 @@ $wgExtensionMessagesFiles['ExternalData'] = dirname(__FILE__) . '/ExternalData.i
 if ( version_compare( $wgVersion, '1.16alpha', '>=' ) ) {
 	$wgExtensionMessagesFiles['ExternalDataMagic'] = dirname(__FILE__) . '/ExternalData.i18n.magic.php';
 } else {
-	// Pre 1.16alpha backward compatibility for magic words
+	// Pre-1.16alpha backward compatibility for magic words
 	$wgHooks['LanguageGetMagic'][] = 'edgLanguageGetMagic';
 }
 
-// register all special pages and other classes
+// Register all special pages and other classes
 $wgAutoloadClasses['EDUtils'] = dirname(__FILE__) . '/ED_Utils.php';
 $wgAutoloadClasses['EDParserFunctions'] = dirname(__FILE__) . '/ED_ParserFunctions.php';
 $wgSpecialPages['GetData'] = 'EDGetData';
@@ -40,7 +40,7 @@ $edgStringReplacements = array();
 $edgCacheTable = null;
 $edgAllowSSL = true;
 
-// (in seconds) set to one week:
+// Value is in seconds - set to one week
 $edgCacheExpireTime = 60 * 60 * 24 * 7;
 
 $edgDBServer = array();
@@ -64,7 +64,7 @@ function edgRegisterParser( &$parser ) {
 	return true; // always return true, in order not to stop MW's hook processing!
 }
 
-// Pre 1.16alpha backward compatibility for magic words
+// Pre-1.16alpha backward compatibility for magic words
 function edgLanguageGetMagic( &$magicWords, $langCode = "en" ) {
 	switch ( $langCode ) {
 	default:
