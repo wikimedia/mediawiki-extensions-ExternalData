@@ -192,7 +192,7 @@ $messages['de'] = array(
 	'externaldata-db-could-not-connect' => 'Fehler: Keine Verbindung zur Datenbank.',
 	'externaldata-db-no-return-values' => 'Fehler: Keine Rückgabewerte festgelegt.',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
-	'externaldata-db-option-unsupported' => 'Fehler: Die  Parameter $1 und $2 werden nicht von dieser MediaWiki-Version unterstützt.',
+	'externaldata-db-option-unsupported' => 'Fehler: Die  Parameter $1 und $2 werden von dieser MediaWiki-Version nicht unterstützt.',
 );
 
 /** Lower Sorbian (Dolnoserbski)
@@ -408,10 +408,12 @@ $messages['ia'] = array(
 	'externaldata-db-could-not-connect' => 'Error: Impossibile connecter se al base de datos.',
 	'externaldata-db-no-return-values' => 'Error: Nulle valor de retorno specificate.',
 	'externaldata-db-invalid-query' => 'Consulta invalide.',
+	'externaldata-db-option-unsupported' => 'Error: Le parametros $1 e $2 non es supportate in iste version de MediaWiki.',
 );
 
 /** Indonesian (Bahasa Indonesia)
  * @author Bennylin
+ * @author IvanLanin
  * @author Iwan Novirion
  */
 $messages['id'] = array(
@@ -420,7 +422,7 @@ $messages['id'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Tidak dapat terhubung ke $1',
 	'externaldata-json-decode-not-supported' => 'Galat: json_decode() tidak didukung oleh versi PHP ini',
 	'externaldata-xml-error' => 'Galat XML: $1 pada baris $2',
-	'externaldata-db-incomplete-information' => 'Galat: Informasi tak lengkap untuk ID peladen ini.',
+	'externaldata-db-incomplete-information' => 'Galat: Informasi tak lengkap untuk ID server ini.',
 	'externaldata-db-could-not-get-url' => 'Tidak dapat mengambil URL setelah dicoba {{PLURAL:$1||}}$1 kali.',
 	'externaldata-db-unknown-type' => 'Galat: Jenis basis data tidak diketahui.',
 	'externaldata-db-could-not-connect' => 'Galat: Tidak dapat terhubung ke basis data.',
@@ -486,6 +488,7 @@ $messages['ksh'] = array(
 	'externaldata-db-could-not-connect' => '<span style="text-transform: uppercase">Fähler:</span> Kunnt kein Verbendung noh dä Datebangk krijje.',
 	'externaldata-db-no-return-values' => '<span style="text-transform: uppercase">Fähler:</span> Kein Wääte för Zerökzeävve aanjejovve.',
 	'externaldata-db-invalid-query' => 'Onjöltesch Frooch aan de Datebangk.',
+	'externaldata-db-option-unsupported' => 'Fähler: Heh di Version vum MediaWiki vershteiht de Parrmeetere $1 un $2 nit.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -635,6 +638,7 @@ $messages['pms'] = array(
 	'externaldata-db-could-not-connect' => 'Eror: a peul pa coleghesse al database.',
 	'externaldata-db-no-return-values' => "Eror: Pa gnun valor d'artorn spessifià.",
 	'externaldata-db-invalid-query' => 'Ciamà pa bon-a.',
+	'externaldata-db-option-unsupported' => 'Eror: paràmetr $1 e $2 a son pa apogià an sta vërsion ëd MediaWiki.',
 );
 
 /** Portuguese (Português)
