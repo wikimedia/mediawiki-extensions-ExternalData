@@ -50,7 +50,7 @@ class EDUtils {
 	}
 
 	static function parseParams( $params ) {
-		$args = Array();
+		$args = array();
 		foreach ( $params as $param ) {
 			$param = preg_replace ( "/\s\s+/", ' ', $param ); // whitespace
 			$param_parts = explode( "=", $param, 2 );
@@ -68,8 +68,22 @@ class EDUtils {
 	 */
 	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
 		$arg = preg_replace ( "/\s\s+/", ' ', $arg ); // whitespace
-		$keyValuePairs = explode( ',', $arg );
-		$returnArray = Array();
+
+		// Split text on commas, except for commas found within quotes
+		// and parentheses. Code copied from:
+		// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
+		$pattern = <<<END
+        /
+	[,\s]++
+	(?=(?:(?:[^"]*+"){2})*+[^"]*+$)
+	(?=(?:(?:[^']*+'){2})*+[^']*+$)
+	(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
+	/x
+END;
+		// " - fix for color highlighting in vi :)
+		$keyValuePairs = preg_split( $pattern, $arg );
+
+		$returnArray = array();
 		foreach ( $keyValuePairs as $keyValuePair ) {
 			$keyAndValue = explode( '=', $keyValuePair, 2 );
 			if ( count( $keyAndValue ) == 2 ) {
@@ -214,7 +228,7 @@ class EDUtils {
 		$rows = self::searchDB( $db, $from, $columns, $where, $options );
 		$db->close();
 
-		$values = Array();
+		$values = array();
 		foreach ( $rows as $row ) {
 			foreach ( $columns as $column ) {
 				$values[$column][] = $row[$column];
@@ -234,7 +248,7 @@ class EDUtils {
 			echo ( wfMsgExt( "externaldata-db-invalid-query", array( 'parse', 'escape' ) ) );
 			return false;
 		} else {
-			$rows = Array();
+			$rows = array();
 			while ( $row = $db->fetchRow( $result ) ) {
 				// Create a new row object, that uses the
 				// passed-in column names as keys, so that
