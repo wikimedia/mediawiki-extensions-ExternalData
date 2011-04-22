@@ -215,7 +215,12 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
 		$data = ( array_key_exists( 'data', $args ) ) ? $args['data'] : null;
-		$server = ( array_key_exists( 'server', $args ) ) ? $args['server'] : null;
+		$dbID = ( array_key_exists( 'db', $args ) ) ? $args['db'] : null;
+		// For backwards-compatibility - 'db' parameter was added
+		// in External Data version 1.3.
+		if ( is_null( $dbID ) ) {
+			$dbID = ( array_key_exists( 'server', $args ) ) ? $args['server'] : null;
+		}
 		$table = ( array_key_exists( 'from', $args ) ) ? $args['from'] : null;
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
@@ -223,7 +228,7 @@ class EDParserFunctions {
 		$options = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy );
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $server, $table, array_values( $mappings ), $conds, $options );
+		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $options );
 		// handle error cases
 		if ( is_null( $external_values ) )
 			return;

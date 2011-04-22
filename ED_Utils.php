@@ -141,7 +141,7 @@ END;
 		return $results;
 	}
 
-	static function getDBData( $server_id, $from, $columns, $where, $options ) {
+	static function getDBData( $dbID, $from, $columns, $where, $options ) {
 		global $edgDBServerType;
 		global $edgDBServer;
 		global $edgDBName;
@@ -151,29 +151,29 @@ END;
 		global $edgDBTablePrefix;
 
 		// Mandatory parameters
-		if ( ( ! array_key_exists( $server_id, $edgDBServerType ) ) ||
-		    ( ! array_key_exists( $server_id, $edgDBServer ) ) ||
-		    ( ! array_key_exists( $server_id, $edgDBName ) ) ||
-		    ( ! array_key_exists( $server_id, $edgDBUser ) ) ||
-		    ( ! array_key_exists( $server_id, $edgDBPass ) ) ) {
+		if ( ( ! array_key_exists( $dbID, $edgDBServerType ) ) ||
+		    ( ! array_key_exists( $dbID, $edgDBServer ) ) ||
+		    ( ! array_key_exists( $dbID, $edgDBName ) ) ||
+		    ( ! array_key_exists( $dbID, $edgDBUser ) ) ||
+		    ( ! array_key_exists( $dbID, $edgDBPass ) ) ) {
 			echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
 			return;
 		}
 
-		$db_type = $edgDBServerType[$server_id];
-		$db_server = $edgDBServer[$server_id];
-		$db_name = $edgDBName[$server_id];
-		$db_username = $edgDBUser[$server_id];
-		$db_password = $edgDBPass[$server_id];
+		$db_type = $edgDBServerType[$dbID];
+		$db_server = $edgDBServer[$dbID];
+		$db_name = $edgDBName[$dbID];
+		$db_username = $edgDBUser[$dbID];
+		$db_password = $edgDBPass[$dbID];
 
 		// Optional parameters
-		if ( array_key_exists( $server_id, $edgDBFlags ) ) {
-			$db_flags = $edgDBFlags[$server_id];
+		if ( array_key_exists( $dbID, $edgDBFlags ) ) {
+			$db_flags = $edgDBFlags[$dbID];
 		} else {
 			$db_flags = DBO_DEFAULT;
 		}		
-		if ( array_key_exists( $server_id, $edgDBTablePrefix ) ) {
-			$db_tableprefix = $edgDBTablePrefix[$server_id];
+		if ( array_key_exists( $dbID, $edgDBTablePrefix ) ) {
+			$db_tableprefix = $edgDBTablePrefix[$dbID];
 		} else {
 			$db_tableprefix = '';
 		}
