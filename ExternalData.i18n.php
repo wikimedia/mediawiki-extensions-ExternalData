@@ -342,6 +342,7 @@ $messages['gu'] = array(
 );
 
 /** Hebrew (עברית)
+ * @author Amire80
  * @author Rotemliss
  * @author YaronSh
  */
@@ -357,6 +358,7 @@ $messages['he'] = array(
 	'externaldata-db-could-not-connect' => 'שגיאה: לא ניתן להתחבר אל בסיס הנתונים.',
 	'externaldata-db-no-return-values' => 'שגיאה: לא הוגדרו ערכים להחזרה.',
 	'externaldata-db-invalid-query' => 'שאילתה בלתי תקינה.',
+	'externaldata-db-option-unsupported' => 'שגיאה: הפרמטרים $1 ו{{GRAMMAR:תחילית|$2}} אינם נתמכים בגרסה הזאת של מדיה־ויקי',
 );
 
 /** Upper Sorbian (Hornjoserbsce)
@@ -656,8 +658,9 @@ $messages['pt'] = array(
 	'externaldata-db-could-not-get-url' => 'Não foi possível importar a URL após {{PLURAL:$1|uma tentativa|$1 tentativas}}.',
 	'externaldata-db-unknown-type' => 'Erro: Tipo de base de dados desconhecido.',
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível estabelecer ligação à base de dados.',
-	'externaldata-db-no-return-values' => 'Erro: Nenhum valor de retorno especificado.',
+	'externaldata-db-no-return-values' => 'Erro: Não foram especificados nenhuns valores de retorno.',
 	'externaldata-db-invalid-query' => "''Query'' inválida.",
+	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
 /** Brazilian Portuguese (Português do Brasil)
