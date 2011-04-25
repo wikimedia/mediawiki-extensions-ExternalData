@@ -587,6 +587,7 @@ $messages['no'] = array(
 	'externaldata-db-could-not-connect' => 'Feil: Kunne ikke koble til database.',
 	'externaldata-db-no-return-values' => 'Feil: Ingen returverdi spesifisert.',
 	'externaldata-db-invalid-query' => 'Ugyldig spørring.',
+	'externaldata-db-option-unsupported' => 'Feil: Parameterne $1 og $2 er ikke støttet i denne versjonen av MediaWiki.',
 );
 
 /** Occitan (Occitan)
@@ -720,6 +721,7 @@ $messages['ru'] = array(
 	'externaldata-db-could-not-connect' => 'ОШИБКА. Не удаётся подключиться к базе данных.',
 	'externaldata-db-no-return-values' => 'ОШИБКА. Не указаны возвращаемые значение.',
 	'externaldata-db-invalid-query' => 'Ошибочный запрос.',
+	'externaldata-db-option-unsupported' => 'Ошибка. Параметры $1 и $2 не поддерживаются в этой версии MediaWiki.',
 );
 
 /** Slovak (Slovenčina)
