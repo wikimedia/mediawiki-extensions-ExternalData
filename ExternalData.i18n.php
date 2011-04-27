@@ -430,6 +430,7 @@ $messages['id'] = array(
 	'externaldata-db-could-not-connect' => 'Galat: Tidak dapat terhubung ke basis data.',
 	'externaldata-db-no-return-values' => 'Galat: Nilai pengembalian tidak dispesifikasi.',
 	'externaldata-db-invalid-query' => 'Kueri tidak sah.',
+	'externaldata-db-option-unsupported' => 'Galat: Parameter $1 dan $2 tidak didukung oleh versi MediaWiki ini.',
 );
 
 /** Italian (Italiano)
