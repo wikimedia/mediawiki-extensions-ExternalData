@@ -125,6 +125,7 @@ $messages['br'] = array(
 	'externaldata-db-could-not-connect' => "Fazi : Ne c'haller ket kevreañ ouzh an diaz roadennoù.",
 	'externaldata-db-no-return-values' => "Fazi : N'eus bet resisaet talvoud distro ebet.",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
+	'externaldata-db-option-unsupported' => "Fazi : N'eo ket skoret an arventennoù $1 ha $2 er stumm-mañ eus MediaWiki.",
 );
 
 /** Bosnian (Bosanski)
@@ -314,6 +315,7 @@ $messages['gl'] = array(
 	'externaldata-db-could-not-connect' => 'Erro: non se puido conectar á base de datos.',
 	'externaldata-db-no-return-values' => 'Erro: non se especificou ningún valor de retorno.',
 	'externaldata-db-invalid-query' => 'Consulta non válida.',
+	'externaldata-db-option-unsupported' => 'Erro: Os parámetros $1 e $2 non están soportados nesta versión de MediaWiki.',
 );
 
 /** Swiss German (Alemannisch)
