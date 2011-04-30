@@ -800,10 +800,12 @@ $messages['sv'] = array(
 );
 
 /** Telugu (తెలుగు)
+ * @author Chaduvari
  * @author Kiranmayee
  */
 $messages['te'] = array(
 	'getdata' => 'విషయములు తీసుకునిరా',
+	'externaldata-ldap-unable-to-connect' => '$1 కు కనెక్టు కాలేకున్నాం',
 );
 
 /** Tagalog (Tagalog)
