@@ -512,6 +512,7 @@ $messages['lb'] = array(
 	'externaldata-db-could-not-connect' => "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
 	'externaldata-db-no-return-values' => 'Feeler: Kee Retour-Wäert festgeluecht.',
 	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
+	'externaldata-db-option-unsupported' => "Feeler: D'Parametere(n) $1 a(n) $2 gi vun dëser Versioun vu MediaWiki net ënnerstëtzt.",
 );
 
 /** Macedonian (Македонски)
