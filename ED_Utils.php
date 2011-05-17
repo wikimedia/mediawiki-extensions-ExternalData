@@ -258,7 +258,10 @@ END;
 				// doesn't get chopped off to just "b").
 				$new_row = array();
 				foreach ( $vars as $i => $column_name ) {
-					$new_row[$column_name] = $row[$i];
+					// Data that comes from the DB will
+					// (always?) be in ISO-8859-1 format -
+					// convert it to UTF8.
+					$new_row[$column_name] = utf8_encode( $row[$i] );
 				}
 				$rows[] = $new_row;
 			}
