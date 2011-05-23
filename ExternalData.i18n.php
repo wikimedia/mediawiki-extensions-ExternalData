@@ -300,6 +300,20 @@ $messages['fr'] = array(
 	'externaldata-db-option-unsupported' => 'Erreur: Les paramètres $1 et $2 ne sont pas supportés dans cette version de MediaWiki.',
 );
 
+/** Franco-Provençal (Arpetan)
+ * @author ChrisPtDe
+ */
+$messages['frp'] = array(
+	'getdata' => 'Avêr des balyês',
+	'externaldata-ldap-unable-to-connect' => 'Empossiblo de sè branchiér a $1',
+	'externaldata-xml-error' => 'Èrror XML : $1 a la legne $2',
+	'externaldata-db-could-not-get-url' => 'Empossiblo d’avêr l’URL aprés $1 tentativ{{PLURAL:$1|a|es}}.',
+	'externaldata-db-unknown-type' => 'Èrror : tipo de bâsa de balyês encognu.',
+	'externaldata-db-could-not-connect' => 'Èrror : empossiblo de sè branchiér a la bâsa de balyês.',
+	'externaldata-db-no-return-values' => 'Èrror : niona valor de retôrn at étâ spècefiâ.',
+	'externaldata-db-invalid-query' => 'Requéta envalida.',
+);
+
 /** Galician (Galego)
  * @author Toliño
  */
@@ -531,6 +545,24 @@ $messages['mk'] = array(
 	'externaldata-db-no-return-values' => 'Грешка: Нема назначено повратни вредности.',
 	'externaldata-db-invalid-query' => 'Грешно барање.',
 	'externaldata-db-option-unsupported' => 'Грешка: Параметрите $1 и $2 не се поддржани во оваа верзија на МедијаВики.',
+);
+
+/** Malay (Bahasa Melayu)
+ * @author Anakmalaysia
+ */
+$messages['ms'] = array(
+	'getdata' => 'Dapatkan data',
+	'externaldata-desc' => 'Membolehkan pengambilan data berstruktur dari URL luaran, pangkalan data atau sumber-sumber lain',
+	'externaldata-ldap-unable-to-connect' => 'Tidak dapat bersambung dengan $1',
+	'externaldata-json-decode-not-supported' => 'Ralat: json_decode() tidak disokong dalam versi PHP ini',
+	'externaldata-xml-error' => 'Ralat XML: $1 di baris $2',
+	'externaldata-db-incomplete-information' => 'Ralat: Maklumat tidak lengkap untuk ID pelayan ini.',
+	'externaldata-db-could-not-get-url' => 'URL tidak dapat diterima selepas $1 cubaan.',
+	'externaldata-db-unknown-type' => 'Ralat: Jenis pangkalan data tidak dikenali.',
+	'externaldata-db-could-not-connect' => 'Ralat: Tidak dapat bersambung dengan pangkalan data.',
+	'externaldata-db-no-return-values' => 'Ralat: Tiada nilai pulangan yang ditentukan.',
+	'externaldata-db-invalid-query' => 'Pertanyaan tidak sah.',
+	'externaldata-db-option-unsupported' => 'Ralat: Parameter $1 dan $2 tidak disokong dalam versi Mediawiki ini.',
 );
 
 /** Erzya (Эрзянь)
@@ -786,6 +818,7 @@ $messages['sr-el'] = array(
  * @author Boivie
  * @author Najami
  * @author Per
+ * @author WikiPhoenix
  */
 $messages['sv'] = array(
 	'getdata' => 'Hämta data',
@@ -799,6 +832,7 @@ $messages['sv'] = array(
 	'externaldata-db-could-not-connect' => 'Fel: Kunde inte koppla till databasen.',
 	'externaldata-db-no-return-values' => 'Fel: Inga returvärden specificerade.',
 	'externaldata-db-invalid-query' => 'Ogiltig fråga.',
+	'externaldata-db-option-unsupported' => 'Fel: Parametrarna $1 och $2 stöds inte i denna version av MediaWiki.',
 );
 
 /** Telugu (తెలుగు)
