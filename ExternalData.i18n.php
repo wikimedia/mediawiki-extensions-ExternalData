@@ -717,6 +717,7 @@ $messages['pt-br'] = array(
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível conectar-se a base de dados.',
 	'externaldata-db-no-return-values' => 'Erro: Nenhum valor de retorno especificado.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
+	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
 /** Romanian (Română)
