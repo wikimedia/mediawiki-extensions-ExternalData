@@ -912,3 +912,11 @@ $messages['yi'] = array(
 	'getdata' => 'באַקומען דאַטן',
 );
 
+/** Simplified Chinese (‪中文(简体)‬)
+ * @author Hydra
+ */
+$messages['zh-hans'] = array(
+	'getdata' => '获取数据',
+	'externaldata-db-invalid-query' => '无效的查询。',
+);
+
