@@ -70,11 +70,11 @@ class EDUtils {
 		$arg = preg_replace ( "/\s\s+/", ' ', $arg ); // whitespace
 
 		// Split text on commas, except for commas found within quotes
-		// and parentheses. Code copied from:
+		// and parentheses. Code based on:
 		// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
 		$pattern = <<<END
         /
-	[,\s]++
+	[,]++
 	(?=(?:(?:[^"]*+"){2})*+[^"]*+$)
 	(?=(?:(?:[^']*+'){2})*+[^']*+$)
 	(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
@@ -319,11 +319,17 @@ END;
 			}
 			fclose( $fp );
 		//}
-		// now "flip" the data, turning it into a column-by-column
-		// array, instead of row-by-row
+		// Get header values, if this is 'csv with header'
 		if ( $has_header ) {
 			$header_vals = array_shift( $table );
+			// On the off chance that there are one or more blank
+			// lines at the beginning, cycle through.
+			while ( count( $header_vals ) == 0 ) {
+				$header_vals = array_shift( $table );
+			}
 		}
+		// Now "flip" the data, turning it into a column-by-column
+		// array, instead of row-by-row.
 		$values = array();
 		foreach ( $table as $line ) {
 			foreach ( $line as $i => $row_val ) {
