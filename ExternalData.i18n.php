@@ -143,6 +143,7 @@ $messages['bs'] = array(
 	'externaldata-db-could-not-connect' => 'Greška: Ne može se spojiti na bazu podataka.',
 	'externaldata-db-no-return-values' => 'Greška: Nije navedena povratna vrijednost.',
 	'externaldata-db-invalid-query' => 'Nevaljan upit.',
+	'externaldata-db-option-unsupported' => 'Greška: Parametri $1 i $2 nisu podržani u ovoj verziji MediaWiki.',
 );
 
 /** Catalan (Català)
