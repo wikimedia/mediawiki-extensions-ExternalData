@@ -679,7 +679,7 @@ $messages['pms'] = array(
 	'externaldata-db-could-not-connect' => 'Eror: a peul pa coleghesse al database.',
 	'externaldata-db-no-return-values' => "Eror: Pa gnun valor d'artorn spessifià.",
 	'externaldata-db-invalid-query' => 'Ciamà pa bon-a.',
-	'externaldata-db-option-unsupported' => 'Eror: paràmetr $1 e $2 a son pa apogià an sta vërsion ëd MediaWiki.',
+	'externaldata-db-option-unsupported' => 'Eror: Ij paràmetr $1 e $2 a son pa mantnù an costa version ëd MediaWiki.',
 );
 
 /** Portuguese (Português)
