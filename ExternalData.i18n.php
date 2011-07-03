@@ -661,6 +661,7 @@ $messages['pl'] = array(
 	'externaldata-db-could-not-connect' => 'Błąd: Nie można połączyć się z bazą danych.',
 	'externaldata-db-no-return-values' => 'Błąd – nie określono zwracanej wartości.',
 	'externaldata-db-invalid-query' => 'Nieprawidłowe zapytanie.',
+	'externaldata-db-option-unsupported' => 'Błąd – parametry $1 i $2 nie są obsługiwane w tej wersji MediaWiki.',
 );
 
 /** Piedmontese (Piemontèis)
