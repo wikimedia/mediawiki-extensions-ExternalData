@@ -63,6 +63,7 @@ $messages['aln'] = array(
 );
 
 /** Arabic (العربية)
+ * @author Imksa
  * @author Meno25
  * @author OsamaK
  */
@@ -78,6 +79,7 @@ $messages['ar'] = array(
 	'externaldata-db-could-not-connect' => 'خطأ: تعذّر الاتصال بقاعدة البيانات.',
 	'externaldata-db-no-return-values' => 'خطأ: لم تحدد أي قيم عائدة.',
 	'externaldata-db-invalid-query' => 'استعلام غير صالح.',
+	'externaldata-db-option-unsupported' => 'خطأ: معلمات $1 و $2 غير معتمدة في هذا الإصدار من ميدياويكي.',
 );
 
 /** Egyptian Spoken Arabic (مصرى)
