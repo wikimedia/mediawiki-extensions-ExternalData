@@ -258,10 +258,15 @@ END;
 				// doesn't get chopped off to just "b").
 				$new_row = array();
 				foreach ( $vars as $i => $column_name ) {
-					// Data that comes from the DB will
-					// (always?) be in ISO-8859-1 format -
-					// convert it to UTF8.
-					$new_row[$column_name] = utf8_encode( $row[$i] );
+					// Convert the encoding to UTF-8
+					// if necessary - based on code at
+					// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
+					$dbField = $row[$i];
+					if ( mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
+						$new_row[$column_name] = $dbField;
+					} else {
+						$new_row[$column_name] = utf8_encode( $dbField );
+					}
 				}
 				$rows[] = $new_row;
 			}
@@ -293,8 +298,9 @@ END;
 		// regular expression copied from http://us.php.net/fgetcsv
 		$vals = preg_split( '/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv_line );
 		$vals2 = array();
-		foreach ( $vals as $val )
+		foreach ( $vals as $val ) {
 			$vals2[] = trim( $val, '"' );
+		}
 		return $vals2;
 	}
 
