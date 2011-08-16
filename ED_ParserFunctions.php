@@ -377,6 +377,6 @@ class EDParserFunctions {
 	 */
 	static function doClearExternalData( &$parser ) {
 		global $edgValues;
-		$edgValues = null;
+		$edgValues = array();
 	}
 }
