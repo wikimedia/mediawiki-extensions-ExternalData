@@ -473,6 +473,7 @@ $messages['it'] = array(
 
 /** Japanese (日本語)
  * @author Fryed-peach
+ * @author Schu
  * @author 青子守歌
  */
 $messages['ja'] = array(
@@ -487,6 +488,7 @@ $messages['ja'] = array(
 	'externaldata-db-could-not-connect' => 'エラー: データベースに接続できませんでした。',
 	'externaldata-db-no-return-values' => 'エラー: 戻り値が指定されていません。',
 	'externaldata-db-invalid-query' => '不正なクエリー',
+	'externaldata-db-option-unsupported' => 'エラー: パラメータ $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
 );
 
 /** Khmer (ភាសាខ្មែរ)
