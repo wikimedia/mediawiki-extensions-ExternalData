@@ -26,6 +26,7 @@ $magicWords['ar'] = array(
 	'external_value' => array( 0, 'قيمة_خارجية' ),
 	'for_external_table' => array( 0, 'لجدول_خارجي' ),
 	'store_external_table' => array( 0, 'تخزين_جدول_خارجي' ),
+	'clear_external_data' => array( 0, 'إزالة_بيانات_خارجية' ),
 );
 
 /** Egyptian Spoken Arabic (مصرى) */
@@ -87,11 +88,13 @@ $magicWords['mr'] = array(
 
 /** Nedersaksisch (Nedersaksisch) */
 $magicWords['nds-nl'] = array(
-	'get_external_data' => array( 0, 'externe_gegevens_ophaolen', 'externe_gegevens_ophalen', 'get_external_data' ),
-	'get_ldap_data' => array( 0, 'ldap-gegevens_ophaolen', 'ldap_gegevens_ophalen', 'get_ldap_data' ),
-	'get_db_data' => array( 0, 'db-gegevens_ophaolen', 'db_gegevens_ophalen', 'get_db_data' ),
-	'external_value' => array( 0, 'externe_weerde', 'externe_waarde', 'external_value' ),
-	'for_external_table' => array( 0, 'veur_externe_tebel', 'voor_externe_tabel', 'for_external_table' ),
+	'get_external_data' => array( 0, 'externe_gegevens_ophaolen', 'externe_gegevens_ophalen' ),
+	'get_web_data' => array( 0, 'webgegevens_ophaolen' ),
+	'get_ldap_data' => array( 0, 'ldap-gegevens_ophaolen', 'ldap_gegevens_ophalen' ),
+	'get_db_data' => array( 0, 'db-gegevens_ophaolen', 'db_gegevens_ophalen' ),
+	'external_value' => array( 0, 'externe_weerde', 'externe_waarde' ),
+	'for_external_table' => array( 0, 'veur_externe_tabel', 'voor_externe_tabel' ),
+	'store_external_table' => array( 0, 'opslaon_externe_tabel' ),
 );
 
 /** Dutch (Nederlands) */
@@ -115,7 +118,7 @@ $magicWords['ru'] = array(
 	'store_external_table' => array( 0, 'внешняя_таблица_хранения' ),
 );
 
-/** Serbian Cyrillic ekavian (‪Српски (ћирилица)‬) */
+/** Serbian (Cyrillic script) (‪Српски (ћирилица)‬) */
 $magicWords['sr-ec'] = array(
 	'get_external_data' => array( 0, 'добави_спољне_податке' ),
 	'get_web_data' => array( 0, 'добави_веб_податке' ),
