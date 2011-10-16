@@ -336,6 +336,7 @@ $messages['gl'] = array(
 );
 
 /** Swiss German (Alemannisch)
+ * @author Als-Chlämens
  * @author Als-Holder
  */
 $messages['gsw'] = array(
@@ -350,6 +351,7 @@ $messages['gsw'] = array(
 	'externaldata-db-could-not-connect' => 'Fähler: Cha kei Verbindig härstelle zue dr Datebank.',
 	'externaldata-db-no-return-values' => 'Fähler: Kei Ruckgabewärt spezifiziert.',
 	'externaldata-db-invalid-query' => 'Nit giltigi Umfrog.',
+	'externaldata-db-option-unsupported' => 'Fääler: D  Parameter $1 un $2 werde vo derre MediaWiki-Version nit unterstützt.',
 );
 
 /** Gujarati (ગુજરાતી)
