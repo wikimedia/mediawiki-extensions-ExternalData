@@ -11,7 +11,7 @@ class EDUtils {
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
 
-	/*
+	/**
 	 * Loads messages only for MediaWiki versions that need it (< 1.16)
 	 */
 	public static function loadMessages() {
@@ -171,7 +171,7 @@ END;
 			$db_flags = $edgDBFlags[$dbID];
 		} else {
 			$db_flags = DBO_DEFAULT;
-		}		
+		}
 		if ( array_key_exists( $dbID, $edgDBTablePrefix ) ) {
 			$db_tableprefix = $edgDBTablePrefix[$dbID];
 		} else {
