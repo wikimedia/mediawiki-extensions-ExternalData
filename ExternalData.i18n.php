@@ -397,6 +397,7 @@ $messages['hsb'] = array(
 	'externaldata-db-could-not-connect' => "'''Zmylk: Njemóžno z datowej banku zwjazać.'''",
 	'externaldata-db-no-return-values' => "'''Zmylk: Žane hódnoty wróćenja podate.'''",
 	'externaldata-db-invalid-query' => 'Njepłaćiwe naprašowanje.',
+	'externaldata-db-option-unsupported' => 'Zmylk: Parametraj $1 a $2 so w tutej wersiji MediaWiki njepodpěrujetej.',
 );
 
 /** Hungarian (Magyar)
