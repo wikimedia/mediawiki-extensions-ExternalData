@@ -331,7 +331,7 @@ $messages['gl'] = array(
 	'externaldata-db-unknown-type' => 'Erro: tipo de base de datos descoñecido.',
 	'externaldata-db-could-not-connect' => 'Erro: non se puido conectar á base de datos.',
 	'externaldata-db-no-return-values' => 'Erro: non se especificou ningún valor de retorno.',
-	'externaldata-db-invalid-query' => 'Consulta non válida.',
+	'externaldata-db-invalid-query' => 'A consulta non é válida.',
 	'externaldata-db-option-unsupported' => 'Erro: Os parámetros $1 e $2 non están soportados nesta versión de MediaWiki.',
 );
 
