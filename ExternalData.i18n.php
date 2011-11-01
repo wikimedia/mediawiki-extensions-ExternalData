@@ -214,6 +214,7 @@ $messages['dsb'] = array(
 	'externaldata-db-could-not-connect' => "'''Zmólka: Njemóžno z datoweju banku zwězaś.'''",
 	'externaldata-db-no-return-values' => "'''Zmólka: Žedne gódnoty slědkdaśa pódane.'''",
 	'externaldata-db-invalid-query' => 'Njepłaśiwe napšašowanje.',
+	'externaldata-db-option-unsupported' => 'Zmólka: Parametra $1 a $2 njepódpěratej se w toś tej wersiji MediaWiki.',
 );
 
 /** Greek (Ελληνικά)
