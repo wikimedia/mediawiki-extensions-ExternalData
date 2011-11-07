@@ -506,7 +506,9 @@ END;
 			}
 			if ( $page != '' ) {
 				$dbw = wfGetDB( DB_MASTER );
-				// insert contents into the cache table
+				// Delete the old entry, if one exists.
+				$dbw->delete( $edgCacheTable, array( 'url' => substr( $url, 0, 254 )));
+				// Insert contents into the cache table.
 				$dbw->insert( $edgCacheTable, array( 'url' => substr( $url, 0, 254 ), 'result' => $page, 'req_time' => time() ) );
 				return $page;
 			}
