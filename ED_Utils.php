@@ -193,7 +193,7 @@ END;
 			);
 		} else {
 			if ( ( $db_flags !== DBO_DEFAULT ) || ( $db_tableprefix !== '' ) ) {
-				print wfMsg( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>'  );
+				print wfMsg( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' );
 				return;
 			}
 
@@ -262,11 +262,12 @@ END;
 					// if necessary - based on code at
 					// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
 					$dbField = $row[$i];
-					if ( mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
-						$new_row[$column_name] = $dbField;
-					} else {
-						$new_row[$column_name] = utf8_encode( $dbField );
-					}
+					if ( !function_exists( 'mb_detect_encoding' ) ||
+						mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
+							$new_row[$column_name] = $dbField;
+						} else {
+							$new_row[$column_name] = utf8_encode( $dbField );
+						}
 				}
 				$rows[] = $new_row;
 			}
