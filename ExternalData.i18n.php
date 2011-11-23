@@ -789,7 +789,7 @@ $messages['sk'] = array(
 	'externaldata-db-invalid-query' => 'Neplatná požiadavka.',
 );
 
-/** Serbian Cyrillic ekavian (‪Српски (ћирилица)‬)
+/** Serbian (Cyrillic script) (‪Српски (ћирилица)‬)
  * @author Charmed94
  * @author Михајло Анђелковић
  */
@@ -807,7 +807,7 @@ $messages['sr-ec'] = array(
 	'externaldata-db-invalid-query' => 'Неисправан упит.',
 );
 
-/** Serbian Latin ekavian (‪Srpski (latinica)‬)
+/** Serbian (Latin script) (‪Srpski (latinica)‬)
  * @author Michaello
  */
 $messages['sr-el'] = array(
