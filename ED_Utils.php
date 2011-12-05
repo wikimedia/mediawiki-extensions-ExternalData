@@ -178,9 +178,25 @@ END;
 			$db_tableprefix = '';
 		}
 
-		// DatabaseBase::newFromType() was added in MW 1.17
-		$realFunction = array( 'DatabaseBase', 'newFromType' );
-		if ( is_callable( $realFunction ) ) {
+		// DatabaseBase::newFromType() was added in MW 1.17 - it was
+		// then replaced by DatabaseBase::factory() in MW 1.18
+		$factorFunction = array( 'DatabaseBase', 'factory' );
+		$newFromTypeFunction = array( 'DatabaseBase', 'newFromType' );
+		if ( is_callable( $factorFunction ) ) {
+			$db = DatabaseBase::factory( $db_type,
+				array(
+					'host' => $db_server,
+					'user' => $db_username,
+					'password' => $db_password,
+					// Both 'dbname' and 'dbName' have been
+					// used in different versions.
+					'dbname' => $db_name,
+					'dbName' => $db_name,
+					'flags' => $db_flags,
+					'tablePrefix' => $db_tableprefix,
+				)
+			);
+		} elseif ( is_callable( $newFromTypeFunction ) ) {
 			$db = DatabaseBase::newFromType( $db_type,
 				array(
 					'host' => $db_server,
