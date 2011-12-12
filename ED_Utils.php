@@ -3,10 +3,6 @@
  * Utility functions for External Data
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	die( 'This file is a MediaWiki extension; it is not a valid entry point' );
-}
-
 class EDUtils {
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
@@ -451,14 +447,20 @@ END;
 	 */
 	static function parseTree( $tree, &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {
-			if ( is_array( $val ) ) {
+			if ( is_array( $val ) && count( $val ) > 1 ) {
 				self::parseTree( $val, $retrieved_values );
 			} else {
+				// If it's an array with just one element,
+				// treat it like a regular value.
+				if ( is_array( $val ) ) {
+					$val = $val[0];
+				}
 				$key = strtolower( $key );
-				if ( array_key_exists( $key, $retrieved_values ) )
+				if ( array_key_exists( $key, $retrieved_values ) ) {
 					$retrieved_values[$key][] = $val;
-				else
+				} else {
 					$retrieved_values[$key] = array( $val );
+				}
 			}
 		}
 	}
@@ -492,6 +494,10 @@ END;
 			if ( $edgAllowSSL ) {
 				// The hardcoded 'CURLOPT_SSL_VERIFYPEER' is
 				// needed for MW < 1.17
+				if ( !defined( 'CURLOPT_SSL_VERIFYPEER' ) ) {
+					print 'CURLOPT_SSL_VERIFYPEER is not defined on this system - you must set $edgAllowSSL = "false".';
+					return;
+				}
 				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false, 'sslVerifyCert' => false, 'followRedirects' => false ) );
 			} else {
 				return Http::get( $url );
