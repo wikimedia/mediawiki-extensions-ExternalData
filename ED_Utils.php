@@ -447,8 +447,11 @@ END;
 	 */
 	static function parseTree( $tree, &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {
+			// TODO - this logic could probably be a little nicer.
 			if ( is_array( $val ) && count( $val ) > 1 ) {
 				self::parseTree( $val, $retrieved_values );
+			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( $val[0] ) ) {
+				self::parseTree( $val[0], $retrieved_values );
 			} else {
 				// If it's an array with just one element,
 				// treat it like a regular value.
