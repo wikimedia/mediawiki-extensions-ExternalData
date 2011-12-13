@@ -14,7 +14,7 @@ $wgExtensionCredits['parserhook'][] = array(
 	'name'           => 'External Data',
 	'version'        => '1.3.4',
 	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
-	'url'            => 'http://www.mediawiki.org/wiki/Extension:External_Data',
+	'url'            => 'https://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
 );
 
