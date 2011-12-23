@@ -930,3 +930,9 @@ $messages['zh-hans'] = array(
 	'externaldata-db-invalid-query' => '无效的查询。',
 );
 
+/** Traditional Chinese (‪中文(繁體)‬) */
+$messages['zh-hant'] = array(
+	'getdata' => '獲取數據',
+	'externaldata-db-invalid-query' => '無效的查詢。',
+);
+
