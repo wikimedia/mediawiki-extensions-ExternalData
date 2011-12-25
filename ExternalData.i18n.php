@@ -581,6 +581,25 @@ $messages['myv'] = array(
 	'getdata' => 'Дата мельга',
 );
 
+/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+ * @author Harald Khan
+ * @author Nghtwlkr
+ */
+$messages['nb'] = array(
+	'getdata' => 'Hent data',
+	'externaldata-desc' => 'Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder',
+	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
+	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikke støttet i denne versjonen av PHP',
+	'externaldata-xml-error' => 'XML-feil: $1 på linje $2',
+	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tjener-IDen.',
+	'externaldata-db-could-not-get-url' => 'Kunne ikke hente URL etter {{PLURAL:$1|ett forsøk|$1 forsøk}}.',
+	'externaldata-db-unknown-type' => 'Feil: Ukjent databasetype.',
+	'externaldata-db-could-not-connect' => 'Feil: Kunne ikke koble til database.',
+	'externaldata-db-no-return-values' => 'Feil: Ingen returverdi spesifisert.',
+	'externaldata-db-invalid-query' => 'Ugyldig spørring.',
+	'externaldata-db-option-unsupported' => 'Feil: Parameterne $1 og $2 er ikke støttet i denne versjonen av MediaWiki.',
+);
+
 /** Dutch (Nederlands)
  * @author Siebrand
  */
@@ -615,25 +634,6 @@ $messages['nn'] = array(
 	'externaldata-db-could-not-connect' => 'Feil: Kunne ikkje kopla til databasen.',
 	'externaldata-db-no-return-values' => 'Feil: Ingen returverdiar oppgjevne.',
 	'externaldata-db-invalid-query' => 'Ugyldig spørjing.',
-);
-
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
- * @author Harald Khan
- * @author Nghtwlkr
- */
-$messages['nb'] = array(
-	'getdata' => 'Hent data',
-	'externaldata-desc' => 'Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder',
-	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
-	'externaldata-json-decode-not-supported' => 'Feil: json_decode() er ikke støttet i denne versjonen av PHP',
-	'externaldata-xml-error' => 'XML-feil: $1 på linje $2',
-	'externaldata-db-incomplete-information' => 'Feil: Ufullstendig informasjon for denne tjener-IDen.',
-	'externaldata-db-could-not-get-url' => 'Kunne ikke hente URL etter {{PLURAL:$1|ett forsøk|$1 forsøk}}.',
-	'externaldata-db-unknown-type' => 'Feil: Ukjent databasetype.',
-	'externaldata-db-could-not-connect' => 'Feil: Kunne ikke koble til database.',
-	'externaldata-db-no-return-values' => 'Feil: Ingen returverdi spesifisert.',
-	'externaldata-db-invalid-query' => 'Ugyldig spørring.',
-	'externaldata-db-option-unsupported' => 'Feil: Parameterne $1 og $2 er ikke støttet i denne versjonen av MediaWiki.',
 );
 
 /** Occitan (Occitan)
