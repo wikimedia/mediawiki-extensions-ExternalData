@@ -48,11 +48,23 @@ $magicWords['ce'] = array(
 	'for_external_table' => array( 0, 'оцу_архьара_тебалецlаш', 'для_внешней_таблицы', 'for_external_table' ),
 );
 
+/** German (Deutsch) */
+$magicWords['de'] = array(
+	'get_external_data' => array( 0, 'hole_externe_daten' ),
+	'get_web_data' => array( 0, 'hole_webdaten' ),
+	'get_ldap_data' => array( 0, 'hole_ldapdaten' ),
+	'get_db_data' => array( 0, 'hole_dbdaten' ),
+	'external_value' => array( 0, 'externer_wert' ),
+	'for_external_table' => array( 0, 'für_externe_tabelle' ),
+	'store_external_table' => array( 0, 'speichere_externe_tabelle' ),
+	'clear_external_data' => array( 0, 'leere_externe_tabelle' ),
+);
+
 /** Spanish (Español) */
 $magicWords['es'] = array(
-	'get_external_data' => array( 0, 'obtener_datos_externos', 'get_external_data' ),
-	'get_db_data' => array( 0, 'obtener_datos_db', 'get_db_data' ),
-	'external_value' => array( 0, 'valor_externo', 'external_value' ),
+	'get_external_data' => array( 0, 'obtener_datos_externos' ),
+	'get_db_data' => array( 0, 'obtener_datos_db' ),
+	'external_value' => array( 0, 'valor_externo' ),
 );
 
 /** Japanese (日本語) */
@@ -71,6 +83,7 @@ $magicWords['mk'] = array(
 	'external_value' => array( 0, 'надворешна_вредност' ),
 	'for_external_table' => array( 0, 'за_надворешна_табела' ),
 	'store_external_table' => array( 0, 'складирај_надворешна_табела' ),
+	'clear_external_data' => array( 0, 'исчисти_надворешни_податоци' ),
 );
 
 /** Malayalam (മലയാളം) */
@@ -106,6 +119,7 @@ $magicWords['nl'] = array(
 	'external_value' => array( 0, 'externe_waarde' ),
 	'for_external_table' => array( 0, 'voor_externe_tabel' ),
 	'store_external_table' => array( 0, 'opslaan_externe_tabel' ),
+	'clear_external_data' => array( 0, 'externe_gegevens_opschonen' ),
 );
 
 /** Russian (Русский) */
@@ -127,4 +141,16 @@ $magicWords['sr-ec'] = array(
 	'external_value' => array( 0, 'спољна_вредност' ),
 	'for_external_table' => array( 0, 'за_спољну_табелу' ),
 	'store_external_table' => array( 0, 'смести_спољну_табелу' ),
+);
+
+/** Serbian (Latin script) (‪Srpski (latinica)‬) */
+$magicWords['sr-el'] = array(
+	'get_external_data' => array( 0, 'dobavi_spoljne_podatke' ),
+	'get_web_data' => array( 0, 'dobavi_mrežne_podatke' ),
+	'get_ldap_data' => array( 0, 'dobavi_ldap_podatke' ),
+	'get_db_data' => array( 0, 'dobavi_podatke_baze' ),
+	'external_value' => array( 0, 'spoljna_vrednost' ),
+	'for_external_table' => array( 0, 'za_spoljnu_tabelu' ),
+	'store_external_table' => array( 0, 'smesti_spoljnu_tabelu' ),
+	'clear_external_data' => array( 0, 'očisti_spoljne_podatke' ),
 );
