@@ -621,7 +621,7 @@ $messages['nn'] = array(
  * @author Harald Khan
  * @author Nghtwlkr
  */
-$messages['no'] = array(
+$messages['nb'] = array(
 	'getdata' => 'Hent data',
 	'externaldata-desc' => 'Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder',
 	'externaldata-ldap-unable-to-connect' => 'Klarte ikke å koble til $1',
