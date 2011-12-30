@@ -653,6 +653,15 @@ $messages['oc'] = array(
 	'externaldata-db-invalid-query' => 'Requèsta invalida.',
 );
 
+/** Oriya (ଓଡ଼ିଆ)
+ * @author Jnanaranjan Sahu
+ */
+$messages['or'] = array(
+	'getdata' => 'ତଥ୍ୟ ହାସଲ କରିବେ',
+	'externaldata-ldap-unable-to-connect' => '$1ସହ ସଂଯୋଗ କରାଯାଇପାରିଲା ନାହିଁ',
+	'externaldata-db-could-not-connect' => 'ଅସୁବିଧା : ଡାଟାବେସ ସହ ସଂଯୋଗ କରାଯାଇପାରିଲା ନାହିଁ ।',
+);
+
 /** Polish (Polski)
  * @author Leinad
  * @author Sp5uhe
