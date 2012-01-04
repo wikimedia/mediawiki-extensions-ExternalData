@@ -459,12 +459,7 @@ END;
 	}
 
 	static function getJSONData( $json ) {
-		// escape if json_decode() isn't supported
-		if ( ! function_exists( 'json_decode' ) ) {
-			echo ( wfMsgExt( "externaldata-json-decode-not-supported", array( 'parse', 'escape' ) ) );
-			return array();
-		}
-		$json_tree = json_decode( $json, true );
+		$json_tree = FormatJson::decode( $json, true );
 		$values = array();
 		if ( is_array( $json_tree ) ) {
 			self::parseTree( $json_tree, $values );
