@@ -4,8 +4,6 @@
  * data in CSV format
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) die();
-
 class EDGetData extends SpecialPage {
 
 	/**
@@ -17,15 +15,17 @@ class EDGetData extends SpecialPage {
 
 	function execute( $query ) {
 		global $wgRequest, $wgOut;
-		$wgOut->disable();
 
+		$wgOut->disable();
 		$this->setHeaders();
 		$page_name = $query;
 		$title = Title::newFromText( $page_name );
-		if ( is_null( $title ) )
+		if ( is_null( $title ) ) {
 			return;
-		if ( ! $title->userCanRead() )
+		}
+		if ( ! $title->userCanRead() ) {
 			return;
+		}
 		$article = new Article( $title );
 		$page_text = $article->fetchContent();
 		// Remove <noinclude> sections and <includeonly> tags from text
@@ -34,9 +34,11 @@ class EDGetData extends SpecialPage {
 		$orig_lines = explode( "\n", $page_text );
 		// ignore lines that are either blank or start with a semicolon
 		$page_lines = array();
-		foreach ( $orig_lines as $i => $line )
-			if ( $line != '' && $line[0] != ';' )
+		foreach ( $orig_lines as $i => $line ) {
+			if ( $line != '' && $line[0] != ';' ) {
 				$page_lines[] = $line;
+			}
+		}
 		$headers = EDUtils::getValuesFromCSVLine( $page_lines[0] );
 		$queried_headers = array();
 		foreach ( $wgRequest->getValues() as $key => $value ) {
