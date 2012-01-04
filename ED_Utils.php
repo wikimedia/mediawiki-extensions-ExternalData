@@ -7,16 +7,6 @@ class EDUtils {
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
 
-	/**
-	 * Loads messages only for MediaWiki versions that need it (< 1.16)
-	 */
-	public static function loadMessages() {
-		global $wgVersion;
-		if ( version_compare( $wgVersion, '1.16', '<' ) ) {
-			wfLoadExtensionMessages( 'ExternalData' );
-		}
-	}
-
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {

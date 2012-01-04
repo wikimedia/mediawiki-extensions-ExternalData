@@ -13,7 +13,6 @@ class EDGetData extends SpecialPage {
 	 */
 	function __construct() {
 		parent::__construct( 'GetData' );
-		EDUtils::loadMessages();
 	}
 
 	function execute( $query ) {
