@@ -207,6 +207,10 @@ END;
 				$db = new DatabaseMssql( $db_server, $db_username, $db_password, $db_name );
 			} elseif ( $db_type == "oracle" ) {
 				$db = new DatabaseOracle( $db_server, $db_username, $db_password, $db_name );
+			} elseif ( $db_type == "sqlite" ) {
+				$db = new DatabaseSqlite( $db_server, $db_username, $db_password, $db_name );
+			} elseif ( $db_type == "db2" ) {
+				$db = new DatabaseIbm_db2( $db_server, $db_username, $db_password, $db_name );
 			} else {
 				$db = null;
 			}
