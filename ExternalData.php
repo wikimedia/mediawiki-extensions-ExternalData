@@ -42,6 +42,7 @@ $edgDBServerType = array();
 $edgDBName = array();
 $edgDBUser = array();
 $edgDBPass = array();
+$edgDBDirectory = array();
 $edgDBFlags = array();
 $edgDBTablePrefix = array();
 

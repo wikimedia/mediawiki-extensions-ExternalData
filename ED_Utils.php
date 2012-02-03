@@ -127,41 +127,59 @@ END;
 		return $results;
 	}
 
+	static function getArrayValue( $arrayName, $key ) {
+		if ( array_key_exists( $key, $arrayName ) ) {
+			return $arrayName[$key];
+		} else {
+			return null;
+		}
+	}
+
 	static function getDBData( $dbID, $from, $columns, $where, $options ) {
 		global $edgDBServerType;
 		global $edgDBServer;
+		global $edgDBDirectory;
 		global $edgDBName;
 		global $edgDBUser;
 		global $edgDBPass;
 		global $edgDBFlags;
 		global $edgDBTablePrefix;
 
-		// Mandatory parameters
-		if ( ( ! array_key_exists( $dbID, $edgDBServerType ) ) ||
-		    ( ! array_key_exists( $dbID, $edgDBServer ) ) ||
-		    ( ! array_key_exists( $dbID, $edgDBName ) ) ||
-		    ( ! array_key_exists( $dbID, $edgDBUser ) ) ||
-		    ( ! array_key_exists( $dbID, $edgDBPass ) ) ) {
+		// Get all possible parameters
+		$db_type = self::getArrayValue( $edgDBServerType, $dbID );
+		$db_server = self::getArrayValue( $edgDBServer, $dbID );
+		$db_directory = self::getArrayValue( $edgDBDirectory, $dbID );
+		$db_name = self::getArrayValue( $edgDBName, $dbID );
+		$db_username = self::getArrayValue( $edgDBUser, $dbID );
+		$db_password = self::getArrayValue( $edgDBPass, $dbID );
+		$db_flags = self::getArrayValue( $edgDBFlags, $dbID );
+		$db_tableprefix = self::getArrayValue( $edgDBTablePrefix, $dbID );
+
+		// Validate parameters
+		if ( $db_type == '' )  {
 			echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
 			return;
+		} elseif ( $db_type == 'sqlite' )  {
+			if ( $db_directory == '' || $db_name == '' ) {
+				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+				return;
+			}
+		} else {
+			if ( $db_server == '' || $db_name == '' ||
+				$db_username == '' || $db_password == '' ) {
+				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+				return;
+			}
 		}
 
-		$db_type = $edgDBServerType[$dbID];
-		$db_server = $edgDBServer[$dbID];
-		$db_name = $edgDBName[$dbID];
-		$db_username = $edgDBUser[$dbID];
-		$db_password = $edgDBPass[$dbID];
-
-		// Optional parameters
-		if ( array_key_exists( $dbID, $edgDBFlags ) ) {
-			$db_flags = $edgDBFlags[$dbID];
-		} else {
+		// Additional settings
+		if ( $db_type == 'sqlite' )  {
+			global $wgSQLiteDataDir;
+			$oldDataDir = $wgSQLiteDataDir;
+			$wgSQLiteDataDir = $db_directory;
+		}
+		if ( $db_flags == '' ) {
 			$db_flags = DBO_DEFAULT;
-		}
-		if ( array_key_exists( $dbID, $edgDBTablePrefix ) ) {
-			$db_tableprefix = $edgDBTablePrefix[$dbID];
-		} else {
-			$db_tableprefix = '';
 		}
 
 		// DatabaseBase::newFromType() was added in MW 1.17 - it was
@@ -233,6 +251,11 @@ END;
 
 		$rows = self::searchDB( $db, $from, $columns, $where, $options );
 		$db->close();
+		if ( $db_type == 'sqlite' )  {
+			// Reset global variable back to its original value.
+			global $wgSQLiteDataDir;
+			$wgSQLiteDataDir = $oldDataDir;
+		}
 
 		$values = array();
 		foreach ( $rows as $row ) {
