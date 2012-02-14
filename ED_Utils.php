@@ -184,9 +184,9 @@ END;
 
 		// DatabaseBase::newFromType() was added in MW 1.17 - it was
 		// then replaced by DatabaseBase::factory() in MW 1.18
-		$factorFunction = array( 'DatabaseBase', 'factory' );
+		$factoryFunction = array( 'DatabaseBase', 'factory' );
 		$newFromTypeFunction = array( 'DatabaseBase', 'newFromType' );
-		if ( is_callable( $factorFunction ) ) {
+		if ( is_callable( $factoryFunction ) ) {
 			$db = DatabaseBase::factory( $db_type,
 				array(
 					'host' => $db_server,
