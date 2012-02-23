@@ -227,6 +227,7 @@ $messages['eo'] = array(
 );
 
 /** Spanish (Español)
+ * @author Armando-Martin
  * @author Crazymadlover
  * @author Imre
  * @author Manuelt15
@@ -244,6 +245,7 @@ $messages['es'] = array(
 	'externaldata-db-could-not-connect' => 'Error: No se pudo lograr conexión con la base de datos.',
 	'externaldata-db-no-return-values' => 'Error: No se ha especificado valores de retorno.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
+	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  no son compatibles con esta versión de MediaWiki.',
 );
 
 /** Basque (Euskara)
