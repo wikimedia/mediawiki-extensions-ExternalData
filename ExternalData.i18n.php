@@ -180,15 +180,15 @@ $messages['cs'] = array(
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
 	'externaldata-desc' => 'Ermöglicht das Einfügen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen',
-	'externaldata-ldap-unable-to-connect' => 'Keine Verbindung zu $1',
+	'externaldata-ldap-unable-to-connect' => 'Es konnte keine Verbindung zu $1 hergestellt werden',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
-	'externaldata-db-incomplete-information' => 'Fehler: Unvollständige Informationen für diese Server-ID.',
-	'externaldata-db-could-not-get-url' => 'URL konnte nach $1 {{PLURAL:$1|Versuch|Versuchen}} nicht abgerufen werden.',
-	'externaldata-db-unknown-type' => 'Fehler: Unbekannter Datenbanktyp.',
-	'externaldata-db-could-not-connect' => 'Fehler: Keine Verbindung zur Datenbank.',
-	'externaldata-db-no-return-values' => 'Fehler: Keine Rückgabewerte festgelegt.',
+	'externaldata-db-incomplete-information' => 'Fehler: Es liegen nur unvollständige Informationen für diese Serverkennung vor.',
+	'externaldata-db-could-not-get-url' => 'Die URL konnte mit {{PLURAL:$1|einem Versuch|$1 Versuchen}} nicht abgerufen werden.',
+	'externaldata-db-unknown-type' => 'Fehler: Es handelt sich um einen unbekannten Datenbanktyp.',
+	'externaldata-db-could-not-connect' => 'Fehler: Es konnte keine Verbindung zur Datenbank hergestellt werden.',
+	'externaldata-db-no-return-values' => 'Fehler: Es wurden keine Rückgabewerte festgelegt.',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
-	'externaldata-db-option-unsupported' => 'Fehler: Die  Parameter $1 und $2 werden von dieser MediaWiki-Version nicht unterstützt.',
+	'externaldata-db-option-unsupported' => 'Fehler: Die Parameter $1 und $2 werden von dieser MediaWiki-Version nicht unterstützt.',
 );
 
 /** Lower Sorbian (Dolnoserbski)
