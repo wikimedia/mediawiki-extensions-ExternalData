@@ -370,11 +370,12 @@ END;
 		foreach ( $table as $line ) {
 			foreach ( $line as $i => $row_val ) {
 				if ( $has_header ) {
-					$column = strtolower( $header_vals[$i] );
+					$column = strtolower( trim( $header_vals[$i] ) );
 				} else {
 					// start with an index of 1 instead of 0
 					$column = $i + 1;
 				}
+				$row_val = trim( $row_val );
 				if ( array_key_exists( $column, $values ) )
 					$values[$column][] = $row_val;
 				else
@@ -597,6 +598,8 @@ END;
 			return self::getJSONData( $url_contents );
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $url_contents );
+		} else {
+			return wfMsg( 'externaldata-web-invalid-format', $format );
 		}
 		return array();
 	}
