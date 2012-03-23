@@ -32,6 +32,9 @@ $messages['en'] = array(
  */
 $messages['qqq'] = array(
 	'externaldata-desc' => '{{desc}}',
+	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
+	'externaldata-ldap-unable-to-connect' => 'The error message if #get_ldap_data can\'t connect to the LDAP server',
+	'externaldata-xml-error' => 'The error message if #get_web_data can\'t parse an XML file',
 );
 
 /** Afrikaans (Afrikaans)
