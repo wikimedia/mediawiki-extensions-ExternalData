@@ -14,6 +14,7 @@ $messages['en'] = array(
 	// user messages
 	'getdata' => 'Get data',
 	'externaldata-desc' => 'Allows for retrieving structured data from external URLs, databases and other sources',
+	'externaldata-web-invalid-format' => 'Invalid format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1',
 	'externaldata-xml-error' => 'XML error: $1 at line $2',
 	'externaldata-db-incomplete-information' => 'Error: Incomplete information for this server ID.',
