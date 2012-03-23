@@ -145,6 +145,11 @@ class EDParserFunctions {
 			$format = '';
 		}
 		$external_values = EDUtils::getDataFromURL( $url, $format );
+		if ( is_string( $external_values ) ) {
+			// It's an error message - just display it on the
+			// screen.
+			return $external_values;
+		}
 		if ( count( $external_values ) == 0 ) {
 			return;
 		}
