@@ -178,12 +178,14 @@ $messages['cs'] = array(
  * @author Kghbln
  * @author MF-Warburg
  * @author Merlissimo
+ * @author Metalhead64
  * @author Purodha
  * @author Umherirrender
  */
 $messages['de'] = array(
 	'getdata' => 'Daten holen',
 	'externaldata-desc' => 'Ermöglicht das Einfügen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen',
+	'externaldata-web-invalid-format' => 'Ungültiges Format: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Es konnte keine Verbindung zu $1 hergestellt werden',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
 	'externaldata-db-incomplete-information' => 'Fehler: Es liegen nur unvollständige Informationen für diese Serverkennung vor.',
@@ -241,6 +243,7 @@ $messages['eo'] = array(
 $messages['es'] = array(
 	'getdata' => 'Obtener datos',
 	'externaldata-desc' => 'Permite la recuperación de datos estructurados a partir de direcciones URL externas, bases de datos y otras fuentes',
+	'externaldata-web-invalid-format' => 'Formato inválido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'No se pudo conectar con $1',
 	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
 	'externaldata-db-incomplete-information' => 'Error: Información incompleta para este ID de servidor.',
@@ -581,11 +584,13 @@ $messages['nb'] = array(
 );
 
 /** Dutch (Nederlands)
+ * @author SPQRobin
  * @author Siebrand
  */
 $messages['nl'] = array(
 	'getdata' => 'Gegevens ophalen',
 	'externaldata-desc' => "Maakt het mogelijk gegevens van externe URL's, database en andere externe bronnen op te halen",
+	'externaldata-web-invalid-format' => 'Ongeldige indeling: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Het was niet mogelijk te verbinden met $1',
 	'externaldata-xml-error' => 'XML-fout: $1 op regel $2',
 	'externaldata-db-incomplete-information' => 'Fout: Onvolledige informatie voor dit servernummer.',
