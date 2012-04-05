@@ -92,6 +92,24 @@ $messages['arz'] = array(
 	'externaldata-desc' => 'بيسمح انك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
 );
 
+/** Asturian (Asturianu)
+ * @author Xuacu
+ */
+$messages['ast'] = array(
+	'getdata' => 'Recuperar datos',
+	'externaldata-desc' => 'Permite recuperar datos estructuraos de direiciones URL, bases de datos y otres fontes esternes',
+	'externaldata-web-invalid-format' => 'Formatu inválidu: "$1"',
+	'externaldata-ldap-unable-to-connect' => 'Nun se pudo coneutar con $1',
+	'externaldata-xml-error' => 'Error XML: $1 na llinia $2',
+	'externaldata-db-incomplete-information' => 'Error: Información incompleta pa esta ID de sirvidor.',
+	'externaldata-db-could-not-get-url' => 'Nun se pudo recuperar la URL dempués de $1 {{PLURAL:$1|intentu|intentos}}.',
+	'externaldata-db-unknown-type' => 'Error: Triba de base de datos desconocida.',
+	'externaldata-db-could-not-connect' => 'Error: Nun se pudo coneutar cola base de datos.',
+	'externaldata-db-no-return-values' => "Error: Nun s'especificaron valores de retornu.",
+	'externaldata-db-invalid-query' => 'Consulta inválida.',
+	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  nun tienen sofitu nesta versión de MediaWiki.',
+);
+
 /** Belarusian (Taraškievica orthography) (‪Беларуская (тарашкевіца)‬)
  * @author EugeneZelenko
  * @author Jim-by
@@ -513,6 +531,7 @@ $messages['ksh'] = array(
 $messages['lb'] = array(
 	'getdata' => 'Donnéeë kréien',
 	'externaldata-desc' => 'Erlaabt et Donnéeën vun externen URLen, Datebanken an anere Quellen ze verschaffen',
+	'externaldata-web-invalid-format' => 'Net valabele Format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Onméiglech sech op $1 ze connectéieren',
 	'externaldata-xml-error' => 'XML Feeler: $1 an der Linn $2',
 	'externaldata-db-incomplete-information' => 'Feeler: Informatioun fir dës Server ID net komplett.',
@@ -547,6 +566,7 @@ $messages['mk'] = array(
 $messages['ms'] = array(
 	'getdata' => 'Dapatkan data',
 	'externaldata-desc' => 'Membolehkan pengambilan data berstruktur dari URL luaran, pangkalan data atau sumber-sumber lain',
+	'externaldata-web-invalid-format' => 'Format tidak sah: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Tidak dapat bersambung dengan $1',
 	'externaldata-xml-error' => 'Ralat XML: $1 di baris $2',
 	'externaldata-db-incomplete-information' => 'Ralat: Maklumat tidak lengkap untuk ID pelayan ini.',
