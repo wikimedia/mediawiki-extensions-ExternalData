@@ -767,6 +767,7 @@ $messages['roa-tara'] = array(
 $messages['ru'] = array(
 	'getdata' => 'Получить данные',
 	'externaldata-desc' => 'Позволяет получать структурированные данные с внешних адресов, баз данных и других источников',
+	'externaldata-web-invalid-format' => 'Недопустимый формат:  "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Не удаётся подключиться к $1',
 	'externaldata-xml-error' => 'Ошибка XML. $1 в строке $2',
 	'externaldata-db-incomplete-information' => 'ОШИБКА. Неполная информация для этого ID сервера.',
