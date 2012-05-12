@@ -33,8 +33,8 @@ $messages['en'] = array(
 $messages['qqq'] = array(
 	'externaldata-desc' => '{{desc}}',
 	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
-	'externaldata-ldap-unable-to-connect' => 'The error message if #get_ldap_data can\'t connect to the LDAP server',
-	'externaldata-xml-error' => 'The error message if #get_web_data can\'t parse an XML file',
+	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server",
+	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file",
 );
 
 /** Afrikaans (Afrikaans)
@@ -113,10 +113,12 @@ $messages['ast'] = array(
 /** Belarusian (Taraškievica orthography) (‪Беларуская (тарашкевіца)‬)
  * @author EugeneZelenko
  * @author Jim-by
+ * @author Wizardist
  */
 $messages['be-tarask'] = array(
 	'getdata' => 'Атрымаць зьвесткі',
 	'externaldata-desc' => 'Дазваляе атрымліваць структураваныя зьвесткі з вонкавых URL-адрасоў, базаў зьвестак і іншых крыніц',
+	'externaldata-web-invalid-format' => 'Няслушны фармат: «$1»',
 	'externaldata-ldap-unable-to-connect' => 'Немагчыма далучыцца да $1',
 	'externaldata-xml-error' => 'Памылка XML: $1 у радку $2',
 	'externaldata-db-incomplete-information' => 'Памылка: Няпоўная інфармацыя для гэтага ідэнтыфікатара сэрвэра.',
@@ -221,6 +223,7 @@ $messages['de'] = array(
 $messages['dsb'] = array(
 	'getdata' => 'Daty wobstaraś',
 	'externaldata-desc' => 'Zmóžnja wótwołowanje strukturěrowanych datow z eksternych URL, datowych bankow a drugich žrědłow',
+	'externaldata-web-invalid-format' => 'Njepłaśiwy format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwězaś',
 	'externaldata-xml-error' => 'Zmólka XML: $1 na smužce $2',
 	'externaldata-db-incomplete-information' => "'''Zmólka: Njedopołne informacije za toś ten serwerowy ID.'''",
@@ -301,6 +304,7 @@ $messages['fi'] = array(
 
 /** French (Français)
  * @author Crochet.david
+ * @author Gomoko
  * @author IAlex
  * @author McDutchie
  * @author PieRRoMaN
@@ -308,6 +312,7 @@ $messages['fi'] = array(
 $messages['fr'] = array(
 	'getdata' => 'Obtenir des données',
 	'externaldata-desc' => "Permet de récupérer des données structurées à partir d'URL externes, de bases de données et d'autres sources",
+	'externaldata-web-invalid-format' => 'Format invalide: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Impossible de se connecter à $1',
 	'externaldata-xml-error' => 'Erreur XML : $1 à la ligne $2',
 	'externaldata-db-incomplete-information' => 'Erreur : Informations incomplètes pour cet identifiant de serveur.',
@@ -339,6 +344,7 @@ $messages['frp'] = array(
 $messages['gl'] = array(
 	'getdata' => 'Obter os datos',
 	'externaldata-desc' => 'Permite a recuperación de datos estruturados a partir de enderezos URL externos, bases de datos e outras fontes',
+	'externaldata-web-invalid-format' => 'Formato incorrecto: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Non se pode conectar a $1',
 	'externaldata-xml-error' => 'Erro XML: $1 na liña $2',
 	'externaldata-db-incomplete-information' => 'Erro: información incompleta para este ID de servidor.',
@@ -402,6 +408,7 @@ $messages['he'] = array(
 $messages['hsb'] = array(
 	'getdata' => 'Daty wobstarać',
 	'externaldata-desc' => 'Zmóžnja wotwołowanje strukturowanych datow z eksternych URL, datowych bankow a druhich žórłow',
+	'externaldata-web-invalid-format' => 'Njepłaćiwy format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Njemóžno z $1 zwjazać',
 	'externaldata-xml-error' => 'Zmylk XML: $1 na lince $2',
 	'externaldata-db-incomplete-information' => "'''Zmylk: Njedospołne informacije za ID tutoho serwera.'''",
@@ -435,6 +442,7 @@ $messages['hu'] = array(
 $messages['ia'] = array(
 	'getdata' => 'Obtener datos',
 	'externaldata-desc' => 'Permitte recuperar datos structurate ab adresses URL, bases de datos e altere fontes externe',
+	'externaldata-web-invalid-format' => 'Formato invalide: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Impossibile connecter se a $1',
 	'externaldata-xml-error' => 'Error de XML: $1 al linea $2',
 	'externaldata-db-incomplete-information' => 'Error: Information incomplete pro iste ID de servitor.',
@@ -550,6 +558,7 @@ $messages['lb'] = array(
 $messages['mk'] = array(
 	'getdata' => 'Земи податоци',
 	'externaldata-desc' => 'Овозможува добивање структурирани податоци од надворешни URL-адреси, бази на податоци и други извори',
+	'externaldata-web-invalid-format' => 'Неважечки формат: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Не можам да се поврзам со  $1',
 	'externaldata-xml-error' => 'XML грешка: $1 во ред $2',
 	'externaldata-db-incomplete-information' => 'Грешка: Нецелосни информации за овој опслужувачки ид. бр.',
@@ -626,6 +635,7 @@ $messages['nl'] = array(
 /** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
  * @author Gunnernett
  * @author Harald Khan
+ * @author Njardarlogar
  */
 $messages['nn'] = array(
 	'getdata' => 'Hent data',
@@ -901,7 +911,7 @@ $messages['uk'] = array(
 	'externaldata-db-could-not-connect' => 'Помилка: не вдалося підключитися до бази даних.',
 );
 
-/** Veps (Vepsan kel')
+/** Veps (Vepsän kel’)
  * @author Игорь Бродский
  */
 $messages['vep'] = array(
