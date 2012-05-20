@@ -480,6 +480,7 @@ $messages['id'] = array(
 $messages['it'] = array(
 	'getdata' => 'Ottieni dati',
 	'externaldata-desc' => 'Consente di recuperare dati strutturati da URL esterni, database o altre sorgenti',
+	'externaldata-web-invalid-format' => 'Formato non valido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Impossibile connettersi a $1',
 	'externaldata-xml-error' => 'Errore XML: $1 alla linea $2',
 	'externaldata-db-incomplete-information' => 'Errore: informazioni incomplete per questo server ID.',
