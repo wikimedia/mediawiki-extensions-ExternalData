@@ -495,11 +495,13 @@ $messages['it'] = array(
 /** Japanese (日本語)
  * @author Fryed-peach
  * @author Schu
+ * @author Shirayuki
  * @author 青子守歌
  */
 $messages['ja'] = array(
 	'getdata' => 'データ取得',
 	'externaldata-desc' => '外部URLやデータベース、その他のソースからデータを取得できるようにする',
+	'externaldata-web-invalid-format' => '正しくない書式："$1"',
 	'externaldata-ldap-unable-to-connect' => '$1 に接続できません',
 	'externaldata-xml-error' => 'XMLエラー: 行$2で$1',
 	'externaldata-db-incomplete-information' => 'エラー: このサーバーIDに対する情報が不十分です。',
