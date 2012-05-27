@@ -679,12 +679,14 @@ $messages['or'] = array(
 );
 
 /** Polish (Polski)
+ * @author BeginaFelicysym
  * @author Leinad
  * @author Sp5uhe
  */
 $messages['pl'] = array(
 	'getdata' => 'Pobierz dane',
 	'externaldata-desc' => 'Umożliwia pobieranie strukturalnych danych z zewnętrznych adresów URL, baz danych i innych źródeł',
+	'externaldata-web-invalid-format' => 'Nieprawidłowy format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Nie można połączyć się z $1',
 	'externaldata-xml-error' => 'Błąd XML – $1 w wierszu $2',
 	'externaldata-db-incomplete-information' => 'Błąd – niepełne informacje o tym identyfikatorze serwera.',
