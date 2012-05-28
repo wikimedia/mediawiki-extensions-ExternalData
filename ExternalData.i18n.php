@@ -65,6 +65,7 @@ $messages['aln'] = array(
 );
 
 /** Arabic (العربية)
+ * @author DRIHEM
  * @author Imksa
  * @author Meno25
  * @author OsamaK
@@ -72,6 +73,7 @@ $messages['aln'] = array(
 $messages['ar'] = array(
 	'getdata' => 'الحصول على البيانات',
 	'externaldata-desc' => 'يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى',
+	'externaldata-web-invalid-format' => 'إمتداد خاطئ: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'تعذّر الاتصال ب$1',
 	'externaldata-xml-error' => 'خطأ XML: $1 عند السطر $2',
 	'externaldata-db-incomplete-information' => 'خطأ: معلومات غير كاملة عن هوية هذا الخادوم.',
