@@ -740,10 +740,12 @@ $messages['pt'] = array(
 /** Brazilian Portuguese (Português do Brasil)
  * @author Eduardo.mps
  * @author Giro720
+ * @author Jaideraf
  */
 $messages['pt-br'] = array(
 	'getdata' => 'Obter dados',
 	'externaldata-desc' => 'Permite a obtenção de dados em CSV, JSON e XML a partir de URLs externos, banco de dados e outras fontes',
+	'externaldata-web-invalid-format' => 'Formato inválido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Não foi possível conectar-se a $1',
 	'externaldata-xml-error' => 'Erro no XML: $1 na linha $2',
 	'externaldata-db-incomplete-information' => 'Erro: Informação incompleta para o ID deste servidor</P>',
