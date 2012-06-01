@@ -707,6 +707,7 @@ $messages['pl'] = array(
 $messages['pms'] = array(
 	'getdata' => 'Oten dij dat',
 	'externaldata-desc' => "A përmët d'arcuperé dat struturà da adrësse dl'aragnà esterne, base ëd dàit e d'àutre sorgiss",
+	'externaldata-web-invalid-format' => 'Formà pa bon: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'A peul pa coleghesse a $1',
 	'externaldata-xml-error' => 'Eror XML: $1 a la linia $2',
 	'externaldata-db-incomplete-information' => 'Eror: Anformassion pa completa për sto server ID-sì.',
