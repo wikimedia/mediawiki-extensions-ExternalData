@@ -132,7 +132,7 @@ $messages['be-tarask'] = array(
 	'externaldata-db-option-unsupported' => 'Памылка: Парамэтры $1 і $2 не падтрымліваюцца ў гэтай вэрсіі MediaWiki.',
 );
 
-/** Breton (Brezhoneg)
+/** Breton (brezhoneg)
  * @author Fohanno
  * @author Fulup
  * @author Y-M D
@@ -140,6 +140,7 @@ $messages['be-tarask'] = array(
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
 	'externaldata-desc' => 'Talvezout a ra da adtapout roadennoù frammet adalek URLoù diavaez, diazoù titouroù ha mammennoù all.',
+	'externaldata-web-invalid-format' => 'Furmad direizh : "$1"',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
 	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer-mañ.',
@@ -738,7 +739,7 @@ $messages['pt'] = array(
 	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
-/** Brazilian Portuguese (Português do Brasil)
+/** Brazilian Portuguese (português do Brasil)
  * @author Eduardo.mps
  * @author Giro720
  * @author Jaideraf
