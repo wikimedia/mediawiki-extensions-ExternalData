@@ -366,6 +366,7 @@ $messages['gl'] = array(
 $messages['gsw'] = array(
 	'getdata' => 'Date hole',
 	'externaldata-desc' => 'Erlaubt strukturierti Daten abzruefe vu extärne URL un andre Quälle',
+	'externaldata-web-invalid-format' => 'Ungültigs Format: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Cha kei Verbindig härstellen zue $1',
 	'externaldata-xml-error' => 'XML-Fähler: $1 in dr Zyyle $2',
 	'externaldata-db-incomplete-information' => 'Fähler: Nit vollständigi Information fir die Server-ID.',
