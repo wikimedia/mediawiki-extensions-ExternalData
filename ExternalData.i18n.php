@@ -530,6 +530,7 @@ $messages['km'] = array(
 $messages['ksh'] = array(
 	'getdata' => 'Date holle!',
 	'externaldata-desc' => 'Määt et müjjelich, Date en beshtemmpte Fomaate fun främbde <i lang="en">URLs</i>, Daatebangke, un ander Quälle ze holle.',
+	'externaldata-web-invalid-format' => 'Dat Formaat es onjöltsch: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Kann nit noh $1 verbenge',
 	'externaldata-xml-error' => 'Fähler em XML, op Reih $2: $1',
 	'externaldata-db-incomplete-information' => '<span style="text-transform: uppercase">Fähler:</span> De Enfomazjuhne vör di ẞööver-Kännong sin nit kumplätt.',
