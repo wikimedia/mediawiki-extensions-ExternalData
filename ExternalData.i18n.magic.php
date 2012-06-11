@@ -60,7 +60,7 @@ $magicWords['de'] = array(
 	'clear_external_data' => array( 0, 'leere_externe_tabelle' ),
 );
 
-/** Spanish (Español) */
+/** Spanish (español) */
 $magicWords['es'] = array(
 	'get_external_data' => array( 0, 'obtener_datos_externos' ),
 	'get_db_data' => array( 0, 'obtener_datos_db' ),
@@ -77,7 +77,19 @@ $magicWords['ja'] = array(
 	'store_external_table' => array( 0, '外部テーブル格納' ),
 );
 
-/** Macedonian (Македонски) */
+/** Korean (한국어) */
+$magicWords['ko'] = array(
+	'get_external_data' => array( 0, '바깥_데이터_얻기' ),
+	'get_web_data' => array( 0, '웹_데이터_얻기' ),
+	'get_ldap_data' => array( 0, 'ldap_데이터_얻기' ),
+	'get_db_data' => array( 0, 'db_데이터_얻기' ),
+	'external_value' => array( 0, '바깥_값' ),
+	'for_external_table' => array( 0, '바깥_표_대해' ),
+	'store_external_table' => array( 0, '바깥_표_저장' ),
+	'clear_external_data' => array( 0, '바깥_데이터_지우기' ),
+);
+
+/** Macedonian (македонски) */
 $magicWords['mk'] = array(
 	'get_external_data' => array( 0, 'преземи_надворешни_податоци' ),
 	'external_value' => array( 0, 'надворешна_вредност' ),
@@ -122,7 +134,7 @@ $magicWords['nl'] = array(
 	'clear_external_data' => array( 0, 'externe_gegevens_opschonen' ),
 );
 
-/** Russian (Русский) */
+/** Russian (русский) */
 $magicWords['ru'] = array(
 	'get_external_data' => array( 0, 'получить_внешние_данные' ),
 	'get_ldap_data' => array( 0, 'получить_данные_ldap' ),
@@ -132,7 +144,7 @@ $magicWords['ru'] = array(
 	'store_external_table' => array( 0, 'внешняя_таблица_хранения' ),
 );
 
-/** Serbian (Cyrillic script) (‪Српски (ћирилица)‬) */
+/** Serbian (Cyrillic script) (‪српски (ћирилица)‬) */
 $magicWords['sr-ec'] = array(
 	'get_external_data' => array( 0, 'добави_спољне_податке' ),
 	'get_web_data' => array( 0, 'добави_веб_податке' ),
@@ -143,7 +155,7 @@ $magicWords['sr-ec'] = array(
 	'store_external_table' => array( 0, 'смести_спољну_табелу' ),
 );
 
-/** Serbian (Latin script) (‪Srpski (latinica)‬) */
+/** Serbian (Latin script) (‪srpski (latinica)‬) */
 $magicWords['sr-el'] = array(
 	'get_external_data' => array( 0, 'dobavi_spoljne_podatke' ),
 	'get_web_data' => array( 0, 'dobavi_mrežne_podatke' ),
@@ -153,4 +165,14 @@ $magicWords['sr-el'] = array(
 	'for_external_table' => array( 0, 'za_spoljnu_tabelu' ),
 	'store_external_table' => array( 0, 'smesti_spoljnu_tabelu' ),
 	'clear_external_data' => array( 0, 'očisti_spoljne_podatke' ),
+);
+
+/** Ukrainian (українська) */
+$magicWords['uk'] = array(
+	'get_external_data' => array( 0, 'отримати_зовнішні_дані' ),
+	'get_ldap_data' => array( 0, 'отримати_дані_ldap' ),
+	'get_db_data' => array( 0, 'отримати_дані_db' ),
+	'external_value' => array( 0, 'зовнішнє_значення' ),
+	'for_external_table' => array( 0, 'для_зовнішньої_таблиці' ),
+	'store_external_table' => array( 0, 'зовнішня_таблиця_зберігання' ),
 );
