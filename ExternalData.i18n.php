@@ -94,7 +94,7 @@ $messages['arz'] = array(
 	'externaldata-desc' => 'بيسمح انك تجيب الداتا المتركبه من URLات برّانيه, و قواعد بيانات (databases) و مصادر تانيه',
 );
 
-/** Asturian (Asturianu)
+/** Asturian (asturianu)
  * @author Xuacu
  */
 $messages['ast'] = array(
@@ -152,7 +152,7 @@ $messages['br'] = array(
 	'externaldata-db-option-unsupported' => "Fazi : N'eo ket skoret an arventennoù $1 ha $2 er stumm-mañ eus MediaWiki.",
 );
 
-/** Bosnian (Bosanski)
+/** Bosnian (bosanski)
  * @author CERminator
  */
 $messages['bs'] = array(
@@ -169,7 +169,7 @@ $messages['bs'] = array(
 	'externaldata-db-option-unsupported' => 'Greška: Parametri $1 i $2 nisu podržani u ovoj verziji MediaWiki.',
 );
 
-/** Catalan (Català)
+/** Catalan (català)
  * @author Paucabot
  * @author Solde
  */
@@ -181,7 +181,7 @@ $messages['ca'] = array(
 	'externaldata-db-invalid-query' => 'Consulta no vàlida.',
 );
 
-/** Czech (Česky)
+/** Czech (česky)
  * @author Jkjk
  */
 $messages['cs'] = array(
@@ -256,7 +256,7 @@ $messages['eo'] = array(
 	'externaldata-db-invalid-query' => 'Malvalida serĉomendo.',
 );
 
-/** Spanish (Español)
+/** Spanish (español)
  * @author Armando-Martin
  * @author Crazymadlover
  * @author Imre
@@ -279,14 +279,14 @@ $messages['es'] = array(
 	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  no son compatibles con esta versión de MediaWiki.',
 );
 
-/** Basque (Euskara)
+/** Basque (euskara)
  * @author Kobazulo
  */
 $messages['eu'] = array(
 	'getdata' => 'Datuak eskuratu',
 );
 
-/** Finnish (Suomi)
+/** Finnish (suomi)
  * @author Centerlink
  * @author Crt
  * @author Silvonen
@@ -305,7 +305,7 @@ $messages['fi'] = array(
 	'externaldata-db-invalid-query' => 'Virheellinen kysely.',
 );
 
-/** French (Français)
+/** French (français)
  * @author Crochet.david
  * @author Gomoko
  * @author IAlex
@@ -327,7 +327,7 @@ $messages['fr'] = array(
 	'externaldata-db-option-unsupported' => 'Erreur: Les paramètres $1 et $2 ne sont pas supportés dans cette version de MediaWiki.',
 );
 
-/** Franco-Provençal (Arpetan)
+/** Franco-Provençal (arpetan)
  * @author ChrisPtDe
  */
 $messages['frp'] = array(
@@ -424,7 +424,7 @@ $messages['hsb'] = array(
 	'externaldata-db-option-unsupported' => 'Zmylk: Parametraj $1 a $2 so w tutej wersiji MediaWiki njepodpěrujetej.',
 );
 
-/** Hungarian (Magyar)
+/** Hungarian (magyar)
  * @author Glanthor Reviol
  */
 $messages['hu'] = array(
@@ -440,7 +440,7 @@ $messages['hu'] = array(
 	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
 );
 
-/** Interlingua (Interlingua)
+/** Interlingua (interlingua)
  * @author McDutchie
  */
 $messages['ia'] = array(
@@ -477,7 +477,7 @@ $messages['id'] = array(
 	'externaldata-db-option-unsupported' => 'Galat: Parameter $1 dan $2 tidak didukung oleh versi MediaWiki ini.',
 );
 
-/** Italian (Italiano)
+/** Italian (italiano)
  * @author Beta16
  * @author Pietrodn
  */
@@ -560,7 +560,7 @@ $messages['lb'] = array(
 	'externaldata-db-option-unsupported' => "Feeler: D'Parametere(n) $1 a(n) $2 gi vun dëser Versioun vu MediaWiki net ënnerstëtzt.",
 );
 
-/** Macedonian (Македонски)
+/** Macedonian (македонски)
  * @author Bjankuloski06
  */
 $messages['mk'] = array(
@@ -640,7 +640,7 @@ $messages['nl'] = array(
 	'externaldata-db-option-unsupported' => 'Fout: de parameters $1 en $2 worden niet ondersteund in deze versie van MediaWiki.',
 );
 
-/** Norwegian Nynorsk (‪Norsk (nynorsk)‬)
+/** Norwegian Nynorsk (‪norsk (nynorsk)‬)
  * @author Gunnernett
  * @author Harald Khan
  * @author Njardarlogar
@@ -658,7 +658,7 @@ $messages['nn'] = array(
 	'externaldata-db-invalid-query' => 'Ugyldig spørjing.',
 );
 
-/** Occitan (Occitan)
+/** Occitan (occitan)
  * @author Cedric31
  */
 $messages['oc'] = array(
@@ -683,7 +683,7 @@ $messages['or'] = array(
 	'externaldata-db-could-not-connect' => 'ଅସୁବିଧା : ଡାଟାବେସ ସହ ସଂଯୋଗ କରାଯାଇପାରିଲା ନାହିଁ ।',
 );
 
-/** Polish (Polski)
+/** Polish (polski)
  * @author BeginaFelicysym
  * @author Leinad
  * @author Sp5uhe
@@ -722,7 +722,7 @@ $messages['pms'] = array(
 	'externaldata-db-option-unsupported' => 'Eror: Ij paràmetr $1 e $2 a son pa mantnù an costa version ëd MediaWiki.',
 );
 
-/** Portuguese (Português)
+/** Portuguese (português)
  * @author Giro720
  * @author Hamilton Abreu
  * @author Waldir
@@ -761,7 +761,7 @@ $messages['pt-br'] = array(
 	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
-/** Romanian (Română)
+/** Romanian (română)
  * @author Firilacroco
  * @author KlaudiuMihaila
  * @author Stelistcristi
@@ -776,7 +776,7 @@ $messages['ro'] = array(
 	'externaldata-db-invalid-query' => 'Interogare invalidă.',
 );
 
-/** Tarandíne (Tarandíne)
+/** tarandíne (tarandíne)
  * @author Joetaras
  */
 $messages['roa-tara'] = array(
@@ -784,7 +784,7 @@ $messages['roa-tara'] = array(
 	'externaldata-desc' => 'Permette de repigghià data strutturate da URL fore a Uicchipèdie, database e otre sorgende',
 );
 
-/** Russian (Русский)
+/** Russian (русский)
  * @author Ferrer
  * @author Александр Сигачёв
  */
@@ -803,7 +803,7 @@ $messages['ru'] = array(
 	'externaldata-db-option-unsupported' => 'Ошибка. Параметры $1 и $2 не поддерживаются в этой версии MediaWiki.',
 );
 
-/** Slovak (Slovenčina)
+/** Slovak (slovenčina)
  * @author Helix84
  */
 $messages['sk'] = array(
@@ -819,7 +819,7 @@ $messages['sk'] = array(
 	'externaldata-db-invalid-query' => 'Neplatná požiadavka.',
 );
 
-/** Serbian (Cyrillic script) (‪Српски (ћирилица)‬)
+/** Serbian (Cyrillic script) (‪српски (ћирилица)‬)
  * @author Charmed94
  * @author Михајло Анђелковић
  */
@@ -836,7 +836,7 @@ $messages['sr-ec'] = array(
 	'externaldata-db-invalid-query' => 'Неисправан упит.',
 );
 
-/** Serbian (Latin script) (‪Srpski (latinica)‬)
+/** Serbian (Latin script) (‪srpski (latinica)‬)
  * @author Michaello
  */
 $messages['sr-el'] = array(
@@ -852,7 +852,7 @@ $messages['sr-el'] = array(
 	'externaldata-db-invalid-query' => 'Neispravan upit.',
 );
 
-/** Swedish (Svenska)
+/** Swedish (svenska)
  * @author Ainali
  * @author Boivie
  * @author Najami
@@ -912,7 +912,7 @@ $messages['tr'] = array(
 	'externaldata-db-invalid-query' => 'Geçersiz sorgu.',
 );
 
-/** Ukrainian (Українська)
+/** Ukrainian (українська)
  * @author Тест
  */
 $messages['uk'] = array(
@@ -948,7 +948,7 @@ $messages['yi'] = array(
 	'getdata' => 'באַקומען דאַטן',
 );
 
-/** Simplified Chinese (‪中文(简体)‬)
+/** Simplified Chinese (‪中文（简体）‬)
  * @author Hydra
  */
 $messages['zh-hans'] = array(
@@ -956,7 +956,7 @@ $messages['zh-hans'] = array(
 	'externaldata-db-invalid-query' => '无效的查询。',
 );
 
-/** Traditional Chinese (‪中文(繁體)‬) */
+/** Traditional Chinese (‪中文（繁體）‬) */
 $messages['zh-hant'] = array(
 	'getdata' => '獲取數據',
 	'externaldata-db-invalid-query' => '無效的查詢。',
