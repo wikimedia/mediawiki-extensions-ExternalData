@@ -226,7 +226,8 @@ class EDParserFunctions {
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
 		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
-		$options = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy );
+		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
+		$options = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy );
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
 		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $options );
