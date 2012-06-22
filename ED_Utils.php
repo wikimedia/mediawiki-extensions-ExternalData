@@ -41,10 +41,11 @@ class EDUtils {
 			$param = preg_replace ( "/\s\s+/", ' ', $param ); // whitespace
 			$param_parts = explode( "=", $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
-				continue;
+				$args[$param_parts[0]] = null;
+			} else {
+				list( $name, $value ) = $param_parts;
+				$args[$name] = $value;
 			}
-			list( $name, $value ) = $param_parts;
-			$args[$name] = $value;
 		}
 		return $args;
 	}
@@ -156,10 +157,10 @@ END;
 		$db_tableprefix = self::getArrayValue( $edgDBTablePrefix, $dbID );
 
 		// Validate parameters
-		if ( $db_type == '' )  {
+		if ( $db_type == '' ) {
 			echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
 			return;
-		} elseif ( $db_type == 'sqlite' )  {
+		} elseif ( $db_type == 'sqlite' ) {
 			if ( $db_directory == '' || $db_name == '' ) {
 				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
 				return;
@@ -173,7 +174,7 @@ END;
 		}
 
 		// Additional settings
-		if ( $db_type == 'sqlite' )  {
+		if ( $db_type == 'sqlite' ) {
 			global $wgSQLiteDataDir;
 			$oldDataDir = $wgSQLiteDataDir;
 			$wgSQLiteDataDir = $db_directory;
@@ -251,7 +252,7 @@ END;
 
 		$rows = self::searchDB( $db, $from, $columns, $where, $options );
 		$db->close();
-		if ( $db_type == 'sqlite' )  {
+		if ( $db_type == 'sqlite' ) {
 			// Reset global variable back to its original value.
 			global $wgSQLiteDataDir;
 			$wgSQLiteDataDir = $oldDataDir;
@@ -321,6 +322,38 @@ END;
 			xml_get_current_line_number( $xml_parser ), array( 'parse', 'escape' ) ) );
 		}
 		xml_parser_free( $xml_parser );
+		return $edgXMLValues;
+	}
+
+	static function isNodeNotEmpty( $node ) {
+		return trim( $node[0] ) != '';
+	}
+
+	static function filterEmptyNodes( $nodes ) {
+		if ( !is_array( $nodes ) ) return $nodes;
+		return array_filter( $nodes, "self::isNodeNotEmpty" );
+	}
+
+	static function getXPathData( $xml, $mappings ) {
+		global $edgXMLValues;
+
+		$edgXMLValues = array();
+		$sxml = new SimpleXMLElement( $xml );
+
+		foreach ( $mappings as $local_var => $xpath ) {
+			$nodes = self::filterEmptyNodes( $sxml->xpath( $xpath ) );
+			if ( !$nodes ) {
+				continue;
+			}
+			if ( array_key_exists( $xpath, $edgXMLValues ) ) {
+				// At the moment, this code will never get
+				// called, because duplicate values in
+				// $mappings will have been removed already.
+				$edgXMLValues[$xpath] = array_merge( $edgXMLValues[$xpath], (array)$nodes );
+			} else {
+				$edgXMLValues[$xpath] = (array)$nodes;
+			}
+		}
 		return $edgXMLValues;
 	}
 
@@ -582,7 +615,7 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format ) {
+	static public function getDataFromURL( $url, $format, $mappings ) {
 		$url_contents = EDUtils::fetchURL( $url );
 		// exit if there's nothing there
 		if ( empty( $url_contents ) )
@@ -590,6 +623,8 @@ END;
 
 		if ( $format == 'xml' ) {
 			return self::getXMLData( $url_contents );
+		} elseif ( $format == 'xml with xpath' ) {
+			return self::getXPathData( $url_contents, $mappings );
 		} elseif ( $format == 'csv' ) {
 			return self::getCSVData( $url_contents, false );
 		} elseif ( $format == 'csv with header' ) {

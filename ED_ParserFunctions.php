@@ -30,7 +30,7 @@ class EDParserFunctions {
 		}
 
 		$format = strtolower( array_shift( $params ) ); // make case-insensitive
-		$external_values = EDUtils::getDataFromURL( $url, $format );
+		$external_values = EDUtils::getDataFromURL( $url, $format, null );
 		if ( count( $external_values ) == 0 ) {
 			return;
 		}
@@ -139,12 +139,28 @@ class EDParserFunctions {
 			return;
 		}
 
+		if ( array_key_exists( 'data', $args ) ) {
+			// parse the 'data' arg into mappings
+			$mappings = EDUtils::paramToArray( $args['data'], false, true );
+		} else {
+			return;
+		}
+
 		if ( array_key_exists( 'format', $args ) ) {
 			$format = strtolower( $args['format'] );
 		} else {
 			$format = '';
 		}
-		$external_values = EDUtils::getDataFromURL( $url, $format );
+		if ( $format == 'xml' ) {
+			if ( array_key_exists( 'use xpath', $args ) ) {
+				// Somewhat of a hack - store the fact that
+				// we're using XPath within the format, even
+				// though the format is still XML.
+				$format = 'xml with xpath';
+			}
+		}
+
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings );
 		if ( is_string( $external_values ) ) {
 			// It's an error message - just display it on the
 			// screen.
@@ -154,12 +170,6 @@ class EDParserFunctions {
 			return;
 		}
 
-		if ( array_key_exists( 'data', $args ) ) {
-			// parse the 'data' arg into mappings
-			$mappings = EDUtils::paramToArray( $args['data'], false, true );
-		} else {
-			return;
-		}
 		if ( array_key_exists( 'filters', $args ) ) {
 			// parse the 'filters' arg
 			$filters = EDUtils::paramToArray( $args['filters'], true, false );
