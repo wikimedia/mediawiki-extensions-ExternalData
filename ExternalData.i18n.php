@@ -112,7 +112,7 @@ $messages['ast'] = array(
 	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  nun tienen sofitu nesta versión de MediaWiki.',
 );
 
-/** Belarusian (Taraškievica orthography) (‪Беларуская (тарашкевіца)‬)
+/** Belarusian (Taraškievica orthography) (‪беларуская (тарашкевіца)‬)
  * @author EugeneZelenko
  * @author Jim-by
  * @author Wizardist
@@ -220,7 +220,7 @@ $messages['de'] = array(
 	'externaldata-db-option-unsupported' => 'Fehler: Die Parameter $1 und $2 werden von dieser MediaWiki-Version nicht unterstützt.',
 );
 
-/** Lower Sorbian (Dolnoserbski)
+/** Lower Sorbian (dolnoserbski)
  * @author Michawiki
  */
 $messages['dsb'] = array(
@@ -341,7 +341,7 @@ $messages['frp'] = array(
 	'externaldata-db-invalid-query' => 'Requéta envalida.',
 );
 
-/** Galician (Galego)
+/** Galician (galego)
  * @author Toliño
  */
 $messages['gl'] = array(
@@ -406,7 +406,7 @@ $messages['he'] = array(
 	'externaldata-db-option-unsupported' => 'שגיאה: הפרמטרים $1 ו{{GRAMMAR:תחילית|$2}} אינם נתמכים בגרסה הזאת של מדיה־ויקי',
 );
 
-/** Upper Sorbian (Hornjoserbsce)
+/** Upper Sorbian (hornjoserbsce)
  * @author Michawiki
  */
 $messages['hsb'] = array(
