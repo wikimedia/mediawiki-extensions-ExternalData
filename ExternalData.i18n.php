@@ -889,6 +889,7 @@ $messages['te'] = array(
 $messages['tl'] = array(
 	'getdata' => 'Kunin ang dato',
 	'externaldata-desc' => 'Nagpapahintulot sa pagkuha ng nakabalangkas na datos mula sa panlabas na mga URL, mga kalipunan ng datos at sa ibang mga pinagmulan',
+	'externaldata-web-invalid-format' => 'Hindi katanggap-tanggap na anyo: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Hindi makakunekta sa $1',
 	'externaldata-xml-error' => 'Kamalian sa XML: $1 sa linyang $2',
 	'externaldata-db-incomplete-information' => 'Kamalian: Hindi-kumpletong impormasyon para sa itong ID ng serbidor.',
