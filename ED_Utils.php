@@ -15,10 +15,11 @@ class EDUtils {
 		$edgCurrentXMLTag = strtolower( $name );
 		foreach ( $attrs as $attr => $value ) {
 			$attr = strtolower( $attr );
-			if ( array_key_exists( $attr, $edgXMLValues ) )
+			if ( array_key_exists( $attr, $edgXMLValues ) ) {
 				$edgXMLValues[$attr][] = $value;
-			else
+			} else {
 				$edgXMLValues[$attr] = array( $value );
+			}
 		}
 	}
 
@@ -506,7 +507,8 @@ END;
 			} else {
 				// If it's an array with just one element,
 				// treat it like a regular value.
-				if ( is_array( $val ) ) {
+				// (Why is the null check necessary?)
+				if ( $val != null && is_array( $val ) ) {
 					$val = $val[0];
 				}
 				$key = strtolower( $key );
@@ -532,6 +534,10 @@ END;
 		$dbr = wfGetDB( DB_SLAVE );
 		global $edgStringReplacements, $edgCacheTable,
 			$edgCacheExpireTime, $edgAllowSSL;
+
+		if ( $post_vars ) {
+			return Http::post( $url, array( 'postData' => $post_vars ) );
+		}
 
 		// do any special variable replacements in the URLs, for
 		// secret API keys and the like
@@ -615,8 +621,8 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format, $mappings ) {
-		$url_contents = EDUtils::fetchURL( $url );
+	static public function getDataFromURL( $url, $format, $mappings, $postData = null ) {
+		$url_contents = EDUtils::fetchURL( $url, $postData );
 		// exit if there's nothing there
 		if ( empty( $url_contents ) )
 			return array();

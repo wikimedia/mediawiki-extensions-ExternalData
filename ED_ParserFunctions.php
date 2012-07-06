@@ -131,12 +131,12 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return;
+			return "No URL specified";
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
 		if ( ! EDUtils::isURLAllowed( $url ) ) {
-			return;
+			return "URL is not allowed";
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
@@ -160,7 +160,8 @@ class EDParserFunctions {
 			}
 		}
 
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings );
+		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData );
 		if ( is_string( $external_values ) ) {
 			// It's an error message - just display it on the
 			// screen.
