@@ -596,16 +596,17 @@ $messages['ms'] = array(
 	'externaldata-db-option-unsupported' => 'Ralat: Parameter $1 dan $2 tidak disokong dalam versi Mediawiki ini.',
 );
 
-/** Erzya (Эрзянь)
+/** Erzya (эрзянь)
  * @author Botuzhaleny-sodamo
  */
 $messages['myv'] = array(
 	'getdata' => 'Дата мельга',
 );
 
-/** Norwegian (bokmål)‬ (‪Norsk (bokmål)‬)
+/** Norwegian Bokmål (‪norsk (bokmål)‬)
  * @author Harald Khan
  * @author Nghtwlkr
+ * @author Njardarlogar
  */
 $messages['nb'] = array(
 	'getdata' => 'Hent data',
@@ -925,7 +926,7 @@ $messages['uk'] = array(
 	'externaldata-db-could-not-connect' => 'Помилка: не вдалося підключитися до бази даних.',
 );
 
-/** Veps (Vepsän kel’)
+/** Veps (vepsän kel’)
  * @author Игорь Бродский
  */
 $messages['vep'] = array(

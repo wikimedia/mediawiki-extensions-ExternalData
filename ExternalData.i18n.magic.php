@@ -39,7 +39,7 @@ $magicWords['arz'] = array(
 	'store_external_table' => array( 0, 'تخزين_جدول_خارجى', 'تخزين_جدول_خارجي', 'store_external_table' ),
 );
 
-/** Chechen (Нохчийн) */
+/** Chechen (нохчийн) */
 $magicWords['ce'] = array(
 	'get_external_data' => array( 0, 'схьаэца_архьара_хаамаш', 'получить_внешние_данные', 'get_external_data' ),
 	'get_ldap_data' => array( 0, 'схьаэца_хаамаш_ldap', 'получить_данные_ldap', 'get_ldap_data' ),
