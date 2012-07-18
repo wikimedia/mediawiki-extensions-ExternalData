@@ -10,11 +10,11 @@ class EDParserFunctions {
 	 * @deprecated
 	 */
 	static function doGetExternalData( &$parser ) {
-		global $wgTitle, $edgCurPageName, $edgValues;
+		global $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
-		$cur_page_name = $wgTitle->getText();
+		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
@@ -115,11 +115,11 @@ class EDParserFunctions {
 	 * Render the #get_web_data parser function
 	 */
 	static function doGetWebData( &$parser ) {
-		global $wgTitle, $edgCurPageName, $edgValues;
+		global $edgCurPageName, $edgValues;
 
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
-		$cur_page_name = $wgTitle->getText();
+		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
@@ -185,11 +185,11 @@ class EDParserFunctions {
 	 * Render the #get_ldap_data parser function
 	 */
 	static function doGetLDAPData( &$parser ) {
-		global $wgTitle, $edgCurPageName, $edgValues;
+		global $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
-		$cur_page_name = $wgTitle->getText();
+		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
@@ -213,11 +213,11 @@ class EDParserFunctions {
 	 * Render the #get_db_data parser function
 	 */
 	static function doGetDBData( &$parser ) {
-		global $wgTitle, $edgCurPageName, $edgValues;
+		global $edgCurPageName, $edgValues;
 
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
-		$cur_page_name = $wgTitle->getText();
+		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = array();
 			$edgCurPageName = $cur_page_name;
