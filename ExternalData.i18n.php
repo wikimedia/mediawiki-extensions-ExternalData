@@ -731,14 +731,15 @@ $messages['pms'] = array(
 $messages['pt'] = array(
 	'getdata' => 'Obter dados',
 	'externaldata-desc' => 'Permite a importação de dados estruturados a partir de URLs, bases de dados e outras fontes externas',
+	'externaldata-web-invalid-format' => 'Formato inválido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Não foi possível estabelecer ligação a $1',
 	'externaldata-xml-error' => 'Erro XML: $1 na linha $2',
-	'externaldata-db-incomplete-information' => 'Erro: Informação incompleta para o ID deste servidor.',
+	'externaldata-db-incomplete-information' => 'Erro: Informação incompleta para este identificador de servidor.',
 	'externaldata-db-could-not-get-url' => 'Não foi possível importar a URL após {{PLURAL:$1|uma tentativa|$1 tentativas}}.',
 	'externaldata-db-unknown-type' => 'Erro: Tipo de base de dados desconhecido.',
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível estabelecer ligação à base de dados.',
-	'externaldata-db-no-return-values' => 'Erro: Não foram especificados nenhuns valores de retorno.',
-	'externaldata-db-invalid-query' => "''Query'' inválida.",
+	'externaldata-db-no-return-values' => 'Erro: Não foram especificados valores de retorno.',
+	'externaldata-db-invalid-query' => 'Consulta inválida.',
 	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
