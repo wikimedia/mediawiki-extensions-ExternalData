@@ -203,10 +203,15 @@ class EDParserFunctions {
 		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
 
 		// Build $edgValues
-		foreach( $external_values as $i => $row ) {
+		foreach ( $external_values as $i => $row ) {
+			if ( !is_array( $row ) ) {
+				continue;
+			}
 			foreach ( $mappings as $local_var => $external_var ) {
 				if ( array_key_exists( $external_var, $row ) ) {
 					$edgValues[$local_var][] = $row[$external_var][0];
+				} else {
+					$edgValues[$local_var][] = '';
 				}
 			}
 		}
