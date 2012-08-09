@@ -286,6 +286,13 @@ $messages['eu'] = array(
 	'getdata' => 'Datuak eskuratu',
 );
 
+/** Persian (فارسی)
+ * @author Mjbmr
+ */
+$messages['fa'] = array(
+	'getdata' => 'دریافت اطلاعات',
+);
+
 /** Finnish (suomi)
  * @author Centerlink
  * @author Crt
@@ -771,6 +778,7 @@ $messages['pt-br'] = array(
 $messages['ro'] = array(
 	'getdata' => 'Obține date',
 	'externaldata-desc' => 'Permite obținerea datelor în format CSV, JSON și XML din atât adrese URL externe, cât și pagini wiki locale',
+	'externaldata-web-invalid-format' => 'Fomat invalid: „$1”',
 	'externaldata-ldap-unable-to-connect' => 'Nu se poate conecta la $1',
 	'externaldata-xml-error' => 'Eroare XML: $1 la linia $2',
 	'externaldata-db-unknown-type' => 'Eroare: Tipul bazei de date necunoscut.',
