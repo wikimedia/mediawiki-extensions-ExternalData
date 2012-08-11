@@ -183,10 +183,12 @@ $messages['ca'] = array(
 
 /** Czech (česky)
  * @author Jkjk
+ * @author Reaperman
  */
 $messages['cs'] = array(
 	'getdata' => 'Získat data',
 	'externaldata-desc' => 'Umožňuje získávání strukturovaných dat z externích webových stránek, databází a jiných zdrojů',
+	'externaldata-web-invalid-format' => 'Neplatný formát: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Nepodařilo se spojit s $1',
 	'externaldata-xml-error' => 'Chyba XML: $1 na řádku $2',
 	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru',
@@ -194,6 +196,7 @@ $messages['cs'] = array(
 	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
 	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.',
 	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
+	'externaldata-db-option-unsupported' => 'Chyba: Parametry $1 a $2 nejsou v této verzi MediaWiki podporovány.',
 );
 
 /** German (Deutsch)
