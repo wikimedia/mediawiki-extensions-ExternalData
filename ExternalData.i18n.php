@@ -816,6 +816,13 @@ $messages['ru'] = array(
 	'externaldata-db-option-unsupported' => 'Ошибка. Параметры $1 и $2 не поддерживаются в этой версии MediaWiki.',
 );
 
+/** Sinhala (සිංහල)
+ * @author පසිඳු කාවින්ද
+ */
+$messages['si'] = array(
+	'getdata' => 'දත්ත ලබා ගන්න',
+);
+
 /** Slovak (slovenčina)
  * @author Helix84
  */
