@@ -92,6 +92,7 @@ $magicWords['ko'] = array(
 /** Macedonian (македонски) */
 $magicWords['mk'] = array(
 	'get_external_data' => array( 0, 'преземи_надворешни_податоци' ),
+	'get_web_data' => array( 0, 'преземи_мрежни_податоци' ),
 	'external_value' => array( 0, 'надворешна_вредност' ),
 	'for_external_table' => array( 0, 'за_надворешна_табела' ),
 	'store_external_table' => array( 0, 'складирај_надворешна_табела' ),

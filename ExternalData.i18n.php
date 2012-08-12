@@ -821,6 +821,8 @@ $messages['ru'] = array(
  */
 $messages['si'] = array(
 	'getdata' => 'දත්ත ලබා ගන්න',
+	'externaldata-web-invalid-format' => 'වලංගු නොවන ආකෘතිය: "$1"',
+	'externaldata-db-invalid-query' => 'වලංගු නොවන ප්‍රශ්නය.',
 );
 
 /** Slovak (slovenčina)
@@ -891,6 +893,13 @@ $messages['sv'] = array(
 	'externaldata-db-no-return-values' => 'Fel: Inga returvärden specificerade.',
 	'externaldata-db-invalid-query' => 'Ogiltig fråga.',
 	'externaldata-db-option-unsupported' => 'Fel: Parametrarna $1 och $2 stöds inte i denna version av MediaWiki.',
+);
+
+/** Tamil (தமிழ்)
+ * @author Karthi.dr
+ */
+$messages['ta'] = array(
+	'getdata' => 'தகவலைப் பெறு',
 );
 
 /** Telugu (తెలుగు)
