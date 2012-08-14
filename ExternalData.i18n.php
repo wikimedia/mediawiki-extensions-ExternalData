@@ -897,9 +897,13 @@ $messages['sv'] = array(
 
 /** Tamil (தமிழ்)
  * @author Karthi.dr
+ * @author மதனாஹரன்
  */
 $messages['ta'] = array(
 	'getdata' => 'தகவலைப் பெறு',
+	'externaldata-db-unknown-type' => 'தவறு: அறியாத தரவுத் தள வகை.',
+	'externaldata-db-could-not-connect' => 'தவறு: தரவுத் தளத்துடன் தொடர்பு கொள்ள முடியவில்லை.',
+	'externaldata-db-invalid-query' => 'செல்லாத வினவல்.',
 );
 
 /** Telugu (తెలుగు)
