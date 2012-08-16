@@ -342,6 +342,7 @@ $messages['fr'] = array(
  */
 $messages['frp'] = array(
 	'getdata' => 'Avêr des balyês',
+	'externaldata-web-invalid-format' => 'Format envalido : « $1 »',
 	'externaldata-ldap-unable-to-connect' => 'Empossiblo de sè branchiér a $1',
 	'externaldata-xml-error' => 'Èrror XML : $1 a la legne $2',
 	'externaldata-db-could-not-get-url' => 'Empossiblo d’avêr l’URL aprés $1 tentativ{{PLURAL:$1|a|es}}.',
