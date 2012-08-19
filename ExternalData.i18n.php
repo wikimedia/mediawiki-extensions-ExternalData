@@ -515,17 +515,17 @@ $messages['it'] = array(
  */
 $messages['ja'] = array(
 	'getdata' => 'データ取得',
-	'externaldata-desc' => '外部URLやデータベース、その他のソースからデータを取得できるようにする',
+	'externaldata-desc' => '外部 URL やデータベース、その他のソースからデータを取得できるようにする',
 	'externaldata-web-invalid-format' => '正しくない書式："$1"',
 	'externaldata-ldap-unable-to-connect' => '$1 に接続できません',
-	'externaldata-xml-error' => 'XMLエラー: 行$2で$1',
+	'externaldata-xml-error' => 'XML エラー: 行$2で$1',
 	'externaldata-db-incomplete-information' => 'エラー: このサーバーIDに対する情報が不十分です。',
-	'externaldata-db-could-not-get-url' => '$1回の試行を行いましたが URL を取得できませんでした。',
+	'externaldata-db-could-not-get-url' => '$1 回試行しましたが URL を取得できませんでした。',
 	'externaldata-db-unknown-type' => 'エラー: データベースの種類が不明です。',
 	'externaldata-db-could-not-connect' => 'エラー: データベースに接続できませんでした。',
 	'externaldata-db-no-return-values' => 'エラー: 戻り値が指定されていません。',
 	'externaldata-db-invalid-query' => '正しくないクエリーです。',
-	'externaldata-db-option-unsupported' => 'エラー: パラメータ $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
+	'externaldata-db-option-unsupported' => 'エラー: パラメーター $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
 );
 
 /** Khmer (ភាសាខ្មែរ)
