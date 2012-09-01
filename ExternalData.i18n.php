@@ -885,6 +885,7 @@ $messages['sr-el'] = array(
 $messages['sv'] = array(
 	'getdata' => 'Hämta data',
 	'externaldata-desc' => 'Ger möjlighet att hämta strukturerad data från externa URL:er, databaser och andra källor',
+	'externaldata-web-invalid-format' => 'Ogiltigt format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Kunde inte koppla till $1',
 	'externaldata-xml-error' => 'XML-fel: $1 på rad $2',
 	'externaldata-db-incomplete-information' => 'Fel: Informationen för server-ID inte komplett.',
