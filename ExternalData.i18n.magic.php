@@ -147,7 +147,7 @@ $magicWords['ru'] = array(
 	'store_external_table' => array( 0, 'внешняя_таблица_хранения' ),
 );
 
-/** Serbian (Cyrillic script) (‪српски (ћирилица)‬) */
+/** Serbian (Cyrillic script) (српски (ћирилица)‎) */
 $magicWords['sr-ec'] = array(
 	'get_external_data' => array( 0, 'добави_спољне_податке' ),
 	'get_web_data' => array( 0, 'добави_веб_податке' ),
@@ -158,7 +158,7 @@ $magicWords['sr-ec'] = array(
 	'store_external_table' => array( 0, 'смести_спољну_табелу' ),
 );
 
-/** Serbian (Latin script) (‪srpski (latinica)‬) */
+/** Serbian (Latin script) (srpski (latinica)‎) */
 $magicWords['sr-el'] = array(
 	'get_external_data' => array( 0, 'dobavi_spoljne_podatke' ),
 	'get_web_data' => array( 0, 'dobavi_mrežne_podatke' ),
