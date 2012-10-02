@@ -112,7 +112,7 @@ $messages['ast'] = array(
 	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  nun tienen sofitu nesta versión de MediaWiki.',
 );
 
-/** Belarusian (Taraškievica orthography) (‪беларуская (тарашкевіца)‬)
+/** Belarusian (Taraškievica orthography) (беларуская (тарашкевіца)‎)
  * @author EugeneZelenko
  * @author Jim-by
  * @author Wizardist
@@ -614,7 +614,7 @@ $messages['myv'] = array(
 	'getdata' => 'Дата мельга',
 );
 
-/** Norwegian Bokmål (‪norsk (bokmål)‬)
+/** Norwegian Bokmål (norsk (bokmål)‎)
  * @author Harald Khan
  * @author Nghtwlkr
  * @author Njardarlogar
@@ -652,7 +652,7 @@ $messages['nl'] = array(
 	'externaldata-db-option-unsupported' => 'Fout: de parameters $1 en $2 worden niet ondersteund in deze versie van MediaWiki.',
 );
 
-/** Norwegian Nynorsk (‪norsk (nynorsk)‬)
+/** Norwegian Nynorsk (norsk (nynorsk)‎)
  * @author Gunnernett
  * @author Harald Khan
  * @author Njardarlogar
@@ -842,7 +842,7 @@ $messages['sk'] = array(
 	'externaldata-db-invalid-query' => 'Neplatná požiadavka.',
 );
 
-/** Serbian (Cyrillic script) (‪српски (ћирилица)‬)
+/** Serbian (Cyrillic script) (српски (ћирилица)‎)
  * @author Charmed94
  * @author Михајло Анђелковић
  */
@@ -859,7 +859,7 @@ $messages['sr-ec'] = array(
 	'externaldata-db-invalid-query' => 'Неисправан упит.',
 );
 
-/** Serbian (Latin script) (‪srpski (latinica)‬)
+/** Serbian (Latin script) (srpski (latinica)‎)
  * @author Michaello
  */
 $messages['sr-el'] = array(
@@ -984,7 +984,7 @@ $messages['yi'] = array(
 	'getdata' => 'באַקומען דאַטן',
 );
 
-/** Simplified Chinese (‪中文（简体）‬)
+/** Simplified Chinese (中文（简体）‎)
  * @author Hydra
  */
 $messages['zh-hans'] = array(
@@ -992,7 +992,7 @@ $messages['zh-hans'] = array(
 	'externaldata-db-invalid-query' => '无效的查询。',
 );
 
-/** Traditional Chinese (‪中文（繁體）‬) */
+/** Traditional Chinese (中文（繁體）‎) */
 $messages['zh-hant'] = array(
 	'getdata' => '獲取數據',
 	'externaldata-db-invalid-query' => '無效的查詢。',
