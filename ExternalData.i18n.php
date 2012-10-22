@@ -191,10 +191,10 @@ $messages['cs'] = array(
 	'externaldata-web-invalid-format' => 'Neplatný formát: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Nepodařilo se spojit s $1',
 	'externaldata-xml-error' => 'Chyba XML: $1 na řádku $2',
-	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru',
+	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru', # Fuzzy
 	'externaldata-db-unknown-type' => 'Chyba: Neznámý typ databáze.',
 	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
-	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.',
+	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.', # Fuzzy
 	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
 	'externaldata-db-option-unsupported' => 'Chyba: Parametry $1 a $2 nejsou v této verzi MediaWiki podporovány.',
 );
@@ -247,7 +247,7 @@ $messages['dsb'] = array(
  */
 $messages['el'] = array(
 	'getdata' => 'Πάρε δεδομένα',
-	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki',
+	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki', # Fuzzy
 	'externaldata-xml-error' => 'Σφάλμα XML : $1 στη γραμμή $2',
 	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
 );
@@ -394,7 +394,7 @@ $messages['gsw'] = array(
  */
 $messages['gu'] = array(
 	'getdata' => 'માહિતી પ્રાપ્ત કરો',
-	'externaldata-desc' => 'બાહ્ય કડીઓ અને સ્થાનિક વિકિ પાનાઓ પરથી CSV, JSON અને XML શૈલીમાં માહિતીની પુન:પ્રાપ્તિની છુટ',
+	'externaldata-desc' => 'બાહ્ય કડીઓ અને સ્થાનિક વિકિ પાનાઓ પરથી CSV, JSON અને XML શૈલીમાં માહિતીની પુન:પ્રાપ્તિની છુટ', # Fuzzy
 );
 
 /** Hebrew (עברית)
@@ -781,7 +781,7 @@ $messages['pt-br'] = array(
  */
 $messages['ro'] = array(
 	'getdata' => 'Obține date',
-	'externaldata-desc' => 'Permite obținerea datelor în format CSV, JSON și XML din atât adrese URL externe, cât și pagini wiki locale',
+	'externaldata-desc' => 'Permite obținerea datelor în format CSV, JSON și XML din atât adrese URL externe, cât și pagini wiki locale', # Fuzzy
 	'externaldata-web-invalid-format' => 'Fomat invalid: „$1”',
 	'externaldata-ldap-unable-to-connect' => 'Nu se poate conecta la $1',
 	'externaldata-xml-error' => 'Eroare XML: $1 la linia $2',
@@ -992,9 +992,9 @@ $messages['zh-hans'] = array(
 	'externaldata-db-invalid-query' => '无效的查询。',
 );
 
-/** Traditional Chinese (中文（繁體）‎) */
+/** Traditional Chinese (中文（繁體）‎)
+ */
 $messages['zh-hant'] = array(
 	'getdata' => '獲取數據',
 	'externaldata-db-invalid-query' => '無效的查詢。',
 );
-
