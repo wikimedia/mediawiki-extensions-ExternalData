@@ -94,8 +94,8 @@ END;
 		global $edgLDAPUser;
 		global $edgLDAPPass;
 
-		$ds = EDUtils::connectLDAP( $edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain] );
-		$results = EDUtils::searchLDAP( $ds, $domain, $filter, $params );
+		$ds = self::connectLDAP( $edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain] );
+		$results = self::searchLDAP( $ds, $domain, $filter, $params );
 
 		return $results;
 	}
@@ -332,7 +332,7 @@ END;
 
 	static function filterEmptyNodes( $nodes ) {
 		if ( !is_array( $nodes ) ) return $nodes;
-		return array_filter( $nodes, "self::isNodeNotEmpty" );
+		return array_filter( $nodes, array( 'EDUtils', 'isNodeNotEmpty' ) );
 	}
 
 	static function getXPathData( $xml, $mappings ) {
@@ -622,7 +622,7 @@ END;
 	}
 
 	static public function getDataFromURL( $url, $format, $mappings, $postData = null ) {
-		$url_contents = EDUtils::fetchURL( $url, $postData );
+		$url_contents = self::fetchURL( $url, $postData );
 		// exit if there's nothing there
 		if ( empty( $url_contents ) )
 			return array();
