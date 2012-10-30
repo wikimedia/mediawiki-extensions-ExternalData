@@ -404,7 +404,12 @@ END;
 		foreach ( $table as $line ) {
 			foreach ( $line as $i => $row_val ) {
 				if ( $has_header ) {
-					$column = strtolower( trim( $header_vals[$i] ) );
+					if ( array_key_exists( $i, $header_vals ) ) {
+						$column = strtolower( trim( $header_vals[$i] ) );
+					} else {
+						$column = '';
+						wfDebug( "External Data: number of values per line appears to be inconsistent in CSV file." );
+					}
 				} else {
 					// start with an index of 1 instead of 0
 					$column = $i + 1;
