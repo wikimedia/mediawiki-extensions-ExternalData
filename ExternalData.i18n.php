@@ -986,10 +986,20 @@ $messages['yi'] = array(
 
 /** Simplified Chinese (中文（简体）‎)
  * @author Hydra
+ * @author Yfdyh000
  */
 $messages['zh-hans'] = array(
 	'getdata' => '获取数据',
+	'externaldata-desc' => '允许从外部URL，数据库及其他来源接收结构化数据',
+	'externaldata-web-invalid-format' => '无效的格式：“$1”',
+	'externaldata-ldap-unable-to-connect' => '无法连接到 $1',
+	'externaldata-xml-error' => 'XML错误：$1 在行 $2',
+	'externaldata-db-incomplete-information' => '错误：此服务器ID信息不完整。',
+	'externaldata-db-unknown-type' => '错误：未知的数据库类型。',
+	'externaldata-db-could-not-connect' => '错误：无法连接到数据库。',
+	'externaldata-db-no-return-values' => '错误：没有返回指定的值。',
 	'externaldata-db-invalid-query' => '无效的查询。',
+	'externaldata-db-option-unsupported' => '错误：参数 $1 和 $2 在此 MediaWiki 此版本中不支持。',
 );
 
 /** Traditional Chinese (中文（繁體）‎)
