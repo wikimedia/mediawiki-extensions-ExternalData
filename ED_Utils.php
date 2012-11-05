@@ -58,14 +58,15 @@ class EDUtils {
 		$arg = preg_replace ( "/\s\s+/", ' ', $arg ); // whitespace
 
 		// Split text on commas, except for commas found within quotes
-		// and parentheses. Code based on:
+		// and parentheses. Regular expression based on:
 		// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
+		// ...with modifications by Nick Lindridge, ionCube Ltd.
 		$pattern = <<<END
         /
-	[,]++
-	(?=(?:(?:[^"]*+"){2})*+[^"]*+$)
-	(?=(?:(?:[^']*+'){2})*+[^']*+$)
-	(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
+	[,]
+	(?=(?:(?:[^"]*"){2})*[^"]*$)
+	(?=(?:(?:[^']*'){2})*[^']*$)
+	(?=(?:[[:alnum:]]+=))
 	/x
 END;
 		// " - fix for color highlighting in vi :)
