@@ -336,13 +336,21 @@ END;
 		return array_filter( $nodes, array( 'EDUtils', 'isNodeNotEmpty' ) );
 	}
 
-	static function getXPathData( $xml, $mappings ) {
+	static function getXPathData( $xml, $mappings, $url ) {
 		global $edgXMLValues;
 
 		$edgXMLValues = array();
 		$sxml = new SimpleXMLElement( $xml );
 
 		foreach ( $mappings as $local_var => $xpath ) {
+			// First, register any necessary namespaces, to avoid
+			// "Undefined namespace prefix" errors.
+			$matches = array();
+			preg_match( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
+			$sxml->registerXPathNamespace( $matches[1], $url );
+
+			// Now, get all the matching values, and remove any
+			// empty results.
 			$nodes = self::filterEmptyNodes( $sxml->xpath( $xpath ) );
 			if ( !$nodes ) {
 				continue;
@@ -636,7 +644,7 @@ END;
 		if ( $format == 'xml' ) {
 			return self::getXMLData( $url_contents );
 		} elseif ( $format == 'xml with xpath' ) {
-			return self::getXPathData( $url_contents, $mappings );
+			return self::getXPathData( $url_contents, $mappings, $url );
 		} elseif ( $format == 'csv' ) {
 			return self::getCSVData( $url_contents, false );
 		} elseif ( $format == 'csv with header' ) {
