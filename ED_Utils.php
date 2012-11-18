@@ -346,8 +346,10 @@ END;
 			// First, register any necessary namespaces, to avoid
 			// "Undefined namespace prefix" errors.
 			$matches = array();
-			preg_match( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
-			$sxml->registerXPathNamespace( $matches[1], $url );
+			preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
+			foreach ( $matches[1] as $namespace ) {
+				$sxml->registerXPathNamespace( $namespace, $url );
+			}
 
 			// Now, get all the matching values, and remove any
 			// empty results.
