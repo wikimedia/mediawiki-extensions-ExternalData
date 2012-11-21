@@ -343,8 +343,8 @@ END;
 		$sxml = new SimpleXMLElement( $xml );
 
 		foreach ( $mappings as $local_var => $xpath ) {
-			// First, register any necessary namespaces, to avoid
-			// "Undefined namespace prefix" errors.
+			// First, register any necessary XML namespaces, to
+			// avoid "Undefined namespace prefix" errors.
 			$matches = array();
 			preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
 			foreach ( $matches[1] as $namespace ) {
@@ -511,30 +511,27 @@ END;
 	}
 
 	/**
-	 * Recursive function for use by getJSONData()
+	 * JSON-parsing function for use by getJSONData().
+	 *
+	 * @author MWJames
 	 */
 	static function parseTree( $tree, &$retrieved_values ) {
-		foreach ( $tree as $key => $val ) {
-			// TODO - this logic could probably be a little nicer.
-			if ( is_array( $val ) && count( $val ) > 1 ) {
-				self::parseTree( $val, $retrieved_values );
-			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( $val[0] ) ) {
-				self::parseTree( $val[0], $retrieved_values );
+		$treeIterator = new RecursiveIteratorIterator(
+			new RecursiveArrayIterator( $tree ),
+			RecursiveIteratorIterator::SELF_FIRST );
+		foreach( $treeIterator as $key => $value ) { 
+			// Using strip_tags to avoid HTML and PHP tags
+			// distorts the wiki mark-up.
+			$key = strtolower( $key ); 
+			if ( !is_array( $value ) ) {
+				$retrieved_values[$key] = strip_tags($value); 
 			} else {
-				// If it's an array with just one element,
-				// treat it like a regular value.
-				// (Why is the null check necessary?)
-				if ( $val != null && is_array( $val ) ) {
-					$val = $val[0];
-				}
-				$key = strtolower( $key );
-				if ( array_key_exists( $key, $retrieved_values ) ) {
-					$retrieved_values[$key][] = $val;
-				} else {
-					$retrieved_values[$key] = array( $val );
-				}
-			}
-		}
+				$iterator = iterator_to_array(
+					new RecursiveIteratorIterator( new RecursiveArrayIterator( $value ) ),
+					true );
+				$retrieved_values[$key] = strip_tags( implode( ',', $iterator ) );
+			} 
+		} 
 	}
 
 	static function getJSONData( $json ) {
