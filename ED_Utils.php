@@ -519,19 +519,19 @@ END;
 		$treeIterator = new RecursiveIteratorIterator(
 			new RecursiveArrayIterator( $tree ),
 			RecursiveIteratorIterator::SELF_FIRST );
-		foreach( $treeIterator as $key => $value ) { 
+		foreach( $treeIterator as $key => $value ) {
 			// Using strip_tags to avoid HTML and PHP tags
 			// distorts the wiki mark-up.
-			$key = strtolower( $key ); 
+			$key = strtolower( $key );
 			if ( !is_array( $value ) ) {
-				$retrieved_values[$key] = strip_tags($value); 
+				$retrieved_values[$key] = strip_tags($value);
 			} else {
 				$iterator = iterator_to_array(
 					new RecursiveIteratorIterator( new RecursiveArrayIterator( $value ) ),
 					true );
 				$retrieved_values[$key] = strip_tags( implode( ',', $iterator ) );
-			} 
-		} 
+			}
+		}
 	}
 
 	static function getJSONData( $json ) {
