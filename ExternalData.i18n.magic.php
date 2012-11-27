@@ -114,7 +114,7 @@ $magicWords['mr'] = array(
 	'for_external_table' => array( 0, 'बाह्य_सारणी_करिता', 'for_external_table' ),
 );
 
-/** Nedersaksisch (Nedersaksisch) */
+/** Nedersaksies (Nedersaksies) */
 $magicWords['nds-nl'] = array(
 	'get_external_data' => array( 0, 'externe_gegevens_ophaolen', 'externe_gegevens_ophalen' ),
 	'get_web_data' => array( 0, 'webgegevens_ophaolen' ),
