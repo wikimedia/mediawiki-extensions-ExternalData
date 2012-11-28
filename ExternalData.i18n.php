@@ -299,12 +299,14 @@ $messages['fa'] = array(
 /** Finnish (suomi)
  * @author Centerlink
  * @author Crt
+ * @author Nedergard
  * @author Silvonen
  * @author Str4nd
  */
 $messages['fi'] = array(
 	'getdata' => 'Hae data',
 	'externaldata-desc' => 'Mahdollistaa muotoillun datan noutamisen ulkoisista verkko-osoitteista, tietokannoista ja muista lähteistä.',
+	'externaldata-web-invalid-format' => 'Virheellinen muoto: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Ei voitu yhdistää palvelimelle $1',
 	'externaldata-xml-error' => 'XML-virhe: $1 rivillä $2',
 	'externaldata-db-incomplete-information' => 'Virhe: Vaillinaiset tiedot tälle palvelintunnukselle.',
@@ -313,6 +315,7 @@ $messages['fi'] = array(
 	'externaldata-db-could-not-connect' => 'Virhe: Ei yhteyttä tietokantaan.',
 	'externaldata-db-no-return-values' => 'Virhe: Paluuarvoja ei ole annettu.',
 	'externaldata-db-invalid-query' => 'Virheellinen kysely.',
+	'externaldata-db-option-unsupported' => 'Virhe: parametrit $1 ja $2 eivät ole käytössä tässä MediaWiki-versiossa.',
 );
 
 /** French (français)
