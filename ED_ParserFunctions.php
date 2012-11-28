@@ -389,7 +389,13 @@ class EDParserFunctions {
 			foreach ( $params as $key => $value ) {
 				$refParams[$key] = &$params[$key];
 			}
-			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
+			// If #set_internal is set to call SMW's #subobject, the
+			// method will be called doSetInternalAsAlias() instead.
+			if ( method_exists( 'SIOHandler', 'doSetInternalAsAlias' ) ) {
+				call_user_func_array( array( 'SIOHandler', 'doSetInternalAsAlias' ), $refParams );
+			} else{
+				call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
+			}
 		}
 		return null;
 	}
