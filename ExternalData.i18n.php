@@ -952,15 +952,22 @@ $messages['tr'] = array(
 );
 
 /** Ukrainian (українська)
+ * @author Ата
  * @author Тест
  */
 $messages['uk'] = array(
 	'getdata' => 'Отримати дані',
+	'externaldata-desc' => 'Дозволяє отримувати структуровані дані із зовнішніх URL-адрес, баз даних та інших джерел',
+	'externaldata-web-invalid-format' => 'Неприпустимий формат: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Не вдається підключитися до $1',
 	'externaldata-xml-error' => 'Помилка XML: $1 в рядку $2',
+	'externaldata-db-incomplete-information' => 'Помилка: Неповна інформація для цього ID сервера.',
 	'externaldata-db-could-not-get-url' => 'Не вдалося отримати URL після $1 {{PLURAL:$1|спроби|спроб}}.',
 	'externaldata-db-unknown-type' => 'Помилка: Невідомий тип бази даних.',
 	'externaldata-db-could-not-connect' => 'Помилка: не вдалося підключитися до бази даних.',
+	'externaldata-db-no-return-values' => 'Помилка: Не вказано зворотних значень.',
+	'externaldata-db-invalid-query' => 'Неприпустимий запит.',
+	'externaldata-db-option-unsupported' => 'Помилка: Параметри $1 і $2 не підтримуються цією версією MediaWiki.',
 );
 
 /** Veps (vepsän kel’)
