@@ -527,7 +527,7 @@ $messages['ja'] = array(
 	'externaldata-db-unknown-type' => 'エラー: データベースの種類が不明です。',
 	'externaldata-db-could-not-connect' => 'エラー: データベースに接続できませんでした。',
 	'externaldata-db-no-return-values' => 'エラー: 戻り値が指定されていません。',
-	'externaldata-db-invalid-query' => '正しくないクエリーです。',
+	'externaldata-db-invalid-query' => '無効なクエリです。',
 	'externaldata-db-option-unsupported' => 'エラー: パラメーター $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
 );
 
