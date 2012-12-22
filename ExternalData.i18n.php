@@ -474,12 +474,14 @@ $messages['ia'] = array(
 
 /** Indonesian (Bahasa Indonesia)
  * @author Bennylin
+ * @author Farras
  * @author IvanLanin
  * @author Iwan Novirion
  */
 $messages['id'] = array(
 	'getdata' => 'Ambil data',
 	'externaldata-desc' => 'Memungkinkan untuk mengambil data terstruktur dari URL eksternal, database dan sumber lainnya',
+	'externaldata-web-invalid-format' => 'Format salah: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Tidak dapat terhubung ke $1',
 	'externaldata-xml-error' => 'Galat XML: $1 pada baris $2',
 	'externaldata-db-incomplete-information' => 'Galat: Informasi tak lengkap untuk ID server ini.',
@@ -529,6 +531,13 @@ $messages['ja'] = array(
 	'externaldata-db-no-return-values' => 'エラー: 戻り値が指定されていません。',
 	'externaldata-db-invalid-query' => '無効なクエリです。',
 	'externaldata-db-option-unsupported' => 'エラー: パラメーター $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
+);
+
+/** Georgian (ქართული)
+ * @author David1010
+ */
+$messages['ka'] = array(
+	'externaldata-db-invalid-query' => 'არასწორი მოთხონა.',
 );
 
 /** Khmer (ភាសាខ្មែរ)
