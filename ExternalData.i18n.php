@@ -199,6 +199,13 @@ $messages['cs'] = array(
 	'externaldata-db-option-unsupported' => 'Chyba: Parametry $1 a $2 nejsou v této verzi MediaWiki podporovány.',
 );
 
+/** Danish (dansk)
+ * @author Tjernobyl
+ */
+$messages['da'] = array(
+	'externaldata-db-invalid-query' => 'Ugyldig forespørgsel.',
+);
+
 /** German (Deutsch)
  * @author Imre
  * @author Kghbln
