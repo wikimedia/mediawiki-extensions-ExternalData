@@ -289,6 +289,16 @@ $messages['es'] = array(
 	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  no son compatibles con esta versión de MediaWiki.',
 );
 
+/** Estonian (eesti)
+ * @author Pikne
+ */
+$messages['et'] = array(
+	'externaldata-db-unknown-type' => 'Tõrge: Tundmatu andmebaasi tüüp.',
+	'externaldata-db-could-not-connect' => 'Tõrge: Andmebaasiga ei saa ühendust.',
+	'externaldata-db-invalid-query' => 'Vigane päring.',
+	'externaldata-db-option-unsupported' => 'Tõrge: See MediaWiki versioon ei toeta parameetreid $1 ja $2.',
+);
+
 /** Basque (euskara)
  * @author Kobazulo
  */
