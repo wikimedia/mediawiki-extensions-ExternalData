@@ -456,11 +456,13 @@ $messages['hsb'] = array(
 );
 
 /** Hungarian (magyar)
+ * @author Dj
  * @author Glanthor Reviol
  */
 $messages['hu'] = array(
 	'getdata' => 'Adatok lekérése',
 	'externaldata-desc' => 'Strukturált adatok lekérése külső URL-ekről, adatbázisokból vagy más forrásokból',
+	'externaldata-web-invalid-format' => 'Érvénytelen formátum: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Sikertelen csatlakozás a következőhöz: $1',
 	'externaldata-xml-error' => '$1 XML hiba, $2. sor',
 	'externaldata-db-incomplete-information' => 'Hiba: hiányos információ a szerver azonosítóhoz.',
