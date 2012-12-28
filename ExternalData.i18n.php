@@ -471,6 +471,7 @@ $messages['hu'] = array(
 	'externaldata-db-could-not-connect' => 'Hiba: nem sikerült csatlakozni az adatbázishoz.',
 	'externaldata-db-no-return-values' => 'Hiba: nem lettek megadva visszatérési értékek.',
 	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
+	'externaldata-db-option-unsupported' => 'Hiba: $1 és $2 paraméterek nem támogatottan a MediaWiki ezen verziójában.',
 );
 
 /** Interlingua (interlingua)
@@ -600,6 +601,13 @@ $messages['lb'] = array(
 	'externaldata-db-no-return-values' => 'Feeler: Kee Retour-Wäert festgeluecht.',
 	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
 	'externaldata-db-option-unsupported' => "Feeler: D'Parametere(n) $1 a(n) $2 gi vun dëser Versioun vu MediaWiki net ënnerstëtzt.",
+);
+
+/** Latvian (latviešu)
+ * @author Papuass
+ */
+$messages['lv'] = array(
+	'getdata' => 'Saņemt datus',
 );
 
 /** Macedonian (македонски)
