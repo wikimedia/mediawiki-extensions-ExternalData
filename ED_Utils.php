@@ -518,14 +518,14 @@ END;
 			// TODO - this logic could probably be a little nicer.
 			if ( is_array( $val ) && count( $val ) > 1 ) {
 				self::parseTree( $val, $retrieved_values );
-			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( $val[0] ) ) {
-				self::parseTree( $val[0], $retrieved_values );
+			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( current( $val ) ) ) {
+				self::parseTree( current( $val ), $retrieved_values );
 			} else {
 				// If it's an array with just one element,
 				// treat it like a regular value.
 				// (Why is the null check necessary?)
 				if ( $val != null && is_array( $val ) ) {
-					$val = $val[0];
+					$val = current( $val );
 				}
 				$key = strtolower( $key );
 				if ( array_key_exists( $key, $retrieved_values ) ) {
