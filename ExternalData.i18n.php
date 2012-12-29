@@ -251,10 +251,13 @@ $messages['dsb'] = array(
 /** Greek (Ελληνικά)
  * @author Dead3y3
  * @author Omnipaedista
+ * @author ZaDiak
  */
 $messages['el'] = array(
 	'getdata' => 'Πάρε δεδομένα',
 	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki', # Fuzzy
+	'externaldata-web-invalid-format' => 'Μη έγκυρη μορφή: "$1"',
+	'externaldata-ldap-unable-to-connect' => 'Δεν είναι δυνατή η σύνδεση με $1',
 	'externaldata-xml-error' => 'Σφάλμα XML : $1 στη γραμμή $2',
 	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
 );
