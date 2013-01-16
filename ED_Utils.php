@@ -158,6 +158,14 @@ END;
 		$db_flags = self::getArrayValue( $edgDBFlags, $dbID );
 		$db_tableprefix = self::getArrayValue( $edgDBTablePrefix, $dbID );
 
+		// MongoDB has entirely different handling from the rest.
+		if ( $db_type == "mongodb" ) {
+			if ( $db_name == '' ) {
+				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+			}
+			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options );
+		}
+
 		// Validate parameters
 		if ( $db_type == '' ) {
 			echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
@@ -264,6 +272,98 @@ END;
 		foreach ( $rows as $row ) {
 			foreach ( $columns as $column ) {
 				$values[$column][] = $row[$column];
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Handles #get_db_data for the non-relational database system
+	 * MongoDB.
+	 */
+	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options ) {
+		$m = new MongoClient();
+		$db = $m->selectDB( $db_name );
+		if ( $db_username != '' ) {
+			$db->authenticate( $db_username, $db_password );
+		}
+
+		// MongoDB doesn't seem to have a way to check whether either
+		// a database or a collection exists, so instead we'll use
+		// getCollectionNames() to check for both.
+		$collectionNames = $db->getCollectionNames();
+		if ( count( $collectionNames ) == 0 ) {
+			echo ( wfMsgExt( "externaldata-db-could-not-connect", array( 'parse', 'escape' ) ) );
+			return;
+		}
+
+		if ( !in_array( $from, $collectionNames ) ) {
+			echo ( wfMsgExt( "externaldata-unknown-collection", array( 'parse', 'escape' ) ) );
+			return;
+		}
+
+		$collection = new MongoCollection( $db, $from );
+
+		// Turn the SQL of the "where=" parameter into the appropriate
+		// array for MongoDB.
+		$whereArray = array();
+		if ( $where != '' ) {
+			// Hopefully all-caps and all-lowercase are the only
+			// two variants that people will use - otherwise,
+			// preg_replace() should be used.
+			$where = str_replace( ' and ', ' AND ', $where );
+			$where = str_replace( ' like ', ' LIKE ', $where );
+			$whereElements = explode( ' AND ', $where );
+			foreach ( $whereElements as $whereElement ) {
+				if ( strpos( $whereElement, '>=' ) ) {
+					list( $fieldName, $value ) = explode( '>=', $whereElement );
+					$whereArray[trim( $fieldName )] = array( '$gte' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '>' ) ) {
+					list( $fieldName, $value ) = explode( '>', $whereElement );
+					$whereArray[trim( $fieldName )] = array( '$gt' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '<=' ) ) {
+					list( $fieldName, $value ) = explode( '<=', $whereElement );
+					$whereArray[trim( $fieldName )] = array( '$lte' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '<' ) ) {
+					list( $fieldName, $value ) = explode( '<', $whereElement );
+					$whereArray[trim( $fieldName )] = array( '$lt' => trim( $value ) );
+				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
+					list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
+					$value = trim( $value );
+					$regex = new MongoRegex( "/$value/i" );
+					$whereArray[trim( $fieldName )] = $regex;
+				} else {
+					list( $fieldName, $value ) = explode( '=', $whereElement );
+					$whereArray[trim( $fieldName )] = trim( $value );
+				}
+			}
+		}
+
+		// Do the same for the "order=" parameter.
+		$sortArray = array();
+		if ( $options['ORDER BY'] != '' ) {
+			$sortElements = explode( ',', $options['ORDER BY'] );
+			foreach ( $sortElements as $sortElement ) {
+				$parts = explode( ' ', $sortElement );
+				$fieldName = $parts[0];
+				$orderingNum = 1;
+				if ( count( $parts ) > 1 ) {
+					if ( strtolower( $parts[1] ) == 'desc' ) {
+						$orderingNum = -1;
+					}
+				}
+				$sortArray[$fieldName] = $orderingNum;
+			}
+		}
+
+		// Get the data!
+		$resultsCursor = $collection->find( $whereArray, $columns )->sort( $sortArray )->limit( $options['LIMIT'] );
+
+		$values = array();
+		foreach ( $resultsCursor as $doc ) {
+			foreach ( $columns as $column ) {
+				$values[$column][] = $doc[$column];
 			}
 		}
 
