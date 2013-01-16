@@ -299,7 +299,7 @@ END;
 		}
 
 		if ( !in_array( $from, $collectionNames ) ) {
-			echo wfMessage( "externaldata-unknown-collection" );
+			echo wfMessage( "externaldata-db-unknown-collection" );
 			return;
 		}
 
