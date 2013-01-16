@@ -118,7 +118,7 @@ END;
 			# should check the result of the bind here
 			return $ds;
 		} else {
-			echo ( wfMsgExt( "externaldata-ldap-unable-to-connect", array( 'parse', 'escape' ), $server ) );
+			echo wfMessage( "externaldata-ldap-unable-to-connect", $server );
 		}
 	}
 
@@ -161,24 +161,24 @@ END;
 		// MongoDB has entirely different handling from the rest.
 		if ( $db_type == "mongodb" ) {
 			if ( $db_name == '' ) {
-				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+				echo wfMessage( "externaldata-db-incomplete-information" );
 			}
 			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options );
 		}
 
 		// Validate parameters
 		if ( $db_type == '' ) {
-			echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-incomplete-information" );
 			return;
 		} elseif ( $db_type == 'sqlite' ) {
 			if ( $db_directory == '' || $db_name == '' ) {
-				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+				echo wfMessage( "externaldata-db-incomplete-information" );
 				return;
 			}
 		} else {
 			if ( $db_server == '' || $db_name == '' ||
 				$db_username == '' || $db_password == '' ) {
-				echo ( wfMsgExt( "externaldata-db-incomplete-information", array( 'parse', 'escape' ) ) );
+				echo wfMessage( "externaldata-db-incomplete-information" );
 				return;
 			}
 		}
@@ -224,7 +224,7 @@ END;
 			);
 		} else {
 			if ( ( $db_flags !== DBO_DEFAULT ) || ( $db_tableprefix !== '' ) ) {
-				print wfMsg( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' );
+				print wfMessage( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' );
 				return;
 			}
 
@@ -246,17 +246,17 @@ END;
 		}
 
 		if ( $db == null ) {
-			echo ( wfMsgExt( "externaldata-db-unknown-type", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-unknown-type" );
 			return;
 		}
 
 		if ( ! $db->isOpen() ) {
-			echo ( wfMsgExt( "externaldata-db-could-not-connect", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-could-not-connect" );
 			return;
 		}
 
 		if ( count( $columns ) == 0 ) {
-			echo ( wfMsgExt( "externaldata-db-no-return-values", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-no-return-values" );
 			return;
 		}
 
@@ -294,12 +294,12 @@ END;
 		// getCollectionNames() to check for both.
 		$collectionNames = $db->getCollectionNames();
 		if ( count( $collectionNames ) == 0 ) {
-			echo ( wfMsgExt( "externaldata-db-could-not-connect", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-could-not-connect" );
 			return;
 		}
 
 		if ( !in_array( $from, $collectionNames ) ) {
-			echo ( wfMsgExt( "externaldata-unknown-collection", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-unknown-collection" );
 			return;
 		}
 
@@ -377,7 +377,7 @@ END;
 		$table = ' ' . $table;
 		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
 		if ( !$result ) {
-			echo ( wfMsgExt( "externaldata-db-invalid-query", array( 'parse', 'escape' ) ) );
+			echo wfMessage( "externaldata-db-invalid-query" );
 			return false;
 		} else {
 			$rows = array();
@@ -419,9 +419,9 @@ END;
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
 		xml_set_character_data_handler( $xml_parser, array( 'EDUtils', 'getContent' ) );
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
-			echo ( wfMsgExt( 'externaldata-xml-error',
+			echo wfMessage( 'externaldata-xml-error',
 			xml_error_string( xml_get_error_code( $xml_parser ) ),
-			xml_get_current_line_number( $xml_parser ), array( 'parse', 'escape' ) ) );
+			xml_get_current_line_number( $xml_parser ) );
 		}
 		xml_parser_free( $xml_parser );
 		return $edgXMLValues;
@@ -691,7 +691,7 @@ END;
 			if ( $page === false ) {
 				sleep( 1 );
 				if ( $try_count >= self::$http_number_of_tries ) {
-					echo ( wfMsgExt( 'externaldata-db-could-not-get-url', array( 'parsemag', 'escape' ), self::$http_number_of_tries ) );
+					echo wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries );
 					return '';
 				}
 				$try_count++;
@@ -756,7 +756,7 @@ END;
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $url_contents );
 		} else {
-			return wfMsg( 'externaldata-web-invalid-format', $format );
+			return wfMessage( 'externaldata-web-invalid-format', $format );
 		}
 		return array();
 	}
