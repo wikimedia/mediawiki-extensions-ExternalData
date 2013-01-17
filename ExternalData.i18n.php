@@ -536,6 +536,7 @@ $messages['it'] = array(
 	'externaldata-db-could-not-get-url' => "Impossibile raggiungere l'URL dopo $1 {{PLURAL:$1|tentativo|tentativi}}.",
 	'externaldata-db-unknown-type' => 'Errore: tipo di database sconosciuto.',
 	'externaldata-db-could-not-connect' => 'Errore: impossibile connettersi al database.',
+	'externaldata-db-unknown-collection' => 'Errore: collezione MongoDB sconosciuta.',
 	'externaldata-db-no-return-values' => 'Errore: non è stato specificato alcun valore di ritorno.',
 	'externaldata-db-invalid-query' => 'Query non valida.',
 	'externaldata-db-option-unsupported' => 'Errore: i parametri $1 e $2 non sono supportati in questa versione di MediaWiki.',
