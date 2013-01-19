@@ -779,6 +779,7 @@ $messages['pms'] = array(
 	'externaldata-db-could-not-get-url' => "A peul pa oten-e l'URL d'apress ëd $1 {{PLURAL:$1|preuva|preuve}}.",
 	'externaldata-db-unknown-type' => 'Eror: Sòrt ëd database pa conossùa',
 	'externaldata-db-could-not-connect' => 'Eror: a peul pa coleghesse al database.',
+	'externaldata-db-unknown-collection' => 'Eoro: Colession MongoDB pa conossùa.',
 	'externaldata-db-no-return-values' => "Eror: Pa gnun valor d'artorn spessifià.",
 	'externaldata-db-invalid-query' => 'Ciamà pa bon-a.',
 	'externaldata-db-option-unsupported' => 'Eror: Ij paràmetr $1 e $2 a son pa mantnù an costa version ëd MediaWiki.',
