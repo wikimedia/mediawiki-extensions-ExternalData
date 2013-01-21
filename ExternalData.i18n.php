@@ -1059,6 +1059,7 @@ $messages['zh-hans'] = array(
 	'externaldata-db-incomplete-information' => '错误：此服务器ID信息不完整。',
 	'externaldata-db-unknown-type' => '错误：未知的数据库类型。',
 	'externaldata-db-could-not-connect' => '错误：无法连接到数据库。',
+	'externaldata-db-unknown-collection' => '错误：未知的MongoDB集合。',
 	'externaldata-db-no-return-values' => '错误：没有返回指定的值。',
 	'externaldata-db-invalid-query' => '无效的查询。',
 	'externaldata-db-option-unsupported' => '错误：参数 $1 和 $2 在此 MediaWiki 此版本中不支持。',
