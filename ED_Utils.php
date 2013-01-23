@@ -161,25 +161,22 @@ END;
 		// MongoDB has entirely different handling from the rest.
 		if ( $db_type == "mongodb" ) {
 			if ( $db_name == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" )->text();
+				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options );
 		}
 
 		// Validate parameters
 		if ( $db_type == '' ) {
-			echo wfMessage( "externaldata-db-incomplete-information" )->text();
-			return;
+			return wfMessage( "externaldata-db-incomplete-information" )->text();
 		} elseif ( $db_type == 'sqlite' ) {
 			if ( $db_directory == '' || $db_name == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" )->text();
-				return;
+				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		} else {
 			if ( $db_server == '' || $db_name == '' ||
 				$db_username == '' || $db_password == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" )->text();
-				return;
+				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		}
 
@@ -246,22 +243,25 @@ END;
 		}
 
 		if ( $db == null ) {
-			echo wfMessage( "externaldata-db-unknown-type" )->text();
-			return;
+			return wfMessage( "externaldata-db-unknown-type" )->text();
 		}
 
 		if ( ! $db->isOpen() ) {
-			echo wfMessage( "externaldata-db-could-not-connect" )->text();
-			return;
+			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
 
 		if ( count( $columns ) == 0 ) {
-			echo wfMessage( "externaldata-db-no-return-values" )->text();
-			return;
+			return wfMessage( "externaldata-db-no-return-values" )->text();
 		}
 
 		$rows = self::searchDB( $db, $from, $columns, $where, $options );
 		$db->close();
+
+		if ( !is_array( $rows ) ) {
+			// It's an error message.
+			return $rows;
+		}
+
 		if ( $db_type == 'sqlite' ) {
 			// Reset global variable back to its original value.
 			global $wgSQLiteDataDir;
@@ -294,13 +294,11 @@ END;
 		// getCollectionNames() to check for both.
 		$collectionNames = $db->getCollectionNames();
 		if ( count( $collectionNames ) == 0 ) {
-			echo wfMessage( "externaldata-db-could-not-connect" )->text();
-			return;
+			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
 
 		if ( !in_array( $from, $collectionNames ) ) {
-			echo wfMessage( "externaldata-db-unknown-collection" )->text();
-			return;
+			return wfMessage( "externaldata-db-unknown-collection" )->text();
 		}
 
 		$collection = new MongoCollection( $db, $from );
@@ -377,34 +375,32 @@ END;
 		$table = ' ' . $table;
 		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
 		if ( !$result ) {
-			echo wfMessage( "externaldata-db-invalid-query" )->text();
-			return false;
-		} else {
-			$rows = array();
-			while ( $row = $db->fetchRow( $result ) ) {
-				// Create a new row object, that uses the
-				// passed-in column names as keys, so that
-				// there's always an exact match between
-				// what's in the query and what's in the
-				// return value (so that "a.b", for instance,
-				// doesn't get chopped off to just "b").
-				$new_row = array();
-				foreach ( $vars as $i => $column_name ) {
-					// Convert the encoding to UTF-8
-					// if necessary - based on code at
-					// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
-					$dbField = $row[$i];
-					if ( !function_exists( 'mb_detect_encoding' ) ||
-						mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
-							$new_row[$column_name] = $dbField;
-						} else {
-							$new_row[$column_name] = utf8_encode( $dbField );
-						}
-				}
-				$rows[] = $new_row;
-			}
-			return $rows;
+			return wfMessage( "externaldata-db-invalid-query" )->text();
 		}
+
+		$rows = array();
+		while ( $row = $db->fetchRow( $result ) ) {
+			// Create a new row object, that uses the passed-in
+			// column names as keys, so that there's always an
+			// exact match between what's in the query and what's
+			// in the return value (so that "a.b", for instance,
+			// doesn't get chopped off to just "b").
+			$new_row = array();
+			foreach ( $vars as $i => $column_name ) {
+				// Convert the encoding to UTF-8
+				// if necessary - based on code at
+				// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
+				$dbField = $row[$i];
+				if ( !function_exists( 'mb_detect_encoding' ) ||
+					mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
+					$new_row[$column_name] = $dbField;
+				} else {
+					$new_row[$column_name] = utf8_encode( $dbField );
+				}
+			}
+			$rows[] = $new_row;
+		}
+		return $rows;
 	}
 
 	static function getXMLData( $xml ) {
@@ -419,7 +415,7 @@ END;
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
 		xml_set_character_data_handler( $xml_parser, array( 'EDUtils', 'getContent' ) );
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
-			echo wfMessage( 'externaldata-xml-error',
+			return wfMessage( 'externaldata-xml-error',
 			xml_error_string( xml_get_error_code( $xml_parser ) ),
 			xml_get_current_line_number( $xml_parser ) )->text();
 		}

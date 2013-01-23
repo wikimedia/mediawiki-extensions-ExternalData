@@ -251,9 +251,11 @@ class EDParserFunctions {
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
 		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $options );
-		// handle error cases
-		if ( is_null( $external_values ) )
-			return;
+
+		// Handle error cases.
+		if ( !is_array( $external_values ) ) {
+			return $external_values;
+		}
 
 		// Build $edgValues
 		foreach ( $mappings as $local_var => $external_var ) {
