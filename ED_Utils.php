@@ -118,7 +118,7 @@ END;
 			# should check the result of the bind here
 			return $ds;
 		} else {
-			echo wfMessage( "externaldata-ldap-unable-to-connect", $server );
+			echo wfMessage( "externaldata-ldap-unable-to-connect", $server )->text();
 		}
 	}
 
@@ -161,24 +161,24 @@ END;
 		// MongoDB has entirely different handling from the rest.
 		if ( $db_type == "mongodb" ) {
 			if ( $db_name == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" );
+				echo wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options );
 		}
 
 		// Validate parameters
 		if ( $db_type == '' ) {
-			echo wfMessage( "externaldata-db-incomplete-information" );
+			echo wfMessage( "externaldata-db-incomplete-information" )->text();
 			return;
 		} elseif ( $db_type == 'sqlite' ) {
 			if ( $db_directory == '' || $db_name == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" );
+				echo wfMessage( "externaldata-db-incomplete-information" )->text();
 				return;
 			}
 		} else {
 			if ( $db_server == '' || $db_name == '' ||
 				$db_username == '' || $db_password == '' ) {
-				echo wfMessage( "externaldata-db-incomplete-information" );
+				echo wfMessage( "externaldata-db-incomplete-information" )->text();
 				return;
 			}
 		}
@@ -224,7 +224,7 @@ END;
 			);
 		} else {
 			if ( ( $db_flags !== DBO_DEFAULT ) || ( $db_tableprefix !== '' ) ) {
-				print wfMessage( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' );
+				print wfMessage( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' )->text();
 				return;
 			}
 
@@ -246,17 +246,17 @@ END;
 		}
 
 		if ( $db == null ) {
-			echo wfMessage( "externaldata-db-unknown-type" );
+			echo wfMessage( "externaldata-db-unknown-type" )->text();
 			return;
 		}
 
 		if ( ! $db->isOpen() ) {
-			echo wfMessage( "externaldata-db-could-not-connect" );
+			echo wfMessage( "externaldata-db-could-not-connect" )->text();
 			return;
 		}
 
 		if ( count( $columns ) == 0 ) {
-			echo wfMessage( "externaldata-db-no-return-values" );
+			echo wfMessage( "externaldata-db-no-return-values" )->text();
 			return;
 		}
 
@@ -294,12 +294,12 @@ END;
 		// getCollectionNames() to check for both.
 		$collectionNames = $db->getCollectionNames();
 		if ( count( $collectionNames ) == 0 ) {
-			echo wfMessage( "externaldata-db-could-not-connect" );
+			echo wfMessage( "externaldata-db-could-not-connect" )->text();
 			return;
 		}
 
 		if ( !in_array( $from, $collectionNames ) ) {
-			echo wfMessage( "externaldata-db-unknown-collection" );
+			echo wfMessage( "externaldata-db-unknown-collection" )->text();
 			return;
 		}
 
@@ -377,7 +377,7 @@ END;
 		$table = ' ' . $table;
 		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
 		if ( !$result ) {
-			echo wfMessage( "externaldata-db-invalid-query" );
+			echo wfMessage( "externaldata-db-invalid-query" )->text();
 			return false;
 		} else {
 			$rows = array();
@@ -421,7 +421,7 @@ END;
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
 			echo wfMessage( 'externaldata-xml-error',
 			xml_error_string( xml_get_error_code( $xml_parser ) ),
-			xml_get_current_line_number( $xml_parser ) );
+			xml_get_current_line_number( $xml_parser ) )->text();
 		}
 		xml_parser_free( $xml_parser );
 		return $edgXMLValues;
@@ -691,7 +691,7 @@ END;
 			if ( $page === false ) {
 				sleep( 1 );
 				if ( $try_count >= self::$http_number_of_tries ) {
-					echo wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries );
+					echo wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries )->text();
 					return '';
 				}
 				$try_count++;
@@ -756,7 +756,7 @@ END;
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $url_contents );
 		} else {
-			return wfMessage( 'externaldata-web-invalid-format', $format );
+			return wfMessage( 'externaldata-web-invalid-format', $format )->text();
 		}
 		return array();
 	}
