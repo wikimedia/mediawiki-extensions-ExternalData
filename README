@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 1.4.3
+        Version 1.5
         Yaron Koren, Michael Dale and David Macdonald
 
 This is free software licensed under the GNU General Public License. Please
@@ -24,7 +24,7 @@ JSON or XML, and assigns it to local variables or arrays.
 * #get_external_data is an earlier version of #get_web_data that does
 the same thing; it is deprecated.
 
-* #get_db_data retrieves data from a database, using a SQL query, and
+* #get_db_data retrieves data from a database, using SQL-like syntax, and
 assigns it to local variables or arrays.
 
 * #get_ldap_data retrieves data from an LDAP server and assigns it to
