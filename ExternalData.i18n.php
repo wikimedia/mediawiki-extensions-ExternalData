@@ -109,6 +109,7 @@ $messages['ast'] = array(
 	'externaldata-db-could-not-get-url' => 'Nun se pudo recuperar la URL dempués de $1 {{PLURAL:$1|intentu|intentos}}.',
 	'externaldata-db-unknown-type' => 'Error: Triba de base de datos desconocida.',
 	'externaldata-db-could-not-connect' => 'Error: Nun se pudo coneutar cola base de datos.',
+	'externaldata-db-unknown-collection' => 'Fallu: Coleición MongoDB desconocida.',
 	'externaldata-db-no-return-values' => "Error: Nun s'especificaron valores de retornu.",
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
 	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  nun tienen sofitu nesta versión de MediaWiki.',
