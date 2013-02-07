@@ -461,6 +461,7 @@ $messages['hsb'] = array(
 	'externaldata-db-could-not-get-url' => 'Njebě móžno URL po $1 {{PLURAL:$1|pospyće|pospytomaj|pospytach|pospytach}} dóstać.',
 	'externaldata-db-unknown-type' => "'''Zmylk: Njeznaty typ datoweje banki.'''",
 	'externaldata-db-could-not-connect' => "'''Zmylk: Njemóžno z datowej banku zwjazać.'''",
+	'externaldata-db-unknown-collection' => 'Zmylk: Njeznata MongoDB-zběrka.',
 	'externaldata-db-no-return-values' => "'''Zmylk: Žane hódnoty wróćenja podate.'''",
 	'externaldata-db-invalid-query' => 'Njepłaćiwe naprašowanje.',
 	'externaldata-db-option-unsupported' => 'Zmylk: Parametraj $1 a $2 so w tutej wersiji MediaWiki njepodpěrujetej.',
