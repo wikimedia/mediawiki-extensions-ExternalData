@@ -656,6 +656,7 @@ $messages['ms'] = array(
 	'externaldata-db-could-not-get-url' => 'URL tidak dapat diterima selepas $1 cubaan.',
 	'externaldata-db-unknown-type' => 'Ralat: Jenis pangkalan data tidak dikenali.',
 	'externaldata-db-could-not-connect' => 'Ralat: Tidak dapat bersambung dengan pangkalan data.',
+	'externaldata-db-unknown-collection' => 'Ralat: Koleksi MongoDB tidak dikenali.',
 	'externaldata-db-no-return-values' => 'Ralat: Tiada nilai pulangan yang ditentukan.',
 	'externaldata-db-invalid-query' => 'Pertanyaan tidak sah.',
 	'externaldata-db-option-unsupported' => 'Ralat: Parameter $1 dan $2 tidak disokong dalam versi Mediawiki ini.',
