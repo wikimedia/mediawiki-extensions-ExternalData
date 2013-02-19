@@ -1010,6 +1010,7 @@ $messages['tr'] = array(
 );
 
 /** Ukrainian (українська)
+ * @author Base
  * @author Ата
  * @author Тест
  */
@@ -1023,6 +1024,7 @@ $messages['uk'] = array(
 	'externaldata-db-could-not-get-url' => 'Не вдалося отримати URL після $1 {{PLURAL:$1|спроби|спроб}}.',
 	'externaldata-db-unknown-type' => 'Помилка: Невідомий тип бази даних.',
 	'externaldata-db-could-not-connect' => 'Помилка: не вдалося підключитися до бази даних.',
+	'externaldata-db-unknown-collection' => 'Помилка: Невідома колекція MongoDB.',
 	'externaldata-db-no-return-values' => 'Помилка: Не вказано зворотних значень.',
 	'externaldata-db-invalid-query' => 'Неприпустимий запит.',
 	'externaldata-db-option-unsupported' => 'Помилка: Параметри $1 і $2 не підтримуються цією версією MediaWiki.',
