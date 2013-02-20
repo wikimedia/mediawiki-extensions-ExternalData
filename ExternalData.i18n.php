@@ -1065,6 +1065,7 @@ $messages['zh-hans'] = array(
 	'externaldata-ldap-unable-to-connect' => '无法连接到 $1',
 	'externaldata-xml-error' => 'XML错误：$1 在行 $2',
 	'externaldata-db-incomplete-information' => '错误：此服务器ID信息不完整。',
+	'externaldata-db-could-not-get-url' => '$1次尝试后仍无法获取URL。',
 	'externaldata-db-unknown-type' => '错误：未知的数据库类型。',
 	'externaldata-db-could-not-connect' => '错误：无法连接到数据库。',
 	'externaldata-db-unknown-collection' => '错误：未知的MongoDB集合。',
