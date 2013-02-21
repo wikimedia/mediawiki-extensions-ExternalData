@@ -193,7 +193,7 @@ END;
 		// DatabaseBase::newFromType() was added in MW 1.17 - it was
 		// then replaced by DatabaseBase::factory() in MW 1.18
 		$factoryFunction = array( 'DatabaseBase', 'factory' );
-		$newFromTypeFunction = array( 'DatabaseBase', 'newFromType' );
+		//$newFromTypeFunction = array( 'DatabaseBase', 'newFromType' );
 		if ( is_callable( $factoryFunction ) ) {
 			$db = DatabaseBase::factory( $db_type,
 				array(
@@ -208,7 +208,7 @@ END;
 					'tablePrefix' => $db_tableprefix,
 				)
 			);
-		} elseif ( is_callable( $newFromTypeFunction ) ) {
+		} else { //if ( is_callable( $newFromTypeFunction ) ) {
 			$db = DatabaseBase::newFromType( $db_type,
 				array(
 					'host' => $db_server,
@@ -219,27 +219,6 @@ END;
 					'tableprefix' => $db_tableprefix,
 				)
 			);
-		} else {
-			if ( ( $db_flags !== DBO_DEFAULT ) || ( $db_tableprefix !== '' ) ) {
-				print wfMessage( "externaldata-db-option-unsupported", '<code>$edgDBFlags</code>', '<code>$edgDBTablePrefix</code>' )->text();
-				return;
-			}
-
-			if ( $db_type == "mysql" ) {
-				$db = new Database( $db_server, $db_username, $db_password, $db_name );
-			} elseif ( $db_type == "postgres" ) {
-				$db = new DatabasePostgres( $db_server, $db_username, $db_password, $db_name );
-			} elseif ( $db_type == "mssql" ) {
-				$db = new DatabaseMssql( $db_server, $db_username, $db_password, $db_name );
-			} elseif ( $db_type == "oracle" ) {
-				$db = new DatabaseOracle( $db_server, $db_username, $db_password, $db_name );
-			} elseif ( $db_type == "sqlite" ) {
-				$db = new DatabaseSqlite( $db_server, $db_username, $db_password, $db_name );
-			} elseif ( $db_type == "db2" ) {
-				$db = new DatabaseIbm_db2( $db_server, $db_username, $db_password, $db_name );
-			} else {
-				$db = null;
-			}
 		}
 
 		if ( $db == null ) {
@@ -659,13 +638,7 @@ END;
 
 		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
 			if ( $edgAllowSSL ) {
-				// The hardcoded 'CURLOPT_SSL_VERIFYPEER' is
-				// needed for MW < 1.17
-				if ( !defined( 'CURLOPT_SSL_VERIFYPEER' ) ) {
-					print 'CURLOPT_SSL_VERIFYPEER is not defined on this system - you must set $edgAllowSSL = "false".';
-					return;
-				}
-				return Http::get( $url, 'default', array( CURLOPT_SSL_VERIFYPEER => false, 'sslVerifyCert' => false, 'followRedirects' => false ) );
+				return Http::get( $url, 'default', array( 'sslVerifyCert' => false, 'followRedirects' => false ) );
 			} else {
 				return Http::get( $url );
 			}

@@ -24,7 +24,6 @@ $messages['en'] = array(
 	'externaldata-db-unknown-collection' => 'Error: Unknown MongoDB collection.',
 	'externaldata-db-no-return-values' => 'Error: No return values specified.',
 	'externaldata-db-invalid-query' => 'Invalid query.',
-	'externaldata-db-option-unsupported' => 'Error: Parameters $1 and $2 are not supported in this version of MediaWiki.',
 );
 
 /** Message documentation (Message documentation)
@@ -84,7 +83,6 @@ $messages['ar'] = array(
 	'externaldata-db-could-not-connect' => 'خطأ: تعذّر الاتصال بقاعدة البيانات.',
 	'externaldata-db-no-return-values' => 'خطأ: لم تحدد أي قيم عائدة.',
 	'externaldata-db-invalid-query' => 'استعلام غير صالح.',
-	'externaldata-db-option-unsupported' => 'خطأ: معلمات $1 و $2 غير معتمدة في هذا الإصدار من ميدياويكي.',
 );
 
 /** Egyptian Spoken Arabic (مصرى)
@@ -112,7 +110,6 @@ $messages['ast'] = array(
 	'externaldata-db-unknown-collection' => 'Fallu: Coleición MongoDB desconocida.',
 	'externaldata-db-no-return-values' => "Error: Nun s'especificaron valores de retornu.",
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
-	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  nun tienen sofitu nesta versión de MediaWiki.',
 );
 
 /** Belarusian (Taraškievica orthography) (беларуская (тарашкевіца)‎)
@@ -133,7 +130,6 @@ $messages['be-tarask'] = array(
 	'externaldata-db-unknown-collection' => 'Памылка: невядомая калецыя MongoDB.',
 	'externaldata-db-no-return-values' => 'Памылка: Не пазначаныя выніковыя значэньні.',
 	'externaldata-db-invalid-query' => 'Няслушны запыт.',
-	'externaldata-db-option-unsupported' => 'Памылка: Парамэтры $1 і $2 не падтрымліваюцца ў гэтай вэрсіі MediaWiki.',
 );
 
 /** Breton (brezhoneg)
@@ -153,7 +149,6 @@ $messages['br'] = array(
 	'externaldata-db-could-not-connect' => "Fazi : Ne c'haller ket kevreañ ouzh an diaz roadennoù.",
 	'externaldata-db-no-return-values' => "Fazi : N'eus bet resisaet talvoud distro ebet.",
 	'externaldata-db-invalid-query' => 'Reked direizh.',
-	'externaldata-db-option-unsupported' => "Fazi : N'eo ket skoret an arventennoù $1 ha $2 er stumm-mañ eus MediaWiki.",
 );
 
 /** Bosnian (bosanski)
@@ -170,7 +165,6 @@ $messages['bs'] = array(
 	'externaldata-db-could-not-connect' => 'Greška: Ne može se spojiti na bazu podataka.',
 	'externaldata-db-no-return-values' => 'Greška: Nije navedena povratna vrijednost.',
 	'externaldata-db-invalid-query' => 'Nevaljan upit.',
-	'externaldata-db-option-unsupported' => 'Greška: Parametri $1 i $2 nisu podržani u ovoj verziji MediaWiki.',
 );
 
 /** Catalan (català)
@@ -200,7 +194,6 @@ $messages['cs'] = array(
 	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
 	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.', # Fuzzy
 	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
-	'externaldata-db-option-unsupported' => 'Chyba: Parametry $1 a $2 nejsou v této verzi MediaWiki podporovány.',
 );
 
 /** Danish (dansk)
@@ -232,7 +225,6 @@ $messages['de'] = array(
 	'externaldata-db-unknown-collection' => 'Fehler: Unbekannte MongoDB-Sammlung',
 	'externaldata-db-no-return-values' => 'Fehler: Es wurden keine Rückgabewerte festgelegt.',
 	'externaldata-db-invalid-query' => 'Ungültige Abfrage.',
-	'externaldata-db-option-unsupported' => 'Fehler: Die Parameter $1 und $2 werden von dieser MediaWiki-Version nicht unterstützt.',
 );
 
 /** Lower Sorbian (dolnoserbski)
@@ -250,7 +242,6 @@ $messages['dsb'] = array(
 	'externaldata-db-could-not-connect' => "'''Zmólka: Njemóžno z datoweju banku zwězaś.'''",
 	'externaldata-db-no-return-values' => "'''Zmólka: Žedne gódnoty slědkdaśa pódane.'''",
 	'externaldata-db-invalid-query' => 'Njepłaśiwe napšašowanje.',
-	'externaldata-db-option-unsupported' => 'Zmólka: Parametra $1 a $2 njepódpěratej se w toś tej wersiji MediaWiki.',
 );
 
 /** Greek (Ελληνικά)
@@ -295,7 +286,6 @@ $messages['es'] = array(
 	'externaldata-db-could-not-connect' => 'Error: No se pudo lograr conexión con la base de datos.',
 	'externaldata-db-no-return-values' => 'Error: No se ha especificado valores de retorno.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
-	'externaldata-db-option-unsupported' => 'Error: Los parámetros  $1  y  $2  no son compatibles con esta versión de MediaWiki.',
 );
 
 /** Estonian (eesti)
@@ -305,7 +295,6 @@ $messages['et'] = array(
 	'externaldata-db-unknown-type' => 'Tõrge: Tundmatu andmebaasi tüüp.',
 	'externaldata-db-could-not-connect' => 'Tõrge: Andmebaasiga ei saa ühendust.',
 	'externaldata-db-invalid-query' => 'Vigane päring.',
-	'externaldata-db-option-unsupported' => 'Tõrge: See MediaWiki versioon ei toeta parameetreid $1 ja $2.',
 );
 
 /** Basque (euskara)
@@ -341,7 +330,6 @@ $messages['fi'] = array(
 	'externaldata-db-could-not-connect' => 'Virhe: Ei yhteyttä tietokantaan.',
 	'externaldata-db-no-return-values' => 'Virhe: Paluuarvoja ei ole annettu.',
 	'externaldata-db-invalid-query' => 'Virheellinen kysely.',
-	'externaldata-db-option-unsupported' => 'Virhe: parametrit $1 ja $2 eivät ole käytössä tässä MediaWiki-versiossa.',
 );
 
 /** French (français)
@@ -364,7 +352,6 @@ $messages['fr'] = array(
 	'externaldata-db-unknown-collection' => 'Erreur: Collection MongoDB inconnue.',
 	'externaldata-db-no-return-values' => "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	'externaldata-db-invalid-query' => 'Requête invalide.',
-	'externaldata-db-option-unsupported' => 'Erreur: Les paramètres $1 et $2 ne sont pas supportés dans cette version de MediaWiki.',
 );
 
 /** Franco-Provençal (arpetan)
@@ -398,7 +385,6 @@ $messages['gl'] = array(
 	'externaldata-db-unknown-collection' => 'Erro: Colección MongoDB descoñecida.',
 	'externaldata-db-no-return-values' => 'Erro: Non se especificou ningún valor de retorno.',
 	'externaldata-db-invalid-query' => 'A consulta non é válida.',
-	'externaldata-db-option-unsupported' => 'Erro: Os parámetros $1 e $2 non están soportados nesta versión de MediaWiki.',
 );
 
 /** Swiss German (Alemannisch)
@@ -417,7 +403,6 @@ $messages['gsw'] = array(
 	'externaldata-db-could-not-connect' => 'Fähler: Cha kei Verbindig härstelle zue dr Datebank.',
 	'externaldata-db-no-return-values' => 'Fähler: Kei Ruckgabewärt spezifiziert.',
 	'externaldata-db-invalid-query' => 'Nit giltigi Umfrog.',
-	'externaldata-db-option-unsupported' => 'Fääler: D  Parameter $1 un $2 werde vo derre MediaWiki-Version nit unterstützt.',
 );
 
 /** Gujarati (ગુજરાતી)
@@ -445,7 +430,6 @@ $messages['he'] = array(
 	'externaldata-db-could-not-connect' => 'שגיאה: לא ניתן להתחבר אל מסד הנתונים.',
 	'externaldata-db-no-return-values' => 'שגיאה: לא הוגדרו ערכים להחזרה.',
 	'externaldata-db-invalid-query' => 'שאילתה בלתי תקינה.',
-	'externaldata-db-option-unsupported' => 'שגיאה: הפרמטרים $1 ו{{GRAMMAR:תחילית|$2}} אינם נתמכים בגרסה הזאת של מדיה־ויקי',
 );
 
 /** Upper Sorbian (hornjoserbsce)
@@ -464,7 +448,6 @@ $messages['hsb'] = array(
 	'externaldata-db-unknown-collection' => 'Zmylk: Njeznata MongoDB-zběrka.',
 	'externaldata-db-no-return-values' => "'''Zmylk: Žane hódnoty wróćenja podate.'''",
 	'externaldata-db-invalid-query' => 'Njepłaćiwe naprašowanje.',
-	'externaldata-db-option-unsupported' => 'Zmylk: Parametraj $1 a $2 so w tutej wersiji MediaWiki njepodpěrujetej.',
 );
 
 /** Hungarian (magyar)
@@ -483,7 +466,6 @@ $messages['hu'] = array(
 	'externaldata-db-could-not-connect' => 'Hiba: nem sikerült csatlakozni az adatbázishoz.',
 	'externaldata-db-no-return-values' => 'Hiba: nem lettek megadva visszatérési értékek.',
 	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
-	'externaldata-db-option-unsupported' => 'Hiba: $1 és $2 paraméterek nem támogatottan a MediaWiki ezen verziójában.',
 );
 
 /** Interlingua (interlingua)
@@ -501,7 +483,6 @@ $messages['ia'] = array(
 	'externaldata-db-could-not-connect' => 'Error: Impossibile connecter se al base de datos.',
 	'externaldata-db-no-return-values' => 'Error: Nulle valor de retorno specificate.',
 	'externaldata-db-invalid-query' => 'Consulta invalide.',
-	'externaldata-db-option-unsupported' => 'Error: Le parametros $1 e $2 non es supportate in iste version de MediaWiki.',
 );
 
 /** Indonesian (Bahasa Indonesia)
@@ -522,7 +503,6 @@ $messages['id'] = array(
 	'externaldata-db-could-not-connect' => 'Galat: Tidak dapat terhubung ke basis data.',
 	'externaldata-db-no-return-values' => 'Galat: Nilai pengembalian tidak dispesifikasi.',
 	'externaldata-db-invalid-query' => 'Kueri tidak sah.',
-	'externaldata-db-option-unsupported' => 'Galat: Parameter $1 dan $2 tidak didukung oleh versi MediaWiki ini.',
 );
 
 /** Italian (italiano)
@@ -542,7 +522,6 @@ $messages['it'] = array(
 	'externaldata-db-unknown-collection' => 'Errore: collezione MongoDB sconosciuta.',
 	'externaldata-db-no-return-values' => 'Errore: non è stato specificato alcun valore di ritorno.',
 	'externaldata-db-invalid-query' => 'Query non valida.',
-	'externaldata-db-option-unsupported' => 'Errore: i parametri $1 e $2 non sono supportati in questa versione di MediaWiki.',
 );
 
 /** Japanese (日本語)
@@ -564,7 +543,6 @@ $messages['ja'] = array(
 	'externaldata-db-unknown-collection' => 'エラー: 不明な MongoDB コレクションです。',
 	'externaldata-db-no-return-values' => 'エラー: 戻り値が指定されていません。',
 	'externaldata-db-invalid-query' => '無効なクエリです。',
-	'externaldata-db-option-unsupported' => 'エラー: パラメーター $1 と $2 は MediaWiki のこのバージョンではサポートされていません。',
 );
 
 /** Georgian (ქართული)
@@ -596,7 +574,6 @@ $messages['ksh'] = array(
 	'externaldata-db-could-not-connect' => '<span style="text-transform: uppercase">Fähler:</span> Kunnt kein Verbendung noh dä Datebangk krijje.',
 	'externaldata-db-no-return-values' => '<span style="text-transform: uppercase">Fähler:</span> Kein Wääte för Zerökzeävve aanjejovve.',
 	'externaldata-db-invalid-query' => 'Onjöltesch Frooch aan de Datebangk.',
-	'externaldata-db-option-unsupported' => 'Fähler: Heh di Version vum MediaWiki vershteiht de Parrmeetere $1 un $2 nit.',
 );
 
 /** Luxembourgish (Lëtzebuergesch)
@@ -614,7 +591,6 @@ $messages['lb'] = array(
 	'externaldata-db-could-not-connect' => "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
 	'externaldata-db-no-return-values' => 'Feeler: Kee Retour-Wäert festgeluecht.',
 	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
-	'externaldata-db-option-unsupported' => "Feeler: D'Parametere(n) $1 a(n) $2 gi vun dëser Versioun vu MediaWiki net ënnerstëtzt.",
 );
 
 /** Latvian (latviešu)
@@ -640,7 +616,6 @@ $messages['mk'] = array(
 	'externaldata-db-unknown-collection' => 'Грешка: Непозната збирка од MongoDB.',
 	'externaldata-db-no-return-values' => 'Грешка: Нема назначено повратни вредности.',
 	'externaldata-db-invalid-query' => 'Грешно барање.',
-	'externaldata-db-option-unsupported' => 'Грешка: Параметрите $1 и $2 не се поддржани во оваа верзија на МедијаВики.',
 );
 
 /** Malay (Bahasa Melayu)
@@ -659,7 +634,6 @@ $messages['ms'] = array(
 	'externaldata-db-unknown-collection' => 'Ralat: Koleksi MongoDB tidak dikenali.',
 	'externaldata-db-no-return-values' => 'Ralat: Tiada nilai pulangan yang ditentukan.',
 	'externaldata-db-invalid-query' => 'Pertanyaan tidak sah.',
-	'externaldata-db-option-unsupported' => 'Ralat: Parameter $1 dan $2 tidak disokong dalam versi Mediawiki ini.',
 );
 
 /** Erzya (эрзянь)
@@ -685,7 +659,6 @@ $messages['nb'] = array(
 	'externaldata-db-could-not-connect' => 'Feil: Kunne ikke koble til database.',
 	'externaldata-db-no-return-values' => 'Feil: Ingen returverdi spesifisert.',
 	'externaldata-db-invalid-query' => 'Ugyldig spørring.',
-	'externaldata-db-option-unsupported' => 'Feil: Parameterne $1 og $2 er ikke støttet i denne versjonen av MediaWiki.',
 );
 
 /** Dutch (Nederlands)
@@ -705,7 +678,6 @@ $messages['nl'] = array(
 	'externaldata-db-unknown-collection' => 'Fout: onbekende MongoDB-collectie.',
 	'externaldata-db-no-return-values' => 'Fout: er zijn geen return-waarden ingesteld.',
 	'externaldata-db-invalid-query' => 'Ongeldige zoekopdracht.',
-	'externaldata-db-option-unsupported' => 'Fout: de parameters $1 en $2 worden niet ondersteund in deze versie van MediaWiki.',
 );
 
 /** Norwegian Nynorsk (norsk (nynorsk)‎)
@@ -768,7 +740,6 @@ $messages['pl'] = array(
 	'externaldata-db-could-not-connect' => 'Błąd: Nie można połączyć się z bazą danych.',
 	'externaldata-db-no-return-values' => 'Błąd – nie określono zwracanej wartości.',
 	'externaldata-db-invalid-query' => 'Nieprawidłowe zapytanie.',
-	'externaldata-db-option-unsupported' => 'Błąd – parametry $1 i $2 nie są obsługiwane w tej wersji MediaWiki.',
 );
 
 /** Piedmontese (Piemontèis)
@@ -788,7 +759,6 @@ $messages['pms'] = array(
 	'externaldata-db-unknown-collection' => 'Eoro: Colession MongoDB pa conossùa.',
 	'externaldata-db-no-return-values' => "Eror: Pa gnun valor d'artorn spessifià.",
 	'externaldata-db-invalid-query' => 'Ciamà pa bon-a.',
-	'externaldata-db-option-unsupported' => 'Eror: Ij paràmetr $1 e $2 a son pa mantnù an costa version ëd MediaWiki.',
 );
 
 /** Portuguese (português)
@@ -808,7 +778,6 @@ $messages['pt'] = array(
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível estabelecer ligação à base de dados.',
 	'externaldata-db-no-return-values' => 'Erro: Não foram especificados valores de retorno.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
-	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
 /** Brazilian Portuguese (português do Brasil)
@@ -828,7 +797,6 @@ $messages['pt-br'] = array(
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível conectar-se a base de dados.',
 	'externaldata-db-no-return-values' => 'Erro: Nenhum valor de retorno especificado.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
-	'externaldata-db-option-unsupported' => 'Erro: Os parâmetros $1 e $2 não são suportados nesta versão do MediaWiki.',
 );
 
 /** Romanian (română)
@@ -871,7 +839,6 @@ $messages['ru'] = array(
 	'externaldata-db-could-not-connect' => 'ОШИБКА. Не удаётся подключиться к базе данных.',
 	'externaldata-db-no-return-values' => 'ОШИБКА. Не указаны возвращаемые значение.',
 	'externaldata-db-invalid-query' => 'Ошибочный запрос.',
-	'externaldata-db-option-unsupported' => 'Ошибка. Параметры $1 и $2 не поддерживаются в этой версии MediaWiki.',
 );
 
 /** Sinhala (සිංහල)
@@ -955,7 +922,6 @@ $messages['sv'] = array(
 	'externaldata-db-could-not-connect' => 'Fel: Kunde inte koppla till databasen.',
 	'externaldata-db-no-return-values' => 'Fel: Inga returvärden specificerade.',
 	'externaldata-db-invalid-query' => 'Ogiltig fråga.',
-	'externaldata-db-option-unsupported' => 'Fel: Parametrarna $1 och $2 stöds inte i denna version av MediaWiki.',
 );
 
 /** Tamil (தமிழ்)
@@ -994,7 +960,6 @@ $messages['tl'] = array(
 	'externaldata-db-could-not-connect' => 'Kamalian: Hindi makakunekta sa talaan ng dato.',
 	'externaldata-db-no-return-values' => 'Kamalian: Walang tinukoy na halagang pabalik.',
 	'externaldata-db-invalid-query' => 'Hindi tanggap na katanungan.',
-	'externaldata-db-option-unsupported' => 'Kamalian: Ang mga parametrong $1 at $2 ay hindi tinatangkilik sa bersyong ito MediaWiki.',
 );
 
 /** Turkish (Türkçe)
@@ -1027,7 +992,6 @@ $messages['uk'] = array(
 	'externaldata-db-unknown-collection' => 'Помилка: Невідома колекція MongoDB.',
 	'externaldata-db-no-return-values' => 'Помилка: Не вказано зворотних значень.',
 	'externaldata-db-invalid-query' => 'Неприпустимий запит.',
-	'externaldata-db-option-unsupported' => 'Помилка: Параметри $1 і $2 не підтримуються цією версією MediaWiki.',
 );
 
 /** Veps (vepsän kel’)
@@ -1071,7 +1035,6 @@ $messages['zh-hans'] = array(
 	'externaldata-db-unknown-collection' => '错误：未知的MongoDB集合。',
 	'externaldata-db-no-return-values' => '错误：没有返回指定的值。',
 	'externaldata-db-invalid-query' => '无效的查询。',
-	'externaldata-db-option-unsupported' => '错误：参数 $1 和 $2 在此 MediaWiki 此版本中不支持。',
 );
 
 /** Traditional Chinese (中文（繁體）‎)
