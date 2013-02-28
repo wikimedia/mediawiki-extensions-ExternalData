@@ -29,9 +29,10 @@ $messages['en'] = array(
 /** Message documentation (Message documentation)
  * @author Dead3y3
  * @author Fryed-peach
+ * @author Shirayuki
  */
 $messages['qqq'] = array(
-	'externaldata-desc' => '{{desc}}',
+	'externaldata-desc' => '{{desc|name=External Data|url=http://www.mediawiki.org/wiki/Extension:External_Data}}',
 	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
 	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server",
 	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file",
