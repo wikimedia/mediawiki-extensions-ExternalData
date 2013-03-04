@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 1.5
+        Version 1.6
         Yaron Koren, Michael Dale and David Macdonald
 
 This is free software licensed under the GNU General Public License. Please
@@ -15,7 +15,8 @@ and XML formats), database tables, and LDAP servers.
 
 The extension defines eight parser functions: #get_web_data,
 #get_external_data, #get_db_data, #get_ldap_data, #external_value,
-#for_external_table, #store_external_table and #clear_external_data.
+#for_external_table, #display_external_table, #store_external_table and
+#clear_external_data.
 They are described below:
 
 * #get_web_data retrieves the data from a URL that holds CSV, GFF,
@@ -35,6 +36,9 @@ first value if it's an array.
 
 * #for_external_table applies processing onto multiple rows retrieved by
 any of the #get_*_data functions
+
+* #display_external_table is like #for_external_table, but passes the
+values of each row to a template, which handles the formatting.
 
 * #store_external_table mimics a call to the Semantic Internal Objects
 extension's #set_internal parser function onto each row retrieved by

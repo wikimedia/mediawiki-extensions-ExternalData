@@ -333,6 +333,54 @@ class EDParserFunctions {
 		}
 		return $text;
 	}
+
+
+ 	/**
+	 * Render the #display_external_table parser function
+	 *
+	 * @author Dan Bolser
+	 */
+	static function doDisplayExternalTable( &$parser ) {
+		global $edgValues;
+		
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		
+		if ( array_key_exists( 'template', $args ) ) {
+			$template = $args['template'];
+		} else {
+			return "No template specified";
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			// parse the 'data' arg into mappings
+			$mappings = EDUtils::paramToArray( $args['data'], false, true );
+		} else {
+			// or just use keys from edgValues
+			foreach ( $edgValues as $local_variable => $values ) {
+				$mappings[$local_variable] = $local_variable;
+			}
+		}
+
+		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
+		foreach ( $mappings as $template_param => $local_variable ) {
+			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
+		}
+
+		$text = "";
+		for ( $i = 0; $i < $num_loops; $i++ ) {
+			$text .= '{{' . $template;
+			foreach ( $mappings as $template_param => $local_variable ) {
+				$value = self::getIndexedValue( $local_variable, $i );
+				$text .= "|$template_param=$value";
+			}
+			$text .= "}}\n";
+		}
+
+		// This actually 'calls' the template that we built above
+		return array( $text, 'noparse' => false );
+	}
  
 	/**
 	 * Render the #store_external_table parser function
