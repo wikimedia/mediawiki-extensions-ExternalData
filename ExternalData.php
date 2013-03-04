@@ -53,6 +53,7 @@ function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
 	$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
 	$parser->setFunctionHook( 'for_external_table', array( 'EDParserFunctions', 'doForExternalTable' ) );
+	$parser->setFunctionHook( 'display_external_table', array( 'EDParserFunctions', 'doDisplayExternalTable' ) );
 	$parser->setFunctionHook( 'store_external_table', array( 'EDParserFunctions', 'doStoreExternalTable' ) );
 	$parser->setFunctionHook( 'clear_external_data', array( 'EDParserFunctions', 'doClearExternalData' ) );
 

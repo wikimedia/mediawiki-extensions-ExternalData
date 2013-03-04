@@ -13,6 +13,7 @@ $magicWords['en'] = array(
 	'get_db_data' => array( 0, 'get_db_data' ),
 	'external_value' => array( 0, 'external_value' ),
 	'for_external_table' => array( 0, 'for_external_table' ),
+	'display_external_table' => array( 0, 'display_external_table' ),
 	'store_external_table' => array( 0, 'store_external_table' ),
 	'clear_external_data' => array( 0, 'clear_external_data' ),
 );
