@@ -181,7 +181,7 @@ class EDParserFunctions {
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
 	}
 
- 	/**
+	/**
 	 * Render the #get_ldap_data parser function
 	 */
 	static function doGetLDAPData( &$parser ) {
@@ -334,19 +334,18 @@ class EDParserFunctions {
 		return $text;
 	}
 
-
- 	/**
+	/**
 	 * Render the #display_external_table parser function
 	 *
 	 * @author Dan Bolser
 	 */
 	static function doDisplayExternalTable( &$parser ) {
 		global $edgValues;
-		
+
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		
+
 		if ( array_key_exists( 'template', $args ) ) {
 			$template = $args['template'];
 		} else {
@@ -381,12 +380,56 @@ class EDParserFunctions {
 		// This actually 'calls' the template that we built above
 		return array( $text, 'noparse' => false );
 	}
- 
+
+	/**
+	 * Based on Semantic Internal Objects'
+	 * SIOSubobjectHandler::doSetInternal().
+	 */
+	public static function callSubobject( $parser, $params ) {
+		// This is a hack, since SMW's SMWSubobject::render() call is
+		// not meant to be called outside of SMW. However, this seemed
+		// like the better solution than copying over all of that
+		// method's code. Ideally, a true public function can be
+		// added to SMW, that handles a subobject creation, that this
+		// code can then call.
+
+		$subobjectArgs = array( &$parser );
+		// Blank first argument, so that subobject ID will be
+		// an automatically-generated random number.
+		$subobjectArgs[1] = '';
+		// "main" property, pointing back to the page.
+		$mainPageName = $parser->getTitle()->getText();
+		$mainPageNamespace = $parser->getTitle()->getNsText();
+		if ( $mainPageNamespace != '' ) {
+			$mainPageName = $mainPageNamespace . ':' . $mainPageName;
+		}
+		$subobjectArgs[2] = $params[0] . '=' . $mainPageName;
+
+		foreach ( $params as $i => $value ) {
+			if ( $i == 0 ) continue;
+			$subobjectArgs[] = $value;
+		}
+		if ( class_exists( 'SMW\SubobjectParser' ) ) {
+			// SMW 1.9+
+			call_user_func_array( array( 'SMW\SubobjectParser', 'render' ), $subobjectArgs );
+		} elseif ( class_exists( 'SMW\Subobject' ) ) {
+			// SMW 1.9
+			call_user_func_array( array( 'SMW\Subobject', 'render' ), $subobjectArgs );
+		} else {
+			// SMW 1.8
+			call_user_func_array( array( 'SMWSubobject', 'render' ), $subobjectArgs );
+		}
+		return;
+	}
+
 	/**
 	 * Render the #store_external_table parser function
 	 */
 	static function doStoreExternalTable( &$parser ) {
-		if ( ! class_exists( 'SIOHandler' ) ) {
+		global $smwgDefaultStore;
+
+		if ( $smwgDefaultStore != 'SMWSQLStore3' && ! class_exists( 'SIOHandler' ) ) {
+			// If SQLStore3 is not installed, we need SIO.
 			return 'Semantic Internal Objects is not installed';
 		}
 		global $edgValues;
@@ -428,6 +471,15 @@ class EDParserFunctions {
 					$params[$j] = str_replace( '{{{' . $variable . '}}}', $value, $params[$j] );
 				}
 			}
+
+			// If SQLStore3 is being used, we can call #subobject -
+			// that's what #set_internal would call anyway, so
+			// we're cutting out the middleman.
+			if ( $smwgDefaultStore == 'SMWSQLStore3' ) {
+				self::callSubobject( $parser, $params );
+				continue;
+			}
+
 			// Add $parser to the beginning of the $params array,
 			// and pass the whole thing in as arguments to
 			// doSetInternal, to mimic a call to #set_internal.
@@ -439,13 +491,7 @@ class EDParserFunctions {
 			foreach ( $params as $key => $value ) {
 				$refParams[$key] = &$params[$key];
 			}
-			// If #set_internal is set to call SMW's #subobject, the
-			// method will be called doSetInternalAsAlias() instead.
-			if ( method_exists( 'SIOHandler', 'doSetInternalAsAlias' ) ) {
-				call_user_func_array( array( 'SIOHandler', 'doSetInternalAsAlias' ), $refParams );
-			} else{
-				call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
-			}
+			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
 		}
 		return null;
 	}
