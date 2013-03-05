@@ -409,8 +409,11 @@ class EDParserFunctions {
 			if ( $i == 0 ) continue;
 			$subobjectArgs[] = $value;
 		}
-		if ( class_exists( 'SMW\SubobjectParser' ) ) {
+		if ( class_exists( 'SMW\SubobjectHandler' ) ) {
 			// SMW 1.9+
+			call_user_func_array( array( 'SMW\SubobjectHandler', 'render' ), $subobjectArgs );
+		} elseif ( class_exists( 'SMW\SubobjectParser' ) ) {
+			// SMW 1.9
 			call_user_func_array( array( 'SMW\SubobjectParser', 'render' ), $subobjectArgs );
 		} elseif ( class_exists( 'SMW\Subobject' ) ) {
 			// SMW 1.9
