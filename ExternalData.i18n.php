@@ -590,6 +590,7 @@ $messages['lb'] = array(
 	'externaldata-db-could-not-get-url' => "D'URL konnt no {{PLURAL:$1|enger Kéier|$1 Versich}} net opgemaach ginn.",
 	'externaldata-db-unknown-type' => 'Feeler: Onbekannten Datebank-Typ.',
 	'externaldata-db-could-not-connect' => "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
+	'externaldata-db-unknown-collection' => 'Feeler:Onbekannte MongoDB Sammlung.',
 	'externaldata-db-no-return-values' => 'Feeler: Kee Retour-Wäert festgeluecht.',
 	'externaldata-db-invalid-query' => 'Net valabel Ufro.',
 );
