@@ -139,13 +139,6 @@ class EDParserFunctions {
 			return "URL is not allowed";
 		}
 
-		if ( array_key_exists( 'data', $args ) ) {
-			// parse the 'data' arg into mappings
-			$mappings = EDUtils::paramToArray( $args['data'], false, true );
-		} else {
-			return;
-		}
-
 		if ( array_key_exists( 'format', $args ) ) {
 			$format = strtolower( $args['format'] );
 		} else {
@@ -158,6 +151,17 @@ class EDParserFunctions {
 				// though the format is still XML.
 				$format = 'xml with xpath';
 			}
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			// parse the 'data' arg into mappings
+			if ( $format == 'xml with xpath' ) {
+				$mappings = EDUtils::paramToArray( $args['data'], false, false );
+			} else {
+				$mappings = EDUtils::paramToArray( $args['data'], false, true );
+			}
+		} else {
+			return;
 		}
 
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
