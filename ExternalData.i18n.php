@@ -36,6 +36,8 @@ $messages['qqq'] = array(
 	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
 	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server",
 	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file",
+	'externaldata-db-could-not-get-url' => 'Parameters:
+* $1 - number of HTTP tries',
 	'externaldata-db-unknown-collection' => 'The error message if #get_db_data can\'t find the specified "collection" when connecting to MongoDB.',
 );
 
