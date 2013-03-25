@@ -32,13 +32,23 @@ $messages['en'] = array(
  * @author Shirayuki
  */
 $messages['qqq'] = array(
+	'getdata' => '{{doc-special|GetData}}',
 	'externaldata-desc' => '{{desc|name=External Data|url=http://www.mediawiki.org/wiki/Extension:External_Data}}',
 	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
 	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server",
 	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file",
+	'externaldata-db-incomplete-information' => 'Used as error message.
+
+Database server, database type, database directory, database username and/or database password are not specified.',
 	'externaldata-db-could-not-get-url' => 'Parameters:
 * $1 - number of HTTP tries',
+	'externaldata-db-unknown-type' => 'Used as error message when creating a database object with using the specified information.',
+	'externaldata-db-could-not-connect' => 'Used as error message when connecting to the database system.',
 	'externaldata-db-unknown-collection' => 'The error message if #get_db_data can\'t find the specified "collection" when connecting to MongoDB.',
+	'externaldata-db-no-return-values' => 'Used as error message, if the number of the specified columns is zero.
+
+If successful, the system returns values in the specified columns.',
+	'externaldata-db-invalid-query' => 'Used as error message, if the query has been failed.',
 );
 
 /** Afrikaans (Afrikaans)

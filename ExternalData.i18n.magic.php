@@ -98,6 +98,7 @@ $magicWords['mk'] = array(
 	'get_db_data' => array( 0, 'преземи_db_податоци' ),
 	'external_value' => array( 0, 'надворешна_вредност' ),
 	'for_external_table' => array( 0, 'за_надворешна_табела' ),
+	'display_external_table' => array( 0, 'прикажи_надворешна_табела' ),
 	'store_external_table' => array( 0, 'складирај_надворешна_табела' ),
 	'clear_external_data' => array( 0, 'исчисти_надворешни_податоци' ),
 );
