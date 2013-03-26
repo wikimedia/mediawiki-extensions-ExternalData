@@ -86,6 +86,7 @@ $magicWords['ko'] = array(
 	'get_db_data' => array( 0, 'db_데이터_얻기' ),
 	'external_value' => array( 0, '바깥_값' ),
 	'for_external_table' => array( 0, '바깥_표_대해' ),
+	'display_external_table' => array( 0, '바깥_표_보기' ),
 	'store_external_table' => array( 0, '바깥_표_저장' ),
 	'clear_external_data' => array( 0, '바깥_데이터_지우기' ),
 );
