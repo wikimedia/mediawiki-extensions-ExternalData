@@ -341,6 +341,7 @@ $messages['fi'] = array(
 	'externaldata-db-could-not-get-url' => 'Ei voitu hakea verkko-osoitetta $1 {{PLURAL:$1|yrityksen|yrityksen}} jälkeen.',
 	'externaldata-db-unknown-type' => 'Virhe: Tuntematon tietokantatyyppi.',
 	'externaldata-db-could-not-connect' => 'Virhe: Ei yhteyttä tietokantaan.',
+	'externaldata-db-unknown-collection' => 'Virhe: Tuntematon MongoDB-kokoelma.',
 	'externaldata-db-no-return-values' => 'Virhe: Paluuarvoja ei ole annettu.',
 	'externaldata-db-invalid-query' => 'Virheellinen kysely.',
 );
