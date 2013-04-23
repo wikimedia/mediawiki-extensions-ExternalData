@@ -922,6 +922,7 @@ $messages['sr-el'] = array(
 /** Swedish (svenska)
  * @author Ainali
  * @author Boivie
+ * @author Lokal Profil
  * @author Najami
  * @author Per
  * @author WikiPhoenix
@@ -936,6 +937,7 @@ $messages['sv'] = array(
 	'externaldata-db-could-not-get-url' => 'Kunde inte hämta URL på $1 {{PLURAL:$1|försök|försök}}.',
 	'externaldata-db-unknown-type' => 'Fel: Okänd databastyp.',
 	'externaldata-db-could-not-connect' => 'Fel: Kunde inte koppla till databasen.',
+	'externaldata-db-unknown-collection' => 'Fel: Okänd MongoDB samling.',
 	'externaldata-db-no-return-values' => 'Fel: Inga returvärden specificerade.',
 	'externaldata-db-invalid-query' => 'Ogiltig fråga.',
 );
