@@ -811,6 +811,7 @@ $messages['pt-br'] = array(
 	'externaldata-db-could-not-get-url' => 'Não foi possível obter o URL após $1 {{PLURAL:$1|tentativa|tentativas}}.',
 	'externaldata-db-unknown-type' => 'Erro: Tipo de base de dados desconhecido.',
 	'externaldata-db-could-not-connect' => 'Erro: Não foi possível conectar-se a base de dados.',
+	'externaldata-db-unknown-collection' => 'Erro: coleção do MongoDB desconhecida.',
 	'externaldata-db-no-return-values' => 'Erro: Nenhum valor de retorno especificado.',
 	'externaldata-db-invalid-query' => 'Consulta inválida.',
 );
