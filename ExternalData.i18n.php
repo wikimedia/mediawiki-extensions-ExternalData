@@ -259,17 +259,24 @@ $messages['dsb'] = array(
 
 /** Greek (Ελληνικά)
  * @author Dead3y3
+ * @author Glavkos
  * @author Omnipaedista
  * @author Protnet
  * @author ZaDiak
  */
 $messages['el'] = array(
-	'getdata' => 'Πάρε δεδομένα',
-	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δεδομένων σε μορφές CSV, JSON και XML και για εξωτερικά URLs και για σελίδες του τοπικού wiki', # Fuzzy
+	'getdata' => 'Λήψη δεδομένων',
+	'externaldata-desc' => 'Επιτρέπει την ανάκτηση δομημένων δεδομένων από εξωτερικά URLs, βάσεις δεδομένων και άλλες πηγές',
 	'externaldata-web-invalid-format' => 'Μη έγκυρη μορφή: «$1»',
 	'externaldata-ldap-unable-to-connect' => 'Δεν είναι δυνατή η σύνδεση με $1',
 	'externaldata-xml-error' => 'Σφάλμα XML : $1 στη γραμμή $2',
-	'externaldata-db-invalid-query' => 'Άκυρο αίτημα.',
+	'externaldata-db-incomplete-information' => "Σφάλμα: Μη επαρκής πληροφορία γι'αυτό το αναγνωριστικό βάσης δεδομένων.",
+	'externaldata-db-could-not-get-url' => 'Δεν μπόρεσε να λάβει το URL μετά από $1 {{PLURAL:$1|προσπάθεια|προσπάθειες}}.',
+	'externaldata-db-unknown-type' => 'Σφάλμα: Άγνωστος τύπος βάσης δεδομένων.',
+	'externaldata-db-could-not-connect' => 'Σφάλμα: Δεν μπόρεσε να συνδεθεί στη βάση δεδομένων.',
+	'externaldata-db-unknown-collection' => 'Σφάλα: Άγνωστη συλλογή MongoDB.',
+	'externaldata-db-no-return-values' => 'Σφάλμα: Δεν καθορίστηκαν τιμές επιστροφής.',
+	'externaldata-db-invalid-query' => 'Άκυρο ερώτημα.',
 );
 
 /** Esperanto (Esperanto)
