@@ -138,7 +138,7 @@ END;
 		}
 	}
 
-	static function getDBData( $dbID, $from, $columns, $where, $options ) {
+	static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $otherParams ) {
 		global $edgDBServerType;
 		global $edgDBServer;
 		global $edgDBDirectory;
@@ -163,7 +163,7 @@ END;
 			if ( $db_name == '' ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
-			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options );
+			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams );
 		}
 
 		// Validate parameters
@@ -233,7 +233,7 @@ END;
 			return wfMessage( "externaldata-db-no-return-values" )->text();
 		}
 
-		$rows = self::searchDB( $db, $from, $columns, $where, $options );
+		$rows = self::searchDB( $db, $from, $columns, $where, $sqlOptions );
 		$db->close();
 
 		if ( !is_array( $rows ) ) {
@@ -261,7 +261,7 @@ END;
 	 * Handles #get_db_data for the non-relational database system
 	 * MongoDB.
 	 */
-	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options ) {
+	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
 		
 		// construct connect string
 		$connect_string = "mongodb://";
@@ -293,17 +293,19 @@ END;
 
 		$findArray = array();
 		// Was a direct MongoDB find query JSON string provided?
-		if ( $options['FIND QUERY'] != '' ) {
-			// if FIND QUERY is used, then just passthrough the
-			// JSON MongoDB FIND query as a JSON string.  This is necessary so we don't try 
-			// to create a MongoDB find parser in ExternalData to accomodate all the possible
-			// find scenarios since MongoDB is NotSQL :).  Be sure to use spaces between curly 
-			// brackets in the FIND JSON so as not to trip up the MW parser
-			$findArray = json_decode ($options['FIND QUERY'], true);
+		// If so, use that.
+		if ( array_key_exists( 'find query', $otherParams ) ) {
+die('got here!');
+			// Not to users: be sure to use spaces between curly
+			// brackets in the 'find' JSON so as not to trip up the
+			// MW parser.
+			$findArray = json_decode ($otherParams['find query'], true);
 		} elseif ( $where != '' ) {
-			// If not, turn the SQL of the "where=" parameter into the appropriate find
-			// array for MongoDB. Note that this approach is only appropriate for simple
-			// find queries - the ff operators: OR, AND, >=, >, <=, < and LIKE and NO NUMBER LITERALS 
+			// If not, turn the SQL of the "where=" parameter into
+			// a "find" array for MongoDB. Note that this approach
+			// is only appropriate for simple find queries, that
+			// use the operators OR, AND, >=, >, <=, < and LIKE
+			// - and NO NUMBER LITERALS.
 			$where = str_ireplace( ' and ', ' AND ', $where );
 			$where = str_ireplace( ' like ', ' LIKE ', $where );
 			$whereElements = explode( ' AND ', $where );
@@ -334,8 +336,8 @@ END;
 
 		// Do the same for the "order=" parameter.
 		$sortArray = array();
-		if ( $options['ORDER BY'] != '' ) {
-			$sortElements = explode( ',', $options['ORDER BY'] );
+		if ( $sqlOptions['ORDER BY'] != '' ) {
+			$sortElements = explode( ',', $sqlOptions['ORDER BY'] );
 			foreach ( $sortElements as $sortElement ) {
 				$parts = explode( ' ', $sortElement );
 				$fieldName = $parts[0];
@@ -350,7 +352,7 @@ END;
 		}
 
 		// Get the data!
-		$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $options['LIMIT'] );
+		$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $sqlOptions['LIMIT'] );
 
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
@@ -362,12 +364,12 @@ END;
 		return $values;
 	}
 
-	static function searchDB( $db, $table, $vars, $conds, $options ) {
+	static function searchDB( $db, $table, $vars, $conds, $sqlOptions ) {
 		// Add on a space at the beginning of $table so that
 		// $db->select() will treat it as a literal, instead of
 		// putting quotes around it or otherwise trying to parse it.
 		$table = ' ' . $table;
-		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $options );
+		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $sqlOptions );
 		if ( !$result ) {
 			return wfMessage( "externaldata-db-invalid-query" )->text();
 		}

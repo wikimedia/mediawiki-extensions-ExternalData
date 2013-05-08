@@ -248,14 +248,17 @@ class EDParserFunctions {
 		}
 		$table = ( array_key_exists( 'from', $args ) ) ? $args['from'] : null;
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
-		$findQuery = ( array_key_exists( 'find query', $args ) ) ? $args['find query'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
 		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
 		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
-		$options = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy, 'FIND QUERY' => $findQuery );
+		$sqlOptions = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy );
+		$otherParams = array();
+		if ( array_key_exists( 'find query', $args ) ) {
+			$otherParams['find query'] = $args['find query'];
+		}
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $options );
+		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $sqlOptions, $otherParams );
 
 		// Handle error cases.
 		if ( !is_array( $external_values ) ) {
