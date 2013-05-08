@@ -266,7 +266,7 @@ END;
 		// construct connect string
 		$connect_string = "mongodb://";
 		if ( $db_username != '' ) {
-			$connect_string .= $db_username . ':' . $db_password + '@';
+			$connect_string .= $db_username . ':' . $db_password . '@';
 		}
 		if ( $db_server != '') {
 			$connect_string .= $db_server;
@@ -295,8 +295,7 @@ END;
 		// Was a direct MongoDB find query JSON string provided?
 		// If so, use that.
 		if ( array_key_exists( 'find query', $otherParams ) ) {
-die('got here!');
-			// Not to users: be sure to use spaces between curly
+			// Note to users: be sure to use spaces between curly
 			// brackets in the 'find' JSON so as not to trip up the
 			// MW parser.
 			$findArray = json_decode ($otherParams['find query'], true);
@@ -305,7 +304,7 @@ die('got here!');
 			// a "find" array for MongoDB. Note that this approach
 			// is only appropriate for simple find queries, that
 			// use the operators OR, AND, >=, >, <=, < and LIKE
-			// - and NO NUMBER LITERALS.
+			// - and NO NUMERIC LITERALS.
 			$where = str_ireplace( ' and ', ' AND ', $where );
 			$where = str_ireplace( ' like ', ' LIKE ', $where );
 			$whereElements = explode( ' AND ', $where );
