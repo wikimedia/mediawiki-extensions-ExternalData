@@ -159,7 +159,7 @@ END;
 		$db_tableprefix = self::getArrayValue( $edgDBTablePrefix, $dbID );
 
 		// MongoDB has entirely different handling from the rest.
-		if ( $db_type == "mongodb" ) {
+		if ( $db_type == 'mongodb' ) {
 			if ( $db_name == '' ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
@@ -262,11 +262,20 @@ END;
 	 * MongoDB.
 	 */
 	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $options ) {
-		$m = new MongoClient();
-		$db = $m->selectDB( $db_name );
+		
+		// construct connect string
+		$connect_string = "mongodb://";
 		if ( $db_username != '' ) {
-			$db->authenticate( $db_username, $db_password );
+			$connect_string .= $db_username . ':' . $db_password + '@';
 		}
+		if ( $db_server != '') {
+			$connect_string .= $db_server;
+		} else {
+			$connect_string .= 'localhost:27017';
+		}
+
+		$m = new MongoClient($connect_string);
+		$db = $m->selectDB( $db_name );
 
 		// MongoDB doesn't seem to have a way to check whether either
 		// a database or a collection exists, so instead we'll use
@@ -286,33 +295,43 @@ END;
 		// array for MongoDB.
 		$whereArray = array();
 		if ( $where != '' ) {
-			// Hopefully all-caps and all-lowercase are the only
-			// two variants that people will use - otherwise,
-			// preg_replace() should be used.
-			$where = str_replace( ' and ', ' AND ', $where );
-			$where = str_replace( ' like ', ' LIKE ', $where );
-			$whereElements = explode( ' AND ', $where );
-			foreach ( $whereElements as $whereElement ) {
-				if ( strpos( $whereElement, '>=' ) ) {
-					list( $fieldName, $value ) = explode( '>=', $whereElement );
-					$whereArray[trim( $fieldName )] = array( '$gte' => trim( $value ) );
-				} elseif ( strpos( $whereElement, '>' ) ) {
-					list( $fieldName, $value ) = explode( '>', $whereElement );
-					$whereArray[trim( $fieldName )] = array( '$gt' => trim( $value ) );
-				} elseif ( strpos( $whereElement, '<=' ) ) {
-					list( $fieldName, $value ) = explode( '<=', $whereElement );
-					$whereArray[trim( $fieldName )] = array( '$lte' => trim( $value ) );
-				} elseif ( strpos( $whereElement, '<' ) ) {
-					list( $fieldName, $value ) = explode( '<', $whereElement );
-					$whereArray[trim( $fieldName )] = array( '$lt' => trim( $value ) );
-				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
-					list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
-					$value = trim( $value );
-					$regex = new MongoRegex( "/$value/i" );
-					$whereArray[trim( $fieldName )] = $regex;
-				} else {
-					list( $fieldName, $value ) = explode( '=', $whereElement );
-					$whereArray[trim( $fieldName )] = trim( $value );
+
+			// if the string '<PASSTHRU>' is used, then just passthrough the
+			// JSON MongoDB find condition as a JSON string.  This is necessary so we don't try 
+			// to create a MongoDB find parser in ExternalData to accomodate all the possible
+			// find scenarios since MongoDB is NotSQL :).  Be sure to use spaces between curly 
+			// brackets so as not to trip up the MW parser
+			if ( substr($where, 0, 10) == '<PASSTHRU>' ) {
+				$whereArray = json_decode (substr($where, 10), true);
+			} else {
+				// Hopefully all-caps and all-lowercase are the only
+				// two variants that people will use - otherwise,
+				// preg_replace() should be used.
+				$where = str_replace( ' and ', ' AND ', $where );
+				$where = str_replace( ' like ', ' LIKE ', $where );
+				$whereElements = explode( ' AND ', $where );
+				foreach ( $whereElements as $whereElement ) {
+					if ( strpos( $whereElement, '>=' ) ) {
+						list( $fieldName, $value ) = explode( '>=', $whereElement );
+						$whereArray[trim( $fieldName )] = array( '$gte' => trim( $value ) );
+					} elseif ( strpos( $whereElement, '>' ) ) {
+						list( $fieldName, $value ) = explode( '>', $whereElement );
+						$whereArray[trim( $fieldName )] = array( '$gt' => trim( $value ) );
+					} elseif ( strpos( $whereElement, '<=' ) ) {
+						list( $fieldName, $value ) = explode( '<=', $whereElement );
+						$whereArray[trim( $fieldName )] = array( '$lte' => trim( $value ) );
+					} elseif ( strpos( $whereElement, '<' ) ) {
+						list( $fieldName, $value ) = explode( '<', $whereElement );
+						$whereArray[trim( $fieldName )] = array( '$lt' => trim( $value ) );
+					} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
+						list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
+						$value = trim( $value );
+						$regex = new MongoRegex( "/$value/i" );
+						$whereArray[trim( $fieldName )] = $regex;
+					} else {
+						list( $fieldName, $value ) = explode( '=', $whereElement );
+						$whereArray[trim( $fieldName )] = trim( $value );
+					}
 				}
 			}
 		}
