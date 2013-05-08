@@ -291,47 +291,43 @@ END;
 
 		$collection = new MongoCollection( $db, $from );
 
-		// Turn the SQL of the "where=" parameter into the appropriate
-		// array for MongoDB.
-		$whereArray = array();
-		if ( $where != '' ) {
-
-			// if the string '<PASSTHRU>' is used, then just passthrough the
-			// JSON MongoDB find condition as a JSON string.  This is necessary so we don't try 
+		$findArray = array();
+		// Was a direct MongoDB find query JSON string provided?
+		if ( $options['FIND QUERY'] != '' ) {
+			// if FIND QUERY is used, then just passthrough the
+			// JSON MongoDB FIND query as a JSON string.  This is necessary so we don't try 
 			// to create a MongoDB find parser in ExternalData to accomodate all the possible
 			// find scenarios since MongoDB is NotSQL :).  Be sure to use spaces between curly 
-			// brackets so as not to trip up the MW parser
-			if ( substr($where, 0, 10) == '<PASSTHRU>' ) {
-				$whereArray = json_decode (substr($where, 10), true);
-			} else {
-				// Hopefully all-caps and all-lowercase are the only
-				// two variants that people will use - otherwise,
-				// preg_replace() should be used.
-				$where = str_replace( ' and ', ' AND ', $where );
-				$where = str_replace( ' like ', ' LIKE ', $where );
-				$whereElements = explode( ' AND ', $where );
-				foreach ( $whereElements as $whereElement ) {
-					if ( strpos( $whereElement, '>=' ) ) {
-						list( $fieldName, $value ) = explode( '>=', $whereElement );
-						$whereArray[trim( $fieldName )] = array( '$gte' => trim( $value ) );
-					} elseif ( strpos( $whereElement, '>' ) ) {
-						list( $fieldName, $value ) = explode( '>', $whereElement );
-						$whereArray[trim( $fieldName )] = array( '$gt' => trim( $value ) );
-					} elseif ( strpos( $whereElement, '<=' ) ) {
-						list( $fieldName, $value ) = explode( '<=', $whereElement );
-						$whereArray[trim( $fieldName )] = array( '$lte' => trim( $value ) );
-					} elseif ( strpos( $whereElement, '<' ) ) {
-						list( $fieldName, $value ) = explode( '<', $whereElement );
-						$whereArray[trim( $fieldName )] = array( '$lt' => trim( $value ) );
-					} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
-						list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
-						$value = trim( $value );
-						$regex = new MongoRegex( "/$value/i" );
-						$whereArray[trim( $fieldName )] = $regex;
-					} else {
-						list( $fieldName, $value ) = explode( '=', $whereElement );
-						$whereArray[trim( $fieldName )] = trim( $value );
-					}
+			// brackets in the FIND JSON so as not to trip up the MW parser
+			$findArray = json_decode ($options['FIND QUERY'], true);
+		} elseif ( $where != '' ) {
+			// If not, turn the SQL of the "where=" parameter into the appropriate find
+			// array for MongoDB. Note that this approach is only appropriate for simple
+			// find queries - the ff operators: OR, AND, >=, >, <=, < and LIKE and NO NUMBER LITERALS 
+			$where = str_ireplace( ' and ', ' AND ', $where );
+			$where = str_ireplace( ' like ', ' LIKE ', $where );
+			$whereElements = explode( ' AND ', $where );
+			foreach ( $whereElements as $whereElement ) {
+				if ( strpos( $whereElement, '>=' ) ) {
+					list( $fieldName, $value ) = explode( '>=', $whereElement );
+					$findArray[trim( $fieldName )] = array( '$gte' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '>' ) ) {
+					list( $fieldName, $value ) = explode( '>', $whereElement );
+					$findArray[trim( $fieldName )] = array( '$gt' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '<=' ) ) {
+					list( $fieldName, $value ) = explode( '<=', $whereElement );
+					$findArray[trim( $fieldName )] = array( '$lte' => trim( $value ) );
+				} elseif ( strpos( $whereElement, '<' ) ) {
+					list( $fieldName, $value ) = explode( '<', $whereElement );
+					$findArray[trim( $fieldName )] = array( '$lt' => trim( $value ) );
+				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
+					list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
+					$value = trim( $value );
+					$regex = new MongoRegex( "/$value/i" );
+					$findArray[trim( $fieldName )] = $regex;
+				} else {
+					list( $fieldName, $value ) = explode( '=', $whereElement );
+					$findArray[trim( $fieldName )] = trim( $value );
 				}
 			}
 		}
@@ -354,7 +350,7 @@ END;
 		}
 
 		// Get the data!
-		$resultsCursor = $collection->find( $whereArray, $columns )->sort( $sortArray )->limit( $options['LIMIT'] );
+		$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $options['LIMIT'] );
 
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
