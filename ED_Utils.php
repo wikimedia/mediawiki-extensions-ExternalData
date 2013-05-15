@@ -356,7 +356,25 @@ END;
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
-				$values[$column][] = $doc[$column];
+				// if MongoDB returns an array for a column, do some extra processing
+				if (is_array($doc[$column])) {
+					// check if its GeoJSON geometry. http://www.geojson.org/geojson-spec.html#geometry-objects 
+					// If so, return it in a format that Maps can understand
+					if ($column == 'geometry' && array_key_exists('coordinates', $doc['geometry'])) {
+						$coordinates = $doc['geometry']['coordinates'][0];
+						$sgeometry = '';
+						foreach ($coordinates as $coordinate) {
+							$sgeometry .= $coordinate[1] . ',' . $coordinate[0] . ':';
+						}
+						$values[$column][] =  substr($sgeometry,0,strlen($sgeometry)-1);
+					} else {
+						// just return it as a JSON string - the lingua franca of MongoDB
+						$values[$column][] = json_encode($doc[$column]);
+					}
+				} else {
+					// its a simple literal
+					$values[$column][] = $doc[$column];
+				}
 			}
 		}
 
