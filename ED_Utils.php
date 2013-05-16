@@ -292,7 +292,7 @@ END;
 		$collection = new MongoCollection( $db, $from );
 
 		$findArray = array();
-		// Was a direct MongoDB find query JSON string provided?
+		// Was a direct MongoDB "find" query JSON string provided?
 		// If so, use that.
 		if ( array_key_exists( 'find query', $otherParams ) ) {
 			// Note to users: be sure to use spaces between curly
@@ -356,23 +356,27 @@ END;
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
-				// if MongoDB returns an array for a column, do some extra processing
-				if (is_array($doc[$column])) {
-					// check if its GeoJSON geometry. http://www.geojson.org/geojson-spec.html#geometry-objects 
-					// If so, return it in a format that Maps can understand
-					if ($column == 'geometry' && array_key_exists('coordinates', $doc['geometry'])) {
+				// If MongoDB returns an array for a column,
+				// do some extra processing.
+				if ( is_array( $doc[$column] ) ) {
+					// Check if it's GeoJSON geometry:
+					// http://www.geojson.org/geojson-spec.html#geometry-objects 
+					// If so, return it in a format that
+					// the Maps extension can understand.
+					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
 						$coordinates = $doc['geometry']['coordinates'][0];
-						$sgeometry = '';
-						foreach ($coordinates as $coordinate) {
-							$sgeometry .= $coordinate[1] . ',' . $coordinate[0] . ':';
+						$coordinateStrings = array();
+						foreach ( $coordinates as $coordinate ) {
+							$coordinateStrings[] = $coordinate[1] . ',' . $coordinate[0];
 						}
-						$values[$column][] =  substr($sgeometry,0,strlen($sgeometry)-1);
+						$values[$column][] =  implode( ':', $coordinateStrings );
 					} else {
-						// just return it as a JSON string - the lingua franca of MongoDB
-						$values[$column][] = json_encode($doc[$column]);
+						// Just return it as JSON, the
+						// lingua franca of MongoDB.
+						$values[$column][] = json_encode( $doc[$column] );
 					}
 				} else {
-					// its a simple literal
+					// It's a simple literal.
 					$values[$column][] = $doc[$column];
 				}
 			}
