@@ -112,9 +112,9 @@ $magicWords['ml'] = array(
 
 /** Marathi (मराठी) */
 $magicWords['mr'] = array(
-	'get_external_data' => array( 0, 'मिळवा_बाह्य_विदा', 'get_external_data' ),
-	'get_ldap_data' => array( 0, 'मिळवा__एलडॅप_विदा', 'get_ldap_data' ),
-	'for_external_table' => array( 0, 'बाह्य_सारणी_करिता', 'for_external_table' ),
+	'get_external_data' => array( 0, 'मिळवा_बाह्य_विदा' ),
+	'get_ldap_data' => array( 0, 'मिळवा__एलडॅप_विदा' ),
+	'for_external_table' => array( 0, 'बाह्य_सारणी_करिता' ),
 );
 
 /** Low Saxon (Netherlands) (Nedersaksies) */
