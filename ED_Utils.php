@@ -7,6 +7,8 @@ class EDUtils {
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
 
+	private static $ampersandReplacement = "THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555";
+
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
@@ -30,6 +32,13 @@ class EDUtils {
 
 	static function getContent( $parser, $content ) {
 		global $edgCurrentXMLTag, $edgXMLValues;
+
+		// Replace ampersands, to avoid the XML getting split up
+		// around them.
+		// Note that this is *escaped* ampersands being replaced -
+		// this is unrelated to the fact that bare ampersands aren't
+		// allowed in XML.
+		$content = str_replace( self::$ampersandReplacement, '&amp;', $content );
 		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) )
 			$edgXMLValues[$edgCurrentXMLTag][] = $content;
 		else
@@ -427,6 +436,10 @@ END;
 		// Remove comments from XML - for some reason, xml_parse()
 		// can't handle them.
 		$xml = preg_replace( '/<!--.*?-->/s', '', $xml );
+
+		// Also, re-insert ampersands, after they were removed to
+		// avoid parsing problems.
+		$xml = str_replace( '&amp;', self::$ampersandReplacement, $xml );
 
 		$xml_parser = xml_parser_create();
 		xml_set_element_handler( $xml_parser, array( 'EDUtils', 'startElement' ), array( 'EDUtils', 'endElement' ) );
