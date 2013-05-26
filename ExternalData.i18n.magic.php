@@ -42,11 +42,11 @@ $magicWords['arz'] = array(
 
 /** Chechen (нохчийн) */
 $magicWords['ce'] = array(
-	'get_external_data' => array( 0, 'схьаэца_архьара_хаамаш', 'получить_внешние_данные', 'get_external_data' ),
-	'get_ldap_data' => array( 0, 'схьаэца_хаамаш_ldap', 'получить_данные_ldap', 'get_ldap_data' ),
-	'get_db_data' => array( 0, 'схьаэца_хаамаш_db', 'получить_данные_db', 'get_db_data' ),
-	'external_value' => array( 0, 'архьара_дозалла', 'внешнее_значение', 'external_value' ),
-	'for_external_table' => array( 0, 'оцу_архьара_тебалецlаш', 'для_внешней_таблицы', 'for_external_table' ),
+	'get_external_data' => array( 0, 'схьаэца_архьара_хаамаш', 'получить_внешние_данные' ),
+	'get_ldap_data' => array( 0, 'схьаэца_хаамаш_ldap', 'получить_данные_ldap' ),
+	'get_db_data' => array( 0, 'схьаэца_хаамаш_db', 'получить_данные_db' ),
+	'external_value' => array( 0, 'архьара_дозалла', 'внешнее_значение' ),
+	'for_external_table' => array( 0, 'оцу_архьара_тебалецlаш', 'для_внешней_таблицы' ),
 );
 
 /** German (Deutsch) */
