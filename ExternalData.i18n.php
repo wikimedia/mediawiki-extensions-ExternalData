@@ -666,7 +666,7 @@ $messages['myv'] = array(
 	'getdata' => 'Дата мельга',
 );
 
-/** Norwegian Bokmål (norsk (bokmål)‎)
+/** Norwegian Bokmål (norsk bokmål)
  * @author Harald Khan
  * @author Nghtwlkr
  * @author Njardarlogar
@@ -703,7 +703,7 @@ $messages['nl'] = array(
 	'externaldata-db-invalid-query' => 'Ongeldige zoekopdracht.',
 );
 
-/** Norwegian Nynorsk (norsk (nynorsk)‎)
+/** Norwegian Nynorsk (norsk nynorsk)
  * @author Gunnernett
  * @author Harald Khan
  * @author Njardarlogar
@@ -737,7 +737,7 @@ $messages['oc'] = array(
 	'externaldata-db-invalid-query' => 'Requèsta invalida.',
 );
 
-/** Oriya (ଓଡ଼ିଆ)
+/** Oriya (ଓଡ଼ିଆ)
  * @author Jnanaranjan Sahu
  */
 $messages['or'] = array(
