@@ -845,6 +845,16 @@ $messages['ro'] = array(
 $messages['roa-tara'] = array(
 	'getdata' => 'Pigghie le date',
 	'externaldata-desc' => 'Permette de repigghià data strutturate da URL fore a Uicchipèdie, database e otre sorgende',
+	'externaldata-web-invalid-format' => 'Formate invalide: "$1"',
+	'externaldata-ldap-unable-to-connect' => 'Indisponibbile a collegarse a $1',
+	'externaldata-xml-error' => 'Errore XML: $1 sus a linèe $2',
+	'externaldata-db-incomplete-information' => "Errore: 'Mbormazione ingomblete pe stu ID d'u database.",
+	'externaldata-db-could-not-get-url' => "Non ge pozze pigghià 'a URL apprisse $1 {{PLURAL:$1|prove}}.",
+	'externaldata-db-unknown-type' => 'Errore: Tipe de database scanusciute.',
+	'externaldata-db-could-not-connect' => "Errore: Non ge me pozze collegà a 'u database.",
+	'externaldata-db-unknown-collection' => 'Errore: Collezzione scanusciute MongoDB.',
+	'externaldata-db-no-return-values' => 'Errore: Nisciune valore de retorne specificate.',
+	'externaldata-db-invalid-query' => 'Inderrogazione invalide.',
 );
 
 /** Russian (русский)
