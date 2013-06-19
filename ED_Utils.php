@@ -689,10 +689,14 @@ END;
 
 		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
 			if ( $edgAllowSSL ) {
-				return Http::get( $url, 'default', array( 'sslVerifyCert' => false, 'followRedirects' => false ) );
+				$contents = Http::get( $url, 'default', array( 'sslVerifyCert' => false, 'followRedirects' => false ) );
 			} else {
-				return Http::get( $url );
+				$contents = Http::get( $url );
 			}
+			// Handle non-UTF-8 encodings.
+			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
+			return mb_convert_encoding( $contents, 'UTF-8',
+				mb_detect_encoding( $contents, 'UTF-8, ISO-8859-1', true ) );
 		}
 
 		// check the cache (only the first 254 chars of the url)
