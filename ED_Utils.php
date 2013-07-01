@@ -267,20 +267,18 @@ END;
 	}
 
 
-	static function dotresolve(array $arrayName, $path, $default = null)
-	{
-	  $current = $arrayName;
-	  $token = strtok($path, '.');
+	static function getValueFromJSONArray( array $origArray, $path, $default = null ) {
+		$current = $origArray;
+		$token = strtok( $path, '.' );
 
-	  while ($token !== false) {
-	    if (!isset($current[$token])) {
-	      return $default;
-	    }
-	    $current = $current[$token];
-	    $token = strtok('.');
-	  }
-
-	  return $current;
+		while ( $token !== false ) {
+			if ( !isset( $current[$token] ) ) {
+				return $default;
+			}
+			$current = $current[$token];
+			$token = strtok( '.' );
+		}
+		return $current;
 	}
 
 
@@ -389,10 +387,13 @@ END;
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
 				if ( strstr($column, ".") ) {
-					// If the user specified dot notation to retrieve values from the MongoDB result array
-				 	$values[$column][] = self::dotresolve($doc, $column);
+					// If the exact path of the value was
+					// specified using dots (e.g., "a.b.c"),
+					// get the value that way.
+				 	$values[$column][] = self::getValueFromJSONArray( $doc, $column );
 				} elseif ( is_array( $doc[$column] ) ) {
-					// If MongoDB returns an array for a column, but the user didnt specify dot notation
+					// If MongoDB returns an array for a column,
+					// but the exact location of the value wasn't specified,
 					// do some extra processing.
 					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
 						// Check if it's GeoJSON geometry:
@@ -404,7 +405,7 @@ END;
 						foreach ( $coordinates as $coordinate ) {
 							$coordinateStrings[] = $coordinate[1] . ',' . $coordinate[0];
 						}
-						$values[$column][] =  implode( ':', $coordinateStrings );
+						$values[$column][] = implode( ':', $coordinateStrings );
 					} else {
 						// Just return it as JSON, the
 						// lingua franca of MongoDB.
