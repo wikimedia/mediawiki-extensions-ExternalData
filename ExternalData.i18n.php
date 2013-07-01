@@ -698,7 +698,7 @@ $messages['nl'] = array(
 	'externaldata-db-could-not-get-url' => 'Na $1 {{PLURAL:$1|poging|pogingen}} gaf de URL geen resultaat.',
 	'externaldata-db-unknown-type' => 'Fout: onbekend databasetype.',
 	'externaldata-db-could-not-connect' => 'Fout: het was niet mogelijk met de database te verbinden.',
-	'externaldata-db-unknown-collection' => 'Fout: onbekende MongoDB-collectie.',
+	'externaldata-db-unknown-collection' => 'Fout: onbekende MongoDB-verzameling.',
 	'externaldata-db-no-return-values' => 'Fout: er zijn geen return-waarden ingesteld.',
 	'externaldata-db-invalid-query' => 'Ongeldige zoekopdracht.',
 );
