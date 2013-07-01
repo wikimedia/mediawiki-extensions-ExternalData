@@ -253,7 +253,9 @@ class EDParserFunctions {
 		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
 		$sqlOptions = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy );
 		$otherParams = array();
-		if ( array_key_exists( 'find query', $args ) ) {
+		if ( array_key_exists('aggregate', $args ) ) {
+			$otherParams['aggregate'] = $args['aggregate'];
+		} elseif ( array_key_exists( 'find query', $args ) ) {
 			$otherParams['find query'] = $args['find query'];
 		}
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings

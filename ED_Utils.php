@@ -266,6 +266,24 @@ END;
 		return $values;
 	}
 
+
+	static function dotresolve(array $arrayName, $path, $default = null)
+	{
+	  $current = $arrayName;
+	  $token = strtok($path, '.');
+
+	  while ($token !== false) {
+	    if (!isset($current[$token])) {
+	      return $default;
+	    }
+	    $current = $current[$token];
+	    $token = strtok('.');
+	  }
+
+	  return $current;
+	}
+
+
 	/**
 	 * Handles #get_db_data for the non-relational database system
 	 * MongoDB.
@@ -301,6 +319,7 @@ END;
 		$collection = new MongoCollection( $db, $from );
 
 		$findArray = array();
+		$aggregateArray = array();
 		// Was a direct MongoDB "find" query JSON string provided?
 		// If so, use that.
 		if ( array_key_exists( 'find query', $otherParams ) ) {
@@ -360,19 +379,26 @@ END;
 		}
 
 		// Get the data!
-		$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $sqlOptions['LIMIT'] );
+		if ( array_key_exists( 'aggregate', $otherParams ) ) {
+			$resultsCursor = $collection->aggregate( $aggregateArray );
+		} else {
+			$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $sqlOptions['LIMIT'] );
+		}
 
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
-				// If MongoDB returns an array for a column,
-				// do some extra processing.
-				if ( is_array( $doc[$column] ) ) {
-					// Check if it's GeoJSON geometry:
-					// http://www.geojson.org/geojson-spec.html#geometry-objects 
-					// If so, return it in a format that
-					// the Maps extension can understand.
+				if ( strstr($column, ".") ) {
+					// If the user specified dot notation to retrieve values from the MongoDB result array
+				 	$values[$column][] = self::dotresolve($doc, $column);
+				} elseif ( is_array( $doc[$column] ) ) {
+					// If MongoDB returns an array for a column, but the user didnt specify dot notation
+					// do some extra processing.
 					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
+						// Check if it's GeoJSON geometry:
+						// http://www.geojson.org/geojson-spec.html#geometry-objects 
+						// If so, return it in a format that
+						// the Maps extension can understand.
 						$coordinates = $doc['geometry']['coordinates'][0];
 						$coordinateStrings = array();
 						foreach ( $coordinates as $coordinate ) {
