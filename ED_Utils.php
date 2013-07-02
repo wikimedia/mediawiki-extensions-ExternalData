@@ -699,10 +699,10 @@ END;
 		return $values;
 	}
 
-	static function fetchURL( $url, $post_vars = array(), $get_fresh = false, $try_count = 1 ) {
+	static function fetchURL( $url, $post_vars = array(), $cacheExpireTime = 0, $get_fresh = false, $try_count = 1 ) {
 		$dbr = wfGetDB( DB_SLAVE );
 		global $edgStringReplacements, $edgCacheTable,
-			$edgCacheExpireTime, $edgAllowSSL;
+			$edgAllowSSL;
 
 		if ( $post_vars ) {
 			return Http::post( $url, array( 'postData' => $post_vars ) );
@@ -729,7 +729,7 @@ END;
 		// check the cache (only the first 254 chars of the url)
 		$row = $dbr->selectRow( $edgCacheTable, '*', array( 'url' => substr( $url, 0, 254 ) ), 'EDUtils::fetchURL' );
 
-		if ( $row && ( ( time() - $row->req_time ) > $edgCacheExpireTime ) ) {
+		if ( $row && ( ( time() - $row->req_time ) > $cacheExpireTime ) ) {
 			$get_fresh = true;
 		}
 
@@ -746,7 +746,7 @@ END;
 					return '';
 				}
 				$try_count++;
-				return self::fetchURL( $url, $post_vars, $get_fresh, $try_count );
+				return self::fetchURL( $url, $post_vars, $cacheExpireTime, $get_fresh, $try_count );
 			}
 			if ( $page != '' ) {
 				$dbw = wfGetDB( DB_MASTER );
@@ -788,8 +788,8 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format, $mappings, $postData = null ) {
-		$url_contents = self::fetchURL( $url, $postData );
+	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime ) {
+		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
 		// exit if there's nothing there
 		if ( empty( $url_contents ) )
 			return array();

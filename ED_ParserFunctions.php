@@ -115,7 +115,7 @@ class EDParserFunctions {
 	 * Render the #get_web_data parser function
 	 */
 	static function doGetWebData( &$parser ) {
-		global $edgCurPageName, $edgValues;
+		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
 
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
@@ -164,8 +164,15 @@ class EDParserFunctions {
 			return;
 		}
 
+		if ( array_key_exists( 'cache seconds', $args) ) {
+			// set cache expire time
+			$cacheExpireTime = $args['cache seconds'];
+		} else {
+			$cacheExpireTime = $edgCacheExpireTime;
+		}
+
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData );
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime );
 		if ( is_string( $external_values ) ) {
 			// It's an error message - just display it on the
 			// screen.
