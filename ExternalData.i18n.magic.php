@@ -57,6 +57,7 @@ $magicWords['de'] = array(
 	'get_db_data' => array( 0, 'hole_dbdaten' ),
 	'external_value' => array( 0, 'externer_wert' ),
 	'for_external_table' => array( 0, 'für_externe_tabelle' ),
+	'display_external_table' => array( 0, 'zeige_externe_tabelle' ),
 	'store_external_table' => array( 0, 'speichere_externe_tabelle' ),
 	'clear_external_data' => array( 0, 'leere_externe_tabelle' ),
 );
