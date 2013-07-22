@@ -299,8 +299,19 @@ END;
 			$connect_string .= 'localhost:27017';
 		}
 
-		$m = new MongoClient($connect_string);
+		// use try catch to suppress error message that shows MongoDB connect string
+		// that may have sensitive information
+		try {
+			$m = new MongoClient($connect_string);
+		} catch (Exception $e) {
+			return wfMessage( "externaldata-db-could-not-connect" )->text();
+		}
+		// if working against a MongoDB replica set, it's OK to go to secondary/slaves
+		// should the primary go down
+		MongoCursor::$slaveOkay = true;
+
 		$db = $m->selectDB( $db_name );
+
 
 		// MongoDB doesn't seem to have a way to check whether either
 		// a database or a collection exists, so instead we'll use
