@@ -266,7 +266,6 @@ END;
 		return $values;
 	}
 
-
 	static function getValueFromJSONArray( array $origArray, $path, $default = null ) {
 		$current = $origArray;
 		$token = strtok( $path, '.' );
@@ -281,14 +280,12 @@ END;
 		return $current;
 	}
 
-
 	/**
 	 * Handles #get_db_data for the non-relational database system
 	 * MongoDB.
 	 */
 	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
-		
-		// construct connect string
+		// MongoDB login is done using a single string.
 		$connect_string = "mongodb://";
 		if ( $db_username != '' ) {
 			$connect_string .= $db_username . ':' . $db_password . '@';
@@ -299,19 +296,19 @@ END;
 			$connect_string .= 'localhost:27017';
 		}
 
-		// use try catch to suppress error message that shows MongoDB connect string
-		// that may have sensitive information
+		// Use try/catch to suppress error messages, which would show
+		// the MongoDB connect string, which may have sensitive
+		// information.
 		try {
-			$m = new MongoClient($connect_string);
-		} catch (Exception $e) {
+			$m = new MongoClient( $connect_string );
+		} catch ( Exception $e ) {
 			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
-		// if working against a MongoDB replica set, it's OK to go to secondary/slaves
-		// should the primary go down
+		// If working against a MongoDB replica set, it's OK to go to
+		// secondary/slaves should the primary go down.
 		MongoCursor::$slaveOkay = true;
 
 		$db = $m->selectDB( $db_name );
-
 
 		// MongoDB doesn't seem to have a way to check whether either
 		// a database or a collection exists, so instead we'll use
@@ -401,14 +398,14 @@ END;
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
-				 	$values[$column][] = self::getValueFromJSONArray( $doc, $column );
+					$values[$column][] = self::getValueFromJSONArray( $doc, $column );
 				} elseif ( is_array( $doc[$column] ) ) {
 					// If MongoDB returns an array for a column,
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
 					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
 						// Check if it's GeoJSON geometry:
-						// http://www.geojson.org/geojson-spec.html#geometry-objects 
+						// http://www.geojson.org/geojson-spec.html#geometry-objects
 						// If so, return it in a format that
 						// the Maps extension can understand.
 						$coordinates = $doc['geometry']['coordinates'][0];

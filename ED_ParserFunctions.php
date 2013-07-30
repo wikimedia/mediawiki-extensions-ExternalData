@@ -316,8 +316,8 @@ class EDParserFunctions {
 	static function doForExternalTable( &$parser, $expression = '' ) {
 		global $edgValues;
 
-		// get the variables used in this expression, get the number
-		// of values for each, and loop through 
+		// Get the variables used in this expression, get the number
+		// of values for each, and loop through.
 		$matches = array();
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
 		$variables = $matches[1];
@@ -464,8 +464,8 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser...
 
-		// get the variables used in this expression, get the number
-		// of values for each, and loop through 
+		// Get the variables used in this expression, get the number
+		// of values for each, and loop through.
 		$expression = implode( '|', $params );
 		$matches = array();
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
