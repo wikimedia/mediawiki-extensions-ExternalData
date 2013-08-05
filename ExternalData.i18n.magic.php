@@ -120,12 +120,12 @@ $magicWords['mr'] = array(
 
 /** Low Saxon (Netherlands) (Nedersaksies) */
 $magicWords['nds-nl'] = array(
-	'get_external_data' => array( 0, 'externe_gegevens_ophaolen', 'externe_gegevens_ophalen' ),
+	'get_external_data' => array( 0, 'externe_gegevens_ophaolen' ),
 	'get_web_data' => array( 0, 'webgegevens_ophaolen' ),
-	'get_ldap_data' => array( 0, 'ldap-gegevens_ophaolen', 'ldap_gegevens_ophalen' ),
-	'get_db_data' => array( 0, 'db-gegevens_ophaolen', 'db_gegevens_ophalen' ),
-	'external_value' => array( 0, 'externe_weerde', 'externe_waarde' ),
-	'for_external_table' => array( 0, 'veur_externe_tabel', 'voor_externe_tabel' ),
+	'get_ldap_data' => array( 0, 'ldap-gegevens_ophaolen' ),
+	'get_db_data' => array( 0, 'db-gegevens_ophaolen' ),
+	'external_value' => array( 0, 'externe_weerde' ),
+	'for_external_table' => array( 0, 'veur_externe_tabel' ),
 	'store_external_table' => array( 0, 'opslaon_externe_tabel' ),
 );
 
