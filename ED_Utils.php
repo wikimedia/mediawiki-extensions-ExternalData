@@ -286,6 +286,9 @@ END;
 	 */
 	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
 		// MongoDB login is done using a single string.
+		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
+		// use $db_server to pass these values
+		// see http://docs.mongodb.org/manual/reference/connection-string
 		$connect_string = "mongodb://";
 		if ( $db_username != '' ) {
 			$connect_string .= $db_username . ':' . $db_password . '@';
@@ -326,12 +329,18 @@ END;
 
 		$findArray = array();
 		$aggregateArray = array();
-		// Was a direct MongoDB "find" query JSON string provided?
-		// If so, use that.
-		if ( array_key_exists( 'find query', $otherParams ) ) {
+		// Was an aggregation pipeline command issued?
+		if ( array_key_exists('aggregate', $otherParams ) ) {
+			// The 'aggregate' parameter should be an array of 
+			// aggregation JSON pipeline commands.
 			// Note to users: be sure to use spaces between curly
-			// brackets in the 'find' JSON so as not to trip up the
+			// brackets in the 'aggregate' JSON so as not to trip up the
 			// MW parser.
+			$aggregateArray = json_decode ($otherParams['aggregate'], true);
+		} elseif ( array_key_exists( 'find query', $otherParams ) ) {
+			// Otherwise, was a direct MongoDB "find" query JSON string provided?
+			// If so, use that.  As with 'aggregate' JSON, use spaces 
+			// between curly brackets
 			$findArray = json_decode ($otherParams['find query'], true);
 		} elseif ( $where != '' ) {
 			// If not, turn the SQL of the "where=" parameter into
@@ -367,7 +376,7 @@ END;
 			}
 		}
 
-		// Do the same for the "order=" parameter.
+		// Do the same for the "order=" parameter as the "where=" parameter
 		$sortArray = array();
 		if ( $sqlOptions['ORDER BY'] != '' ) {
 			$sortElements = explode( ',', $sqlOptions['ORDER BY'] );
@@ -386,11 +395,18 @@ END;
 
 		// Get the data!
 		if ( array_key_exists( 'aggregate', $otherParams ) ) {
-			$resultsCursor = $collection->aggregate( $aggregateArray );
+			if ( $sqlOptions['ORDER BY'] != '') {
+				$aggregateArray[] = array( '$sort' => $sortArray );
+			}
+			if ( $sqlOptions['LIMIT'] != '' ) {
+				$aggregateArray[] = array( '$limit' => intval( $sqlOptions['LIMIT'] ) );
+			}
+			$aggregateResult = $collection->aggregate( $aggregateArray );
+			$resultsCursor = $aggregateResult['result'];
 		} else {
 			$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $sqlOptions['LIMIT'] );
 		}
-
+		
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
