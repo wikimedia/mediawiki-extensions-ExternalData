@@ -34,9 +34,17 @@ $messages['en'] = array(
 $messages['qqq'] = array(
 	'getdata' => '{{doc-special|GetData}}',
 	'externaldata-desc' => '{{desc|name=External Data|url=http://www.mediawiki.org/wiki/Extension:External_Data}}',
-	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value',
-	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server",
-	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file",
+	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value.
+
+Parameters:
+* $1 - invalid file format. Valid formats are: "xml", "xml with xpath", "csv", "csv with header", "json", and "gff"',
+	'externaldata-ldap-unable-to-connect' => "The error message if #get_ldap_data can't connect to the LDAP server.
+
+Parameters:
+* $1 - the LDAP server name",
+	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file. Parameters:
+* $1 - error message which are returned by PHP's <code>xml_error_string()</code>
+* $2 - line number",
 	'externaldata-db-incomplete-information' => 'Used as error message.
 
 Database server, database type, database directory, database username and/or database password are not specified.',
