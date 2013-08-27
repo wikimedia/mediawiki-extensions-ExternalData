@@ -367,6 +367,7 @@ $messages['fi'] = array(
  * @author IAlex
  * @author McDutchie
  * @author PieRRoMaN
+ * @author Shirayuki
  */
 $messages['fr'] = array(
 	'getdata' => 'Obtenir des données',
@@ -375,7 +376,7 @@ $messages['fr'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Impossible de se connecter à $1',
 	'externaldata-xml-error' => 'Erreur XML : $1 à la ligne $2',
 	'externaldata-db-incomplete-information' => 'Erreur : Informations incomplètes pour cet identifiant de serveur.',
-	'externaldata-db-could-not-get-url' => "Impossible d'obtenir l'URL après $1 essai{{PLURAL:$1|s|s}}.",
+	'externaldata-db-could-not-get-url' => "Impossible d'obtenir l'URL après $1 {{PLURAL:$1|essais}}.",
 	'externaldata-db-unknown-type' => 'ERREUR: Type de base de données inconnu.',
 	'externaldata-db-could-not-connect' => 'Erreur : Impossible de se connecter à la base de données.',
 	'externaldata-db-unknown-collection' => 'Erreur: Collection MongoDB inconnue.',
