@@ -62,6 +62,19 @@ $magicWords['de'] = array(
 	'clear_external_data' => array( 0, 'leere_externe_tabelle' ),
 );
 
+/** Greek (Ελληνικά) */
+$magicWords['el'] = array(
+	'get_external_data' => array( 0, 'λήψη_εξωτερικών_δεδομένων' ),
+	'get_web_data' => array( 0, 'λήψη_δεδομένων_ιστού' ),
+	'get_ldap_data' => array( 0, 'λήψη_δεδομένων_ldap' ),
+	'get_db_data' => array( 0, 'λήψη_δεδομένων_βδ' ),
+	'external_value' => array( 0, 'εξωτερική_τιμή' ),
+	'for_external_table' => array( 0, 'για_εξωτερικό_πίνακα' ),
+	'display_external_table' => array( 0, 'προβολή_εξωτερικού_πίνακα' ),
+	'store_external_table' => array( 0, 'αποθήκευση_εξωτερικού_πίνακα' ),
+	'clear_external_data' => array( 0, 'εκκαθάριση_εξωτερικών_δεδομένων' ),
+);
+
 /** Spanish (español) */
 $magicWords['es'] = array(
 	'get_external_data' => array( 0, 'obtener_datos_externos' ),
