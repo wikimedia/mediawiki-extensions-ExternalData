@@ -593,7 +593,7 @@ $messages['km'] = array(
  * @author Purodha
  */
 $messages['ksh'] = array(
-	'getdata' => 'Date holle!',
+	'getdata' => 'Daate holle!',
 	'externaldata-desc' => 'Määt et müjjelich, Date en beshtemmpte Fomaate fun främbde <i lang="en">URLs</i>, Daatebangke, un ander Quälle ze holle.',
 	'externaldata-web-invalid-format' => 'Dat Formaat es onjöltsch: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Kann nit noh $1 verbenge',
