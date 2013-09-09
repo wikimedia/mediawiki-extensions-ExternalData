@@ -511,6 +511,7 @@ $messages['ia'] = array(
 	'externaldata-db-could-not-get-url' => 'Non poteva obtener le URL post $1 {{PLURAL:$1|tentativa|tentativas}}.',
 	'externaldata-db-unknown-type' => 'Error: Typo de base de datos incognite.',
 	'externaldata-db-could-not-connect' => 'Error: Impossibile connecter se al base de datos.',
+	'externaldata-db-unknown-collection' => 'Error: Collection MongoDB incognite.',
 	'externaldata-db-no-return-values' => 'Error: Nulle valor de retorno specificate.',
 	'externaldata-db-invalid-query' => 'Consulta invalide.',
 );
