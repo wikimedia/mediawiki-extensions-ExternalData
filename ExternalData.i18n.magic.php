@@ -121,6 +121,7 @@ $magicWords['mk'] = array(
 /** Malayalam (മലയാളം) */
 $magicWords['ml'] = array(
 	'get_external_data' => array( 0, 'ബാഹ്യ_വിവരങ്ങൾ_എടുക്കുക' ),
+	'get_web_data' => array( 0, 'വെബ്_വിവരങ്ങൾ_എടുക്കുക' ),
 	'external_value' => array( 0, 'ബാഹ്യ_മൂല്യം' ),
 );
 
