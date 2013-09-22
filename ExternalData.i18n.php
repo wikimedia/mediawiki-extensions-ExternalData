@@ -217,6 +217,13 @@ $messages['cs'] = array(
 	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
 );
 
+/** Welsh (Cymraeg)
+ * @author Lloffiwr
+ */
+$messages['cy'] = array(
+	'getdata' => 'Nôl y data',
+);
+
 /** Danish (dansk)
  * @author Tjernobyl
  */
