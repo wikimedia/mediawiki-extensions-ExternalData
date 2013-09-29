@@ -26,6 +26,7 @@ $magicWords['ar'] = array(
 	'get_db_data' => array( 0, 'عرض_بيانات_قب' ),
 	'external_value' => array( 0, 'قيمة_خارجية' ),
 	'for_external_table' => array( 0, 'لجدول_خارجي' ),
+	'display_external_table' => array( 0, 'عرض_جدول_خارجي' ),
 	'store_external_table' => array( 0, 'تخزين_جدول_خارجي' ),
 	'clear_external_data' => array( 0, 'إزالة_بيانات_خارجية' ),
 );
