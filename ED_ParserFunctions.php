@@ -302,12 +302,13 @@ class EDParserFunctions {
 	 */
 	static function doExternalValue( &$parser, $local_var = '' ) {
 		global $edgValues;
-		if ( ! array_key_exists( $local_var, $edgValues ) )
+		if ( ! array_key_exists( $local_var, $edgValues ) ) {
 			return '';
-		elseif ( is_array( $edgValues[$local_var] ) )
+		} elseif ( is_array( $edgValues[$local_var] ) ) {
 			return $edgValues[$local_var][0];
-		else
+		} else {
 			return $edgValues[$local_var];
+		}
 	}
  
 	/**
