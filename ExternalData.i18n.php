@@ -203,6 +203,7 @@ $messages['ca'] = array(
 /** Czech (česky)
  * @author Jkjk
  * @author Reaperman
+ * @author XenoPheX
  */
 $messages['cs'] = array(
 	'getdata' => 'Získat data',
@@ -211,6 +212,7 @@ $messages['cs'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Nepodařilo se spojit s $1',
 	'externaldata-xml-error' => 'Chyba XML: $1 na řádku $2',
 	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru', # Fuzzy
+	'externaldata-db-could-not-get-url' => 'Nepodařilo se získat URL po $1 {{PLURAL:$1|pokusu|pokusech}}.',
 	'externaldata-db-unknown-type' => 'Chyba: Neznámý typ databáze.',
 	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
 	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.', # Fuzzy
