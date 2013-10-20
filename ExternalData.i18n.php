@@ -224,6 +224,17 @@ $messages['cs'] = array(
  */
 $messages['cy'] = array(
 	'getdata' => 'Nôl y data',
+	'externaldata-desc' => 'Yn galluogi nôl data strwythuredig o ffynnonellau allanol megis URLs a chronfeydd data',
+	'externaldata-web-invalid-format' => 'Fformat annilys: "$1"',
+	'externaldata-ldap-unable-to-connect' => 'Ni lwyddwyd i gysylltu â $1',
+	'externaldata-xml-error' => 'Gwall XML: $1 yn y llinell $2',
+	'externaldata-db-incomplete-information' => 'Gwall: Gwybodaeth anghyflawn i ID y gronfa ddata.',
+	'externaldata-db-could-not-get-url' => "Ni chafwyd hyd i'r URL o geisio {{PLURAL:$1||unwaith|dwywaith|teirgwaith|$1 gwaith}}.",
+	'externaldata-db-unknown-type' => "Gwall: Math anhysbys i'r gronfa ddata.",
+	'externaldata-db-could-not-connect' => "Gwall: Ni lwyddwyd i gysylltu â'r gronfa ddata.",
+	'externaldata-db-unknown-collection' => 'Gwall: Casgliad MongoDB anhysbys.',
+	'externaldata-db-no-return-values' => "Gwall: Ni phenwyd unrhyw werthoedd i'w nôl.",
+	'externaldata-db-invalid-query' => 'Gofyniad annilys.',
 );
 
 /** Danish (dansk)
