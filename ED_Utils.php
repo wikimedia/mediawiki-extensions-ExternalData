@@ -17,6 +17,7 @@ class EDUtils {
 		$edgCurrentXMLTag = strtolower( $name );
 		foreach ( $attrs as $attr => $value ) {
 			$attr = strtolower( $attr );
+			$value = str_replace( self::$ampersandReplacement, '&amp;', $value );
 			if ( array_key_exists( $attr, $edgXMLValues ) ) {
 				$edgXMLValues[$attr][] = $value;
 			} else {
