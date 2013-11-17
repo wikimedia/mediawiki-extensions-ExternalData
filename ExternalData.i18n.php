@@ -628,6 +628,13 @@ $messages['km'] = array(
 	'getdata' => 'យក​ទិន្នន័យ',
 );
 
+/** Korean (한국어)
+ * @author Daisy2002
+ */
+$messages['ko'] = array(
+	'externaldata-web-invalid-format' => '"$1" 상태가 잘못되었습니다.',
+);
+
 /** Colognian (Ripoarisch)
  * @author Purodha
  */
