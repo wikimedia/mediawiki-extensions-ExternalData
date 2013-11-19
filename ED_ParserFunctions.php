@@ -100,13 +100,14 @@ class EDParserFunctions {
 		// or them to the local variable name
 		foreach ( $mappings as $local_var => $external_var ) {
 			if ( array_key_exists( $external_var, $external_values ) ) {
-				if ( is_array( $external_values[$external_var] ) )
+				if ( is_array( $external_values[$external_var] ) ) {
 					// array_values() restores regular
 					// 1, 2, 3 indexes to array, after unset()
 					// in filtering may have removed some
 					$edgValues[$local_var] = array_values( $external_values[$external_var] );
-				else
+				} else {
 					$edgValues[$local_var][] = $external_values[$external_var];
+				}
 			}
 		}
 	}
@@ -161,7 +162,7 @@ class EDParserFunctions {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
 			}
 		} else {
-			return;
+			return "No 'data' parameter specified";
 		}
 
 		if ( array_key_exists( 'cache seconds', $args) ) {
@@ -291,10 +292,11 @@ class EDParserFunctions {
 	 */
 	static function getIndexedValue( $var, $i ) {
 		global $edgValues;
-		if ( array_key_exists( $var, $edgValues ) && count( $edgValues[$var] > $i ) )
+		if ( array_key_exists( $var, $edgValues ) && array_key_exists( $i, $edgValues[$var] ) ) {
 			return $edgValues[$var][$i];
-		else
+		} else {
 			return '';
+		}
 	}
  
 	/**
@@ -303,7 +305,7 @@ class EDParserFunctions {
 	static function doExternalValue( &$parser, $local_var = '' ) {
 		global $edgValues;
 		if ( ! array_key_exists( $local_var, $edgValues ) ) {
-			return '';
+			return "Error: no local variable \"$local_var\" was set.";
 		} elseif ( is_array( $edgValues[$local_var] ) ) {
 			return $edgValues[$local_var][0];
 		} else {

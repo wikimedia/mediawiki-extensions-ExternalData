@@ -17,6 +17,7 @@ $messages['en'] = array(
 	'externaldata-web-invalid-format' => 'Invalid format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1',
 	'externaldata-xml-error' => 'XML error: $1 at line $2',
+	'externaldata-invalid-json' => 'Error: Invalid JSON',
 	'externaldata-db-incomplete-information' => 'Error: Incomplete information for this database ID.',
 	'externaldata-db-could-not-get-url' => 'Could not get URL after $1 {{PLURAL:$1|try|tries}}.',
 	'externaldata-db-unknown-type' => 'Error: Unknown database type.',
@@ -45,6 +46,7 @@ Parameters:
 	'externaldata-xml-error' => "The error message if #get_web_data can't parse an XML file. Parameters:
 * $1 - error message which are returned by PHP's <code>xml_error_string()</code>
 * $2 - line number",
+	'externaldata-invalid-json' => 'The error message if the URL being accessed does not contain valid JSON',
 	'externaldata-db-incomplete-information' => 'Used as error message.
 
 Database server, database type, database directory, database username and/or database password are not specified.',

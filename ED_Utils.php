@@ -646,11 +646,7 @@ END;
 			}
 		}
 		fclose( $fp );
-		// now "flip" the data, turning it into a column-by-column
-		// array, instead of row-by-row
-		if ( $has_header ) {
-			$header_vals = array_shift( $table );
-		}
+
 		$values = array();
 		foreach ( $table as $line ) {
 			foreach ( $line as $i => $row_val ) {
@@ -679,10 +675,11 @@ END;
 					// this is hopefully an attribute key
 					$column = $i;
 				}
-				if ( array_key_exists( $column, $values ) )
+				if ( array_key_exists( $column, $values ) ) {
 					$values[$column][] = $row_val;
-				else
+				} else {
 					$values[$column] = array( $row_val );
+				}
 			}
 		}
 		return $values;
@@ -717,6 +714,10 @@ END;
 
 	static function getJSONData( $json ) {
 		$json_tree = FormatJson::decode( $json, true );
+		if ( is_null( $json_tree ) ) {
+			// It's probably invalid JSON.
+			return wfMessage( 'externaldata-invalid-json' )->text();
+		}
 		$values = array();
 		if ( is_array( $json_tree ) ) {
 			self::parseTree( $json_tree, $values );
@@ -726,8 +727,7 @@ END;
 
 	static function fetchURL( $url, $post_vars = array(), $cacheExpireTime = 0, $get_fresh = false, $try_count = 1 ) {
 		$dbr = wfGetDB( DB_SLAVE );
-		global $edgStringReplacements, $edgCacheTable,
-			$edgAllowSSL;
+		global $edgStringReplacements, $edgCacheTable, $edgAllowSSL;
 
 		if ( $post_vars ) {
 			return Http::post( $url, array( 'postData' => $post_vars ) );
@@ -815,9 +815,10 @@ END;
 
 	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime ) {
 		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
-		// exit if there's nothing there
-		if ( empty( $url_contents ) )
-			return array();
+		// Show an error message if there's nothing there.
+		if ( empty( $url_contents ) ) {
+			return "No contents found at URL $url.";
+		}
 
 		if ( $format == 'xml' ) {
 			return self::getXMLData( $url_contents );
