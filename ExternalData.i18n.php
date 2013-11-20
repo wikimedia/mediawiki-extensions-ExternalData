@@ -261,6 +261,7 @@ $messages['de'] = array(
 	'externaldata-web-invalid-format' => 'Ungültiges Format: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Es konnte keine Verbindung zu $1 hergestellt werden',
 	'externaldata-xml-error' => 'XML-Fehler: $1 in Zeile $2',
+	'externaldata-invalid-json' => 'Fehler: Ungültiges JSON',
 	'externaldata-db-incomplete-information' => 'Fehler: Es liegen nur unvollständige Informationen für diese Serverkennung vor.',
 	'externaldata-db-could-not-get-url' => 'Die URL konnte mit {{PLURAL:$1|einem Versuch|$1 Versuchen}} nicht abgerufen werden.',
 	'externaldata-db-unknown-type' => 'Fehler: Es handelt sich um einen unbekannten Datenbanktyp.',
@@ -397,6 +398,7 @@ $messages['fr'] = array(
 	'externaldata-web-invalid-format' => 'Format invalide: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Impossible de se connecter à $1',
 	'externaldata-xml-error' => 'Erreur XML : $1 à la ligne $2',
+	'externaldata-invalid-json' => 'Erreur : JSON non valide',
 	'externaldata-db-incomplete-information' => 'Erreur : Informations incomplètes pour cet identifiant de serveur.',
 	'externaldata-db-could-not-get-url' => "Impossible d'obtenir l'URL après $1 {{PLURAL:$1|essais}}.",
 	'externaldata-db-unknown-type' => 'ERREUR: Type de base de données inconnu.',
@@ -459,10 +461,12 @@ $messages['gsw'] = array(
 
 /** Gujarati (ગુજરાતી)
  * @author Ashok modhvadia
+ * @author KartikMistry
  */
 $messages['gu'] = array(
 	'getdata' => 'માહિતી પ્રાપ્ત કરો',
 	'externaldata-desc' => 'બાહ્ય કડીઓ અને સ્થાનિક વિકિ પાનાઓ પરથી CSV, JSON અને XML શૈલીમાં માહિતીની પુન:પ્રાપ્તિની છુટ', # Fuzzy
+	'externaldata-invalid-json' => 'ક્ષતિ: અયોગ્ય JSON',
 );
 
 /** Hebrew (עברית)
@@ -476,6 +480,7 @@ $messages['he'] = array(
 	'externaldata-web-invalid-format' => 'תסדיר בלתי־תקין: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'לא ניתן להתחבר ל־$1',
 	'externaldata-xml-error' => 'שגיאת XML: $1 בשורה $2',
+	'externaldata-invalid-json' => 'שגיאה: JSON בלתי־תקין',
 	'externaldata-db-incomplete-information' => 'שגיאה: יש רק מידע חלקי על מספר השרת הזה.',
 	'externaldata-db-could-not-get-url' => 'לא ניתן לקבל את כתובת ה־URL לאחר {{PLURAL:$1|נסיון אחד|$1 נסיונות}}.',
 	'externaldata-db-unknown-type' => 'שגיאה: סוג מסד הנתונים אינו מוכר.',
@@ -586,6 +591,7 @@ $messages['it'] = array(
 	'externaldata-web-invalid-format' => 'Formato non valido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Impossibile connettersi a $1',
 	'externaldata-xml-error' => 'Errore XML: $1 alla linea $2',
+	'externaldata-invalid-json' => 'Errore: JSON non valido',
 	'externaldata-db-incomplete-information' => 'Errore: informazioni incomplete per questo server ID.',
 	'externaldata-db-could-not-get-url' => "Impossibile raggiungere l'URL dopo $1 {{PLURAL:$1|tentativo|tentativi}}.",
 	'externaldata-db-unknown-type' => 'Errore: tipo di database sconosciuto.',
@@ -607,6 +613,7 @@ $messages['ja'] = array(
 	'externaldata-web-invalid-format' => '無効な書式:「$1」',
 	'externaldata-ldap-unable-to-connect' => '$1 に接続できません',
 	'externaldata-xml-error' => 'XML エラー: 行$2で$1',
+	'externaldata-invalid-json' => 'エラー: 無効な JSON です',
 	'externaldata-db-incomplete-information' => 'エラー: このデータベース ID に対する情報が不十分です。',
 	'externaldata-db-could-not-get-url' => '$1 回試行しましたが URL を取得できませんでした。',
 	'externaldata-db-unknown-type' => 'エラー: データベースの種類が不明です。',
@@ -742,6 +749,7 @@ $messages['nb'] = array(
 );
 
 /** Dutch (Nederlands)
+ * @author Effeietsanders
  * @author SPQRobin
  * @author Siebrand
  */
@@ -751,6 +759,7 @@ $messages['nl'] = array(
 	'externaldata-web-invalid-format' => 'Ongeldige indeling: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Het was niet mogelijk te verbinden met $1',
 	'externaldata-xml-error' => 'XML-fout: $1 op regel $2',
+	'externaldata-invalid-json' => 'Fout: Ongeldige JSON',
 	'externaldata-db-incomplete-information' => 'Fout: onvolledige informatie voor dit servernummer.',
 	'externaldata-db-could-not-get-url' => 'Na $1 {{PLURAL:$1|poging|pogingen}} gaf de URL geen resultaat.',
 	'externaldata-db-unknown-type' => 'Fout: onbekend databasetype.',
@@ -925,6 +934,7 @@ $messages['ru'] = array(
 	'externaldata-web-invalid-format' => 'Недопустимый формат:  "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Не удаётся подключиться к $1',
 	'externaldata-xml-error' => 'Ошибка XML. $1 в строке $2',
+	'externaldata-invalid-json' => 'Ошибка: Недопустимый JSON',
 	'externaldata-db-incomplete-information' => 'ОШИБКА. Неполная информация для этого ID сервера.',
 	'externaldata-db-could-not-get-url' => 'Не удалось получить URL после $1 {{PLURAL:$1|попытки|попыток|попыток}}.',
 	'externaldata-db-unknown-type' => 'ОШИБКА. Неизвестный тип базы данных.',
@@ -1070,6 +1080,7 @@ $messages['tr'] = array(
 );
 
 /** Ukrainian (українська)
+ * @author Andriykopanytsia
  * @author Base
  * @author Ата
  * @author Тест
@@ -1080,6 +1091,7 @@ $messages['uk'] = array(
 	'externaldata-web-invalid-format' => 'Неприпустимий формат: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Не вдається підключитися до $1',
 	'externaldata-xml-error' => 'Помилка XML: $1 в рядку $2',
+	'externaldata-invalid-json' => 'Помилка: Неправильний JSON',
 	'externaldata-db-incomplete-information' => 'Помилка: Неповна інформація для цього ID сервера.',
 	'externaldata-db-could-not-get-url' => 'Не вдалося отримати URL після $1 {{PLURAL:$1|спроби|спроб}}.',
 	'externaldata-db-unknown-type' => 'Помилка: Невідомий тип бази даних.',
