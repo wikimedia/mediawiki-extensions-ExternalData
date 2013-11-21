@@ -126,6 +126,7 @@ $messages['ast'] = array(
 	'externaldata-web-invalid-format' => 'Formatu inválidu: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Nun se pudo coneutar con $1',
 	'externaldata-xml-error' => 'Error XML: $1 na llinia $2',
+	'externaldata-invalid-json' => 'Error: JSON inválidu',
 	'externaldata-db-incomplete-information' => 'Error: Información incompleta pa esta ID de sirvidor.',
 	'externaldata-db-could-not-get-url' => 'Nun se pudo recuperar la URL dempués de $1 {{PLURAL:$1|intentu|intentos}}.',
 	'externaldata-db-unknown-type' => 'Error: Triba de base de datos desconocida.',
