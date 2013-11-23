@@ -697,6 +697,7 @@ $messages['mk'] = array(
 	'externaldata-web-invalid-format' => 'Неважечки формат: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Не можам да се поврзам со  $1',
 	'externaldata-xml-error' => 'XML грешка: $1 во ред $2',
+	'externaldata-invalid-json' => 'Грешка: Неважечки JSON',
 	'externaldata-db-incomplete-information' => 'Грешка: Нецелосни информации за овој опслужувачки ид. бр.',
 	'externaldata-db-could-not-get-url' => 'Не можев да ја добијам URL адресата по $1 {{PLURAL:$1|обид|обиди}}.',
 	'externaldata-db-unknown-type' => 'Грешка: Непознат тип на база на податоци.',
