@@ -321,6 +321,7 @@ $messages['eo'] = array(
 /** Spanish (español)
  * @author Armando-Martin
  * @author Crazymadlover
+ * @author Fitoschido
  * @author Imre
  * @author Manuelt15
  * @author Sanbec
@@ -332,6 +333,7 @@ $messages['es'] = array(
 	'externaldata-web-invalid-format' => 'Formato inválido: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'No se pudo conectar con $1',
 	'externaldata-xml-error' => 'Error XML: $1 en línea $2',
+	'externaldata-invalid-json' => 'Error: JSON no válido',
 	'externaldata-db-incomplete-information' => 'Error: Información incompleta para este ID de servidor.',
 	'externaldata-db-could-not-get-url' => 'No se pudo obtener la URL después de $1 {{PLURAL:$1|intento|intentos}}.',
 	'externaldata-db-unknown-type' => 'Error: Tipo de base de datos desconocido.',
@@ -524,6 +526,13 @@ $messages['hu'] = array(
 	'externaldata-db-could-not-connect' => 'Hiba: nem sikerült csatlakozni az adatbázishoz.',
 	'externaldata-db-no-return-values' => 'Hiba: nem lettek megadva visszatérési értékek.',
 	'externaldata-db-invalid-query' => 'Érvénytelen lekérdezés.',
+);
+
+/** Armenian (Հայերեն)
+ * @author M hamlet
+ */
+$messages['hy'] = array(
+	'externaldata-invalid-json' => 'Սխալ․ Թերի JSON',
 );
 
 /** Interlingua (interlingua)
@@ -1129,6 +1138,7 @@ $messages['yi'] = array(
 
 /** Simplified Chinese (中文（简体）‎)
  * @author Hydra
+ * @author Liuxinyu970226
  * @author Yfdyh000
  */
 $messages['zh-hans'] = array(
@@ -1137,6 +1147,7 @@ $messages['zh-hans'] = array(
 	'externaldata-web-invalid-format' => '无效的格式：“$1”',
 	'externaldata-ldap-unable-to-connect' => '无法连接到 $1',
 	'externaldata-xml-error' => 'XML错误：$1 在行 $2',
+	'externaldata-invalid-json' => '错误：无效的JSON',
 	'externaldata-db-incomplete-information' => '错误：此服务器ID信息不完整。',
 	'externaldata-db-could-not-get-url' => '$1次尝试后仍无法获取URL。',
 	'externaldata-db-unknown-type' => '错误：未知的数据库类型。',
