@@ -825,6 +825,7 @@ $messages['or'] = array(
 
 /** Polish (polski)
  * @author BeginaFelicysym
+ * @author Chrumps
  * @author Leinad
  * @author Sp5uhe
  */
@@ -834,6 +835,7 @@ $messages['pl'] = array(
 	'externaldata-web-invalid-format' => 'Nieprawidłowy format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Nie można połączyć się z $1',
 	'externaldata-xml-error' => 'Błąd XML – $1 w wierszu $2',
+	'externaldata-invalid-json' => 'Błąd: Nieprawidłowy JSON',
 	'externaldata-db-incomplete-information' => 'Błąd – niepełne informacje o tym identyfikatorze serwera.',
 	'externaldata-db-could-not-get-url' => 'Nie można uzyskać adresu URL po $1 {{PLURAL:$1|próbie|próbach}}.',
 	'externaldata-db-unknown-type' => 'Błąd: Nieznany typ bazy danych.',
