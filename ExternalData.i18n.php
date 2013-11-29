@@ -435,6 +435,7 @@ $messages['gl'] = array(
 	'externaldata-web-invalid-format' => 'Formato incorrecto: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Non se pode conectar con $1',
 	'externaldata-xml-error' => 'Erro XML: $1 na liña $2',
+	'externaldata-invalid-json' => 'Erro: JSON non válido',
 	'externaldata-db-incomplete-information' => 'Erro: Información incompleta para este ID de servidor.',
 	'externaldata-db-could-not-get-url' => 'Non se puido obter o enderezo URL despois de $1 {{PLURAL:$1|intento|intentos}}.',
 	'externaldata-db-unknown-type' => 'Erro: Tipo de base de datos descoñecido.',
