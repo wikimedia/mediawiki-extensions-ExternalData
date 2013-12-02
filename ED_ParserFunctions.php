@@ -132,7 +132,7 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return "No URL specified";
+			return wfMessage( 'externaldata-no-param-specified', 'url')->parse();
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
@@ -162,7 +162,7 @@ class EDParserFunctions {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
 			}
 		} else {
-			return "No 'data' parameter specified";
+			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
 		}
 
 		if ( array_key_exists( 'cache seconds', $args) ) {
@@ -210,9 +210,19 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
+		if ( array_key_exists( 'data', $args ) ) {
+			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
+		}
 
-		$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
+		if ( !array_key_exists( 'filter', $args ) ) {
+			return wfMessage( 'externaldata-no-param-specified', 'filter')->parse();
+		} elseif ( !array_key_exists( 'domain', $args ) ) {
+			return wfMessage( 'externaldata-no-param-specified', 'domain')->parse();
+		} else {
+			$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
+		}
 
 		// Build $edgValues
 		foreach ( $external_values as $i => $row ) {
@@ -248,13 +258,20 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
 		$data = ( array_key_exists( 'data', $args ) ) ? $args['data'] : null;
-		$dbID = ( array_key_exists( 'db', $args ) ) ? $args['db'] : null;
-		// For backwards-compatibility - 'db' parameter was added
-		// in External Data version 1.3.
-		if ( is_null( $dbID ) ) {
-			$dbID = ( array_key_exists( 'server', $args ) ) ? $args['server'] : null;
+		if ( array_key_exists( 'db', $args ) ) {
+			$dbID = $args['db'];
+		} elseif ( array_key_exists( 'server', $args ) ) {
+			// For backwards-compatibility - 'db' parameter was
+			// added in External Data version 1.3.
+			$dbID = $args['server'];
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'db')->parse();
 		}
-		$table = ( array_key_exists( 'from', $args ) ) ? $args['from'] : null;
+		if ( array_key_exists( 'from', $args ) ) {
+			$table = $args['from'];
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'from')->parse();
+		}
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
 		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;

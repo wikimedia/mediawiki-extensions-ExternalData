@@ -14,6 +14,7 @@ $messages['en'] = array(
 	// user messages
 	'getdata' => 'Get data',
 	'externaldata-desc' => 'Allows for retrieving structured data from external URLs, databases and other sources',
+	'externaldata-no-param-specified' => "Error: no '$1' parameter specified.",
 	'externaldata-web-invalid-format' => 'Invalid format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Unable to connect to $1',
 	'externaldata-xml-error' => 'XML error: $1 at line $2',
@@ -35,6 +36,7 @@ $messages['en'] = array(
 $messages['qqq'] = array(
 	'getdata' => '{{doc-special|GetData}}',
 	'externaldata-desc' => '{{desc|name=External Data|url=http://www.mediawiki.org/wiki/Extension:External_Data}}',
+	'externaldata-no-param-specified' => 'The error message if a parameter to some parser function is not set.',
 	'externaldata-web-invalid-format' => 'The error message if #get_web_data is called with an invalid format value.
 
 Parameters:
