@@ -7,7 +7,6 @@ $magicWords = array();
 
 /** English (English) */
 $magicWords['en'] = array(
-	'get_external_data' => array( 0, 'get_external_data' ),
 	'get_web_data' => array( 0, 'get_web_data' ),
 	'get_ldap_data' => array( 0, 'get_ldap_data' ),
 	'get_db_data' => array( 0, 'get_db_data' ),
@@ -20,7 +19,6 @@ $magicWords['en'] = array(
 
 /** Arabic (العربية) */
 $magicWords['ar'] = array(
-	'get_external_data' => array( 0, 'عرض_بيانات_خارجية' ),
 	'get_web_data' => array( 0, 'عرض_بيانات_الويب' ),
 	'get_ldap_data' => array( 0, 'عرض_بيانات_لداب' ),
 	'get_db_data' => array( 0, 'عرض_بيانات_قب' ),
@@ -33,7 +31,6 @@ $magicWords['ar'] = array(
 
 /** Egyptian Spoken Arabic (مصرى) */
 $magicWords['arz'] = array(
-	'get_external_data' => array( 0, 'عرض_بيانات_خارجية' ),
 	'get_ldap_data' => array( 0, 'عرض_بيانات_لداب' ),
 	'get_db_data' => array( 0, 'عرض_بيانات_قب' ),
 	'external_value' => array( 0, 'قيمة_خارجية' ),
@@ -43,7 +40,6 @@ $magicWords['arz'] = array(
 
 /** Chechen (нохчийн) */
 $magicWords['ce'] = array(
-	'get_external_data' => array( 0, 'схьаэца_архьара_хаамаш', 'получить_внешние_данные' ),
 	'get_ldap_data' => array( 0, 'схьаэца_хаамаш_ldap', 'получить_данные_ldap' ),
 	'get_db_data' => array( 0, 'схьаэца_хаамаш_db', 'получить_данные_db' ),
 	'external_value' => array( 0, 'архьара_дозалла', 'внешнее_значение' ),
@@ -52,7 +48,6 @@ $magicWords['ce'] = array(
 
 /** German (Deutsch) */
 $magicWords['de'] = array(
-	'get_external_data' => array( 0, 'hole_externe_daten' ),
 	'get_web_data' => array( 0, 'hole_webdaten' ),
 	'get_ldap_data' => array( 0, 'hole_ldapdaten' ),
 	'get_db_data' => array( 0, 'hole_dbdaten' ),
@@ -65,7 +60,6 @@ $magicWords['de'] = array(
 
 /** Greek (Ελληνικά) */
 $magicWords['el'] = array(
-	'get_external_data' => array( 0, 'λήψη_εξωτερικών_δεδομένων' ),
 	'get_web_data' => array( 0, 'λήψη_δεδομένων_ιστού' ),
 	'get_ldap_data' => array( 0, 'λήψη_δεδομένων_ldap' ),
 	'get_db_data' => array( 0, 'λήψη_δεδομένων_βδ' ),
@@ -78,14 +72,12 @@ $magicWords['el'] = array(
 
 /** Spanish (español) */
 $magicWords['es'] = array(
-	'get_external_data' => array( 0, 'obtener_datos_externos' ),
 	'get_db_data' => array( 0, 'obtener_datos_db' ),
 	'external_value' => array( 0, 'valor_externo' ),
 );
 
 /** Japanese (日本語) */
 $magicWords['ja'] = array(
-	'get_external_data' => array( 0, '外部データ取得' ),
 	'get_ldap_data' => array( 0, 'ldapデータ取得' ),
 	'get_db_data' => array( 0, 'dbデータ取得' ),
 	'external_value' => array( 0, '外部値' ),
@@ -95,7 +87,6 @@ $magicWords['ja'] = array(
 
 /** Korean (한국어) */
 $magicWords['ko'] = array(
-	'get_external_data' => array( 0, '바깥_데이터_얻기' ),
 	'get_web_data' => array( 0, '웹_데이터_얻기' ),
 	'get_ldap_data' => array( 0, 'ldap_데이터_얻기' ),
 	'get_db_data' => array( 0, 'db_데이터_얻기' ),
@@ -108,7 +99,6 @@ $magicWords['ko'] = array(
 
 /** Macedonian (македонски) */
 $magicWords['mk'] = array(
-	'get_external_data' => array( 0, 'преземи_надворешни_податоци' ),
 	'get_web_data' => array( 0, 'преземи_мрежни_податоци' ),
 	'get_ldap_data' => array( 0, 'преземи_ldap_податоци' ),
 	'get_db_data' => array( 0, 'преземи_db_податоци' ),
@@ -121,21 +111,18 @@ $magicWords['mk'] = array(
 
 /** Malayalam (മലയാളം) */
 $magicWords['ml'] = array(
-	'get_external_data' => array( 0, 'ബാഹ്യ_വിവരങ്ങൾ_എടുക്കുക' ),
 	'get_web_data' => array( 0, 'വെബ്_വിവരങ്ങൾ_എടുക്കുക' ),
 	'external_value' => array( 0, 'ബാഹ്യ_മൂല്യം' ),
 );
 
 /** Marathi (मराठी) */
 $magicWords['mr'] = array(
-	'get_external_data' => array( 0, 'मिळवा_बाह्य_विदा' ),
 	'get_ldap_data' => array( 0, 'मिळवा__एलडॅप_विदा' ),
 	'for_external_table' => array( 0, 'बाह्य_सारणी_करिता' ),
 );
 
 /** Low Saxon (Netherlands) (Nedersaksies) */
 $magicWords['nds-nl'] = array(
-	'get_external_data' => array( 0, 'externe_gegevens_ophaolen' ),
 	'get_web_data' => array( 0, 'webgegevens_ophaolen' ),
 	'get_ldap_data' => array( 0, 'ldap-gegevens_ophaolen' ),
 	'get_db_data' => array( 0, 'db-gegevens_ophaolen' ),
@@ -146,7 +133,6 @@ $magicWords['nds-nl'] = array(
 
 /** Dutch (Nederlands) */
 $magicWords['nl'] = array(
-	'get_external_data' => array( 0, 'externe_gegevens_ophalen' ),
 	'get_web_data' => array( 0, 'webgegevens_ophalen' ),
 	'get_ldap_data' => array( 0, 'ldap_gegevens_ophalen' ),
 	'get_db_data' => array( 0, 'db_gegevens_ophalen' ),
@@ -158,7 +144,6 @@ $magicWords['nl'] = array(
 
 /** Russian (русский) */
 $magicWords['ru'] = array(
-	'get_external_data' => array( 0, 'получить_внешние_данные' ),
 	'get_ldap_data' => array( 0, 'получить_данные_ldap' ),
 	'get_db_data' => array( 0, 'получить_данные_db' ),
 	'external_value' => array( 0, 'внешнее_значение' ),
@@ -168,7 +153,6 @@ $magicWords['ru'] = array(
 
 /** Serbian (Cyrillic script) (српски (ћирилица)‎) */
 $magicWords['sr-ec'] = array(
-	'get_external_data' => array( 0, 'добави_спољне_податке' ),
 	'get_web_data' => array( 0, 'добави_веб_податке' ),
 	'get_ldap_data' => array( 0, 'добави_лдап_податке' ),
 	'get_db_data' => array( 0, 'добави_податке_базе' ),
@@ -179,7 +163,6 @@ $magicWords['sr-ec'] = array(
 
 /** Serbian (Latin script) (srpski (latinica)‎) */
 $magicWords['sr-el'] = array(
-	'get_external_data' => array( 0, 'dobavi_spoljne_podatke' ),
 	'get_web_data' => array( 0, 'dobavi_mrežne_podatke' ),
 	'get_ldap_data' => array( 0, 'dobavi_ldap_podatke' ),
 	'get_db_data' => array( 0, 'dobavi_podatke_baze' ),
@@ -191,7 +174,6 @@ $magicWords['sr-el'] = array(
 
 /** Ukrainian (українська) */
 $magicWords['uk'] = array(
-	'get_external_data' => array( 0, 'отримати_зовнішні_дані' ),
 	'get_ldap_data' => array( 0, 'отримати_дані_ldap' ),
 	'get_db_data' => array( 0, 'отримати_дані_db' ),
 	'external_value' => array( 0, 'зовнішнє_значення' ),

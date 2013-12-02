@@ -6,62 +6,7 @@
 class EDParserFunctions {
  
 	/**
-	 * Render the #get_external_data parser function
-	 * @deprecated
-	 */
-	static function doGetExternalData( &$parser ) {
-		global $edgCurPageName, $edgValues;
-
-		// if we're handling multiple pages, reset $edgValues
-		// when we move from one page to another
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
-			$edgCurPageName = $cur_page_name;
-		}
-
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-		$url = array_shift( $params );
-		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
-		// if the URL isn't allowed (based on a whitelist), exit
-		if ( ! EDUtils::isURLAllowed( $url ) ) {
-			return;
-		}
-
-		$format = strtolower( array_shift( $params ) ); // make case-insensitive
-		$external_values = EDUtils::getDataFromURL( $url, $format, null );
-		if ( count( $external_values ) == 0 ) {
-			return;
-		}
-
-		// Get set of filters and set of mappings, determining each
-		// one by whether there's a double or single equals sign,
-		// respectively.
-		$filters = array();
-		$mappings = array();
-		foreach ( $params as $param ) {
-			if ( strpos( $param, '==' ) ) {
-				list( $external_var, $value ) = explode( '==', $param );
-				// set to all lowercase to avoid casing issues
-				$external_var = strtolower( $external_var );
-				$filters[$external_var] = $value;
-			} elseif ( strpos( $param, '=' ) ) {
-				list( $local_var, $external_var ) = explode( '=', $param );
-				// set to all lowercase to avoid casing issues
-				$external_var = strtolower( $external_var );
-				$mappings[$local_var] = $external_var;
-			} else {
-				// if the parameter contains no equals signs,
-				// do nothing
-			}
-		}
-		self::setGlobalValuesArray( $external_values, $filters, $mappings );
-	}
-
-	/**
-	 * A helper function, since it's called by both doGetExternalData()
-	 * and doGetWebData() - the former is deprecated.
+	 * A helper function, called by doGetWebData().
 	 */
 	static public function setGlobalValuesArray( $external_values, $filters, $mappings ) {
 		global $edgValues;
@@ -113,7 +58,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #get_web_data parser function
+	 * Render the #get_web_data parser function.
 	 */
 	static function doGetWebData( &$parser ) {
 		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
@@ -305,7 +250,7 @@ class EDParserFunctions {
 
 	/**
 	 * Get the specified index of the array for the specified local
-	 * variable retrieved by #get_external_data
+	 * variable retrieved by one of the #get... parser functions.
 	 */
 	static function getIndexedValue( $var, $i ) {
 		global $edgValues;

@@ -47,7 +47,6 @@ $edgDBFlags = array();
 $edgDBTablePrefix = array();
 
 function edgRegisterParser( &$parser ) {
-	$parser->setFunctionHook( 'get_external_data', array( 'EDParserFunctions', 'doGetExternalData' ) );
 	$parser->setFunctionHook( 'get_web_data', array( 'EDParserFunctions', 'doGetWebData' ) );
 	$parser->setFunctionHook( 'get_ldap_data', array( 'EDParserFunctions', 'doGetLDAPData' ) );
 	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
