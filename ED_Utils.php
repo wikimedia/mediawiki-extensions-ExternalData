@@ -686,12 +686,33 @@ END;
 	}
 
 	/**
+	 * Helper function that determines whether an array holds a simple
+	 * list of scalar values, with no keys (i.e., not an associative
+	 * array).
+	 */
+	static function holdsSimpleList( $arr ) {
+		$expectedKey = 0;
+		foreach( $arr as $key => $val ) {
+			if ( is_array( $val ) || $key != $expectedKey++ ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Recursive JSON-parsing function for use by getJSONData().
 	 */
 	static function parseTree( $tree, &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {
 			// TODO - this logic could probably be a little nicer.
-			if ( is_array( $val ) && count( $val ) > 1 ) {
+			if ( is_array( $val ) && self::holdsSimpleList( $val ) ) {
+				// If it just holds a simple list, turn the
+				// array into a comma-separated list, then
+				// pass it back in in order to do the final					// processing.
+				$val = array( $key => implode( ', ', $val ) );
+				self::parseTree( $val, $retrieved_values );
+			} elseif ( is_array( $val ) && count( $val ) > 1 ) {
 				self::parseTree( $val, $retrieved_values );
 			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( current( $val ) ) ) {
 				self::parseTree( current( $val ), $retrieved_values );
