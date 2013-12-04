@@ -336,7 +336,7 @@ class EDParserFunctions {
 
 		if ( array_key_exists( 'data', $args ) ) {
 			// parse the 'data' arg into mappings
-			$mappings = EDUtils::paramToArray( $args['data'], false, true );
+			$mappings = EDUtils::paramToArray( $args['data'], false, false );
 		} else {
 			// or just use keys from edgValues
 			foreach ( $edgValues as $local_variable => $values ) {
