@@ -207,7 +207,7 @@ $messages['ca'] = array(
 	'externaldata-db-invalid-query' => 'Consulta no vàlida.',
 );
 
-/** Czech (česky)
+/** Czech (čeština)
  * @author Jkjk
  * @author Reaperman
  * @author XenoPheX
