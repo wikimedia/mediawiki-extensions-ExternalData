@@ -332,7 +332,7 @@ END;
 		$aggregateArray = array();
 		// Was an aggregation pipeline command issued?
 		if ( array_key_exists('aggregate', $otherParams ) ) {
-			// The 'aggregate' parameter should be an array of 
+			// The 'aggregate' parameter should be an array of
 			// aggregation JSON pipeline commands.
 			// Note to users: be sure to use spaces between curly
 			// brackets in the 'aggregate' JSON so as not to trip up the
@@ -340,7 +340,7 @@ END;
 			$aggregateArray = json_decode ($otherParams['aggregate'], true);
 		} elseif ( array_key_exists( 'find query', $otherParams ) ) {
 			// Otherwise, was a direct MongoDB "find" query JSON string provided?
-			// If so, use that.  As with 'aggregate' JSON, use spaces 
+			// If so, use that. As with 'aggregate' JSON, use spaces
 			// between curly brackets
 			$findArray = json_decode ($otherParams['find query'], true);
 		} elseif ( $where != '' ) {
@@ -407,7 +407,7 @@ END;
 		} else {
 			$resultsCursor = $collection->find( $findArray, $columns )->sort( $sortArray )->limit( $sqlOptions['LIMIT'] );
 		}
-		
+
 		$values = array();
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
@@ -578,6 +578,40 @@ END;
 			}
 			fclose( $fp );
 		//}
+
+		// Get rid of blank characters - these sometimes show up
+		// for certain encodings.
+		foreach( $table as $i => $row ) {
+			foreach ( $row as $j => $cell ) {
+				$table[$i][$j] = str_replace( chr(0), '', $cell );
+			}
+		}
+
+		// Get rid of the "byte order mark", if it's there - it could
+		// be one of a variety of options, depending on the encoding.
+		// Code copied in part from:
+		// http://artur.ejsmont.org/blog/content/annoying-utf-byte-order-marks
+		$sets = array(
+			"\xFE",
+			"\xFF",
+			"\xFE\xFF",
+			"\xFF\xFE",
+			"\xEF\xBB\xBF",
+			"\x2B\x2F\x76",
+			"\xF7\x64\x4C",
+			"\x0E\xFE\xFF",
+			"\xFB\xEE\x28",
+			"\x00\x00\xFE\xFF",
+			"\xDD\x73\x66\x73",
+		);
+		$decodedFirstCell = utf8_decode( $table[0][0] );
+		foreach ( $sets as $set ) {
+			if ( 0 == strncmp( $decodedFirstCell, $set, strlen( $set ) ) ) {
+				$table[0][0] = substr( $decodedFirstCell, strlen( $set ) + 1 );
+				break;
+			}
+		}
+
 		// Get header values, if this is 'csv with header'
 		if ( $has_header ) {
 			$header_vals = array_shift( $table );
