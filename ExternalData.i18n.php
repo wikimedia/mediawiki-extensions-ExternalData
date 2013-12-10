@@ -692,6 +692,7 @@ $messages['lb'] = array(
 	'externaldata-web-invalid-format' => 'Net valabele Format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Onméiglech sech op $1 ze connectéieren',
 	'externaldata-xml-error' => 'XML Feeler: $1 an der Linn $2',
+	'externaldata-invalid-json' => 'Feeler:JSON net valabel.',
 	'externaldata-db-incomplete-information' => 'Feeler: Informatioun fir dës Server ID net komplett.',
 	'externaldata-db-could-not-get-url' => "D'URL konnt no {{PLURAL:$1|enger Kéier|$1 Versich}} net opgemaach ginn.",
 	'externaldata-db-unknown-type' => 'Feeler: Onbekannten Datebank-Typ.',
@@ -1041,14 +1042,17 @@ $messages['sr-el'] = array(
  * @author Lokal Profil
  * @author Najami
  * @author Per
+ * @author Tobulos1
  * @author WikiPhoenix
  */
 $messages['sv'] = array(
 	'getdata' => 'Hämta data',
 	'externaldata-desc' => 'Ger möjlighet att hämta strukturerad data från externa URL:er, databaser och andra källor',
+	'externaldata-no-param-specified' => 'Fel: Ingen "$1" parameter specificerad.',
 	'externaldata-web-invalid-format' => 'Ogiltigt format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Kunde inte koppla till $1',
 	'externaldata-xml-error' => 'XML-fel: $1 på rad $2',
+	'externaldata-invalid-json' => 'Fel: Ogiltig JSON.',
 	'externaldata-db-incomplete-information' => 'Fel: Informationen för server-ID inte komplett.',
 	'externaldata-db-could-not-get-url' => 'Kunde inte hämta URL på $1 {{PLURAL:$1|försök|försök}}.',
 	'externaldata-db-unknown-type' => 'Fel: Okänd databastyp.',
