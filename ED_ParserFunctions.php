@@ -454,7 +454,7 @@ class EDParserFunctions {
 					// if variable name ends with a ".urlencode",
 					// that's a command - URL-encode the value of
 					// the actual variable
-					if ( strrpos( $variable, '.urlencode' ) == strlen( $variable ) - strlen( '.urlencode' ) ) {
+					if ( strrpos( $variable, '.urlencode' ) === strlen( $variable ) - strlen( '.urlencode' ) ) {
 						$real_var = str_replace( '.urlencode', '', $variable );
 						$value = urlencode( self::getIndexedValue( $real_var , $i ) );
 					} else {
