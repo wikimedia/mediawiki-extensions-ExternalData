@@ -209,6 +209,7 @@ $messages['ca'] = array(
 
 /** Czech (čeština)
  * @author Jkjk
+ * @author Matěj Grabovský
  * @author Reaperman
  * @author XenoPheX
  */
@@ -218,11 +219,11 @@ $messages['cs'] = array(
 	'externaldata-web-invalid-format' => 'Neplatný formát: „$1“',
 	'externaldata-ldap-unable-to-connect' => 'Nepodařilo se spojit s $1',
 	'externaldata-xml-error' => 'Chyba XML: $1 na řádku $2',
-	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID serveru', # Fuzzy
+	'externaldata-db-incomplete-information' => 'Chyba: Nekompletní informace pro toto ID databáze.',
 	'externaldata-db-could-not-get-url' => 'Nepodařilo se získat URL po $1 {{PLURAL:$1|pokusu|pokusech}}.',
 	'externaldata-db-unknown-type' => 'Chyba: Neznámý typ databáze.',
 	'externaldata-db-could-not-connect' => 'Chyba: Nepodařilo se připojit k databázi.',
-	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.', # Fuzzy
+	'externaldata-db-no-return-values' => 'Chyba: Nebyly zadány návratové hodnoty.',
 	'externaldata-db-invalid-query' => 'Neplatný požadavek.',
 );
 
