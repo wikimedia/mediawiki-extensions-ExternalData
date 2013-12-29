@@ -286,6 +286,19 @@ END;
 	 * MongoDB.
 	 */
 	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
+		global $wgMainCacheType, $wgMemc, $edgMemCachedMongoDBSeconds;
+
+        // use MEMCACHED if configured to cache mongodb queries
+        if ($wgMainCacheType === CACHE_MEMCACHED  && $edgMemCachedMongoDBSeconds > 0) {
+        	// check if cache entry exists
+        	$mckey = wfMemcKey( 'mongodb', $from, md5(json_encode($otherParams) . json_encode($columns) . $where . json_encode($sqlOptions) . $db_name . $db_server));
+        	$values = $wgMemc->get( $mckey );
+
+        	if ($values !== false) {
+        		return $values;
+        	}
+        }
+
 		// MongoDB login is done using a single string.
 		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
 		// use $db_server to pass these values
@@ -308,23 +321,13 @@ END;
 		} catch ( Exception $e ) {
 			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
-		// If working against a MongoDB replica set, it's OK to go to
-		// secondary/slaves should the primary go down.
-		MongoCursor::$slaveOkay = true;
 
 		$db = $m->selectDB( $db_name );
 
-		// MongoDB doesn't seem to have a way to check whether either
-		// a database or a collection exists, so instead we'll use
-		// getCollectionNames() to check for both.
-		$collectionNames = $db->getCollectionNames();
-		if ( count( $collectionNames ) == 0 ) {
-			return wfMessage( "externaldata-db-could-not-connect" )->text();
-		}
-
-		if ( !in_array( $from, $collectionNames ) ) {
-			return wfMessage( "externaldata-db-unknown-collection" )->text();
-		}
+		// Check if collection exists
+		if ($db->system->namespaces->findOne(array('name'=>$db_name . "." . $from)) === null){
+            return wfMessage( "externaldata-db-unknown-collection:")->text() .  $db_name . "." . $from;
+        }
 
 		$collection = new MongoCollection( $db, $from );
 
@@ -416,7 +419,7 @@ END;
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
 					$values[$column][] = self::getValueFromJSONArray( $doc, $column );
-				} elseif ( is_array( $doc[$column] ) ) {
+				} elseif ( isset( $doc[$column] ) && is_array( $doc[$column] ) ) {
 					// If MongoDB returns an array for a column,
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
@@ -438,9 +441,13 @@ END;
 					}
 				} else {
 					// It's a simple literal.
-					$values[$column][] = $doc[$column];
+					$values[$column][] = (isset( $doc[$column] ) ? $doc[$column] : null);
 				}
 			}
+		}
+
+		if ($wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0 ) {
+			$wgMemc->set( $mckey, $values, $edgMemCachedMongoDBSeconds ); 
 		}
 
 		return $values;
