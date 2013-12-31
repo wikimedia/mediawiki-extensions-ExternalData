@@ -265,9 +265,9 @@ class EDParserFunctions {
 	 * Render the #external_value parser function
 	 */
 	static function doExternalValue( &$parser, $local_var = '' ) {
-		global $edgValues, $edgSuppressNoLocalVarMsg;
+		global $edgValues;
 		if ( ! array_key_exists( $local_var, $edgValues ) ) {
-			return $edgSuppressNoLocalVarMsg ? '' : "Error: no local variable \"$local_var\" was set.";
+			return "Error: no local variable \"$local_var\" was set.";
 		} elseif ( is_array( $edgValues[$local_var] ) ) {
 			return $edgValues[$local_var][0];
 		} else {

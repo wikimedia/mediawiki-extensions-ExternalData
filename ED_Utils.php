@@ -288,16 +288,16 @@ END;
 	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
 		global $wgMainCacheType, $wgMemc, $edgMemCachedMongoDBSeconds;
 
-        // use MEMCACHED if configured to cache mongodb queries
-        if ($wgMainCacheType === CACHE_MEMCACHED  && $edgMemCachedMongoDBSeconds > 0) {
-        	// check if cache entry exists
-        	$mckey = wfMemcKey( 'mongodb', $from, md5(json_encode($otherParams) . json_encode($columns) . $where . json_encode($sqlOptions) . $db_name . $db_server));
-        	$values = $wgMemc->get( $mckey );
+		// Use MEMCACHED if configured to cache mongodb queries.
+		if ($wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0) {
+			// Check if cache entry exists.
+			$mckey = wfMemcKey( 'mongodb', $from, md5(json_encode($otherParams) . json_encode($columns) . $where . json_encode($sqlOptions) . $db_name . $db_server));
+			$values = $wgMemc->get( $mckey );
 
-        	if ($values !== false) {
-        		return $values;
-        	}
-        }
+			if ($values !== false) {
+				return $values;
+			}
+		}
 
 		// MongoDB login is done using a single string.
 		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
@@ -325,9 +325,9 @@ END;
 		$db = $m->selectDB( $db_name );
 
 		// Check if collection exists
-		if ($db->system->namespaces->findOne(array('name'=>$db_name . "." . $from)) === null){
-            return wfMessage( "externaldata-db-unknown-collection:")->text() .  $db_name . "." . $from;
-        }
+		if ( $db->system->namespaces->findOne( array( 'name'=>$db_name . "." . $from ) ) === null ){
+			return wfMessage( "externaldata-db-unknown-collection:")->text() . $db_name . "." . $from;
+		}
 
 		$collection = new MongoCollection( $db, $from );
 
@@ -447,7 +447,7 @@ END;
 		}
 
 		if ($wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0 ) {
-			$wgMemc->set( $mckey, $values, $edgMemCachedMongoDBSeconds ); 
+			$wgMemc->set( $mckey, $values, $edgMemCachedMongoDBSeconds );
 		}
 
 		return $values;
