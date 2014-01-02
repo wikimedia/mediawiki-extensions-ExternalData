@@ -237,9 +237,11 @@ $messages['cs'] = array(
 $messages['cy'] = array(
 	'getdata' => 'Nôl y data',
 	'externaldata-desc' => 'Yn galluogi nôl data strwythuredig o ffynnonellau allanol megis URLs a chronfeydd data',
+	'externaldata-no-param-specified' => 'Gwall: Ni phenwyd y paramedr "$1".',
 	'externaldata-web-invalid-format' => 'Fformat annilys: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Ni lwyddwyd i gysylltu â $1',
 	'externaldata-xml-error' => 'Gwall XML: $1 yn y llinell $2',
+	'externaldata-invalid-json' => 'Gwall: JSON annilys.',
 	'externaldata-db-incomplete-information' => 'Gwall: Gwybodaeth anghyflawn i ID y gronfa ddata.',
 	'externaldata-db-could-not-get-url' => "Ni chafwyd hyd i'r URL o geisio {{PLURAL:$1||unwaith|dwywaith|teirgwaith|$1 gwaith}}.",
 	'externaldata-db-unknown-type' => "Gwall: Math anhysbys i'r gronfa ddata.",
@@ -370,10 +372,23 @@ $messages['eu'] = array(
 );
 
 /** Persian (فارسی)
+ * @author Armin1392
  * @author Mjbmr
  */
 $messages['fa'] = array(
 	'getdata' => 'دریافت اطلاعات',
+	'externaldata-no-param-specified' => 'خطا: هیچ پارامتر "$1" تعیین نشده‌است.',
+	'externaldata-web-invalid-format' => 'فرمت نامعتبر: "$1".',
+	'externaldata-ldap-unable-to-connect' => 'قادر نبودن اتصال به $1',
+	'externaldata-xml-error' => 'خطای ایکس‌ام‌ال: $1 در خط $2',
+	'externaldata-invalid-json' => 'خطا: جی‌سون نامعتبر.',
+	'externaldata-db-incomplete-information' => 'خطا: اطلاعات ناقص برای شناسهٔ این پایگاه اطلاعاتی.',
+	'externaldata-db-could-not-get-url' => 'پس از $1 {{PLURAL:$1|try|tries}}، یوآرال نتوانست دریافت شود.',
+	'externaldata-db-unknown-type' => 'خطا: نوع پایگاه اطلاعاتی ناشناخته.',
+	'externaldata-db-could-not-connect' => 'خطا: نتوانست به پایگاه اطلاعاتی متصل شود.',
+	'externaldata-db-unknown-collection' => 'خطا: مجموعهٔ مونگودی‌بی ناشناخته.',
+	'externaldata-db-no-return-values' => 'خطا: بدون بازگشت ارزش‌های تعیین شده.',
+	'externaldata-db-invalid-query' => 'سوال نامعتبر.',
 );
 
 /** Finnish (suomi)
