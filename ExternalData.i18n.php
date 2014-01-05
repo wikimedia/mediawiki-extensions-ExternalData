@@ -377,6 +377,7 @@ $messages['eu'] = array(
  */
 $messages['fa'] = array(
 	'getdata' => 'دریافت اطلاعات',
+	'externaldata-desc' => 'اجازه برای بازیابی اطلاعات ساخته شده از یوآرال‌های خارجی، پایگاه‌های اطلاعاتی و دیگر منابع',
 	'externaldata-no-param-specified' => 'خطا: هیچ پارامتر "$1" تعیین نشده‌است.',
 	'externaldata-web-invalid-format' => 'فرمت نامعتبر: "$1".',
 	'externaldata-ldap-unable-to-connect' => 'قادر نبودن اتصال به $1',
