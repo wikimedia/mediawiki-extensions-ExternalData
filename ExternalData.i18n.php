@@ -985,6 +985,7 @@ $messages['roa-tara'] = array(
 
 /** Russian (русский)
  * @author Ferrer
+ * @author Kaganer
  * @author Okras
  * @author Александр Сигачёв
  */
@@ -997,7 +998,7 @@ $messages['ru'] = array(
 	'externaldata-xml-error' => 'Ошибка XML. $1 в строке $2',
 	'externaldata-invalid-json' => 'Ошибка: Недопустимый JSON',
 	'externaldata-db-incomplete-information' => 'ОШИБКА. Неполная информация для этого ID сервера.',
-	'externaldata-db-could-not-get-url' => 'Не удалось получить URL после $1 {{PLURAL:$1|попытки|попыток|попыток}}.', # Fuzzy
+	'externaldata-db-could-not-get-url' => 'Не удалось получить URL после $1 {{PLURAL:$1|попытки|попыток}}.',
 	'externaldata-db-unknown-type' => 'ОШИБКА. Неизвестный тип базы данных.',
 	'externaldata-db-could-not-connect' => 'ОШИБКА. Не удаётся подключиться к базе данных.',
 	'externaldata-db-unknown-collection' => 'Ошибка: Неизвестная коллекция MongoDB.',
