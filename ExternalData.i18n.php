@@ -685,6 +685,7 @@ $messages['km'] = array(
 
 /** Korean (한국어)
  * @author Daisy2002
+ * @author Priviet
  * @author Yjs5497
  */
 $messages['ko'] = array(
@@ -693,6 +694,7 @@ $messages['ko'] = array(
 	'externaldata-web-invalid-format' => '"$1" 상태가 잘못되었습니다.',
 	'externaldata-ldap-unable-to-connect' => '$1에 연결할 수 없습니다.',
 	'externaldata-invalid-json' => '오류: 잘못된 JSON입니다.',
+	'externaldata-db-invalid-query' => '유효하지 않은 쿼리',
 );
 
 /** Colognian (Ripoarisch)
