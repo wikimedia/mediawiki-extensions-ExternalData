@@ -1047,6 +1047,7 @@ $messages['sk'] = array(
 
 /** Serbian (Cyrillic script) (српски (ћирилица)‎)
  * @author Charmed94
+ * @author Milicevic01
  * @author Михајло Анђелковић
  */
 $messages['sr-ec'] = array(
@@ -1055,7 +1056,7 @@ $messages['sr-ec'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Повезивање на $1 није успело',
 	'externaldata-xml-error' => 'XML грешка: $1 по линији $2',
 	'externaldata-db-incomplete-information' => 'Грешка: Непотпуни подаци за овај ID сервера.',
-	'externaldata-db-could-not-get-url' => 'Преузимање адресе после $1 {{PLURAL:$1|1=try|покушаја}} није успело.', # Fuzzy
+	'externaldata-db-could-not-get-url' => 'Преузимање адресе после $1 {{PLURAL:$1|покушаја}} није успело.',
 	'externaldata-db-unknown-type' => 'Грешка: Непозната врста базе података.',
 	'externaldata-db-could-not-connect' => 'Грешка: Повезивање с базом података није успело.',
 	'externaldata-db-no-return-values' => 'Грешка: Повратне вредности нису одређене.',
@@ -1064,6 +1065,7 @@ $messages['sr-ec'] = array(
 
 /** Serbian (Latin script) (srpski (latinica)‎)
  * @author Michaello
+ * @author Milicevic01
  */
 $messages['sr-el'] = array(
 	'getdata' => 'Preuzmi podatke',
@@ -1071,7 +1073,7 @@ $messages['sr-el'] = array(
 	'externaldata-ldap-unable-to-connect' => 'Povezivanje na $1 nije uspelo',
 	'externaldata-xml-error' => 'XML greška: $1 po liniji $2',
 	'externaldata-db-incomplete-information' => 'Greška: Nepotpuni podaci za ovaj ID servera.',
-	'externaldata-db-could-not-get-url' => 'Preuzimanje adrese posle $1 {{PLURAL:$1|1=try|pokušaja}} nije uspelo.', # Fuzzy
+	'externaldata-db-could-not-get-url' => 'Preuzimanje adrese posle $1 {{PLURAL:$1|pokušaja}} nije uspelo.',
 	'externaldata-db-unknown-type' => 'Greška: Nepoznata vrsta baze podataka.',
 	'externaldata-db-could-not-connect' => 'Greška: Povezivanje s bazom podataka nije uspelo.',
 	'externaldata-db-no-return-values' => 'Greška: Povratne vrednosti nisu određene.',
