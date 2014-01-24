@@ -171,6 +171,7 @@ $messages['br'] = array(
 	'externaldata-web-invalid-format' => 'Furmad direizh : "$1"',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
+	'externaldata-invalid-json' => 'Fazi : JSON direizh',
 	'externaldata-db-incomplete-information' => 'Fazi : Titouroù diglok evit an ID servijer-mañ.',
 	'externaldata-db-could-not-get-url' => 'Dibosupl eo tapout an URL goude $1 {{PLURAL:$1|taol-esae|taol-esae}}.',
 	'externaldata-db-unknown-type' => 'Fazi : Seurt diaz roadennoù dianav',
