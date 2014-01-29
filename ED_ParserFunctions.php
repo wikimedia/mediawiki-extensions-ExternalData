@@ -395,7 +395,8 @@ class EDParserFunctions {
 			// SMW 1.9+
 			$instance = new SMW\SubobjectParserFunction(
 				new SMW\ParserData( $parser->getTitle(), $parser->getOutput() ),
-				new SMW\Subobject( $parser->getTitle() )
+				new SMW\Subobject( $parser->getTitle() ),
+				new SMW\MessageFormatter( $parser->getTargetLanguage() )
 			);
 			return $instance->parse( new SMW\ParserParameterFormatter( $subobjectArgs ) );
 		} elseif ( class_exists( 'SMW\SubobjectHandler' ) ) {
