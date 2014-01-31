@@ -33,6 +33,7 @@ $edgValues = array();
 $edgStringReplacements = array();
 $edgCacheTable = null;
 $edgAllowSSL = true;
+$edgExternalValueVerbose = true;
 
 // Value is in seconds - set to one week
 $edgCacheExpireTime = 60 * 60 * 24 * 7;
