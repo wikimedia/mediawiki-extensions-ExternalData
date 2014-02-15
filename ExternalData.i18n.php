@@ -891,6 +891,7 @@ $messages['or'] = array(
 $messages['pl'] = array(
 	'getdata' => 'Pobierz dane',
 	'externaldata-desc' => 'Umożliwia pobieranie strukturalnych danych z zewnętrznych adresów URL, baz danych i innych źródeł',
+	'externaldata-no-param-specified' => 'Błąd: Nie podano parametru „$1”.',
 	'externaldata-web-invalid-format' => 'Nieprawidłowy format: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'Nie można połączyć się z $1',
 	'externaldata-xml-error' => 'Błąd XML – $1 w wierszu $2',
