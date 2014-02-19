@@ -31,11 +31,14 @@ $magicWords['ar'] = array(
 
 /** Egyptian Spoken Arabic (مصرى) */
 $magicWords['arz'] = array(
+	'get_web_data' => array( 0, 'عرض_بيانات_الويب' ),
 	'get_ldap_data' => array( 0, 'عرض_بيانات_لداب' ),
 	'get_db_data' => array( 0, 'عرض_بيانات_قب' ),
-	'external_value' => array( 0, 'قيمة_خارجية' ),
+	'external_value' => array( 0, 'قيمه_خارجيه' ),
 	'for_external_table' => array( 0, 'لجدول_خارجي' ),
+	'display_external_table' => array( 0, 'عرض_جدول_خارجى' ),
 	'store_external_table' => array( 0, 'تخزين_جدول_خارجى', 'تخزين_جدول_خارجي' ),
+	'clear_external_data' => array( 0, 'مسح_بيانات_خارجيه' ),
 );
 
 /** Chechen (нохчийн) */
@@ -179,4 +182,10 @@ $magicWords['uk'] = array(
 	'external_value' => array( 0, 'зовнішнє_значення' ),
 	'for_external_table' => array( 0, 'для_зовнішньої_таблиці' ),
 	'store_external_table' => array( 0, 'зовнішня_таблиця_зберігання' ),
+);
+
+/** Simplified Chinese (中文（简体）‎) */
+$magicWords['zh-hans'] = array(
+	'get_web_data' => array( 0, '获取_网络_数据' ),
+	'get_db_data' => array( 0, '获取_数据库_数据' ),
 );
