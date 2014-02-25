@@ -508,10 +508,12 @@ $messages['gu'] = array(
  * @author Amire80
  * @author Rotemliss
  * @author YaronSh
+ * @author Yona b
  */
 $messages['he'] = array(
 	'getdata' => 'קבלת נתונים',
 	'externaldata-desc' => 'אפשרות לקבלת נתונים במבנים מכתובות חיצוניות, מסדי נתונים ומקורות אחרים',
+	'externaldata-no-param-specified' => 'שגיאה: נבחר פרמטר "$1" מסוים.',
 	'externaldata-web-invalid-format' => 'תסדיר בלתי־תקין: "$1"',
 	'externaldata-ldap-unable-to-connect' => 'לא ניתן להתחבר ל־$1',
 	'externaldata-xml-error' => 'שגיאת XML: $1 בשורה $2',
@@ -520,6 +522,7 @@ $messages['he'] = array(
 	'externaldata-db-could-not-get-url' => 'לא ניתן לקבל את כתובת ה־URL לאחר {{PLURAL:$1|נסיון אחד|$1 נסיונות}}.',
 	'externaldata-db-unknown-type' => 'שגיאה: סוג מסד הנתונים אינו מוכר.',
 	'externaldata-db-could-not-connect' => 'שגיאה: לא ניתן להתחבר אל מסד הנתונים.',
+	'externaldata-db-unknown-collection' => 'שגיאה: אוסף MongoDB לא ידוע.',
 	'externaldata-db-no-return-values' => 'שגיאה: לא הוגדרו ערכים להחזרה.',
 	'externaldata-db-invalid-query' => 'שאילתה בלתי תקינה.',
 );
