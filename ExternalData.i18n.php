@@ -168,6 +168,7 @@ $messages['be-tarask'] = array(
 $messages['br'] = array(
 	'getdata' => 'Tapout roadennoù',
 	'externaldata-desc' => 'Talvezout a ra da adtapout roadennoù frammet adalek URLoù diavaez, diazoù titouroù ha mammennoù all.',
+	'externaldata-no-param-specified' => 'Fazi : an arventenn "$1" n\'eo ket bet diferet.',
 	'externaldata-web-invalid-format' => 'Furmad direizh : "$1"',
 	'externaldata-ldap-unable-to-connect' => "Ne c'haller ket kevreañ ouzh $1",
 	'externaldata-xml-error' => 'Fazi XML : $1 el linenn $2',
