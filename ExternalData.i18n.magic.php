@@ -186,7 +186,7 @@ $magicWords['uk'] = array(
 
 /** Simplified Chinese (中文（简体）‎) */
 $magicWords['zh-hans'] = array(
-	'get_web_data' => array( 0, '获取_网络_数据' ),
-	'get_ldap_data' => array( 0, '获取_ldap_数据' ),
-	'get_db_data' => array( 0, '获取_数据库_数据' ),
+	'get_web_data' => array( 0, '获取网络数据' ),
+	'get_ldap_data' => array( 0, '获取ldap数据' ),
+	'get_db_data' => array( 0, '获取数据库数据' ),
 );
