@@ -79,6 +79,11 @@ $magicWords['es'] = array(
 	'external_value' => array( 0, 'valor_externo' ),
 );
 
+/** Persian (فارسی) */
+$magicWords['fa'] = array(
+	'get_web_data' => array( 0, 'گرفتن_داده_وب' ),
+);
+
 /** Japanese (日本語) */
 $magicWords['ja'] = array(
 	'get_ldap_data' => array( 0, 'ldapデータ取得' ),
