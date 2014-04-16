@@ -1,8 +1,8 @@
 {
-    "@metadata": {
-        "authors": [
-            "Tjernobyl"
-        ]
-    },
-    "externaldata-db-invalid-query": "Ugyldig forespørgsel."
+	"@metadata": {
+		"authors": [
+			"Tjernobyl"
+		]
+	},
+	"externaldata-db-invalid-query": "Ugyldig forespørgsel."
 }
