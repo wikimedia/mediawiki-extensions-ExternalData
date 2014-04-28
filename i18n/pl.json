@@ -18,6 +18,7 @@
 	"externaldata-db-could-not-get-url": "Nie można uzyskać adresu URL po $1 {{PLURAL:$1|próbie|próbach}}.",
 	"externaldata-db-unknown-type": "Błąd: Nieznany typ bazy danych.",
 	"externaldata-db-could-not-connect": "Błąd: Nie można połączyć się z bazą danych.",
+	"externaldata-db-unknown-collection": "Błąd: Nieznany zbiór MongoDB.",
 	"externaldata-db-no-return-values": "Błąd – nie określono zwracanej wartości.",
 	"externaldata-db-invalid-query": "Nieprawidłowe zapytanie."
 }
