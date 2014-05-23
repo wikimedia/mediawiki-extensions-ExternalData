@@ -619,6 +619,14 @@ END;
 			}
 		}
 
+		// Another "byte order mark" test, this one copied from the
+		// Data Transfer extension - somehow the first one doesn't work
+		// in all cases.
+		$byteOrderMark = pack( "CCC", 0xef, 0xbb, 0xbf );
+		if ( 0 == strncmp( $table[0][0], $byteOrderMark, 3 ) ) {
+			$table[0][0] = substr( $table[0][0], 3 );
+		}
+
 		// Get header values, if this is 'csv with header'
 		if ( $has_header ) {
 			$header_vals = array_shift( $table );
