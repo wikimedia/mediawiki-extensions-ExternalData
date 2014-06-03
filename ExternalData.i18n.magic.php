@@ -196,5 +196,7 @@ $magicWords['zh-hans'] = array(
 	'get_db_data' => array( 0, '获取数据库数据' ),
 	'external_value' => array( 0, '外部值' ),
 	'for_external_table' => array( 0, '用于外部表单' ),
+	'display_external_table' => array( 0, '显示外部表单' ),
+	'store_external_table' => array( 0, '存储外部表单' ),
 	'clear_external_data' => array( 0, '清空外部数据' ),
 );
