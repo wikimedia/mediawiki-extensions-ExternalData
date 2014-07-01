@@ -139,6 +139,68 @@ class EDParserFunctions {
 	}
 
 	/**
+	 * Render the #get_soap_data parser function.
+	 */
+	static function doGetSOAPData( &$parser ) {
+		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
+
+		// If we're handling multiple pages, reset $edgValues
+		// when we move from one page to another.
+		$cur_page_name = $parser->getTitle()->getText();
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		if ( array_key_exists( 'url', $args ) ) {
+			$url = $args['url'];
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'url')->parse();
+		}
+		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
+		// if the URL isn't allowed (based on a whitelist), exit
+		if ( ! EDUtils::isURLAllowed( $url ) ) {
+			return "URL is not allowed";
+		}
+
+		if ( array_key_exists( 'request', $args ) ) {
+			$requestName = $args['request'];
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'request')->parse();
+		}
+
+		if ( array_key_exists( 'requestData', $args ) ) {
+			$requestData = EDUtils::paramToArray( $args['requestData'] ); 
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'requestData')->parse();
+		}
+
+		if ( array_key_exists( 'response', $args ) ) {
+			$responseName = $args['response'];
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'response')->parse();
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
+		} else {
+			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
+		}
+
+		$external_values = EDUtils::getSOAPData( $url, $requestName, $requestData, $responseName, $mappings);
+		if ( is_string( $external_values ) ) {
+			// It's an error message - just display it on the
+			// screen.
+			return $external_values;
+		}
+
+		self::setGlobalValuesArray( $external_values, array(), $mappings );
+	}
+
+	/**
 	 * Render the #get_ldap_data parser function
 	 */
 	static function doGetLDAPData( &$parser ) {

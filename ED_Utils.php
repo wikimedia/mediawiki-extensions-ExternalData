@@ -908,4 +908,30 @@ END;
 		return array();
 	}
 
+	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings) {
+		$client = new SoapClient($url);
+		try {
+			$result = $client->$requestName($requestData);
+		} catch (Exception $e) {
+			return "Caught exception: " . $e->getMessage();
+		}
+
+		$realResultJSON = $result->$responseName;
+		if ( $realResultJSON == '' ) {
+			return 'Error: no data found for this set of "requestData" fields.';
+		}
+
+		$realResult = json_decode( $realResultJSON );
+		$errorKey = '#Error:';
+		if ( array_key_exists( $errorKey, $realResult ) ) { 
+			return 'Error: ' . $realResult->$errorKey;
+		}
+
+		$values = array();
+		foreach ( $mappings as $fieldName ) {
+			$values[$fieldName] = $realResult->$fieldName;
+		}
+		return $values;
+	}
+
 }
