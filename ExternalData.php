@@ -12,8 +12,8 @@ if ( !defined( 'MEDIAWIKI' ) ) die();
 $wgExtensionCredits['parserhook'][] = array(
 	'path'           => __FILE__,
 	'name'           => 'External Data',
-	'version'        => '1.7-alpha',
-	'author'         => array( 'Yaron Koren', 'Michael Dale', 'David Macdonald' ),
+	'version'        => '1.7',
+	'author'         => array( 'Yaron Koren', '...' ),
 	'url'            => 'https://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
 );
