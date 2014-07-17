@@ -77,12 +77,12 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'url')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url')->parse() );
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
 		if ( ! EDUtils::isURLAllowed( $url ) ) {
-			return "URL is not allowed";
+			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
 		if ( array_key_exists( 'format', $args ) ) {
@@ -107,7 +107,7 @@ class EDParserFunctions {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
 			}
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
 		}
 
 		if ( array_key_exists( 'cache seconds', $args) ) {
@@ -120,9 +120,8 @@ class EDParserFunctions {
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
 		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime );
 		if ( is_string( $external_values ) ) {
-			// It's an error message - just display it on the
-			// screen.
-			return $external_values;
+			// It's an error message - display it on the screen.
+			return EDUtils::formatErrorMessage( $external_values );
 		}
 		if ( count( $external_values ) == 0 ) {
 			return;
@@ -158,43 +157,42 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'url')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url')->parse() );
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
 		if ( ! EDUtils::isURLAllowed( $url ) ) {
-			return "URL is not allowed";
+			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
 		if ( array_key_exists( 'request', $args ) ) {
 			$requestName = $args['request'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'request')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'request')->parse() );
 		}
 
 		if ( array_key_exists( 'requestData', $args ) ) {
 			$requestData = EDUtils::paramToArray( $args['requestData'] ); 
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'requestData')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'requestData')->parse() );
 		}
 
 		if ( array_key_exists( 'response', $args ) ) {
 			$responseName = $args['response'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'response')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'response')->parse() );
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
 			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
 		}
 
 		$external_values = EDUtils::getSOAPData( $url, $requestName, $requestData, $responseName, $mappings);
 		if ( is_string( $external_values ) ) {
-			// It's an error message - just display it on the
-			// screen.
-			return $external_values;
+			// It's an error message - display it on the screen.
+			return EDUtils::formatErrorMessage( $external_values );
 		}
 
 		self::setGlobalValuesArray( $external_values, array(), $mappings );
@@ -220,13 +218,13 @@ class EDParserFunctions {
 		if ( array_key_exists( 'data', $args ) ) {
 			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'data')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
 		}
 
 		if ( !array_key_exists( 'filter', $args ) ) {
-			return wfMessage( 'externaldata-no-param-specified', 'filter')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter')->parse() );
 		} elseif ( !array_key_exists( 'domain', $args ) ) {
-			return wfMessage( 'externaldata-no-param-specified', 'domain')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'domain')->parse() );
 		} else {
 			$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
 		}
@@ -272,12 +270,12 @@ class EDParserFunctions {
 			// added in External Data version 1.3.
 			$dbID = $args['server'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'db')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'db')->parse() );
 		}
 		if ( array_key_exists( 'from', $args ) ) {
 			$table = $args['from'];
 		} else {
-			return wfMessage( 'externaldata-no-param-specified', 'from')->parse();
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from')->parse() );
 		}
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
@@ -296,7 +294,7 @@ class EDParserFunctions {
 
 		// Handle error cases.
 		if ( !is_array( $external_values ) ) {
-			return $external_values;
+			return EDUtils::formatErrorMessage( $external_values );
 		}
 
 		// Build $edgValues
@@ -329,7 +327,7 @@ class EDParserFunctions {
 	static function doExternalValue( &$parser, $local_var = '' ) {
 		global $edgValues, $edgExternalValueVerbose;
 		if ( ! array_key_exists( $local_var, $edgValues ) ) {
-			return $edgExternalValueVerbose ? "Error: no local variable \"$local_var\" was set." : '';
+			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
 		} elseif ( is_array( $edgValues[$local_var] ) ) {
 			return $edgValues[$local_var][0];
 		} else {
@@ -393,7 +391,7 @@ class EDParserFunctions {
 		if ( array_key_exists( 'template', $args ) ) {
 			$template = $args['template'];
 		} else {
-			return "No template specified";
+			return EDUtils::formatErrorMessage( "No template specified" );
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
@@ -481,7 +479,7 @@ class EDParserFunctions {
 
 		if ( $smwgDefaultStore != 'SMWSQLStore3' && ! class_exists( 'SIOHandler' ) ) {
 			// If SQLStore3 is not installed, we need SIO.
-			return 'Semantic Internal Objects is not installed';
+			return EDUtils::formatErrorMessage( 'Semantic Internal Objects is not installed' );
 		}
 		global $edgValues;
 

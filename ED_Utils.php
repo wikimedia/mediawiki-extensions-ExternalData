@@ -9,6 +9,15 @@ class EDUtils {
 
 	private static $ampersandReplacement = "THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555";
 
+	/**
+	 * Wraps error message in a span with the "error" class, for better
+	 * display, and so that it can be handled correctly by #iferror and
+	 * possibly others.
+	 */
+	static function formatErrorMessage( $msg ) {
+		return '<span class="error">' . $msg . '</span>';
+	}
+
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
