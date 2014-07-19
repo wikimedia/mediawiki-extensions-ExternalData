@@ -97,6 +97,7 @@ $magicWords['ja'] = array(
 /** Korean (한국어) */
 $magicWords['ko'] = array(
 	'get_web_data' => array( 0, '웹_데이터_얻기' ),
+	'get_soap_data' => array( 0, 'soap_데이터_얻기' ),
 	'get_ldap_data' => array( 0, 'ldap_데이터_얻기' ),
 	'get_db_data' => array( 0, 'db_데이터_얻기' ),
 	'external_value' => array( 0, '바깥_값' ),
