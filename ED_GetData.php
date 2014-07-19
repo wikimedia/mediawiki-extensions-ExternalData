@@ -23,7 +23,7 @@ class EDGetData extends SpecialPage {
 		if ( is_null( $title ) ) {
 			return;
 		}
-		if ( ! $title->userCanRead() ) {
+		if ( ! $title->userCan( 'read' ) ) {
 			return;
 		}
 		$article = new Article( $title );
