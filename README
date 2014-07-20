@@ -21,6 +21,9 @@ They are described below:
 * #get_web_data retrieves the data from a URL that holds CSV, GFF,
 JSON or XML, and assigns it to local variables or arrays.
 
+* #get_file_data retrieves the data from a local file and accepts
+the same formats as #get-web_data.
+
 * #get_soap_data retrieves data from a URL via SOAP.
 
 * #get_db_data retrieves data from a database, using (in most cases)

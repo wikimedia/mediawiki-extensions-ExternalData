@@ -8,6 +8,7 @@ $magicWords = array();
 /** English (English) */
 $magicWords['en'] = array(
 	'get_web_data' => array( 0, 'get_web_data' ),
+	'get_file_data' => array( 0, 'get_file_data' ),
 	'get_soap_data' => array( 0, 'get_soap_data' ),
 	'get_ldap_data' => array( 0, 'get_ldap_data' ),
 	'get_db_data' => array( 0, 'get_db_data' ),

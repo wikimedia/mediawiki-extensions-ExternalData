@@ -48,8 +48,12 @@ $edgDBDirectory = array();
 $edgDBFlags = array();
 $edgDBTablePrefix = array();
 
+$edgDirectoryPath = array();
+$edgFilePath = array();
+
 function edgRegisterParser( &$parser ) {
 	$parser->setFunctionHook( 'get_web_data', array( 'EDParserFunctions', 'doGetWebData' ) );
+	$parser->setFunctionHook( 'get_file_data', array( 'EDParserFunctions', 'doGetFileData' ) );
 	$parser->setFunctionHook( 'get_soap_data', array( 'EDParserFunctions', 'doGetSOAPData' ) );
 	$parser->setFunctionHook( 'get_ldap_data', array( 'EDParserFunctions', 'doGetLDAPData' ) );
 	$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
