@@ -865,7 +865,7 @@ END;
 		}
 	}
 
-	static private function getData( $contents, $format, $mappings, $source ) {
+	static private function getDataFromText( $contents, $format, $mappings, $source ) {
 		if ( $format == 'xml' ) {
 			return self::getXMLData( $contents );
 		} elseif ( $format == 'xml with xpath' ) {
@@ -914,20 +914,23 @@ END;
 		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
 		// Show an error message if there's nothing there.
 		if ( empty( $url_contents ) ) {
-			return "No contents found at URL $url.";
+			return "Error: No contents found at URL $url.";
 		}
 
-		return self::getData( $url_contents, $format, $mappings, $url );
+		return self::getDataFromText( $url_contents, $format, $mappings, $url );
 	}
 
 	static private function getDataFromPath( $path, $format, $mappings ) {
+		if ( !file_exists( $path ) ) {
+			return "Error: No file found.";
+		}
 		$file_contents = file_get_contents( $path );
 		// Show an error message if there's nothing there.
 		if ( empty( $file_contents ) ) {
-			return "Unable to get file contents.";
+			return "Error: Unable to get file contents.";
 		}
 
-		return self::getData( $file_contents, $format, $mappings, $path );
+		return self::getDataFromText( $file_contents, $format, $mappings, $path );
 	}
 
 	static public function getDataFromFile( $file, $format, $mappings ) {
@@ -936,7 +939,7 @@ END;
 		if ( array_key_exists( $file, $edgFilePath ) ) {
 			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings );
 		} else {
-			return self::formatErrorMessage( "No file is set for ID $file." );
+			return "Error: No file is set for ID \"$file\".";
 		}
 	}
 
@@ -949,10 +952,10 @@ END;
 			if ( $path !== false && strpos( $path, $directoryPath ) === 0 ) {
 				return self::getDataFromPath( $path, $format, $mappings );
 			} else {
-				return self::formatErrorMessage( "File name $fileName not allowed for directory ID $directory." );
+				return "Error: File name \"$fileName\" is not allowed for directory ID \"$directory\".";
 			}
 		} else {
-			return self::formatErrorMessage( "No directory is set for ID $directory." );
+			return "Error: No directory is set for ID \"$directory\".";
 		}
 	}
 
