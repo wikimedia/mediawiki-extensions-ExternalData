@@ -81,7 +81,7 @@ class EDUtils {
 		// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
 		// ...with modifications by Nick Lindridge, ionCube Ltd.
 		$pattern = <<<END
-        /
+		/
 	[,]
 	(?=(?:(?:[^"]*"){2})*[^"]*$)
 	(?=(?:(?:[^']*'){2})*[^']*$)
@@ -530,7 +530,7 @@ END;
 		return array_filter( $nodes, array( 'EDUtils', 'isNodeNotEmpty' ) );
 	}
 
-	static function getXPathData( $xml, $mappings, $url ) {
+	static function getXPathData( $xml, $mappings, $ns ) {
 		global $edgXMLValues;
 
 		$edgXMLValues = array();
@@ -542,7 +542,7 @@ END;
 			$matches = array();
 			preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
 			foreach ( $matches[1] as $namespace ) {
-				$sxml->registerXPathNamespace( $namespace, $url );
+				$sxml->registerXPathNamespace( $namespace, $ns );
 			}
 
 			// Now, get all the matching values, and remove any
@@ -865,6 +865,24 @@ END;
 		}
 	}
 
+	static private function getData( $contents, $format, $mappings, $source ) {
+		if ( $format == 'xml' ) {
+			return self::getXMLData( $contents );
+		} elseif ( $format == 'xml with xpath' ) {
+			return self::getXPathData( $contents, $mappings, $source );
+		} elseif ( $format == 'csv' ) {
+			return self::getCSVData( $contents, false );
+		} elseif ( $format == 'csv with header' ) {
+			return self::getCSVData( $contents, true );
+		} elseif ( $format == 'json' ) {
+			return self::getJSONData( $contents );
+		} elseif ( $format == 'gff' ) {
+			return self::getGFFData( $contents );
+		} else {
+			return wfMessage( 'externaldata-web-invalid-format', $format )->text();
+		}
+	}
+
 	/**
 	 * Checks whether this URL is allowed, based on the
 	 * $edgAllowExternalDataFrom whitelist
@@ -899,22 +917,43 @@ END;
 			return "No contents found at URL $url.";
 		}
 
-		if ( $format == 'xml' ) {
-			return self::getXMLData( $url_contents );
-		} elseif ( $format == 'xml with xpath' ) {
-			return self::getXPathData( $url_contents, $mappings, $url );
-		} elseif ( $format == 'csv' ) {
-			return self::getCSVData( $url_contents, false );
-		} elseif ( $format == 'csv with header' ) {
-			return self::getCSVData( $url_contents, true );
-		} elseif ( $format == 'json' ) {
-			return self::getJSONData( $url_contents );
-		} elseif ( $format == 'gff' ) {
-			return self::getGFFData( $url_contents );
-		} else {
-			return wfMessage( 'externaldata-web-invalid-format', $format )->text();
+		return self::getData( $url_contents, $format, $mappings, $url );
+	}
+
+	static private function getDataFromPath( $path, $format, $mappings ) {
+		$file_contents = file_get_contents( $path );
+		// Show an error message if there's nothing there.
+		if ( empty( $file_contents ) ) {
+			return "Unable to get file contents.";
 		}
-		return array();
+
+		return self::getData( $file_contents, $format, $mappings, $path );
+	}
+
+	static public function getDataFromFile( $file, $format, $mappings ) {
+		global $edgFilePath;
+
+		if ( array_key_exists( $file, $edgFilePath ) ) {
+			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings );
+		} else {
+			return self::formatErrorMessage( "No file is set for ID $file." );
+		}
+	}
+
+	static public function getDataFromDirectory( $directory, $fileName, $format, $mappings ) {
+		global $edgDirectoryPath;
+
+		if ( array_key_exists( $directory, $edgDirectoryPath ) ) {
+			$directoryPath = $edgDirectoryPath[$directory];
+			$path = realpath( $directoryPath . $fileName );
+			if ( $path !== false && strpos( $path, $directoryPath ) === 0 ) {
+				return self::getDataFromPath( $path, $format, $mappings );
+			} else {
+				return self::formatErrorMessage( "File name $fileName not allowed for directory ID $directory." );
+			}
+		} else {
+			return self::formatErrorMessage( "No directory is set for ID $directory." );
+		}
 	}
 
 	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings) {

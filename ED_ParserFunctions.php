@@ -138,6 +138,91 @@ class EDParserFunctions {
 	}
 
 	/**
+	 * Render the #get_file_data parser function.
+	 */
+	static function doGetFileData( &$parser ) {
+		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
+
+		// If we're handling multiple pages, reset $edgValues
+		// when we move from one page to another.
+		$cur_page_name = $parser->getTitle()->getText();
+		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+			$edgValues = array();
+			$edgCurPageName = $cur_page_name;
+		}
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		if ( array_key_exists( 'file', $args ) ) {
+			$file = $args['file'];
+		} elseif ( array_key_exists( 'directory', $args ) ) {
+			$directory = $args['directory'];
+			if ( array_key_exists( 'file name', $args ) ) {
+				$fileName = $args['file name'];
+			} else {
+				return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file name')->parse() );
+			}
+		} else {
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory')->parse() );
+		}
+
+		if ( array_key_exists( 'format', $args ) ) {
+			$format = strtolower( $args['format'] );
+		} else {
+			$format = '';
+		}
+		if ( $format == 'xml' ) {
+			if ( array_key_exists( 'use xpath', $args ) ) {
+				// Somewhat of a hack - store the fact that
+				// we're using XPath within the format, even
+				// though the format is still XML.
+				$format = 'xml with xpath';
+			}
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			// parse the 'data' arg into mappings
+			if ( $format == 'xml with xpath' ) {
+				$mappings = EDUtils::paramToArray( $args['data'], false, false );
+			} else {
+				$mappings = EDUtils::paramToArray( $args['data'], false, true );
+			}
+		} else {
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
+		}
+
+		if ( array_key_exists( 'cache seconds', $args) ) {
+			// set cache expire time
+			$cacheExpireTime = $args['cache seconds'];
+		} else {
+			$cacheExpireTime = $edgCacheExpireTime;
+		}
+
+		if ( isset( $file ) ) {
+			$external_values = EDUtils::getDataFromFile( $file, $format, $mappings );
+		} else {
+			$external_values = EDUtils::getDataFromDirectory( $directory, $fileName, $format, $mappings );
+		}
+
+		if ( is_string( $external_values ) ) {
+			// It's an error message - display it on the screen.
+			return EDUtils::formatErrorMessage( $external_values );
+		}
+		if ( count( $external_values ) == 0 ) {
+			return;
+		}
+
+		if ( array_key_exists( 'filters', $args ) ) {
+			// parse the 'filters' arg
+			$filters = EDUtils::paramToArray( $args['filters'], true, false );
+		} else {
+			$filters = array();
+		}
+
+		self::setGlobalValuesArray( $external_values, $filters, $mappings );
+	}
+	/**
 	 * Render the #get_soap_data parser function.
 	 */
 	static function doGetSOAPData( &$parser ) {
