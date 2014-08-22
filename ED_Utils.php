@@ -826,8 +826,13 @@ END;
 			}
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
-			return mb_convert_encoding( $contents, 'UTF-8',
-				mb_detect_encoding( $contents, 'UTF-8, ISO-8859-1', true ) );
+			// Unfortunately, 'mbstring' functions are not available
+			// in all PHP installations.
+			if ( function_exists( 'mb_convert_encoding' ) ) {
+				$contents = mb_convert_encoding( $contents, 'UTF-8',
+					mb_detect_encoding( $contents, 'UTF-8, ISO-8859-1', true ) );
+			}
+			return $contents;
 		}
 
 		// check the cache (only the first 254 chars of the url)
@@ -974,7 +979,7 @@ END;
 
 		$realResult = json_decode( $realResultJSON );
 		$errorKey = '#Error:';
-		if ( array_key_exists( $errorKey, $realResult ) ) { 
+		if ( array_key_exists( $errorKey, $realResult ) ) {
 			return 'Error: ' . $realResult->$errorKey;
 		}
 
