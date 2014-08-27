@@ -110,7 +110,8 @@ $magicWords['ko'] = array(
 
 /** Macedonian (македонски) */
 $magicWords['mk'] = array(
-	'get_web_data' => array( 0, 'преземи_мрежни_податоци' ),
+	'get_web_data' => array( 0, 'преземи_семрежни_податоци' ),
+	'get_file_data' => array( 0, 'преземи_податотечни_податоци' ),
 	'get_soap_data' => array( 0, 'преземи_soap_податоци' ),
 	'get_ldap_data' => array( 0, 'преземи_ldap_податоци' ),
 	'get_db_data' => array( 0, 'преземи_db_податоци' ),
