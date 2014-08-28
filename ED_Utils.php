@@ -964,11 +964,32 @@ END;
 		}
 	}
 
+	/**
+	 * Recursive function, used by getSOAPData().
+	 */
+	static public function getValuesForKeyInTree( $key, $tree ) {
+		// The passed-in tree can be either an array or a stdObject -
+		// we need it to be an array.
+		if ( is_object( $tree ) ) {
+			$tree = get_object_vars( $tree );
+		}
+		$values = array();
+		foreach ( $tree as $curKey => $curValue ) {
+			if ( is_object( $curValue ) || is_array( $curValue ) ) {
+				$additionalValues = self::getValuesForKeyInTree( $key, $curValue );
+				$values = array_merge( $values, $additionalValues );
+			} elseif ( $curKey == $key ) {
+				$values[] = $curValue;
+			}
+		}
+		return $values;
+	}
+
 	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings) {
 		$client = new SoapClient($url);
 		try {
-			$result = $client->$requestName($requestData);
-		} catch (Exception $e) {
+			$result = $client->$requestName( $requestData );
+		} catch ( Exception $e ) {
 			return "Caught exception: " . $e->getMessage();
 		}
 
@@ -985,7 +1006,7 @@ END;
 
 		$values = array();
 		foreach ( $mappings as $fieldName ) {
-			$values[$fieldName] = $realResult->$fieldName;
+			$values[$fieldName] = self::getValuesForKeyInTree( $fieldName, $realResult );
 		}
 		return $values;
 	}
