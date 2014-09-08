@@ -645,27 +645,45 @@ END;
 				$header_vals = array_shift( $table );
 			}
 		}
+
+		// Unfortunately, some subpar CSV generators don't include
+		// trailing commas, so that a line that should look like
+		// "A,B,,," instead is just printed as "A,B".
+		// To get around this, we first figure out the correct number
+		// of columns in this table - which depends on whether the
+		// CSV has a header or not.
+		if ( $has_header ) {
+			$num_columns = count( $header_vals );
+		} else {
+			$num_columns = 0;
+			foreach ( $table as $line ) {
+				$num_columns = max( $num_columns, count( $line ) );
+			}
+		}
+
 		// Now "flip" the data, turning it into a column-by-column
 		// array, instead of row-by-row.
 		$values = array();
 		foreach ( $table as $line ) {
-			foreach ( $line as $i => $row_val ) {
+			for ( $i = 0; $i < $num_columns; $i++ ) {
+				// This check is needed in case it's an
+				// uneven CSV file (see above).
+				if ( array_key_exists( $i, $line ) ) {
+					$row_val = trim( $line[$i] );
+				} else {
+					$row_val = '';
+				}
 				if ( $has_header ) {
-					if ( array_key_exists( $i, $header_vals ) ) {
-						$column = strtolower( trim( $header_vals[$i] ) );
-					} else {
-						$column = '';
-						wfDebug( "External Data: number of values per line appears to be inconsistent in CSV file." );
-					}
+					$column = strtolower( trim( $header_vals[$i] ) );
 				} else {
 					// start with an index of 1 instead of 0
 					$column = $i + 1;
 				}
-				$row_val = trim( $row_val );
-				if ( array_key_exists( $column, $values ) )
+				if ( array_key_exists( $column, $values ) ) {
 					$values[$column][] = $row_val;
-				else
+				} else {
 					$values[$column] = array( $row_val );
+				}
 			}
 		}
 		return $values;
@@ -986,7 +1004,7 @@ END;
 	}
 
 	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings) {
-		$client = new SoapClient($url);
+		$client = new SoapClient( $url );
 		try {
 			$result = $client->$requestName( $requestData );
 		} catch ( Exception $e ) {
