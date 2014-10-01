@@ -1,5 +1,9 @@
 {
-	"@metadata": [],
-	"getdata": "獲取數據",
+	"@metadata": {
+		"authors": [
+			"LNDDYL"
+		]
+	},
+	"getdata": "取得資料",
 	"externaldata-db-invalid-query": "無效的查詢。"
 }
