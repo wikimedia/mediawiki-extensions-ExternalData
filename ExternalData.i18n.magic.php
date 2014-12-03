@@ -22,6 +22,8 @@ $magicWords['en'] = array(
 /** Arabic (العربية) */
 $magicWords['ar'] = array(
 	'get_web_data' => array( 0, 'عرض_بيانات_الويب' ),
+	'get_file_data' => array( 0, 'عرض_بيانات_الملف' ),
+	'get_soap_data' => array( 0, 'عرض_بيانات_السوب' ),
 	'get_ldap_data' => array( 0, 'عرض_بيانات_لداب' ),
 	'get_db_data' => array( 0, 'عرض_بيانات_قب' ),
 	'external_value' => array( 0, 'قيمة_خارجية' ),
