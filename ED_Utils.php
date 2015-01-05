@@ -193,8 +193,10 @@ END;
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		} else {
+			// We don't check the password because it could
+			// legitimately be blank or null.
 			if ( $db_server == '' || $db_name == '' ||
-				$db_username == '' || $db_password == '' ) {
+				$db_username == '' ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		}
