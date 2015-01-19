@@ -535,8 +535,12 @@ END;
 	static function getXPathData( $xml, $mappings, $ns ) {
 		global $edgXMLValues;
 
+		try {
+			$sxml = new SimpleXMLElement( $xml );
+		} catch ( Exception $e ) {
+			return "Caught exception parsing XML: " . $e->getMessage();
+		}
 		$edgXMLValues = array();
-		$sxml = new SimpleXMLElement( $xml );
 
 		foreach ( $mappings as $local_var => $xpath ) {
 			// First, register any necessary XML namespaces, to
