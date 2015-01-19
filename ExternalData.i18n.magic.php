@@ -150,10 +150,13 @@ $magicWords['nds-nl'] = array(
 /** Dutch (Nederlands) */
 $magicWords['nl'] = array(
 	'get_web_data' => array( 0, 'webgegevens_ophalen' ),
+	'get_file_data' => array( 0, 'bestandsgegevens_ophalen' ),
+	'get_soap_data' => array( 0, 'soapgegevens_ophalen' ),
 	'get_ldap_data' => array( 0, 'ldap_gegevens_ophalen' ),
 	'get_db_data' => array( 0, 'db_gegevens_ophalen' ),
 	'external_value' => array( 0, 'externe_waarde' ),
 	'for_external_table' => array( 0, 'voor_externe_tabel' ),
+	'display_external_table' => array( 0, 'externe_tabel_weergeven' ),
 	'store_external_table' => array( 0, 'opslaan_externe_tabel' ),
 	'clear_external_data' => array( 0, 'externe_gegevens_opschonen' ),
 );
