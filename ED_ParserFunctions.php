@@ -489,6 +489,14 @@ class EDParserFunctions {
 			}
 		}
 
+		// The string placed in the wikitext between template calls -
+		// default is a newline.
+		if ( array_key_exists( 'delimiter', $args ) ) {
+			$delimiter = str_replace( '\n', "\n", $args['delimiter'] );
+		} else {
+			$delimiter = "\n";
+		}
+
 		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
 		foreach ( $mappings as $template_param => $local_variable ) {
 			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
@@ -496,12 +504,15 @@ class EDParserFunctions {
 
 		$text = "";
 		for ( $i = 0; $i < $num_loops; $i++ ) {
+			if ( $i > 0 ) {
+				$text .= $delimiter;
+			}
 			$text .= '{{' . $template;
 			foreach ( $mappings as $template_param => $local_variable ) {
 				$value = self::getIndexedValue( $local_variable, $i );
 				$text .= "|$template_param=$value";
 			}
-			$text .= "}}\n";
+			$text .= "}}";
 		}
 
 		// This actually 'calls' the template that we built above
