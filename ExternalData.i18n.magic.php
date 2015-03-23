@@ -213,3 +213,16 @@ $magicWords['zh-hans'] = array(
 	'store_external_table' => array( 0, '存储外部表单' ),
 	'clear_external_data' => array( 0, '清空外部数据' ),
 );
+
+/** Traditional Chinese (中文（繁體）‎) */
+$magicWords['zh-hant'] = array(
+	'get_web_data' => array( 0, '取得網路數據' ),
+	'get_file_data' => array( 0, '取得檔案數據' ),
+	'get_soap_data' => array( 0, '取得soap數據' ),
+	'get_ldap_data' => array( 0, '取得ldap數據' ),
+	'get_db_data' => array( 0, '取得資料庫數據' ),
+	'for_external_table' => array( 0, '用於外部表單' ),
+	'display_external_table' => array( 0, '顯示外部表單' ),
+	'store_external_table' => array( 0, '儲存外部表單' ),
+	'clear_external_data' => array( 0, '清空外部數據' ),
+);
