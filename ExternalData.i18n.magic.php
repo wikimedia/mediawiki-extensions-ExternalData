@@ -88,6 +88,11 @@ $magicWords['fa'] = array(
 	'get_web_data' => array( 0, 'گرفتن_داده_وب' ),
 );
 
+/** Western Frisian (Frysk) */
+$magicWords['fy'] = array(
+	'external_value' => array( 0, 'eksterne_wearde' ),
+);
+
 /** Japanese (日本語) */
 $magicWords['ja'] = array(
 	'get_ldap_data' => array( 0, 'ldapデータ取得' ),
