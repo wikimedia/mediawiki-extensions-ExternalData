@@ -33,7 +33,7 @@ $magicWords['ar'] = array(
 	'clear_external_data' => array( 0, 'إزالة_بيانات_خارجية' ),
 );
 
-/** Egyptian Spoken Arabic (مصرى) */
+/** Egyptian Arabic (مصرى) */
 $magicWords['arz'] = array(
 	'get_web_data' => array( 0, 'عرض_بيانات_الويب' ),
 	'get_ldap_data' => array( 0, 'عرض_بيانات_لداب' ),
