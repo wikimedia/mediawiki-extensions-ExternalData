@@ -579,7 +579,7 @@ END;
 		return $vals2;
 	}
 
-	static function getCSVData( $csv, $has_header ) {
+	static function getCSVData( $csv, $has_header, $delimiter = ',' ) {
 		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
 		// str_getcsv() is a function that was only added in PHP 5.3.0,
 		// so use the much older fgetcsv() if it's not there
@@ -595,7 +595,7 @@ END;
 			fputs( $fp, $csv );
 			rewind( $fp );
 			$table = array();
-			while ( $line = fgetcsv( $fp ) ) {
+			while ( $line = fgetcsv( $fp, 0, $delimiter ) ) {
 				array_push( $table, $line );
 			}
 			fclose( $fp );
@@ -895,14 +895,21 @@ END;
 	}
 
 	static private function getDataFromText( $contents, $format, $mappings, $source ) {
+		// For now, this is only done for the CSV formats.
+		if ( is_array( $format ) ) {
+			list( $format, $delimiter ) = $format;
+		} else {
+			$delimiter = ',';
+		}
+
 		if ( $format == 'xml' ) {
 			return self::getXMLData( $contents );
 		} elseif ( $format == 'xml with xpath' ) {
 			return self::getXPathData( $contents, $mappings, $source );
 		} elseif ( $format == 'csv' ) {
-			return self::getCSVData( $contents, false );
+			return self::getCSVData( $contents, false, $delimiter );
 		} elseif ( $format == 'csv with header' ) {
-			return self::getCSVData( $contents, true );
+			return self::getCSVData( $contents, true, $delimiter );
 		} elseif ( $format == 'json' ) {
 			return self::getJSONData( $contents );
 		} elseif ( $format == 'gff' ) {

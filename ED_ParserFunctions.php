@@ -97,6 +97,12 @@ class EDParserFunctions {
 				// though the format is still XML.
 				$format = 'xml with xpath';
 			}
+		} elseif ( $format == 'csv' || $format == 'csv with header' ) {
+			if ( array_key_exists( 'delimiter', $args ) ) {
+				$delimiter = $args['delimiter'];
+				// Hopefully this solution isn't "too clever".
+				$format = array( $format, $args['delimiter'] );
+			}
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
@@ -178,6 +184,12 @@ class EDParserFunctions {
 				// we're using XPath within the format, even
 				// though the format is still XML.
 				$format = 'xml with xpath';
+			}
+		} elseif ( $format == 'csv' || $format == 'csv with header' ) {
+			if ( array_key_exists( 'delimiter', $args ) ) {
+				$delimiter = $args['delimiter'];
+				// Hopefully this solution isn't "too clever".
+				$format = array( $format, $args['delimiter'] );
 			}
 		}
 
