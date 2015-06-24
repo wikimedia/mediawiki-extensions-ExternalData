@@ -28,7 +28,6 @@ $wgAutoloadClasses['EDUtils'] = dirname(__FILE__) . '/ED_Utils.php';
 $wgAutoloadClasses['EDParserFunctions'] = dirname(__FILE__) . '/ED_ParserFunctions.php';
 $wgSpecialPages['GetData'] = 'EDGetData';
 $wgAutoloadClasses['EDGetData'] = dirname(__FILE__) . '/ED_GetData.php';
-$wgSpecialPageGroups['GetData'] = 'pagetools';
 
 $edgValues = array();
 $edgStringReplacements = array();

@@ -69,4 +69,7 @@ class EDGetData extends SpecialPage {
 		print $text;
 	}
 
+	protected function getGroupName() {
+		return 'pagetools';
+	}
 }
