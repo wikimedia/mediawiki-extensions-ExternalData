@@ -444,29 +444,51 @@ class EDParserFunctions {
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
 		$variables = $matches[1];
 		$num_loops = 0;
+
+		$commands = array( "urlencode", "htmlencode" );
+		// Used for a regexp check.
+		$commandsStr = implode( '|', $commands );
+
 		foreach ( $variables as $variable ) {
-			// ignore the presence of '.urlencode' - it's a command,
-			// not part of the actual variable name
+			// If it ends with one of the pre-defined "commands",
+			// ignore the command to get the actual variable name.
+			foreach ( $commands as $command ) {
+				$variable = str_replace( $command, '', $variable );
+			}
 			$variable = str_replace( '.urlencode', '', $variable );
 			if ( array_key_exists( $variable, $edgValues ) ) {
 				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
 			}
 		}
+
 		$text = "";
 		for ( $i = 0; $i < $num_loops; $i++ ) {
 			$cur_expression = $expression;
 			foreach ( $variables as $variable ) {
-				// if variable name ends with a ".urlencode",
-				// that's a command - URL-encode the value of
-				// the actual variable
-				$loc_of_urlencode = strrpos( $variable, '.urlencode' );
-				if ( ( $loc_of_urlencode > 0 ) && ( $loc_of_urlencode == strlen( $variable ) - strlen( '.urlencode' ) ) ) {
-					$real_var = str_replace( '.urlencode', '', $variable );
-					$value = urlencode( self::getIndexedValue( $real_var , $i ) );
+				// If it ends with one of the pre-defined "commands",
+				// ignore the command to get the actual variable name.
+				$matches = array();
+				preg_match( "/([^.]*)\.?($commandsStr)?$/", $variable, $matches );
+
+				$real_var = $matches[1];
+				if ( count( $matches ) == 3 ) {
+					$command = $matches[2];
 				} else {
-					$value = self::getIndexedValue( $variable , $i );
+					$command = null;
 				}
-				$cur_expression = str_replace( '{{{' . $variable . '}}}', $value, $cur_expression );
+
+				switch( $command ) {
+					case "htmlencode":
+						$value = htmlentities( self::getIndexedValue( $real_var, $i ), ENT_COMPAT | ENT_HTML401| ENT_SUBSTITUTE, null, false );
+						break;
+					case "urlencode":
+						$value = urlencode( self::getIndexedValue( $real_var, $i ) );	
+						break;
+					default:
+						$value = self::getIndexedValue( $real_var, $i );
+ 				}
+				
+ 				$cur_expression = str_replace( '{{{' . $variable . '}}}', $value, $cur_expression );
 			}
 			$text .= $cur_expression;
 		}
@@ -616,9 +638,9 @@ class EDParserFunctions {
 			array_shift( $params );
 			foreach ( $params as $j => $param ) {
 				foreach ( $variables as $variable ) {
-					// if variable name ends with a ".urlencode",
+					// If variable name ends with a ".urlencode",
 					// that's a command - URL-encode the value of
-					// the actual variable
+					// the actual variable.
 					if ( strrpos( $variable, '.urlencode' ) === strlen( $variable ) - strlen( '.urlencode' ) ) {
 						$real_var = str_replace( '.urlencode', '', $variable );
 						$value = urlencode( self::getIndexedValue( $real_var , $i ) );
