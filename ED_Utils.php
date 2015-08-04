@@ -557,13 +557,20 @@ END;
 			if ( !$nodes ) {
 				continue;
 			}
+
+			// Convert from SimpleXMLElement to string.
+			$nodesArray = array();
+			foreach ( $nodes as $xmlNode ) {
+				$nodesArray[] = (string)$xmlNode;
+			}
+
 			if ( array_key_exists( $xpath, $edgXMLValues ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
 				// $mappings will have been removed already.
-				$edgXMLValues[$xpath] = array_merge( $edgXMLValues[$xpath], (array)$nodes );
+				$edgXMLValues[$xpath] = array_merge( $edgXMLValues[$xpath], $nodesArray );
 			} else {
-				$edgXMLValues[$xpath] = (array)$nodes;
+				$edgXMLValues[$xpath] = $nodesArray;
 			}
 		}
 		return $edgXMLValues;
