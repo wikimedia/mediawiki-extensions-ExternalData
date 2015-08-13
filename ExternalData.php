@@ -18,12 +18,13 @@ $wgExtensionCredits['parserhook'][] = array(
 	'descriptionmsg' => 'externaldata-desc',
 );
 
-$wgHooks['ParserFirstCallInit'][] = 'edgRegisterParser';
+$wgHooks['ParserFirstCallInit'][] = 'ExternalDataHooks::registerParser';
 $wgMessagesDirs['ExternalData'] = __DIR__ . '/i18n';
 $wgExtensionMessagesFiles['ExternalData'] = dirname(__FILE__) . '/ExternalData.i18n.php';
 $wgExtensionMessagesFiles['ExternalDataMagic'] = dirname(__FILE__) . '/ExternalData.i18n.magic.php';
 
 // Register all special pages and other classes
+$wgAutoloadClasses['ExternalDataHooks'] = dirname(__FILE__) . '/ExternalData.hooks.php';
 $wgAutoloadClasses['EDUtils'] = dirname(__FILE__) . '/ED_Utils.php';
 $wgAutoloadClasses['EDParserFunctions'] = dirname(__FILE__) . '/ED_ParserFunctions.php';
 $wgSpecialPages['GetData'] = 'EDGetData';
