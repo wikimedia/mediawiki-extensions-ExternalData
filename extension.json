@@ -1,0 +1,34 @@
+{
+	"name": "External Data",
+	"version": "1.8.2",
+	"author": [
+		"Yaron Koren",
+		"..."
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:External_Data",
+	"descriptionmsg": "externaldata-desc",
+	"type": "parserhook",
+	"SpecialPages": {
+		"GetData": "EDGetData"
+	},
+	"MessagesDirs": {
+		"ExternalData": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"ExternalDataMagic": "ExternalData.i18n.magic.php"
+	},
+	"AutoloadClasses": {
+		"ExternalDataHooks": "ExternalData.hooks.php",
+		"EDUtils": "ED_Utils.php",
+		"EDParserFunctions": "ED_ParserFunctions.php",
+		"EDGetData": "ED_GetData.php"
+	},
+	"Hooks": {
+		"ParserFirstCallInit": [
+			"ExternalDataHooks::registerParser"
+		]
+	},
+	"manifest_version": 1
+}
