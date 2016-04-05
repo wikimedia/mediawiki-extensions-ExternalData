@@ -11,7 +11,7 @@
 		]
 	},
 	"getdata": "Daten holen",
-	"externaldata-desc": "Ermöglicht das Einfügen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen",
+	"externaldata-desc": "Ermöglicht das Abrufen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen",
 	"externaldata-no-param-specified": "Fehler: Kein Parameter „$1“ angegeben.",
 	"externaldata-web-invalid-format": "Ungültiges Format: „$1“",
 	"externaldata-ldap-unable-to-connect": "Es konnte keine Verbindung zu $1 hergestellt werden",
