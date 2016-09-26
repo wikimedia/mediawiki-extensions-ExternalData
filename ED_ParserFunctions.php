@@ -581,36 +581,16 @@ class EDParserFunctions {
 			if ( $i == 0 ) continue;
 			$subobjectArgs[] = $value;
 		}
-		if ( class_exists( 'SMW\SubobjectParserFunction' ) ) {
-			// SMW 1.9+
-			$instance = \SMW\ParserFunctionFactory::newFromParser( $parser )->getSubobjectParser();
-			return $instance->parse( new SMW\ParserParameterFormatter( $subobjectArgs ) );
-		} elseif ( class_exists( 'SMW\SubobjectHandler' ) ) {
-			// Old version of SMW 1.9 - can be removed at some point
-			call_user_func_array( array( 'SMW\SubobjectHandler', 'render' ), $subobjectArgs );
-		} elseif ( class_exists( 'SMW\SubobjectParser' ) ) {
-			// Old version of SMW 1.9 - can be removed at some point
-			call_user_func_array( array( 'SMW\SubobjectParser', 'render' ), $subobjectArgs );
-		} elseif ( class_exists( 'SMW\Subobject' ) ) {
-			// Old version of SMW 1.9 - can be removed at some point
-			call_user_func_array( array( 'SMW\Subobject', 'render' ), $subobjectArgs );
-		} else {
-			// SMW 1.8
-			call_user_func_array( array( 'SMWSubobject', 'render' ), $subobjectArgs );
-		}
-		return;
+
+		// SMW 1.9+
+		$instance = \SMW\ParserFunctionFactory::newFromParser( $parser )->getSubobjectParser();
+		return $instance->parse( new SMW\ParserParameterFormatter( $subobjectArgs ) );
 	}
 
 	/**
 	 * Render the #store_external_table parser function
 	 */
 	static function doStoreExternalTable( &$parser ) {
-		global $smwgDefaultStore;
-
-		if ( $smwgDefaultStore != 'SMWSQLStore3' && ! class_exists( 'SIOHandler' ) ) {
-			// If SQLStore3 is not installed, we need SIO.
-			return EDUtils::formatErrorMessage( 'Semantic Internal Objects is not installed' );
-		}
 		global $edgValues;
 
 		$params = func_get_args();
@@ -651,26 +631,7 @@ class EDParserFunctions {
 				}
 			}
 
-			// If SQLStore3 is being used, we can call #subobject -
-			// that's what #set_internal would call anyway, so
-			// we're cutting out the middleman.
-			if ( $smwgDefaultStore == 'SMWSQLStore3' ) {
-				self::callSubobject( $parser, $params );
-				continue;
-			}
-
-			// Add $parser to the beginning of the $params array,
-			// and pass the whole thing in as arguments to
-			// doSetInternal, to mimic a call to #set_internal.
-			array_unshift( $params, $parser );
-			// As of PHP 5.3.1, call_user_func_array() requires that
-			// the function params be references. Workaround via
-			// http://stackoverflow.com/questions/2045875/pass-by-reference-problem-with-php-5-3-1
-			$refParams = array();
-			foreach ( $params as $key => $value ) {
-				$refParams[$key] = &$params[$key];
-			}
-			call_user_func_array( array( 'SIOHandler', 'doSetInternal' ), $refParams );
+			self::callSubobject( $parser, $params );
 		}
 		return null;
 	}

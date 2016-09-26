@@ -42,8 +42,8 @@ any of the #get_*_data functions
 * #display_external_table is like #for_external_table, but passes the
 values of each row to a template, which handles the formatting.
 
-* #store_external_table mimics a call to the Semantic Internal Objects
-extension's #set_internal parser function onto each row retrieved by
+* #store_external_table mimics a call to the Semantic MediaWiki
+extension's #subobject parser function onto each row retrieved by
 any of the #get_*_data functions, in order to store the entire array
 of data semantically.
 
