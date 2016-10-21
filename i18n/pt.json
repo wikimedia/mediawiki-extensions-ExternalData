@@ -18,6 +18,7 @@
 	"externaldata-db-could-not-get-url": "Não foi possível importar a URL após {{PLURAL:$1|uma tentativa|$1 tentativas}}.",
 	"externaldata-db-unknown-type": "Erro: Tipo de base de dados desconhecido.",
 	"externaldata-db-could-not-connect": "Erro: Não foi possível estabelecer ligação à base de dados.",
+	"externaldata-db-unknown-collection": "Erro: Coleção desconhecida no MongoDB.",
 	"externaldata-db-no-return-values": "Erro: Não foram especificados valores de retorno.",
 	"externaldata-db-invalid-query": "Consulta inválida."
 }
