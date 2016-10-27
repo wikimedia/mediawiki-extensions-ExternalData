@@ -21,7 +21,7 @@ class EDUtils {
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
-		global $edgCurrentXMLTag, $edgXMLValues;
+		global $edgCurrentXMLTag, $edgXMLValues, $edgIsFirstCall;
 		// set to all lowercase to avoid casing issues
 		$edgCurrentXMLTag = strtolower( $name );
 		foreach ( $attrs as $attr => $value ) {
@@ -33,15 +33,17 @@ class EDUtils {
 				$edgXMLValues[$attr] = array( $value );
 			}
 		}
+		$edgIsFirstCall = true;
 	}
 
 	static function endElement( $parser, $name ) {
-		global $edgCurrentXMLTag;
+		global $edgCurrentXMLTag, $edgIsFirstCall;
 		$edgCurrentXMLTag = "";
+		$edgIsFirstCall = false;
 	}
 
 	static function getContent( $parser, $content ) {
-		global $edgCurrentXMLTag, $edgXMLValues;
+		global $edgCurrentXMLTag, $edgXMLValues, $edgIsFirstCall;
 
 		// Replace ampersands, to avoid the XML getting split up
 		// around them.
@@ -49,10 +51,17 @@ class EDUtils {
 		// this is unrelated to the fact that bare ampersands aren't
 		// allowed in XML.
 		$content = str_replace( self::$ampersandReplacement, '&amp;', $content );
-		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) )
-			$edgXMLValues[$edgCurrentXMLTag][] = $content;
-		else
+		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) ) {
+			if ( $edgIsFirstCall ) {
+				$edgXMLValues[$edgCurrentXMLTag][] = $content;
+				$edgIsFirstCall = false;
+			} else {
+				$edgXMLValues[$edgCurrentXMLTag][count($edgXMLValues[$edgCurrentXMLTag]) - 1] .= $content;
+			}
+		} else {
 			$edgXMLValues[$edgCurrentXMLTag] = array( $content );
+			$edgIsFirstCall = false;
+		}
 	}
 
 	static function parseParams( $params ) {
