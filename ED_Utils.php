@@ -21,9 +21,10 @@ class EDUtils {
 	// XML-handling functions based on code found at
 	// http://us.php.net/xml_set_element_handler
 	static function startElement( $parser, $name, $attrs ) {
-		global $edgCurrentXMLTag, $edgXMLValues;
+		global $edgCurrentXMLTag, $edgCurrentValue, $edgXMLValues;
 		// set to all lowercase to avoid casing issues
 		$edgCurrentXMLTag = strtolower( $name );
+		$edgCurrentValue = '';
 		foreach ( $attrs as $attr => $value ) {
 			$attr = strtolower( $attr );
 			$value = str_replace( self::$ampersandReplacement, '&amp;', $value );
@@ -36,12 +37,23 @@ class EDUtils {
 	}
 
 	static function endElement( $parser, $name ) {
-		global $edgCurrentXMLTag;
-		$edgCurrentXMLTag = "";
+		global $edgCurrentXMLTag, $edgCurrentValue, $edgXMLValues;
+
+		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) ) {
+			$edgXMLValues[$edgCurrentXMLTag][] = $edgCurrentValue;
+		} else {
+			$edgXMLValues[$edgCurrentXMLTag] = array( $edgCurrentValue );
+		}
 	}
 
+	/**
+	 * Due to the strange way xml_set_character_data_handler() runs,
+	 * getContent() may get called multiple times, once for each fragment
+	 * of the text, for very long XML values. Given that, we keep a global
+	 * variable with the current value and add to it.
+	 */
 	static function getContent( $parser, $content ) {
-		global $edgCurrentXMLTag, $edgXMLValues;
+		global $edgCurrentXMLTag;
 
 		// Replace ampersands, to avoid the XML getting split up
 		// around them.
@@ -49,10 +61,7 @@ class EDUtils {
 		// this is unrelated to the fact that bare ampersands aren't
 		// allowed in XML.
 		$content = str_replace( self::$ampersandReplacement, '&amp;', $content );
-		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) )
-			$edgXMLValues[$edgCurrentXMLTag][] = $content;
-		else
-			$edgXMLValues[$edgCurrentXMLTag] = array( $content );
+		$edgCurrentValue .= $content;
 	}
 
 	static function parseParams( $params ) {
