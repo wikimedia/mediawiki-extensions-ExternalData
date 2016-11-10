@@ -53,7 +53,7 @@ class EDUtils {
 	 * variable with the current value and add to it.
 	 */
 	static function getContent( $parser, $content ) {
-		global $edgCurrentXMLTag;
+		global $edgCurrentValue;
 
 		// Replace ampersands, to avoid the XML getting split up
 		// around them.
