@@ -44,6 +44,9 @@ class EDUtils {
 		} else {
 			$edgXMLValues[$edgCurrentXMLTag] = array( $edgCurrentValue );
 		}
+		// Clear the value both here and in startElement(), in case this
+		// is an embedded tag.
+		$edgCurrentValue = '';
 	}
 
 	/**
