@@ -18,7 +18,8 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"ExternalDataMagic": "ExternalData.i18n.magic.php"
+		"ExternalDataMagic": "ExternalData.i18n.magic.php",
+		"ExternalDataAlias": "ExternalData.i18n.alias.php"
 	},
 	"AutoloadClasses": {
 		"ExternalDataHooks": "ExternalData.hooks.php",
