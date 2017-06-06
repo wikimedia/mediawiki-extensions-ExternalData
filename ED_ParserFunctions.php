@@ -533,6 +533,11 @@ class EDParserFunctions {
 
 		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
 		foreach ( $mappings as $template_param => $local_variable ) {
+			if ( !array_key_exists( $local_variable, $edgValues ) ) {
+				// Don't throw an error message - the source may just
+				// not publish this variable.
+				continue;
+			}
 			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
 		}
 
