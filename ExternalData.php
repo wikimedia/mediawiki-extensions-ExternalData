@@ -34,7 +34,6 @@ $wgExtensionCredits['parserhook'][] = array(
 
 $wgHooks['ParserFirstCallInit'][] = 'ExternalDataHooks::registerParser';
 $wgMessagesDirs['ExternalData'] = __DIR__ . '/i18n';
-$wgExtensionMessagesFiles['ExternalData'] = __DIR__ . '/ExternalData.i18n.php';
 $wgExtensionMessagesFiles['ExternalDataMagic'] = __DIR__ . '/ExternalData.i18n.magic.php';
 
 // Register all special pages and other classes
