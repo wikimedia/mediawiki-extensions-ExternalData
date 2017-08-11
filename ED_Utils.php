@@ -505,17 +505,21 @@ END;
 
 		$rows = array();
 		while ( $row = $db->fetchRow( $result ) ) {
-			// Create a new row object, that uses the passed-in
+			// Create a new row object that uses the passed-in
 			// column names as keys, so that there's always an
 			// exact match between what's in the query and what's
 			// in the return value (so that "a.b", for instance,
 			// doesn't get chopped off to just "b").
 			$new_row = array();
 			foreach ( $vars as $i => $column_name ) {
+				$dbField = $row[$i];
+				// This can happen with MSSQL.
+				if ( $dbField instanceof DateTime ) {
+					$dbField = $dbField->format('Y-m-d H:i:s');
+				}
 				// Convert the encoding to UTF-8
 				// if necessary - based on code at
 				// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
-				$dbField = $row[$i];
 				if ( !function_exists( 'mb_detect_encoding' ) ||
 					mb_detect_encoding( $dbField, 'UTF-8', true ) == 'UTF-8' ) {
 					$new_row[$column_name] = $dbField;
