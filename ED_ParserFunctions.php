@@ -339,7 +339,6 @@ class EDParserFunctions {
 				}
 			}
 		}
-		return;
 	}
 
 	/**
@@ -367,10 +366,10 @@ class EDParserFunctions {
 			// added in External Data version 1.3.
 			$dbID = $args['server'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'db')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'db' )->parse() );
 		}
 		if ( array_key_exists( 'from', $args ) ) {
-			$table = $args['from'];
+			$from = $args['from'];
 		} else {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from')->parse() );
 		}
@@ -379,6 +378,7 @@ class EDParserFunctions {
 		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
 		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
 		$sqlOptions = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy );
+		$joinOn = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : null;
 		$otherParams = array();
 		if ( array_key_exists('aggregate', $args ) ) {
 			$otherParams['aggregate'] = $args['aggregate'];
@@ -387,14 +387,14 @@ class EDParserFunctions {
 		}
 		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $dbID, $table, array_values( $mappings ), $conds, $sqlOptions, $otherParams );
+		$external_values = EDUtils::getDBData( $dbID, $from, array_values( $mappings ), $conds, $sqlOptions, $joinOn, $otherParams );
 
 		// Handle error cases.
 		if ( !is_array( $external_values ) ) {
 			return EDUtils::formatErrorMessage( $external_values );
 		}
 
-		// Build $edgValues
+		// Build $edgValues.
 		foreach ( $mappings as $local_var => $external_var ) {
 			if ( array_key_exists( $external_var, $external_values ) ) {
 				foreach ( $external_values[$external_var] as $value ) {
@@ -402,7 +402,6 @@ class EDParserFunctions {
 				}
 			}
 		}
-		return;
 	}
 
 	/**

@@ -169,7 +169,7 @@ END;
 		}
 	}
 
-	static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $otherParams ) {
+	static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $joinOn, $otherParams ) {
 		global $edgDBServerType;
 		global $edgDBServer;
 		global $edgDBDirectory;
@@ -278,7 +278,7 @@ END;
 			return wfMessage( "externaldata-db-no-return-values" )->text();
 		}
 
-		$rows = self::searchDB( $db, $from, $columns, $where, $sqlOptions );
+		$rows = self::searchDB( $db, $from, $columns, $where, $sqlOptions, $joinOn );
 		$db->close();
 
 		if ( !is_array( $rows ) ) {
@@ -488,17 +488,38 @@ END;
 		return $values;
 	}
 
-	static function searchDB( $db, $table, $vars, $conds, $sqlOptions ) {
-		// Add on a space at the beginning of $table so that
-		// $db->select() will treat it as a literal, instead of
-		// putting quotes around it or otherwise trying to parse it,
-		// so that aliases like "users u" will be accepted.
-		// However, if a table prefix has been set, we need it added,
-		// so don't make it a literal in that case.
-		if ( $db->tablePrefix() == '' ) {
-			$table = ' ' . $table;
+	static function searchDB( $db, $from, $vars, $conds, $sqlOptions, $joinOn ) {
+		// The format of $from can be just "TableName", or the more
+		// complex "Table1=Alias1,Table2=Alias2,...".
+		$tables = array();
+		$tableStrings = explode( ',', $from );
+		foreach ( $tableStrings as $tableString ) {
+			if ( strpos( $tableString, '=' ) !== false ) {
+				$tableStringParts = explode( '=', $tableString, 2 );
+				$tableName = trim( $tableStringParts[0] );
+				$alias = trim( $tableStringParts[1] );
+			} else {
+				$tableName = $alias = trim( $tableString);
+			}
+			$tables[$alias] = $tableName;
 		}
-		$result = $db->select( $table, $vars, $conds, 'EDUtils::searchDB', $sqlOptions );
+		$joinConds = array();
+		$joinStrings = explode( ',', $joinOn );
+		foreach ( $joinStrings as $i => $joinString ) {
+			if ( $joinString == '' ) {
+				continue;
+			}
+			if ( strpos( $joinString, '=' ) === false ) {
+				return "Error: every \"join on\" string must contain an \"=\" sign.";
+			}
+			if ( count( $tables ) <= $i + 1 ) {
+				return "Error: too many \"join on\" conditions.";
+			}
+			$aliases = array_keys( $tables );
+			$alias = $aliases[$i + 1];
+			$joinConds[$alias] = array( 'JOIN', $joinString );
+		}
+		$result = $db->select( $tables, $vars, $conds, 'EDUtils::searchDB', $sqlOptions, $joinConds );
 		if ( !$result ) {
 			return wfMessage( "externaldata-db-invalid-query" )->text();
 		}
