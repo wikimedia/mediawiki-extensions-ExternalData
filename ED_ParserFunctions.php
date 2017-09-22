@@ -23,7 +23,7 @@ class EDParserFunctions {
 						// the filter value, remove
 						// the value from this row for
 						// all columns
-						if ( trim( $single_value ) != trim( $filter_value ) ) {
+						if ( ! preg_match ( '/' . trim( $filter_value) . '/' , trim( $single_value ) ) ) {
 							foreach ( $external_values as $external_var => $external_value ) {
 								unset( $external_values[$external_var][$i] );
 							}
