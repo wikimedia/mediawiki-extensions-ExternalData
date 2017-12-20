@@ -123,8 +123,14 @@ class EDParserFunctions {
 			$cacheExpireTime = $edgCacheExpireTime;
 		}
 
+		if ( array_key_exists( 'json offset', $args) ) {
+			$prefixLength = $args['json offset'];
+		} else {
+			$prefixLength = 0;
+		}
+
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime );
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $prefixLength );
 		if ( is_string( $external_values ) ) {
 			// It's an error message - display it on the screen.
 			return EDUtils::formatErrorMessage( $external_values );
@@ -540,7 +546,11 @@ class EDParserFunctions {
 			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
 		}
 
-		$text = "";
+		if ( array_key_exists( 'intro template', $args ) && $num_loops > 0) {
+			$text = '{{' . $args['intro template'] . '}}';
+		} else {
+			$text = "";
+		}
 		for ( $i = 0; $i < $num_loops; $i++ ) {
 			if ( $i > 0 ) {
 				$text .= $delimiter;
@@ -551,6 +561,9 @@ class EDParserFunctions {
 				$text .= "|$template_param=$value";
 			}
 			$text .= "}}";
+		}
+		if ( array_key_exists( 'outro template', $args ) && $num_loops > 0 ) {
+			$text .= '{{' . $args['outro template'] . '}}';
 		}
 
 		// This actually 'calls' the template that we built above

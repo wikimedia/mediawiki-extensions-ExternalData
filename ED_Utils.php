@@ -876,7 +876,8 @@ END;
 		}
 	}
 
-	static function getJSONData( $json ) {
+	static function getJSONData( $json, $prefixLength ) {
+		$json = substr( $json, $prefixLength );
 		$json_tree = FormatJson::decode( $json, true );
 		if ( is_null( $json_tree ) ) {
 			// It's probably invalid JSON.
@@ -955,7 +956,7 @@ END;
 		}
 	}
 
-	static private function getDataFromText( $contents, $format, $mappings, $source ) {
+	static private function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0 ) {
 		// For now, this is only done for the CSV formats.
 		if ( is_array( $format ) ) {
 			list( $format, $delimiter ) = $format;
@@ -972,7 +973,7 @@ END;
 		} elseif ( $format == 'csv with header' ) {
 			return self::getCSVData( $contents, true, $delimiter );
 		} elseif ( $format == 'json' ) {
-			return self::getJSONData( $contents );
+			return self::getJSONData( $contents, $prefixLength );
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $contents );
 		} else {
@@ -1007,14 +1008,14 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime ) {
+	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength ) {
 		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
 		// Show an error message if there's nothing there.
 		if ( empty( $url_contents ) ) {
 			return "Error: No contents found at URL $url.";
 		}
 
-		return self::getDataFromText( $url_contents, $format, $mappings, $url );
+		return self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength );
 	}
 
 	static private function getDataFromPath( $path, $format, $mappings ) {
