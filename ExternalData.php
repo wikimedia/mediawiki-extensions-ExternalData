@@ -29,7 +29,7 @@ $wgExtensionCredits['parserhook'][] = array(
 	'author'         => array( 'Yaron Koren', '...' ),
 	'url'            => 'https://www.mediawiki.org/wiki/Extension:External_Data',
 	'descriptionmsg' => 'externaldata-desc',
-	'license-name'   => 'GPL-2.0+'
+	'license-name'   => 'GPL-2.0-or-later'
 );
 
 $wgHooks['ParserFirstCallInit'][] = 'ExternalDataHooks::registerParser';
