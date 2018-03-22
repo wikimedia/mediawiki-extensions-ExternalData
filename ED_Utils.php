@@ -900,7 +900,7 @@ END;
 
 		// do any special variable replacements in the URLs, for
 		// secret API keys and the like
-		foreach ( $edgStringReplacements as $key => $value ) {
+		foreach ( (array) $edgStringReplacements as $key => $value ) {
 			$url = str_replace( $key, $value, $url );
 		}
 
