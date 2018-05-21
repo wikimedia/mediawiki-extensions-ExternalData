@@ -7,8 +7,7 @@
  * @author Yaron Koren
  */
 
-// Disabled for now until global variable naming issue is resolved.
-if ( false ) { // function_exists( 'wfLoadExtension' ) ) {
+if ( function_exists( 'wfLoadExtension' ) ) {
 	wfLoadExtension( 'ExternalData' );
 	// Keep i18n globals so mergeMessageFileList.php doesn't break
 	$wgMessagesDirs['ExternalData'] = __DIR__ . '/i18n';
