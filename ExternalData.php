@@ -37,10 +37,10 @@ $wgExtensionMessagesFiles['ExternalDataMagic'] = __DIR__ . '/ExternalData.i18n.m
 
 // Register all special pages and other classes
 $wgAutoloadClasses['ExternalDataHooks'] = __DIR__ . '/ExternalData.hooks.php';
-$wgAutoloadClasses['EDUtils'] = __DIR__ . '/ED_Utils.php';
-$wgAutoloadClasses['EDParserFunctions'] = __DIR__ . '/ED_ParserFunctions.php';
+$wgAutoloadClasses['EDUtils'] = __DIR__ . '/includes/ED_Utils.php';
+$wgAutoloadClasses['EDParserFunctions'] = __DIR__ . '/includes/ED_ParserFunctions.php';
 $wgSpecialPages['GetData'] = 'EDGetData';
-$wgAutoloadClasses['EDGetData'] = __DIR__ . '/ED_GetData.php';
+$wgAutoloadClasses['EDGetData'] = __DIR__ . '/includes/ED_GetData.php';
 
 $edgValues = array();
 $edgStringReplacements = array();
