@@ -945,7 +945,7 @@ END;
 		}
 	}
 
-	static private function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0 ) {
+	static private function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null ) {
 		// For now, this is only done for the CSV formats.
 		if ( is_array( $format ) ) {
 			list( $format, $delimiter ) = $format;
@@ -965,6 +965,12 @@ END;
 			return self::getJSONData( $contents, $prefixLength );
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $contents );
+		} elseif ( $format == 'text' ) {
+			if ( $regex == null ) {
+				return array( 'text' => $contents );
+			} else {
+				return self::getRegexData( $contents, $regex );
+			}
 		} else {
 			return wfMessage( 'externaldata-web-invalid-format', $format )->text();
 		}
@@ -997,16 +1003,16 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength ) {
+	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength, $regex ) {
 		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
 		// Show an error message if there's nothing there.
 		if ( empty( $url_contents ) ) {
 			return "Error: No contents found at URL $url.";
 		}
-		return self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength );
+		return self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex );
 	}
 
-	static private function getDataFromPath( $path, $format, $mappings ) {
+	static private function getDataFromPath( $path, $format, $mappings, $regex ) {
 		if ( !file_exists( $path ) ) {
 			return "Error: No file found.";
 		}
@@ -1016,27 +1022,27 @@ END;
 			return "Error: Unable to get file contents.";
 		}
 
-		return self::getDataFromText( $file_contents, $format, $mappings, $path );
+		return self::getDataFromText( $file_contents, $format, $mappings, $path, $regex );
 	}
 
-	static public function getDataFromFile( $file, $format, $mappings ) {
+	static public function getDataFromFile( $file, $format, $mappings, $regex ) {
 		global $edgFilePath;
 
 		if ( array_key_exists( $file, $edgFilePath ) ) {
-			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings );
+			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings, $regex );
 		} else {
 			return "Error: No file is set for ID \"$file\".";
 		}
 	}
 
-	static public function getDataFromDirectory( $directory, $fileName, $format, $mappings ) {
+	static public function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex ) {
 		global $edgDirectoryPath;
 
 		if ( array_key_exists( $directory, $edgDirectoryPath ) ) {
 			$directoryPath = $edgDirectoryPath[$directory];
 			$path = realpath( $directoryPath . $fileName );
 			if ( $path !== false && strpos( $path, $directoryPath ) === 0 ) {
-				return self::getDataFromPath( $path, $format, $mappings );
+				return self::getDataFromPath( $path, $format, $mappings, $regex );
 			} else {
 				return "Error: File name \"$fileName\" is not allowed for directory ID \"$directory\".";
 			}
@@ -1090,6 +1096,12 @@ END;
 			$values[$fieldName] = self::getValuesForKeyInTree( $fieldName, $realResult );
 		}
 		return $values;
+	}
+
+	static public function getRegexData( $text, $regex ): array {
+		$matches = [];
+		@preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
+		return $matches;
 	}
 
 }
