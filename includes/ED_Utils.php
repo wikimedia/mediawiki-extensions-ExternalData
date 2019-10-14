@@ -228,18 +228,10 @@ END;
 			$dbConnectionParams['dbDirectory'] = $db_directory;
 		}
 
-		// DatabaseBase::factory() was replaced by Database::factory()
-		// in MW 1.28.
-		if ( method_exists( 'Database', 'factory' ) ) {
-			$db = Database::factory( $db_type, $dbConnectionParams );
-		} else {
-			$db = DatabaseBase::factory( $db_type, $dbConnectionParams );
-		}
-
+		$db = Database::factory( $db_type, $dbConnectionParams );
 		if ( $db == null ) {
 			return wfMessage( "externaldata-db-unknown-type" )->text();
 		}
-
 		if ( ! $db->isOpen() ) {
 			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
