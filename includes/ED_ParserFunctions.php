@@ -99,9 +99,10 @@ class EDParserFunctions {
 			}
 		} elseif ( $format == 'csv' || $format == 'csv with header' ) {
 			if ( array_key_exists( 'delimiter', $args ) ) {
-				$delimiter = $args['delimiter'];
+				// Allow for tab delimiters, using \t.
+				$delimiter = str_replace( '\t', "\t", $delimiter );
 				// Hopefully this solution isn't "too clever".
-				$format = array( $format, $args['delimiter'] );
+				$format = array( $format, $delimiter );
 			}
 		}
 
