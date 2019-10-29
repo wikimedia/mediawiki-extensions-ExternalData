@@ -111,7 +111,7 @@ class EDParserFunctions {
 			: null;
 
 		if ( array_key_exists( 'data', $args ) ) {
-			// parse the 'data' arg into mappings
+			// Parse the 'data' arg into mappings.
 			if ( $format == 'xml with xpath' || $format === 'text' ) {
 				$mappings = EDUtils::paramToArray( $args['data'], false, false );
 			} else {
