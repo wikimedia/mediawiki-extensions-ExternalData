@@ -1,6 +1,8 @@
 <?php
 
-class HttpWithHeaders extends Http{
+use MediaWiki\Logger\LoggerFactory;
+
+class HttpWithHeaders extends Http {
 	/**
 	* @see Http::request()
 	* Only diffrence - $options variable an also have value 'headers', and would append to request before sending
