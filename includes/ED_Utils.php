@@ -908,7 +908,7 @@ END;
 			];
 			if ( $edgAllowSSL ) {
 				$options[CURLOPT_SSL_VERIFYPEER] = FALSE;
-			}	
+			}
 			Hooks::run( 'ExternalDataBeforeWebCall', [
 				'get',
 				&$url,
@@ -918,7 +918,7 @@ END;
 			if ( $page === false ) {
 				sleep( 1 );
 				if ( $try_count >= self::$http_number_of_tries ) {
-					echo wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries )->text();
+					wfDebug( wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries )->text() );
 					return '';
 				}
 				$try_count++;
