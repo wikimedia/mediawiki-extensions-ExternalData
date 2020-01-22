@@ -133,6 +133,11 @@ END;
 	}
 
 	static function connectLDAP( $server, $username, $password ) {
+		// Check that a PHP LDAP library is installed.
+		if ( ! function_exists( 'ldap_connect' ) ) {
+			echo ( "Error: you must have a PHP LDAP library installed in order to call #get_ldap_data." );
+		}
+
 		$ds = ldap_connect( $server );
 		if ( $ds ) {
 			// these options for Active Directory only?
