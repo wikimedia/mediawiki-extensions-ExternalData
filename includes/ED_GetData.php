@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * A special page for retrieving selected rows of any wiki page that contains
  * data in CSV format
@@ -23,9 +26,20 @@ class EDGetData extends SpecialPage {
 		if ( is_null( $title ) ) {
 			return;
 		}
-		if ( ! $title->userCan( 'read' ) ) {
-			return;
+
+		$user = $this->getUser();
+		if ( method_exists( 'MediaWiki\Permissions\PermissionManager', 'userCan' ) ) {
+			// MW 1.33+
+			$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
+			if ( !$permissionManager->userCan( 'read', $user, $title ) ) {
+				return true;
+			}
+		} else {
+			if ( !$title->userCan( 'read' ) ) {
+				return true;
+			}
 		}
+
 		$wikiPage = WikiPage::factory( $title );
 		$page_text = ContentHandler::getContentText( $wikiPage->getContent() );
 		// Remove <noinclude> sections and <includeonly> tags from text
