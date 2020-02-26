@@ -17,10 +17,9 @@ class EDGetData extends SpecialPage {
 	}
 
 	function execute( $query ) {
-		global $wgRequest, $wgOut;
-
-		$wgOut->disable();
+		$this->getOutput()->disable();
 		$this->setHeaders();
+
 		$page_name = $query;
 		$title = Title::newFromText( $page_name );
 		if ( is_null( $title ) ) {
@@ -55,7 +54,8 @@ class EDGetData extends SpecialPage {
 		}
 		$headers = EDUtils::getValuesFromCSVLine( $page_lines[0] );
 		$queried_headers = array();
-		foreach ( $wgRequest->getValues() as $key => $value ) {
+		$queryStringValues = $this->getRequest()->getValues();
+		foreach ( $queryStringValues as $key => $value ) {
 			foreach ( $headers as $header_index => $header_value ) {
 				$header_value = str_replace( ' ', '_', $header_value );
 				if ( $key == $header_value ) {
