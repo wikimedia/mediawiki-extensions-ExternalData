@@ -26,10 +26,10 @@
 	},
 	"AutoloadClasses": {
 		"ExternalDataHooks": "includes/ExternalDataHooks.php",
-		"EDUtils": "includes/ED_Utils.php",
-		"HttpWithHeaders": "includes/ED_HttpWithHeaders.php",
-		"EDParserFunctions": "includes/ED_ParserFunctions.php",
-		"EDGetData": "includes/ED_GetData.php"
+		"EDUtils": "includes/EDUtils.php",
+		"EDHttpWithHeaders": "includes/EDHttpWithHeaders.php",
+		"EDParserFunctions": "includes/EDParserFunctions.php",
+		"EDGetData": "includes/EDGetData.php"
 	},
 	"Hooks": {
 		"ParserFirstCallInit": [

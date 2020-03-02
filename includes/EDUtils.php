@@ -864,7 +864,7 @@ END;
 				&$url,
 				&$options
 			] );
-			return HttpWithHeaders::post( $url,  $options );
+			return EDHttpWithHeaders::post( $url,  $options );
 		}
 
 		// do any special variable replacements in the URLs, for
@@ -890,7 +890,7 @@ END;
 				&$url,
 				&$options
 			] );
-			$contents = HttpWithHeaders::get( $url, $options );
+			$contents = EDHttpWithHeaders::get( $url, $options );
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
 			// Unfortunately, 'mbstring' functions are not available
@@ -921,7 +921,7 @@ END;
 				&$url,
 				&$options
 			] );
-			$page = HttpWithHeaders::get( $url );
+			$page = EDHttpWithHeaders::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
 				if ( $try_count >= self::$http_number_of_tries ) {
