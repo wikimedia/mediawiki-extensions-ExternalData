@@ -134,7 +134,7 @@ END;
 
 	static function connectLDAP( $server, $username, $password ) {
 		// Check that a PHP LDAP library is installed.
-		if ( ! function_exists( 'ldap_connect' ) ) {
+		if ( !function_exists( 'ldap_connect' ) ) {
 			echo ( "Error: you must have a PHP LDAP library installed in order to call #get_ldap_data." );
 		}
 
@@ -237,7 +237,7 @@ END;
 		if ( $db == null ) {
 			return wfMessage( "externaldata-db-unknown-type" )->text();
 		}
-		if ( ! $db->isOpen() ) {
+		if ( !$db->isOpen() ) {
 			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
 
@@ -321,7 +321,7 @@ END;
 		$db = $m->selectDB( $db_name );
 
 		// Check if collection exists
-		if ( $db->system->namespaces->findOne( [ 'name'=>$db_name . "." . $from ] ) === null ){
+		if ( $db->system->namespaces->findOne( [ 'name' => $db_name . "." . $from ] ) === null ) {
 			return wfMessage( "externaldata-db-unknown-collection:" )->text() . $db_name . "." . $from;
 		}
 
@@ -543,7 +543,9 @@ END;
 	}
 
 	static function filterEmptyNodes( $nodes ) {
-		if ( !is_array( $nodes ) ) return $nodes;
+		if ( !is_array( $nodes ) ) {
+			return $nodes;
+		}
 		return array_filter( $nodes, [ 'EDUtils', 'isNodeNotEmpty' ] );
 	}
 
@@ -621,11 +623,11 @@ END;
 				array_push( $table, $line );
 			}
 			fclose( $fp );
-		//}
+		// }
 
 		// Get rid of blank characters - these sometimes show up
 		// for certain encodings.
-		foreach( $table as $i => $row ) {
+		foreach ( $table as $i => $row ) {
 			foreach ( $row as $j => $cell ) {
 				$table[$i][$j] = str_replace( chr( 0 ), '', $cell );
 			}
@@ -796,7 +798,7 @@ END;
 	 */
 	static function holdsSimpleList( $arr ) {
 		$expectedKey = 0;
-		foreach( $arr as $key => $val ) {
+		foreach ( $arr as $key => $val ) {
 			if ( is_array( $val ) || $key != $expectedKey++ ) {
 				return false;
 			}
@@ -840,7 +842,7 @@ END;
 	static function getJSONData( $json, $prefixLength ) {
 		$json = substr( $json, $prefixLength );
 		$json_tree = FormatJson::decode( $json, true );
-		if ( is_null( $json_tree ) ) {
+		if ( $json_tree === null ) {
 			// It's probably invalid JSON.
 			return wfMessage( 'externaldata-invalid-json' )->text();
 		}
@@ -871,7 +873,7 @@ END;
 			$url = str_replace( $key, $value, $url );
 		}
 
-		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
+		if ( !isset( $edgCacheTable ) || $edgCacheTable === null ) {
 			if ( $edgAllowSSL ) {
 				$options = [
 					'sslVerifyCert' => false,
@@ -888,7 +890,7 @@ END;
 				&$url,
 				&$options
 			] );
-			$contents = HttpWithHeaders::get( $url ,$options );
+			$contents = HttpWithHeaders::get( $url, $options );
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
 			// Unfortunately, 'mbstring' functions are not available
@@ -912,7 +914,7 @@ END;
 				'timeout' => 'default'
 			];
 			if ( $edgAllowSSL ) {
-				$options[CURLOPT_SSL_VERIFYPEER] = FALSE;
+				$options[CURLOPT_SSL_VERIFYPEER] = false;
 			}
 			Hooks::run( 'ExternalDataBeforeWebCall', [
 				'get',
@@ -942,7 +944,7 @@ END;
 		}
 	}
 
-	static private function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null ) {
+	private static function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null ) {
 		// For now, this is only done for the CSV formats.
 		if ( is_array( $format ) ) {
 			list( $format, $delimiter ) = $format;
@@ -977,7 +979,7 @@ END;
 	 * Checks whether this URL is allowed, based on the
 	 * $edgAllowExternalDataFrom whitelist
 	 */
-	static public function isURLAllowed( $url ) {
+	public static function isURLAllowed( $url ) {
 		// this code is based on Parser::maybeMakeExternalImage()
 		global $edgAllowExternalDataFrom;
 		$data_from = $edgAllowExternalDataFrom;
@@ -1000,7 +1002,7 @@ END;
 		}
 	}
 
-	static public function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength, $regex ) {
+	public static function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength, $regex ) {
 		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
 		// Show an error message if there's nothing there.
 		if ( empty( $url_contents ) ) {
@@ -1009,7 +1011,7 @@ END;
 		return self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex );
 	}
 
-	static private function getDataFromPath( $path, $format, $mappings, $regex ) {
+	private static function getDataFromPath( $path, $format, $mappings, $regex ) {
 		if ( !file_exists( $path ) ) {
 			return "Error: No file found.";
 		}
@@ -1022,7 +1024,7 @@ END;
 		return self::getDataFromText( $file_contents, $format, $mappings, $path, $regex );
 	}
 
-	static public function getDataFromFile( $file, $format, $mappings, $regex ) {
+	public static function getDataFromFile( $file, $format, $mappings, $regex ) {
 		global $edgFilePath;
 
 		if ( array_key_exists( $file, $edgFilePath ) ) {
@@ -1032,7 +1034,7 @@ END;
 		}
 	}
 
-	static public function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex ) {
+	public static function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex ) {
 		global $edgDirectoryPath;
 
 		if ( array_key_exists( $directory, $edgDirectoryPath ) ) {
@@ -1051,7 +1053,7 @@ END;
 	/**
 	 * Recursive function, used by getSOAPData().
 	 */
-	static public function getValuesForKeyInTree( $key, $tree ) {
+	public static function getValuesForKeyInTree( $key, $tree ) {
 		// The passed-in tree can be either an array or a stdObject -
 		// we need it to be an array.
 		if ( is_object( $tree ) ) {
@@ -1069,7 +1071,7 @@ END;
 		return $values;
 	}
 
-	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings ) {
+	public static function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings ) {
 		$client = new SoapClient( $url );
 		try {
 			$result = $client->$requestName( $requestData );
@@ -1095,7 +1097,7 @@ END;
 		return $values;
 	}
 
-	static public function getRegexData( $text, $regex ): array {
+	public static function getRegexData( $text, $regex ): array {
 		$matches = [];
 		@preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
 		return $matches;

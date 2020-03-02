@@ -2,13 +2,13 @@
 /**
  * Class for handling the parser functions for External Data
  */
- 
+
 class EDParserFunctions {
- 
+
 	/**
 	 * A helper function, called by doGetWebData().
 	 */
-	static public function setGlobalValuesArray( $external_values, $filters, $mappings ) {
+	public static function setGlobalValuesArray( $external_values, $filters, $mappings ) {
 		global $edgValues;
 
 		foreach ( $filters as $filter_var => $filter_value ) {
@@ -66,7 +66,7 @@ class EDParserFunctions {
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
@@ -81,7 +81,7 @@ class EDParserFunctions {
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
-		if ( ! EDUtils::isURLAllowed( $url ) ) {
+		if ( !EDUtils::isURLAllowed( $url ) ) {
 			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
@@ -164,7 +164,7 @@ class EDParserFunctions {
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
@@ -252,6 +252,7 @@ class EDParserFunctions {
 
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
 	}
+
 	/**
 	 * Render the #get_soap_data parser function.
 	 */
@@ -261,7 +262,7 @@ class EDParserFunctions {
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
@@ -276,7 +277,7 @@ class EDParserFunctions {
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
-		if ( ! EDUtils::isURLAllowed( $url ) ) {
+		if ( !EDUtils::isURLAllowed( $url ) ) {
 			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
@@ -287,7 +288,7 @@ class EDParserFunctions {
 		}
 
 		if ( array_key_exists( 'requestData', $args ) ) {
-			$requestData = EDUtils::paramToArray( $args['requestData'] ); 
+			$requestData = EDUtils::paramToArray( $args['requestData'] );
 		} else {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'requestData' )->parse() );
 		}
@@ -322,7 +323,7 @@ class EDParserFunctions {
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
@@ -368,7 +369,7 @@ class EDParserFunctions {
 		// if we're handling multiple pages, reset $edgValues
 		// when we move from one page to another
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
@@ -434,13 +435,13 @@ class EDParserFunctions {
 			return '';
 		}
 	}
- 
+
 	/**
 	 * Render the #external_value parser function
 	 */
 	static function doExternalValue( &$parser, $local_var = '' ) {
 		global $edgValues, $edgExternalValueVerbose;
-		if ( ! array_key_exists( $local_var, $edgValues ) ) {
+		if ( !array_key_exists( $local_var, $edgValues ) ) {
 			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
 		} elseif ( is_array( $edgValues[$local_var] ) ) {
 			return $edgValues[$local_var][0];
@@ -448,7 +449,7 @@ class EDParserFunctions {
 			return $edgValues[$local_var];
 		}
 	}
- 
+
 	/**
 	 * Render the #for_external_table parser function
 	 */
@@ -494,18 +495,18 @@ class EDParserFunctions {
 					$command = null;
 				}
 
-				switch( $command ) {
+				switch ( $command ) {
 					case "htmlencode":
-						$value = htmlentities( self::getIndexedValue( $real_var, $i ), ENT_COMPAT | ENT_HTML401| ENT_SUBSTITUTE, null, false );
+						$value = htmlentities( self::getIndexedValue( $real_var, $i ), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, null, false );
 						break;
 					case "urlencode":
-						$value = urlencode( self::getIndexedValue( $real_var, $i ) );	
+						$value = urlencode( self::getIndexedValue( $real_var, $i ) );
 						break;
 					default:
 						$value = self::getIndexedValue( $real_var, $i );
- 				}
-				
- 				$cur_expression = str_replace( '{{{' . $variable . '}}}', $value, $cur_expression );
+				}
+
+				$cur_expression = str_replace( '{{{' . $variable . '}}}', $value, $cur_expression );
 			}
 			$text .= $cur_expression;
 		}
@@ -607,7 +608,9 @@ class EDParserFunctions {
 		$subobjectArgs[2] = $params[0] . '=' . $mainPageName;
 
 		foreach ( $params as $i => $value ) {
-			if ( $i == 0 ) continue;
+			if ( $i == 0 ) {
+				continue;
+			}
 			$subobjectArgs[] = $value;
 		}
 
@@ -652,9 +655,9 @@ class EDParserFunctions {
 					// the actual variable.
 					if ( strrpos( $variable, '.urlencode' ) === strlen( $variable ) - strlen( '.urlencode' ) ) {
 						$real_var = str_replace( '.urlencode', '', $variable );
-						$value = urlencode( self::getIndexedValue( $real_var , $i ) );
+						$value = urlencode( self::getIndexedValue( $real_var, $i ) );
 					} else {
-						$value = self::getIndexedValue( $variable , $i );
+						$value = self::getIndexedValue( $variable, $i );
 					}
 					$params[$j] = str_replace( '{{{' . $variable . '}}}', $value, $params[$j] );
 				}

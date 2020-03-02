@@ -22,7 +22,7 @@ class EDGetData extends SpecialPage {
 
 		$page_name = $query;
 		$title = Title::newFromText( $page_name );
-		if ( is_null( $title ) ) {
+		if ( $title === null ) {
 			return;
 		}
 
@@ -66,7 +66,9 @@ class EDGetData extends SpecialPage {
 		// include header in output
 		$text = $page_lines[0];
 		foreach ( $page_lines as $i => $line ) {
-			if ( $i == 0 ) continue;
+			if ( $i == 0 ) {
+				continue;
+			}
 			$row_values = EDUtils::getValuesFromCSVLine( $line );
 			$found_match = true;
 			foreach ( $queried_headers as $i => $query_value ) {
@@ -76,7 +78,9 @@ class EDGetData extends SpecialPage {
 				}
 			}
 			if ( $found_match ) {
-				if ( $text != '' ) $text .= "\n";
+				if ( $text != '' ) {
+					$text .= "\n";
+				}
 				$text .= $line;
 			}
 		}
