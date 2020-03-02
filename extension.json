@@ -25,7 +25,7 @@
 		"ExternalDataAlias": "ExternalData.i18n.alias.php"
 	},
 	"AutoloadClasses": {
-		"ExternalDataHooks": "ExternalData.hooks.php",
+		"ExternalDataHooks": "includes/ExternalDataHooks.php",
 		"EDUtils": "includes/ED_Utils.php",
 		"HttpWithHeaders": "includes/ED_HttpWithHeaders.php",
 		"EDParserFunctions": "includes/ED_ParserFunctions.php",
