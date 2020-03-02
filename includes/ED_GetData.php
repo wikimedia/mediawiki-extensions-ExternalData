@@ -43,17 +43,17 @@ class EDGetData extends SpecialPage {
 		$page_text = ContentHandler::getContentText( $wikiPage->getContent() );
 		// Remove <noinclude> sections and <includeonly> tags from text
 		$page_text = StringUtils::delimiterReplace( '<noinclude>', '</noinclude>', '', $page_text );
-		$page_text = strtr( $page_text, array( '<includeonly>' => '', '</includeonly>' => '' ) );
+		$page_text = strtr( $page_text, [ '<includeonly>' => '', '</includeonly>' => '' ] );
 		$orig_lines = explode( "\n", $page_text );
 		// ignore lines that are either blank or start with a semicolon
-		$page_lines = array();
+		$page_lines = [];
 		foreach ( $orig_lines as $i => $line ) {
 			if ( $line != '' && $line[0] != ';' ) {
 				$page_lines[] = $line;
 			}
 		}
 		$headers = EDUtils::getValuesFromCSVLine( $page_lines[0] );
-		$queried_headers = array();
+		$queried_headers = [];
 		$queryStringValues = $this->getRequest()->getValues();
 		foreach ( $queryStringValues as $key => $value ) {
 			foreach ( $headers as $header_index => $header_value ) {

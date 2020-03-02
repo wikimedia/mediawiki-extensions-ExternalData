@@ -10,16 +10,16 @@
 class ExternalDataHooks {
 
 	public static function registerParser( Parser $parser ) {
-		$parser->setFunctionHook( 'get_web_data', array( 'EDParserFunctions', 'doGetWebData' ) );
-		$parser->setFunctionHook( 'get_file_data', array( 'EDParserFunctions', 'doGetFileData' ) );
-		$parser->setFunctionHook( 'get_soap_data', array( 'EDParserFunctions', 'doGetSOAPData' ) );
-		$parser->setFunctionHook( 'get_ldap_data', array( 'EDParserFunctions', 'doGetLDAPData' ) );
-		$parser->setFunctionHook( 'get_db_data', array( 'EDParserFunctions', 'doGetDBData' ) );
-		$parser->setFunctionHook( 'external_value', array( 'EDParserFunctions', 'doExternalValue' ) );
-		$parser->setFunctionHook( 'for_external_table', array( 'EDParserFunctions', 'doForExternalTable' ) );
-		$parser->setFunctionHook( 'display_external_table', array( 'EDParserFunctions', 'doDisplayExternalTable' ) );
-		$parser->setFunctionHook( 'store_external_table', array( 'EDParserFunctions', 'doStoreExternalTable' ) );
-		$parser->setFunctionHook( 'clear_external_data', array( 'EDParserFunctions', 'doClearExternalData' ) );
+		$parser->setFunctionHook( 'get_web_data', [ 'EDParserFunctions', 'doGetWebData' ] );
+		$parser->setFunctionHook( 'get_file_data', [ 'EDParserFunctions', 'doGetFileData' ] );
+		$parser->setFunctionHook( 'get_soap_data', [ 'EDParserFunctions', 'doGetSOAPData' ] );
+		$parser->setFunctionHook( 'get_ldap_data', [ 'EDParserFunctions', 'doGetLDAPData' ] );
+		$parser->setFunctionHook( 'get_db_data', [ 'EDParserFunctions', 'doGetDBData' ] );
+		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
+		$parser->setFunctionHook( 'for_external_table', [ 'EDParserFunctions', 'doForExternalTable' ] );
+		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );
+		$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
+		$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
 
 		return true; // always return true, in order not to stop MW's hook processing!
 	}

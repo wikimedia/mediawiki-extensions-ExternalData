@@ -67,7 +67,7 @@ class EDParserFunctions {
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
+			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
@@ -103,7 +103,7 @@ class EDParserFunctions {
 				// Allow for tab delimiters, using \t.
 				$delimiter = str_replace( '\t', "\t", $delimiter );
 				// Hopefully this solution isn't "too clever".
-				$format = array( $format, $delimiter );
+				$format = [ $format, $delimiter ];
 			}
 		}
 
@@ -149,7 +149,7 @@ class EDParserFunctions {
 			// parse the 'filters' arg
 			$filters = EDUtils::paramToArray( $args['filters'], true, false );
 		} else {
-			$filters = array();
+			$filters = [];
 		}
 
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
@@ -165,7 +165,7 @@ class EDParserFunctions {
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
+			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
@@ -203,7 +203,7 @@ class EDParserFunctions {
 				// Allow for tab delimiters, using \t.
 				$delimiter = str_replace( '\t', "\t", $delimiter );
 				// Hopefully this solution isn't "too clever".
-				$format = array( $format, $delimiter );
+				$format = [ $format, $delimiter ];
 			}
 		} elseif ( $format === 'text' ) {
 			if ( array_key_exists( 'regex', $args ) ) {
@@ -247,7 +247,7 @@ class EDParserFunctions {
 			// parse the 'filters' arg
 			$filters = EDUtils::paramToArray( $args['filters'], true, false );
 		} else {
-			$filters = array();
+			$filters = [];
 		}
 
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
@@ -262,7 +262,7 @@ class EDParserFunctions {
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
+			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
@@ -310,7 +310,7 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( $external_values );
 		}
 
-		self::setGlobalValuesArray( $external_values, array(), $mappings );
+		self::setGlobalValuesArray( $external_values, [], $mappings );
 	}
 
 	/**
@@ -323,7 +323,7 @@ class EDParserFunctions {
 		// when we move from one page to another
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
+			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
@@ -369,7 +369,7 @@ class EDParserFunctions {
 		// when we move from one page to another
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( ! isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = array();
+			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
@@ -395,9 +395,9 @@ class EDParserFunctions {
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
 		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
 		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
-		$sqlOptions = array( 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy );
+		$sqlOptions = [ 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy ];
 		$joinOn = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : null;
-		$otherParams = array();
+		$otherParams = [];
 		if ( array_key_exists('aggregate', $args ) ) {
 			$otherParams['aggregate'] = $args['aggregate'];
 		} elseif ( array_key_exists( 'find query', $args ) ) {
@@ -457,12 +457,12 @@ class EDParserFunctions {
 
 		// Get the variables used in this expression, get the number
 		// of values for each, and loop through.
-		$matches = array();
+		$matches = [];
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
 		$variables = $matches[1];
 		$num_loops = 0;
 
-		$commands = array( "urlencode", "htmlencode" );
+		$commands = [ "urlencode", "htmlencode" ];
 		// Used for a regexp check.
 		$commandsStr = implode( '|', $commands );
 
@@ -484,7 +484,7 @@ class EDParserFunctions {
 			foreach ( $variables as $variable ) {
 				// If it ends with one of the pre-defined "commands",
 				// ignore the command to get the actual variable name.
-				$matches = array();
+				$matches = [];
 				preg_match( "/([^.]*)\.?($commandsStr)?$/", $variable, $matches );
 
 				$real_var = $matches[1];
@@ -579,7 +579,7 @@ class EDParserFunctions {
 		}
 
 		// This actually 'calls' the template that we built above
-		return array( $text, 'noparse' => false );
+		return [ $text, 'noparse' => false ];
 	}
 
 	/**
@@ -594,7 +594,7 @@ class EDParserFunctions {
 		// added to SMW, that handles a subobject creation, that this
 		// code can then call.
 
-		$subobjectArgs = array( &$parser );
+		$subobjectArgs = [ &$parser ];
 		// Blank first argument, so that subobject ID will be
 		// an automatically-generated random number.
 		$subobjectArgs[1] = '';
@@ -628,7 +628,7 @@ class EDParserFunctions {
 		// Get the variables used in this expression, get the number
 		// of values for each, and loop through.
 		$expression = implode( '|', $params );
-		$matches = array();
+		$matches = [];
 		preg_match_all( '/{{{([^}]*)}}}/', $expression, $matches );
 		$variables = $matches[1];
 		$num_loops = 0;
@@ -670,6 +670,6 @@ class EDParserFunctions {
 	 */
 	static function doClearExternalData( &$parser ) {
 		global $edgValues;
-		$edgValues = array();
+		$edgValues = [];
 	}
 }
