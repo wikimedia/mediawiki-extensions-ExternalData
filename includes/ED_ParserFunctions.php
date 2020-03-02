@@ -77,7 +77,7 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() );
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
@@ -119,17 +119,17 @@ class EDParserFunctions {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
 			}
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
 		}
 
-		if ( array_key_exists( 'cache seconds', $args) ) {
+		if ( array_key_exists( 'cache seconds', $args ) ) {
 			// set cache expire time
 			$cacheExpireTime = $args['cache seconds'];
 		} else {
 			$cacheExpireTime = $edgCacheExpireTime;
 		}
 
-		if ( array_key_exists( 'json offset', $args) ) {
+		if ( array_key_exists( 'json offset', $args ) ) {
 			$prefixLength = $args['json offset'];
 		} else {
 			$prefixLength = 0;
@@ -179,10 +179,10 @@ class EDParserFunctions {
 			if ( array_key_exists( 'file name', $args ) ) {
 				$fileName = $args['file name'];
 			} else {
-				return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file name')->parse() );
+				return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file name' )->parse() );
 			}
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory' )->parse() );
 		}
 
 		if ( array_key_exists( 'format', $args ) ) {
@@ -219,10 +219,10 @@ class EDParserFunctions {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
 			}
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
 		}
 
-		if ( array_key_exists( 'cache seconds', $args) ) {
+		if ( array_key_exists( 'cache seconds', $args ) ) {
 			// set cache expire time
 			$cacheExpireTime = $args['cache seconds'];
 		} else {
@@ -272,7 +272,7 @@ class EDParserFunctions {
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() );
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// if the URL isn't allowed (based on a whitelist), exit
@@ -283,28 +283,28 @@ class EDParserFunctions {
 		if ( array_key_exists( 'request', $args ) ) {
 			$requestName = $args['request'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'request')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'request' )->parse() );
 		}
 
 		if ( array_key_exists( 'requestData', $args ) ) {
 			$requestData = EDUtils::paramToArray( $args['requestData'] ); 
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'requestData')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'requestData' )->parse() );
 		}
 
 		if ( array_key_exists( 'response', $args ) ) {
 			$responseName = $args['response'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'response')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'response' )->parse() );
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
 			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
 		}
 
-		$external_values = EDUtils::getSOAPData( $url, $requestName, $requestData, $responseName, $mappings);
+		$external_values = EDUtils::getSOAPData( $url, $requestName, $requestData, $responseName, $mappings );
 		if ( is_string( $external_values ) ) {
 			// It's an error message - display it on the screen.
 			return EDUtils::formatErrorMessage( $external_values );
@@ -333,13 +333,13 @@ class EDParserFunctions {
 		if ( array_key_exists( 'data', $args ) ) {
 			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
 		}
 
 		if ( !array_key_exists( 'filter', $args ) ) {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter' )->parse() );
 		} elseif ( !array_key_exists( 'domain', $args ) ) {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'domain')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'domain' )->parse() );
 		} else {
 			$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
 		}
@@ -389,7 +389,7 @@ class EDParserFunctions {
 		if ( array_key_exists( 'from', $args ) ) {
 			$from = $args['from'];
 		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from')->parse() );
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from' )->parse() );
 		}
 		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
@@ -398,7 +398,7 @@ class EDParserFunctions {
 		$sqlOptions = [ 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy ];
 		$joinOn = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : null;
 		$otherParams = [];
-		if ( array_key_exists('aggregate', $args ) ) {
+		if ( array_key_exists( 'aggregate', $args ) ) {
 			$otherParams['aggregate'] = $args['aggregate'];
 		} elseif ( array_key_exists( 'find query', $args ) ) {
 			$otherParams['find query'] = $args['find query'];
@@ -558,7 +558,7 @@ class EDParserFunctions {
 			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
 		}
 
-		if ( array_key_exists( 'intro template', $args ) && $num_loops > 0) {
+		if ( array_key_exists( 'intro template', $args ) && $num_loops > 0 ) {
 			$text = '{{' . $args['intro template'] . '}}';
 		} else {
 			$text = "";

@@ -70,7 +70,7 @@ class EDUtils {
 	static function parseParams( $params ) {
 		$args = [];
 		foreach ( $params as $param ) {
-			$param = preg_replace ( "/\s\s+/", ' ', $param ); // whitespace
+			$param = preg_replace( "/\s\s+/", ' ', $param ); // whitespace
 			$param_parts = explode( "=", $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
 				$args[$param_parts[0]] = null;
@@ -86,7 +86,7 @@ class EDUtils {
 	 * Parses an argument of the form "a=b,c=d,..." into an array
 	 */
 	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
-		$arg = preg_replace ( "/\s\s+/", ' ', $arg ); // whitespace
+		$arg = preg_replace( "/\s\s+/", ' ', $arg ); // whitespace
 
 		// Split text on commas, except for commas found within quotes
 		// and parentheses. Regular expression based on:
@@ -285,12 +285,12 @@ END;
 		global $wgMainCacheType, $wgMemc, $edgMemCachedMongoDBSeconds;
 
 		// Use MEMCACHED if configured to cache mongodb queries.
-		if ($wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0) {
+		if ( $wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0 ) {
 			// Check if cache entry exists.
-			$mckey = wfMemcKey( 'mongodb', $from, md5(json_encode($otherParams) . json_encode($columns) . $where . json_encode($sqlOptions) . $db_name . $db_server));
+			$mckey = wfMemcKey( 'mongodb', $from, md5( json_encode( $otherParams ) . json_encode( $columns ) . $where . json_encode( $sqlOptions ) . $db_name . $db_server ) );
 			$values = $wgMemc->get( $mckey );
 
-			if ($values !== false) {
+			if ( $values !== false ) {
 				return $values;
 			}
 		}
@@ -303,7 +303,7 @@ END;
 		if ( $db_username != '' ) {
 			$connect_string .= $db_username . ':' . $db_password . '@';
 		}
-		if ( $db_server != '') {
+		if ( $db_server != '' ) {
 			$connect_string .= $db_server;
 		} else {
 			$connect_string .= 'localhost:27017';
@@ -322,7 +322,7 @@ END;
 
 		// Check if collection exists
 		if ( $db->system->namespaces->findOne( [ 'name'=>$db_name . "." . $from ] ) === null ){
-			return wfMessage( "externaldata-db-unknown-collection:")->text() . $db_name . "." . $from;
+			return wfMessage( "externaldata-db-unknown-collection:" )->text() . $db_name . "." . $from;
 		}
 
 		$collection = new MongoCollection( $db, $from );
@@ -330,18 +330,18 @@ END;
 		$findArray = [];
 		$aggregateArray = [];
 		// Was an aggregation pipeline command issued?
-		if ( array_key_exists('aggregate', $otherParams ) ) {
+		if ( array_key_exists( 'aggregate', $otherParams ) ) {
 			// The 'aggregate' parameter should be an array of
 			// aggregation JSON pipeline commands.
 			// Note to users: be sure to use spaces between curly
 			// brackets in the 'aggregate' JSON so as not to trip up the
 			// MW parser.
-			$aggregateArray = json_decode ($otherParams['aggregate'], true);
+			$aggregateArray = json_decode( $otherParams['aggregate'], true );
 		} elseif ( array_key_exists( 'find query', $otherParams ) ) {
 			// Otherwise, was a direct MongoDB "find" query JSON string provided?
 			// If so, use that. As with 'aggregate' JSON, use spaces
 			// between curly brackets
-			$findArray = json_decode ($otherParams['find query'], true);
+			$findArray = json_decode( $otherParams['find query'], true );
 		} elseif ( $where != '' ) {
 			// If not, turn the SQL of the "where=" parameter into
 			// a "find" array for MongoDB. Note that this approach
@@ -395,7 +395,7 @@ END;
 
 		// Get the data!
 		if ( array_key_exists( 'aggregate', $otherParams ) ) {
-			if ( $sqlOptions['ORDER BY'] != '') {
+			if ( $sqlOptions['ORDER BY'] != '' ) {
 				$aggregateArray[] = [ '$sort' => $sortArray ];
 			}
 			if ( $sqlOptions['LIMIT'] != '' ) {
@@ -410,7 +410,7 @@ END;
 		$values = [];
 		foreach ( $resultsCursor as $doc ) {
 			foreach ( $columns as $column ) {
-				if ( strstr($column, ".") ) {
+				if ( strstr( $column, "." ) ) {
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
@@ -437,12 +437,12 @@ END;
 					}
 				} else {
 					// It's a simple literal.
-					$values[$column][] = (isset( $doc[$column] ) ? $doc[$column] : null);
+					$values[$column][] = ( isset( $doc[$column] ) ? $doc[$column] : null );
 				}
 			}
 		}
 
-		if ($wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0 ) {
+		if ( $wgMainCacheType === CACHE_MEMCACHED && $edgMemCachedMongoDBSeconds > 0 ) {
 			$wgMemc->set( $mckey, $values, $edgMemCachedMongoDBSeconds );
 		}
 
@@ -460,7 +460,7 @@ END;
 				$tableName = trim( $tableStringParts[0] );
 				$alias = trim( $tableStringParts[1] );
 			} else {
-				$tableName = $alias = trim( $tableString);
+				$tableName = $alias = trim( $tableString );
 			}
 			$tables[$alias] = $tableName;
 		}
@@ -497,7 +497,7 @@ END;
 				$dbField = $row[$i];
 				// This can happen with MSSQL.
 				if ( $dbField instanceof DateTime ) {
-					$dbField = $dbField->format('Y-m-d H:i:s');
+					$dbField = $dbField->format( 'Y-m-d H:i:s' );
 				}
 				// Convert the encoding to UTF-8
 				// if necessary - based on code at
@@ -627,7 +627,7 @@ END;
 		// for certain encodings.
 		foreach( $table as $i => $row ) {
 			foreach ( $row as $j => $cell ) {
-				$table[$i][$j] = str_replace( chr(0), '', $cell );
+				$table[$i][$j] = str_replace( chr( 0 ), '', $cell );
 			}
 		}
 
@@ -861,8 +861,8 @@ END;
 				'post',
 				&$url,
 				&$options
-			]);
-			return HttpWithHeaders::post( $url,  $options);
+			] );
+			return HttpWithHeaders::post( $url,  $options );
 		}
 
 		// do any special variable replacements in the URLs, for
@@ -873,13 +873,13 @@ END;
 
 		if ( !isset( $edgCacheTable ) || is_null( $edgCacheTable ) ) {
 			if ( $edgAllowSSL ) {
-				$options = [ 
-					'sslVerifyCert' => false, 
+				$options = [
+					'sslVerifyCert' => false,
 					'followRedirects' => false ,
 					'timeout' => 'default',
 				];
 			} else {
-				$options = [ 
+				$options = [
 					'timeout' => 'default',
 				];
 			}
@@ -887,7 +887,7 @@ END;
 				'get',
 				&$url,
 				&$options
-			]);
+			] );
 			$contents = HttpWithHeaders::get( $url ,$options );
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
@@ -918,7 +918,7 @@ END;
 				'get',
 				&$url,
 				&$options
-			]);
+			] );
 			$page = HttpWithHeaders::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
@@ -932,7 +932,7 @@ END;
 			if ( $page != '' ) {
 				$dbw = wfGetDB( DB_MASTER );
 				// Delete the old entry, if one exists.
-				$dbw->delete( $edgCacheTable, [ 'url' => substr( $url, 0, 254 )]);
+				$dbw->delete( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ) ] );
 				// Insert contents into the cache table.
 				$dbw->insert( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ), 'result' => $page, 'req_time' => time() ] );
 				return $page;
@@ -1069,7 +1069,7 @@ END;
 		return $values;
 	}
 
-	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings) {
+	static public function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings ) {
 		$client = new SoapClient( $url );
 		try {
 			$result = $client->$requestName( $requestData );

@@ -21,8 +21,8 @@ class HttpWithHeaders extends Http {
 
 		$req = MWHttpRequest::factory( $url, $options, $caller );
 		if( isset( $options['headers'] ) ){
-			foreach ($options['headers'] as $headerName => $headerValue) {
-				$req->setHeader( $headerName, $headerValue);
+			foreach ( $options['headers'] as $headerName => $headerValue ) {
+				$req->setHeader( $headerName, $headerValue );
 			}
 		}
 		$status = $req->execute();
