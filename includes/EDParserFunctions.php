@@ -257,6 +257,7 @@ class EDParserFunctions {
 	 * Render the #get_soap_data parser function.
 	 */
 	static function doGetSOAPData( &$parser ) {
+		// phpcs:ignore MediaWiki.VariableAnalysis.UnusedGlobalVariables.UnusedGlobal$edgCacheExpireTime
 		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
 
 		// If we're handling multiple pages, reset $edgValues

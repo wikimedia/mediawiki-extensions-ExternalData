@@ -18,8 +18,9 @@ class EDUtils {
 		return '<span class="error">' . $msg . '</span>';
 	}
 
-	// XML-handling functions based on code found at
-	// http://us.php.net/xml_set_element_handler
+	/** XML-handling functions based on code found at
+	 * http://us.php.net/xml_set_element_handler
+	 */
 	static function startElement( $parser, $name, $attrs ) {
 		global $edgCurrentXMLTag, $edgCurrentValue, $edgXMLValues;
 		// set to all lowercase to avoid casing issues
@@ -1099,6 +1100,7 @@ END;
 
 	public static function getRegexData( $text, $regex ): array {
 		$matches = [];
+		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 		@preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
 		return $matches;
 	}
