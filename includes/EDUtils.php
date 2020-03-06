@@ -874,23 +874,19 @@ END;
 			$url = str_replace( $key, $value, $url );
 		}
 
+		$options = [ 'timeout' => 'default' ];
+		if ( $edgAllowSSL ) {
+			$options['sslVerifyCert'] = false;
+			$options['followRedirects'] = false;
+		}
+
+		Hooks::run( 'ExternalDataBeforeWebCall', [
+			'get',
+			&$url,
+			&$options
+		] );
+
 		if ( !isset( $edgCacheTable ) || $edgCacheTable === null ) {
-			if ( $edgAllowSSL ) {
-				$options = [
-					'sslVerifyCert' => false,
-					'followRedirects' => false ,
-					'timeout' => 'default',
-				];
-			} else {
-				$options = [
-					'timeout' => 'default',
-				];
-			}
-			Hooks::run( 'ExternalDataBeforeWebCall', [
-				'get',
-				&$url,
-				&$options
-			] );
 			$contents = EDHttpWithHeaders::get( $url, $options );
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
@@ -911,17 +907,6 @@ END;
 		}
 
 		if ( !$row || $get_fresh ) {
-			$options = [
-				'timeout' => 'default'
-			];
-			if ( $edgAllowSSL ) {
-				$options[CURLOPT_SSL_VERIFYPEER] = false;
-			}
-			Hooks::run( 'ExternalDataBeforeWebCall', [
-				'get',
-				&$url,
-				&$options
-			] );
 			$page = EDHttpWithHeaders::get( $url );
 			if ( $page === false ) {
 				sleep( 1 );
