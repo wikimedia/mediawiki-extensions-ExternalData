@@ -626,6 +626,11 @@ class EDParserFunctions {
 	static function doStoreExternalTable( &$parser ) {
 		global $edgValues;
 
+		// Quick exit if Semantic MediaWiki is not installed.
+		if ( !class_exists( '\SMW\ParserFunctionFactory' ) ) {
+			return '<div class="error">Error: Semantic MediaWiki must be installed in order to call #store_external_table.</div>';
+		}
+
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser...
 
