@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for handling the parser functions for External Data
+ * Class for handling the parser functions for External Data.
  */
 
 class EDParserFunctions {
@@ -257,8 +257,7 @@ class EDParserFunctions {
 	 * Render the #get_soap_data parser function.
 	 */
 	static function doGetSOAPData( &$parser ) {
-		// phpcs:ignore MediaWiki.VariableAnalysis.UnusedGlobalVariables.UnusedGlobal$edgCacheExpireTime
-		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
+		global $edgCurPageName, $edgValues;
 
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
@@ -277,7 +276,7 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() );
 		}
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
-		// if the URL isn't allowed (based on a whitelist), exit
+		// If the URL isn't allowed (based on a whitelist), exit.
 		if ( !EDUtils::isURLAllowed( $url ) ) {
 			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
@@ -316,13 +315,13 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #get_ldap_data parser function
+	 * Render the #get_ldap_data parser function.
 	 */
 	static function doGetLDAPData( &$parser ) {
 		global $edgCurPageName, $edgValues;
 
-		// if we're handling multiple pages, reset $edgValues
-		// when we move from one page to another
+		// If we're handling multiple pages, reset $edgValues
+		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
@@ -362,13 +361,13 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #get_db_data parser function
+	 * Render the #get_db_data parser function.
 	 */
 	static function doGetDBData( &$parser ) {
 		global $edgCurPageName, $edgValues;
 
-		// if we're handling multiple pages, reset $edgValues
-		// when we move from one page to another
+		// If we're handling multiple pages, reset $edgValues
+		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
 		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
 			$edgValues = [];
@@ -438,7 +437,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #external_value parser function
+	 * Render the #external_value parser function.
 	 */
 	static function doExternalValue( &$parser, $local_var = '' ) {
 		global $edgValues, $edgExternalValueVerbose;
@@ -452,7 +451,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #for_external_table parser function
+	 * Render the #for_external_table parser function.
 	 */
 	static function doForExternalTable( &$parser, $expression = '' ) {
 		global $edgValues;
@@ -515,7 +514,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #display_external_table parser function
+	 * Render the #display_external_table parser function.
 	 *
 	 * @author Dan Bolser
 	 */
@@ -621,7 +620,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #store_external_table parser function
+	 * Render the #store_external_table parser function.
 	 */
 	static function doStoreExternalTable( &$parser ) {
 		global $edgValues;
@@ -675,7 +674,7 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #clear_external_data parser function
+	 * Render the #clear_external_data parser function.
 	 */
 	static function doClearExternalData( &$parser ) {
 		global $edgValues;
