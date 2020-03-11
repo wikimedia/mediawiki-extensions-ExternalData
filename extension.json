@@ -32,9 +32,7 @@
 		"EDGetData": "includes/EDGetData.php"
 	},
 	"Hooks": {
-		"ParserFirstCallInit": [
-			"ExternalDataHooks::registerParser"
-		]
+		"ParserFirstCallInit": "ExternalDataHooks::registerParser"
 	},
 	"config": {
 		"_prefix": "edg",
