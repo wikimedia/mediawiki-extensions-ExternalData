@@ -185,6 +185,8 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory' )->parse() );
 		}
 
+		$regex = null;
+
 		if ( array_key_exists( 'format', $args ) ) {
 			$format = strtolower( $args['format'] );
 		} else {
