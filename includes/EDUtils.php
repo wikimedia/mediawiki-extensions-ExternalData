@@ -136,7 +136,7 @@ END;
 	}
 
 	static function connectLDAP( $server, $username, $password ) {
-		// Check that a PHP LDAP library is installed.
+		// Check that the PHP LDAP library is installed.
 		if ( !function_exists( 'ldap_connect' ) ) {
 			echo ( "Error: you must have a PHP LDAP library installed in order to call #get_ldap_data." );
 		}
@@ -818,7 +818,8 @@ END;
 			if ( is_array( $val ) && self::holdsSimpleList( $val ) ) {
 				// If it just holds a simple list, turn the
 				// array into a comma-separated list, then
-				// pass it back in in order to do the final					// processing.
+				// pass it back in in order to do the final
+				// processing.
 				$val = [ $key => implode( ', ', $val ) ];
 				self::parseTree( $val, $retrieved_values );
 			} elseif ( is_array( $val ) && count( $val ) > 1 ) {
@@ -870,8 +871,8 @@ END;
 			return EDHttpWithHeaders::post( $url,  $options );
 		}
 
-		// do any special variable replacements in the URLs, for
-		// secret API keys and the like
+		// Do any special variable replacements in the URLs, for
+		// secret API keys and the like.
 		foreach ( $edgStringReplacements as $key => $value ) {
 			$url = str_replace( $key, $value, $url );
 		}
