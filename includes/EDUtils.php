@@ -1088,8 +1088,21 @@ END;
 
 	public static function getRegexData( $text, $regex ): array {
 		$matches = [];
-		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-		@preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
+
+		if ( method_exists( AtEase::class, 'suppressWarnings' ) ) {
+			// MW >= 1.33
+			AtEase::suppressWarnings();
+		} else {
+			\MediaWiki\suppressWarnings();
+		}
+		preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
+		if ( method_exists( AtEase::class, 'restoreWarnings' ) ) {
+			// MW >= 1.33
+			AtEase::restoreWarnings();
+		} else {
+			\MediaWiki\restoreWarnings();
+		}
+
 		return $matches;
 	}
 
