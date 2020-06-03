@@ -29,7 +29,9 @@
 		"EDUtils": "includes/EDUtils.php",
 		"EDHttpWithHeaders": "includes/EDHttpWithHeaders.php",
 		"EDParserFunctions": "includes/EDParserFunctions.php",
-		"EDGetData": "includes/EDGetData.php"
+		"EDGetData": "includes/EDGetData.php",
+		"EDJsonObject": "includes/EDJsonObject.php",
+		"EDArraySlice": "includes/EDArraySlice.php"
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "ExternalDataHooks::registerParser"

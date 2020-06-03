@@ -857,6 +857,16 @@ END;
 		return $values;
 	}
 
+	static function getJSONPathData( $json, $mappings ) {
+		global $edgJSONValues;
+
+		$jsonObject = new EDJsonObject( $json );
+		foreach ( $mappings as $jsonpath ) {
+			$edgJSONValues[$jsonpath] = $jsonObject->get( $jsonpath );
+		}
+		return $edgJSONValues;
+	}
+
 	static function fetchURL( $url, $post_vars = [], $cacheExpireTime = 0, $get_fresh = false, $try_count = 1 ) {
 		$dbr = wfGetDB( DB_REPLICA );
 		global $edgStringReplacements, $edgCacheTable, $edgAllowSSL;
@@ -951,6 +961,8 @@ END;
 			return self::getCSVData( $contents, true, $delimiter );
 		} elseif ( $format == 'json' ) {
 			return self::getJSONData( $contents, $prefixLength );
+		} elseif ( $format == 'json with jsonpath' ) {
+			return self::getJSONPathData( $contents, $mappings );
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $contents );
 		} elseif ( $format == 'text' ) {

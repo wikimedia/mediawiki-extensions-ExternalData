@@ -105,6 +105,10 @@ class EDParserFunctions {
 				// Hopefully this solution isn't "too clever".
 				$format = [ $format, $delimiter ];
 			}
+		} elseif ( $format == 'json' ) {
+			if ( array_key_exists( 'use jsonpath', $args ) ) {
+				$format = 'json with jsonpath';
+			}
 		}
 
 		$regex = $format === 'text' && array_key_exists( 'regex', $args )
@@ -113,7 +117,7 @@ class EDParserFunctions {
 
 		if ( array_key_exists( 'data', $args ) ) {
 			// Parse the 'data' arg into mappings.
-			if ( $format == 'xml with xpath' || $format === 'text' ) {
+			if ( $format == 'xml with xpath' || $format === 'text' || $format == 'json with jsonpath' ) {
 				$mappings = EDUtils::paramToArray( $args['data'], false, false );
 			} else {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
@@ -211,11 +215,15 @@ class EDParserFunctions {
 			if ( array_key_exists( 'regex', $args ) ) {
 				$regex = $args['regex'];
 			}
+		} elseif ( $format == 'json' ) {
+			if ( array_key_exists( 'use jsonpath', $args ) ) {
+				$format = 'json with jsonpath';
+			}
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
 			// parse the 'data' arg into mappings
-			if ( $format == 'xml with xpath' || $format === 'text' ) {
+			if ( $format == 'xml with xpath' || $format === 'text' || $format == 'json with jsonpath' ) {
 				$mappings = EDUtils::paramToArray( $args['data'], false, false );
 			} else {
 				$mappings = EDUtils::paramToArray( $args['data'], false, true );
