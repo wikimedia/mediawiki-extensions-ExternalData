@@ -869,16 +869,17 @@ END;
 
 	static function fetchURL( $url, $post_vars = [], $cacheExpireTime = 0, $get_fresh = false, $try_count = 1 ) {
 		$dbr = wfGetDB( DB_REPLICA );
-		global $edgStringReplacements, $edgCacheTable, $edgAllowSSL;
+		global $edgStringReplacements, $edgCacheTable, $edgAllowSSL, $edgHTTPOptions;
 
+		$options = $edgHTTPOptions;
 		if ( $post_vars ) {
-			$options = [ 'postData' => $post_vars ];
+			$post_options = array_merge( isset( $options['postData'] ) ? $options['postData'] : [], $post_vars );
 			Hooks::run( 'ExternalDataBeforeWebCall', [
 				'post',
 				&$url,
-				&$options
+				$post_options
 			] );
-			return EDHttpWithHeaders::post( $url,  $options );
+			return EDHttpWithHeaders::post( $url,  $post_options );
 		}
 
 		// Do any special variable replacements in the URLs, for
@@ -887,10 +888,9 @@ END;
 			$url = str_replace( $key, $value, $url );
 		}
 
-		$options = [ 'timeout' => 'default' ];
 		if ( $edgAllowSSL ) {
-			$options['sslVerifyCert'] = false;
-			$options['followRedirects'] = false;
+			$options['sslVerifyCert'] = isset( $options['sslVerifyCert'] ) ? $options['sslVerifyCert'] : false;
+			$options['followRedirects'] = isset( $options['followRedirects'] ) ? $options['followRedirects'] : false;
 		}
 
 		Hooks::run( 'ExternalDataBeforeWebCall', [

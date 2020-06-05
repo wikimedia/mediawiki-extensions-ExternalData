@@ -53,7 +53,10 @@
 		"DBFlags": [],
 		"DBTablePrefix": [],
 		"DirectoryPath": [],
-		"FilePath": []
+		"FilePath": [],
+		"HTTPOptions": {
+			"timeout": "default"
+		}
 	},
 	"manifest_version": 1
 }
