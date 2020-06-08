@@ -12,6 +12,7 @@
 	"externaldata-ldap-unable-to-connect": "無法連結至 $1。",
 	"externaldata-xml-error": "XML 錯誤：在第 $2 行出現 $1。",
 	"externaldata-invalid-json": "錯誤：無效的 JSON。",
+	"externaldata-jsonpath-error": "錯誤：無效的 JSONPath 表示。",
 	"externaldata-db-incomplete-information": "錯誤：此資料庫的 ID 訊息不完整。",
 	"externaldata-db-could-not-get-url": "在 $1 {{PLURAL:$1| 次嘗試| 次嘗試}}後仍無法取得 URL。",
 	"externaldata-db-unknown-type": "錯誤：無效資料庫類型。",

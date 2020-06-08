@@ -5,6 +5,7 @@
 			"Gomoko",
 			"IAlex",
 			"McDutchie",
+			"Pamputt",
 			"PieRRoMaN",
 			"Shirayuki",
 			"Thibaut120094"
@@ -17,6 +18,7 @@
 	"externaldata-ldap-unable-to-connect": "Impossible de se connecter à $1",
 	"externaldata-xml-error": "Erreur XML : $1 à la ligne $2",
 	"externaldata-invalid-json": "Erreur : JSON non valide",
+	"externaldata-jsonpath-error": "Erreur : notation de JSONPath non valide.",
 	"externaldata-db-incomplete-information": "Erreur : Informations incomplètes pour cet identifiant de serveur.",
 	"externaldata-db-could-not-get-url": "Impossible d'obtenir l'URL après $1 {{PLURAL:$1|essais}}.",
 	"externaldata-db-unknown-type": "ERREUR: Type de base de données inconnu.",

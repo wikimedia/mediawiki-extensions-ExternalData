@@ -13,6 +13,7 @@
 	"externaldata-ldap-unable-to-connect": "$1 ile bağlantı kurulamıyor.",
 	"externaldata-xml-error": "XML hatası: $1 satırında $2.",
 	"externaldata-invalid-json": "Hata: Geçersiz JSON.",
+	"externaldata-jsonpath-error": "Hata: Geçersiz JSONPath gösterimi.",
 	"externaldata-db-incomplete-information": "Hata: Bu veritabanı kimliği için eksik bilgi.",
 	"externaldata-db-could-not-get-url": "URL, $1 {{PLURAL:$1|denemeden|denemeden}} sonra alınamadı.",
 	"externaldata-db-unknown-type": "Hata: Bilinmeyen veritabanı türü.",

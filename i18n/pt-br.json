@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Eduardo Addad de Oliveira",
 			"Eduardo.mps",
 			"Giro720",
 			"Jaideraf"
@@ -13,6 +14,7 @@
 	"externaldata-ldap-unable-to-connect": "Não foi possível conectar-se a $1",
 	"externaldata-xml-error": "Erro no XML: $1 na linha $2",
 	"externaldata-invalid-json": "Erro: JSON inválido.",
+	"externaldata-jsonpath-error": "Erro: notação JSONPath inválida.",
 	"externaldata-db-incomplete-information": "Erro: informação incompleta para o ID deste servidor</P>",
 	"externaldata-db-could-not-get-url": "Não foi possível obter o URL após $1 {{PLURAL:$1|tentativa|tentativas}}.",
 	"externaldata-db-unknown-type": "Erro: tipo de base de dados desconhecido.",
