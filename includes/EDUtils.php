@@ -900,7 +900,7 @@ END;
 		] );
 
 		if ( !isset( $edgCacheTable ) || $edgCacheTable === null ) {
-			$contents = EDHttpWithHeaders::get( $url, $options );
+			$contents = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
 			// Handle non-UTF-8 encodings.
 			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
 			// Unfortunately, 'mbstring' functions are not available
@@ -913,14 +913,14 @@ END;
 		}
 
 		// check the cache (only the first 254 chars of the url)
-		$row = $dbr->selectRow( $edgCacheTable, '*', [ 'url' => substr( $url, 0, 254 ) ], 'EDUtils::fetchURL' );
+		$row = $dbr->selectRow( $edgCacheTable, '*', [ 'url' => substr( $url, 0, 254 ) ], __METHOD__ );
 
 		if ( $row && ( ( time() - $row->req_time ) > $cacheExpireTime ) ) {
 			$get_fresh = true;
 		}
 
 		if ( !$row || $get_fresh ) {
-			$page = EDHttpWithHeaders::get( $url );
+			$page = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
 			if ( $page === false ) {
 				sleep( 1 );
 				if ( $try_count >= self::$http_number_of_tries ) {
