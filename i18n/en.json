@@ -18,5 +18,6 @@
 	"externaldata-db-could-not-connect": "Error: Could not connect to database.",
 	"externaldata-db-unknown-collection": "Error: Unknown MongoDB collection.",
 	"externaldata-db-no-return-values": "Error: No return values specified.",
-	"externaldata-db-invalid-query": "Invalid query."
+	"externaldata-db-invalid-query": "Invalid query.",
+	"externaldata-no-css-selector": "The library $1, required to use the '$2' format without the '$3' option, is missing."
 }

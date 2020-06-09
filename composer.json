@@ -1,4 +1,5 @@
 {
+	"require": {"symfony/css-selector": ">=3.3-stable"},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "31.0.0",
 		"mediawiki/minus-x": "1.1.0",

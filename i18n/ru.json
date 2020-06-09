@@ -20,5 +20,6 @@
 	"externaldata-db-could-not-connect": "ОШИБКА. Не удаётся подключиться к базе данных.",
 	"externaldata-db-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB.",
 	"externaldata-db-no-return-values": "ОШИБКА. Не указаны возвращаемые значение.",
-	"externaldata-db-invalid-query": "Ошибочный запрос."
+	"externaldata-db-invalid-query": "Ошибочный запрос.",
+	"externaldata-no-css-selector": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'."
 }

@@ -542,7 +542,7 @@ END;
 	}
 
 	static function isNodeNotEmpty( $node ) {
-		return trim( $node[0] ) != '';
+		return trim( $node[0] ) !== '';
 	}
 
 	static function filterEmptyNodes( $nodes ) {
@@ -552,7 +552,7 @@ END;
 		return array_filter( $nodes, [ 'EDUtils', 'isNodeNotEmpty' ] );
 	}
 
-	static function getXPathData( $xml, $mappings, $ns ) {
+	static function getXMLXPathData( $xml, $mappings, $ns ) {
 		global $edgXMLValues;
 
 		try {
@@ -594,6 +594,61 @@ END;
 			}
 		}
 		return $edgXMLValues;
+	}
+
+	static function getHTMLData( $html, array $mappings, $css ) {
+		global $edgHTMLValues;
+		$doc = new DOMDocument;
+		// Remove whitespaces:
+		$doc->preserveWhiteSpace = false;
+
+		// Otherwise, the encoding will be broken:
+		if ( !preg_match( '/^<\?xml[^>]+encoding/', $html )
+			&& preg_match( '%<meta[^>]+charset\s*=\s*(["\'])(.+?)\1[^>]*/?>%i', $html, $matches ) ) {
+			// <? - another fix for color highlighting in vi
+			$encoding = '<?xml encoding="' . $matches [2] . '" ?>';
+		} else {
+			$encoding = '';
+		}
+
+		try {
+			$doc->loadHTML( $encoding . $html );
+		} catch ( Exception $e ) {
+			return "Caught exception parsing HTML: " . $e->getMessage();
+		}
+		$edgHTMLValues = [];
+
+		$domxpath = new DOMXPath( $doc );
+		if ( $css ) {
+			$converter = new Symfony\Component\CssSelector\CssSelectorConverter();
+		}
+		foreach ( $mappings as $local_var => $query ) {
+			if ( $css ) {
+				preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $query, $matches );
+				$xpath = '/' . strtr( $converter->toXPath( $matches ['selector'] ), [
+					'descendant-or-self::*' => '',
+					'descendant-or-self::' => '/'
+				] );
+				$attr = $matches ['attr'];
+			} else {
+				$xpath = $query;
+			}
+			$entries = $domxpath->query( $xpath );
+			$nodesArray = [];
+			foreach ( $entries as $entry ) {
+				$values = $attr ? $entry->attributes[$attr]->nodeValue : $entry->textContent;
+				$nodesArray[] = self::filterEmptyNodes( $values );
+			}
+			if ( array_key_exists( $xpath, $edgHTMLValues ) ) {
+				// At the moment, this code will never get
+				// called, because duplicate values in
+				// $mappings will have been removed already.
+				$edgHTMLValues[$query] = array_merge( $edgHTMLValues[$xpath], $nodesArray );
+			} else {
+				$edgHTMLValues[$query] = $nodesArray;
+			}
+		}
+		return $edgHTMLValues;
 	}
 
 	static function getValuesFromCSVLine( $csv_line ) {
@@ -950,29 +1005,29 @@ END;
 		} else {
 			$delimiter = ',';
 		}
-
-		if ( $format == 'xml' ) {
-			return self::getXMLData( $contents );
-		} elseif ( $format == 'xml with xpath' ) {
-			return self::getXPathData( $contents, $mappings, $source );
-		} elseif ( $format == 'csv' ) {
-			return self::getCSVData( $contents, false, $delimiter );
-		} elseif ( $format == 'csv with header' ) {
-			return self::getCSVData( $contents, true, $delimiter );
-		} elseif ( $format == 'json' ) {
-			return self::getJSONData( $contents, $prefixLength );
-		} elseif ( $format == 'json with jsonpath' ) {
-			return self::getJSONPathData( $contents, $mappings );
-		} elseif ( $format == 'gff' ) {
-			return self::getGFFData( $contents );
-		} elseif ( $format == 'text' ) {
-			if ( $regex == null ) {
-				return [ 'text' => $contents ];
-			} else {
-				return self::getRegexData( $contents, $regex );
-			}
-		} else {
-			return wfMessage( 'externaldata-web-invalid-format', $format )->text();
+		switch ( $format ) {
+			case 'xml':
+				return self::getXMLData( $contents );
+			case 'xml with xpath':
+				return self::getXMLXPathData( $contents, $mappings, $source );
+			case 'html':
+				return self::getHTMLData( $contents, $mappings, true );
+			case 'html with xpath':
+				return self::getHTMLData( $contents, $mappings, false );
+			case 'csv':
+				return self::getCSVData( $contents, false, $delimiter );
+			case 'csv with header':
+				return self::getCSVData( $contents, true, $delimiter );
+			case 'json':
+				return self::getJSONData( $contents, $prefixLength );
+			case 'json with jsonpath':
+				return self::getJSONPathData( $contents, $mappings );
+			case 'gff':
+				return self::getGFFData( $contents );
+			case 'text':
+				return $regex === null ? [ 'text' => $contents ] : self::getRegexData( $contents, $regex );
+			default:
+				return wfMessage( 'externaldata-web-invalid-format', $format )->text();
 		}
 	}
 
@@ -1022,7 +1077,7 @@ END;
 			return "Error: Unable to get file contents.";
 		}
 
-		return self::getDataFromText( $file_contents, $format, $mappings, $path, $regex );
+		return self::getDataFromText( $file_contents, $format, $mappings, $path, 0, $regex );
 	}
 
 	public static function getDataFromFile( $file, $format, $mappings, $regex ) {

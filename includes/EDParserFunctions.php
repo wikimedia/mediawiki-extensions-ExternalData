@@ -8,7 +8,7 @@ class EDParserFunctions {
 	/**
 	 * A helper function, called by doGetWebData().
 	 */
-	public static function setGlobalValuesArray( $external_values, $filters, $mappings ) {
+	public static function setGlobalValuesArray( array $external_values, array $filters, array $mappings ) {
 		global $edgValues;
 
 		foreach ( $filters as $filter_var => $filter_value ) {
@@ -58,22 +58,90 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #get_web_data parser function.
+	 * Common code for doGetWebData and doGetFileData.
 	 */
-	static function doGetWebData( &$parser ) {
+	private static function prepareTextProcessing( Parser &$parser, array $params ) {
 		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
 
 		// If we're handling multiple pages, reset $edgValues
 		// when we move from one page to another.
 		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
+		if ( !isset( $edgCurPageName ) || $edgCurPageName !== $cur_page_name ) {
 			$edgValues = [];
 			$edgCurPageName = $cur_page_name;
 		}
 
+		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+
+		// Preliminary format:
+		$format = array_key_exists( 'format', $args ) ? strtolower( $args['format'] ) : '';
+
+		// Final format:
+		// XPath:
+		if ( array_key_exists( 'use xpath', $args ) && ( $format === 'xml' || $format === 'html' ) ) {
+			$format .= ' with xpath';
+		}
+
+		if ( $format === 'html' && !class_exists( 'Symfony\Component\CssSelector\CssSelectorConverter' ) ) {
+			// Addressing DOM nodes with CSS/jQuery-like selectors requires symfony/css-selector.
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-css-selector', 'symfony/css-selector', 'HTML', 'use xpath' )->parse() );
+		}
+
+		// JSONPath:
+		if ( array_key_exists( 'use jsonpath', $args ) && ( $format === 'json' ) ) {
+			$format .= ' with jsonpath';
+		}
+
+		// CSV:
+		if ( $format === 'csv' || $format === 'csv with header' ) {
+			if ( array_key_exists( 'delimiter', $args ) ) {
+				$delimiter = $args['delimiter'];
+				// Allow for tab delimiters, using \t.
+				$delimiter = str_replace( '\t', "\t", $delimiter );
+				// Hopefully this solution isn't "too clever".
+				$format = [ $format, $delimiter ];
+			}
+		}
+
+		// Regular expression for text format:
+		$regex = $format === 'text' && array_key_exists( 'regex', $args )
+			? html_entity_decode( $args['regex'] )
+			: null;
+
+		if ( array_key_exists( 'data', $args ) ) {
+			// Parse the 'data' arg into mappings.
+			$lc_values = !( $format === 'xml with xpath' || $format === 'html with xpath' || $format === 'text' || $format === 'json with jsonpath' );
+			$mappings = EDUtils::paramToArray( $args['data'], false, $lc_values );
+		} else {
+			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
+		}
+
+		$cacheExpireTime = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : $edgCacheExpireTime;
+
+		$prefixLength = array_key_exists( 'json offset', $args ) ? $args['json offset'] : 0;
+
+		$filters = array_key_exists( 'filters', $args ) ? EDUtils::paramToArray( $args['filters'], true, false ) : [];
+
+		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ];
+	}
+
+	/**
+	 * Render the #get_web_data parser function.
+	 */
+	static function doGetWebData( Parser &$parser ) {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		$parsed = self::prepareTextProcessing( $parser, $params );
+
+		if ( !is_array( $parsed ) ) {
+			// Parsing parameters ended in error.
+			return $parsed;
+		}
+
+		// self::prepareTextProcessing () hasn't returned an error:
+		list( $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ) = $parsed;
+
+		// Parameters specific to {{#get_web_data:}}
 		if ( array_key_exists( 'url', $args ) ) {
 			$url = $args['url'];
 		} else {
@@ -85,75 +153,16 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
-		if ( array_key_exists( 'format', $args ) ) {
-			$format = strtolower( $args['format'] );
-		} else {
-			$format = '';
-		}
-		if ( $format == 'xml' ) {
-			if ( array_key_exists( 'use xpath', $args ) ) {
-				// Somewhat of a hack - store the fact that
-				// we're using XPath within the format, even
-				// though the format is still XML.
-				$format = 'xml with xpath';
-			}
-		} elseif ( $format == 'csv' || $format == 'csv with header' ) {
-			if ( array_key_exists( 'delimiter', $args ) ) {
-				$delimiter = $args['delimiter'];
-				// Allow for tab delimiters, using \t.
-				$delimiter = str_replace( '\t', "\t", $delimiter );
-				// Hopefully this solution isn't "too clever".
-				$format = [ $format, $delimiter ];
-			}
-		} elseif ( $format == 'json' ) {
-			if ( array_key_exists( 'use jsonpath', $args ) ) {
-				$format = 'json with jsonpath';
-			}
-		}
-
-		$regex = $format === 'text' && array_key_exists( 'regex', $args )
-			? html_entity_decode( $args['regex'] )
-			: null;
-
-		if ( array_key_exists( 'data', $args ) ) {
-			// Parse the 'data' arg into mappings.
-			if ( $format == 'xml with xpath' || $format === 'text' || $format == 'json with jsonpath' ) {
-				$mappings = EDUtils::paramToArray( $args['data'], false, false );
-			} else {
-				$mappings = EDUtils::paramToArray( $args['data'], false, true );
-			}
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
-		}
-
-		if ( array_key_exists( 'cache seconds', $args ) ) {
-			// set cache expire time
-			$cacheExpireTime = $args['cache seconds'];
-		} else {
-			$cacheExpireTime = $edgCacheExpireTime;
-		}
-
-		if ( array_key_exists( 'json offset', $args ) ) {
-			$prefixLength = $args['json offset'];
-		} else {
-			$prefixLength = 0;
-		}
-
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
+
 		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $prefixLength, $regex );
+
 		if ( is_string( $external_values ) ) {
 			// It's an error message - display it on the screen.
 			return EDUtils::formatErrorMessage( $external_values );
 		}
-		if ( count( $external_values ) == 0 ) {
+		if ( count( $external_values ) === 0 ) {
 			return;
-		}
-
-		if ( array_key_exists( 'filters', $args ) ) {
-			// parse the 'filters' arg
-			$filters = EDUtils::paramToArray( $args['filters'], true, false );
-		} else {
-			$filters = [];
 		}
 
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
@@ -162,20 +171,20 @@ class EDParserFunctions {
 	/**
 	 * Render the #get_file_data parser function.
 	 */
-	static function doGetFileData( &$parser ) {
-		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
-
-		// If we're handling multiple pages, reset $edgValues
-		// when we move from one page to another.
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = [];
-			$edgCurPageName = $cur_page_name;
-		}
-
+	static function doGetFileData( Parser &$parser ) {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		$parsed = self::prepareTextProcessing( $parser, $params );
+
+		if ( !is_array( $parsed ) ) {
+			// Parsing parameters ended in error.
+			return $parsed;
+		}
+
+		// self::prepareTextProcessing () hasn't returned an error:
+		list( $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ) = $parsed;
+
+		// Parameters specific to {{#get_file_data:}}
 		if ( array_key_exists( 'file', $args ) ) {
 			$file = $args['file'];
 		} elseif ( array_key_exists( 'directory', $args ) ) {
@@ -189,56 +198,6 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory' )->parse() );
 		}
 
-		$regex = null;
-
-		if ( array_key_exists( 'format', $args ) ) {
-			$format = strtolower( $args['format'] );
-		} else {
-			$format = '';
-		}
-		if ( $format == 'xml' ) {
-			if ( array_key_exists( 'use xpath', $args ) ) {
-				// Somewhat of a hack - store the fact that
-				// we're using XPath within the format, even
-				// though the format is still XML.
-				$format = 'xml with xpath';
-			}
-		} elseif ( $format == 'csv' || $format == 'csv with header' ) {
-			if ( array_key_exists( 'delimiter', $args ) ) {
-				$delimiter = $args['delimiter'];
-				// Allow for tab delimiters, using \t.
-				$delimiter = str_replace( '\t', "\t", $delimiter );
-				// Hopefully this solution isn't "too clever".
-				$format = [ $format, $delimiter ];
-			}
-		} elseif ( $format === 'text' ) {
-			if ( array_key_exists( 'regex', $args ) ) {
-				$regex = $args['regex'];
-			}
-		} elseif ( $format == 'json' ) {
-			if ( array_key_exists( 'use jsonpath', $args ) ) {
-				$format = 'json with jsonpath';
-			}
-		}
-
-		if ( array_key_exists( 'data', $args ) ) {
-			// parse the 'data' arg into mappings
-			if ( $format == 'xml with xpath' || $format === 'text' || $format == 'json with jsonpath' ) {
-				$mappings = EDUtils::paramToArray( $args['data'], false, false );
-			} else {
-				$mappings = EDUtils::paramToArray( $args['data'], false, true );
-			}
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
-		}
-
-		if ( array_key_exists( 'cache seconds', $args ) ) {
-			// set cache expire time
-			$cacheExpireTime = $args['cache seconds'];
-		} else {
-			$cacheExpireTime = $edgCacheExpireTime;
-		}
-
 		if ( isset( $file ) ) {
 			$external_values = EDUtils::getDataFromFile( $file, $format, $mappings, $regex );
 		} else {
@@ -249,15 +208,8 @@ class EDParserFunctions {
 			// It's an error message - display it on the screen.
 			return EDUtils::formatErrorMessage( $external_values );
 		}
-		if ( count( $external_values ) == 0 ) {
+		if ( count( $external_values ) === 0 ) {
 			return;
-		}
-
-		if ( array_key_exists( 'filters', $args ) ) {
-			// parse the 'filters' arg
-			$filters = EDUtils::paramToArray( $args['filters'], true, false );
-		} else {
-			$filters = [];
 		}
 
 		self::setGlobalValuesArray( $external_values, $filters, $mappings );
@@ -266,7 +218,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #get_soap_data parser function.
 	 */
-	static function doGetSOAPData( &$parser ) {
+	static function doGetSOAPData( Parser &$parser ) {
 		global $edgCurPageName, $edgValues;
 
 		// If we're handling multiple pages, reset $edgValues
@@ -327,7 +279,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #get_ldap_data parser function.
 	 */
-	static function doGetLDAPData( &$parser ) {
+	static function doGetLDAPData( Parser &$parser ) {
 		global $edgCurPageName, $edgValues;
 
 		// If we're handling multiple pages, reset $edgValues
@@ -373,7 +325,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #get_db_data parser function.
 	 */
-	static function doGetDBData( &$parser ) {
+	static function doGetDBData( Parser &$parser ) {
 		global $edgCurPageName, $edgValues;
 
 		// If we're handling multiple pages, reset $edgValues
@@ -449,7 +401,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #external_value parser function.
 	 */
-	static function doExternalValue( &$parser, $local_var = '' ) {
+	static function doExternalValue( Parser &$parser, $local_var = '' ) {
 		global $edgValues, $edgExternalValueVerbose;
 		if ( !array_key_exists( $local_var, $edgValues ) ) {
 			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
@@ -463,7 +415,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #for_external_table parser function.
 	 */
-	static function doForExternalTable( &$parser, $expression = '' ) {
+	static function doForExternalTable( Parser &$parser, $expression = '' ) {
 		global $edgValues;
 
 		// Get the variables used in this expression, get the number
@@ -528,7 +480,7 @@ class EDParserFunctions {
 	 *
 	 * @author Dan Bolser
 	 */
-	static function doDisplayExternalTable( &$parser ) {
+	static function doDisplayExternalTable( Parser &$parser ) {
 		global $edgValues;
 
 		$params = func_get_args();
@@ -597,7 +549,7 @@ class EDParserFunctions {
 	 * Based on Semantic Internal Objects'
 	 * SIOSubobjectHandler::doSetInternal().
 	 */
-	public static function callSubobject( $parser, $params ) {
+	public static function callSubobject( Parser $parser, $params ) {
 		// This is a hack, since SMW's SMWSubobject::render() call is
 		// not meant to be called outside of SMW. However, this seemed
 		// like the better solution than copying over all of that
@@ -618,7 +570,7 @@ class EDParserFunctions {
 		$subobjectArgs[2] = $params[0] . '=' . $mainPageName;
 
 		foreach ( $params as $i => $value ) {
-			if ( $i == 0 ) {
+			if ( $i === 0 ) {
 				continue;
 			}
 			$subobjectArgs[] = $value;
@@ -632,7 +584,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #store_external_table parser function.
 	 */
-	static function doStoreExternalTable( &$parser ) {
+	static function doStoreExternalTable( Parser &$parser ) {
 		global $edgValues;
 
 		// Quick exit if Semantic MediaWiki is not installed.
@@ -686,7 +638,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #clear_external_data parser function.
 	 */
-	static function doClearExternalData( &$parser ) {
+	static function doClearExternalData( Parser &$parser ) {
 		global $edgValues;
 		$edgValues = [];
 	}
