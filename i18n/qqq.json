@@ -3,6 +3,7 @@
 		"authors": [
 			"Dead3y3",
 			"Fryed-peach",
+			"Raymond",
 			"Shirayuki",
 			"Umherirrender"
 		]
@@ -22,5 +23,5 @@
 	"externaldata-db-unknown-collection": "The error message if #get_db_data can't find the specified \"collection\" when connecting to MongoDB.",
 	"externaldata-db-no-return-values": "Used as error message, if the number of the specified columns is zero.\n\nIf successful, the system returns values in the specified columns.",
 	"externaldata-db-invalid-query": "Used as error message, if the query has been failed.",
-	"externaldata-no-css-selector": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n$2 - the format that requires it\n$3 - a parameter for a MediaWiki parser function"
+	"externaldata-no-css-selector": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function"
 }
