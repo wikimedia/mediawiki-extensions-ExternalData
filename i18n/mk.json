@@ -18,5 +18,6 @@
 	"externaldata-db-could-not-connect": "Грешка: Не можев да се поврзам со базата на податоци.",
 	"externaldata-db-unknown-collection": "Грешка: Непозната збирка од MongoDB.",
 	"externaldata-db-no-return-values": "Грешка: Нема назначено повратни вредности.",
-	"externaldata-db-invalid-query": "Грешно барање."
+	"externaldata-db-invalid-query": "Грешно барање.",
+	"externaldata-no-css-selector": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“."
 }
