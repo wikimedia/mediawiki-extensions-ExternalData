@@ -14,6 +14,7 @@
 	"externaldata-ldap-unable-to-connect": "Не удаётся подключиться к $1",
 	"externaldata-xml-error": "Ошибка XML. $1 в строке $2",
 	"externaldata-invalid-json": "Ошибка: Недопустимый JSON",
+	"externaldata-jsonpath-error": "Ошибка: неверная запись JSONPath.",
 	"externaldata-db-incomplete-information": "ОШИБКА. Неполная информация для этого ID сервера.",
 	"externaldata-db-could-not-get-url": "Не удалось получить URL после $1 {{PLURAL:$1|попытки|попыток}}.",
 	"externaldata-db-unknown-type": "ОШИБКА. Неизвестный тип базы данных.",
