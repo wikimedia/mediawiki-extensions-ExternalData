@@ -20,5 +20,6 @@
 	"externaldata-db-could-not-connect": "Hata: Veritabanına bağlanılamıyor.",
 	"externaldata-db-unknown-collection": "Hata: Bilinmeyen MongoDB koleksiyonu.",
 	"externaldata-db-no-return-values": "Hata: Dönüş değeri belirtilmedi.",
-	"externaldata-db-invalid-query": "Geçersiz sorgu."
+	"externaldata-db-invalid-query": "Geçersiz sorgu.",
+	"externaldata-no-css-selector": "'$3' seçeneği olmadan '$2' biçimini kullanmak için gereken $1 kitaplığı eksik."
 }
