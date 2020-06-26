@@ -16,11 +16,17 @@
 	"externaldata-invalid-json": "Ошибка: Недопустимый JSON",
 	"externaldata-jsonpath-error": "Ошибка: неверная запись JSONPath.",
 	"externaldata-db-incomplete-information": "ОШИБКА. Неполная информация для этого ID сервера.",
-	"externaldata-db-could-not-get-url": "Не удалось получить URL после $1 {{PLURAL:$1|попытки|попыток}}.",
+	"externaldata-db-could-not-get-url": "Не удалось получить URL $1 после $2 {{PLURAL:$2|попытки|попыток}}.",
 	"externaldata-db-unknown-type": "ОШИБКА. Неизвестный тип базы данных.",
 	"externaldata-db-could-not-connect": "ОШИБКА. Не удаётся подключиться к базе данных.",
 	"externaldata-db-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB.",
 	"externaldata-db-no-return-values": "ОШИБКА. Не указаны возвращаемые значение.",
 	"externaldata-db-invalid-query": "Ошибочный запрос.",
-	"externaldata-no-css-selector": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'."
+	"externaldata-no-css-selector": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",
+	"externaldata-post-failed": "Запрос POST к $1 не удался или возвратил ошибку.",
+	"externaldata-url-unknown-error": "По неизвестной причине, данные по адресу $1 не получены.",
+	"externaldata-parsing-html-failed": "HTML не был разобран.",
+	"externaldata-caught-exception-parsing-html": "При разборе HTML выброшено исключение. Текст ошибки: &laquo;$1&raquo;.",
+	"externaldata-error-converting-css-to-xpath": "При преобразовании селектора CSS в XPath выброшено исключение:\n$1",
+	"externaldata-xpath-invalid": "Поиск по XPath $1 закончился ошибкой: $2"
 }

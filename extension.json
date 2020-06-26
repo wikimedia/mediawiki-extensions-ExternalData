@@ -41,6 +41,7 @@
 		"Values": [],
 		"StringReplacements": [],
 		"CacheTable": null,
+		"AlwaysAllowStaleCache": true,
 		"AllowSSL": true,
 		"ExternalValueVerbose": true,
 		"CacheExpireTime": 604800,

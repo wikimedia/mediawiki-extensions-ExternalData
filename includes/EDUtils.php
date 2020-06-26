@@ -4,9 +4,15 @@
  */
 
 class EDUtils {
+
+	private const STATUS_OK = 0;
+	private const STATUS_POST_FAILED = 1;
+	private const STATUS_STALE = 2;
+	private const STATUS_URL_NO_DATA = 4;
+	private const STATUS_CACHE_HIT = 8;
+
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
-
 	private static $ampersandReplacement = "THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555";
 
 	/**
@@ -125,13 +131,10 @@ END;
 	}
 
 	static function getLDAPData( $filter, $domain, $params ) {
-		global $edgLDAPServer;
-		global $edgLDAPUser;
-		global $edgLDAPPass;
+		global $edgLDAPServer, $edgLDAPUser, $edgLDAPPass;
 
 		$ds = self::connectLDAP( $edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain] );
 		$results = self::searchLDAP( $ds, $domain, $filter, $params );
-
 		return $results;
 	}
 
@@ -154,7 +157,7 @@ END;
 				$r = ldap_bind( $ds );
 			}
 
-			# should check the result of the bind here
+			// should check the result of the bind here
 			return $ds;
 		} else {
 			echo wfMessage( "externaldata-ldap-unable-to-connect", $server )->text();
@@ -178,14 +181,8 @@ END;
 	}
 
 	static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $joinOn, $otherParams ) {
-		global $edgDBServerType;
-		global $edgDBServer;
-		global $edgDBDirectory;
-		global $edgDBName;
-		global $edgDBUser;
-		global $edgDBPass;
-		global $edgDBFlags;
-		global $edgDBTablePrefix;
+		global $edgDBServerType, $edgDBServer, $edgDBDirectory, $edgDBName,
+			$edgDBUser, $edgDBPass, $edgDBFlags, $edgDBTablePrefix;
 
 		// Get all possible parameters
 		$db_type = self::getArrayValue( $edgDBServerType, $dbID );
@@ -198,7 +195,7 @@ END;
 		$db_tableprefix = self::getArrayValue( $edgDBTablePrefix, $dbID );
 
 		// MongoDB has entirely different handling from the rest.
-		if ( $db_type == 'mongodb' ) {
+		if ( $db_type === 'mongodb' ) {
 			if ( $db_name == '' ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
@@ -219,7 +216,6 @@ END;
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		}
-
 		if ( $db_flags == '' ) {
 			$db_flags = DBO_DEFAULT;
 		}
@@ -232,7 +228,7 @@ END;
 			'flags' => $db_flags,
 			'tablePrefix' => $db_tableprefix,
 		];
-		if ( $db_type == 'sqlite' ) {
+		if ( $db_type === 'sqlite' ) {
 			$dbConnectionParams['dbDirectory'] = $db_directory;
 		}
 
@@ -244,7 +240,7 @@ END;
 			return wfMessage( "externaldata-db-could-not-connect" )->text();
 		}
 
-		if ( count( $columns ) == 0 ) {
+		if ( count( $columns ) === 0 ) {
 			return wfMessage( "externaldata-db-no-return-values" )->text();
 		}
 
@@ -423,7 +419,7 @@ END;
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
 					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
-						// Check if it's GeoJSON geometry:
+						// Check if it's GeoJSON geometry.
 						// http://www.geojson.org/geojson-spec.html#geometry-objects
 						// If so, return it in a format that
 						// the Maps extension can understand.
@@ -597,9 +593,8 @@ END;
 	}
 
 	static function getHTMLData( $html, array $mappings, $css ) {
-		global $edgHTMLValues;
-		$doc = new DOMDocument;
-		// Remove whitespaces:
+		$doc = new DOMDocument();
+		// Remove whitespaces.
 		$doc->preserveWhiteSpace = false;
 
 		// Otherwise, the encoding will be broken:
@@ -611,11 +606,31 @@ END;
 			$encoding = '';
 		}
 
+		// Try to recover really crappy HTML.
+		$html = preg_replace( [ '/\\\\"/' ], [ '&quot;' ], $html );
+		// Relax HTML strictness, see https://stackoverflow.com/a/7386650.
+		$doc->recover = true;
+		$doc->strictErrorChecking = false;
+
+		// Try to parse HTML.
+
 		try {
-			$doc->loadHTML( $encoding . $html );
+			// Give the log a rest. See https://stackoverflow.com/a/10482622.
+			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
+			if ( !$doc->loadHTML( $encoding . $html ) ) {
+				return wfMessage( 'externaldata-parsing-html-failed' )->text();
+			}
+			// Report errors.
+			foreach ( libxml_get_errors() as $error ) {
+				wfDebug( "HTML parsing error {$error->code} in line {$error->line}, column {$error->column}: {$error->message}" );
+			}
+			libxml_clear_errors();
+			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		} catch ( Exception $e ) {
-			return "Caught exception parsing HTML: " . $e->getMessage();
+			wfDebug( wfMessage( 'externaldata-caught-exception-parsing-html', $e->getMessage() )->text() );
+			return wfMessage( 'externaldata-caught-exception-parsing-html', $e->getMessage() )->text();
 		}
+		global $edgHTMLValues;
 		$edgHTMLValues = [];
 
 		$domxpath = new DOMXPath( $doc );
@@ -625,19 +640,32 @@ END;
 		foreach ( $mappings as $local_var => $query ) {
 			if ( $css ) {
 				preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $query, $matches );
-				$xpath = '/' . strtr( $converter->toXPath( $matches ['selector'] ), [
+				try {
+					$xpath = $converter->toXPath( $matches ['selector'] );
+				} catch ( Exception $e ) {
+					return wfMessage( 'externaldata-error-converting-css-to-xpath', $e->getMessage() )->text();
+				}
+				$xpath = '/' . strtr( $xpath, [
 					'descendant-or-self::*' => '',
 					'descendant-or-self::' => '/'
 				] );
-				$attr = $matches ['attr'];
+				$attr = isset( $matches ['attr'] ) ? $matches ['attr'] : null;
 			} else {
 				$xpath = $query;
+				$attr = null;
 			}
-			$entries = $domxpath->query( $xpath );
+			try {
+				$entries = $domxpath->query( $xpath );
+			} catch ( Exception $e ) {
+				wfDebug( wfMessage( 'externaldata-xpath-invalid', $xpath, $e->getMessage() )->text() );
+				return wfMessage( 'externaldata-xpath-invalid', $xpath, $e->getMessage() )->text();
+			}
 			$nodesArray = [];
-			foreach ( $entries as $entry ) {
-				$values = $attr ? $entry->attributes[$attr]->nodeValue : $entry->textContent;
-				$nodesArray[] = self::filterEmptyNodes( $values );
+			if ( is_iterable( $entries ) ) {
+				foreach ( $entries as $entry ) {
+					$values = $attr ? $entry->attributes[$attr]->nodeValue : $entry->textContent;
+					$nodesArray[] = self::filterEmptyNodes( $values );
+				}
 			}
 			if ( array_key_exists( $xpath, $edgHTMLValues ) ) {
 				// At the moment, this code will never get
@@ -922,80 +950,99 @@ END;
 		return $edgJSONValues;
 	}
 
-	static function fetchURL( $url, $post_vars = [], $cacheExpireTime = 0, $get_fresh = false, $try_count = 1 ) {
-		$dbr = wfGetDB( DB_REPLICA );
-		global $edgStringReplacements, $edgCacheTable, $edgAllowSSL, $edgHTTPOptions;
-
-		$options = $edgHTTPOptions;
-		if ( $post_vars ) {
-			$post_options = array_merge( isset( $options['postData'] ) ? $options['postData'] : [], $post_vars );
-			Hooks::run( 'ExternalDataBeforeWebCall', [
-				'post',
-				&$url,
-				$post_options
-			] );
-			return EDHttpWithHeaders::post( $url,  $post_options );
-		}
-
+	private static function fetchURL( $url, $post_vars, $cacheExpireTime, $useStaleCache ) {
 		// Do any special variable replacements in the URLs, for
 		// secret API keys and the like.
+		global $edgStringReplacements;
 		foreach ( $edgStringReplacements as $key => $value ) {
 			$url = str_replace( $key, $value, $url );
 		}
+		global $edgHTTPOptions;
+		$options = $edgHTTPOptions;
 
-		if ( $edgAllowSSL ) {
-			$options['sslVerifyCert'] = isset( $options['sslVerifyCert'] ) ? $options['sslVerifyCert'] : false;
-			$options['followRedirects'] = isset( $options['followRedirects'] ) ? $options['followRedirects'] : false;
+		// We do not cache POST requests.
+		if ( $post_vars ) {
+			$post_options = array_merge( isset( $options['postData'] ) ? $options['postData'] : [], $post_vars );
+			Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $post_options ] );
+			$result = EDHttpWithHeaders::post( $url,  $post_options );
+			return [ $result ? self::STATUS_OK : self::STATUS_POST_FAILED, $result, time(), false, 0 ];
 		}
 
-		Hooks::run( 'ExternalDataBeforeWebCall', [
-			'get',
-			&$url,
-			&$options
-		] );
+		// Is the cache set up, present and fresh?
+		global $edgCacheTable;
+		$cache_set_up = (bool)$edgCacheTable;
+		if ( $cache_set_up && ( $cacheExpireTime !== 0 || $useStaleCache ) ) {
+			// Cache set up and can be used.
+			// check the cache (only the first 254 chars of the url)
+			$dbr = wfGetDB( DB_REPLICA );
+			$row = $dbr->selectRow( $edgCacheTable, '*', [ 'url' => substr( $url, 0, 254 ) ], __METHOD__ );
+			$cache_present = (bool)$row;
+			if ( $cache_present ) {
+				$cached = $row->result;
+				$cached_time = $row->req_time;
+				$cache_fresh = $cacheExpireTime !== 0 && time() - $cached_time <= $cacheExpireTime;
+			}
+		}
 
-		if ( !isset( $edgCacheTable ) || $edgCacheTable === null ) {
-			$contents = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
-			// Handle non-UTF-8 encodings.
-			// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
-			// Unfortunately, 'mbstring' functions are not available
-			// in all PHP installations.
-			if ( function_exists( 'mb_convert_encoding' ) ) {
+		// If there is no fresh cache, try to get from the web.
+		$tries = 0;
+		if ( !$cache_set_up || !$cache_present || !$cache_fresh || $cacheExpireTime === 0 ) {
+			// Continue forming set HTTP request fields.
+			global $edgAllowSSL;
+			if ( $edgAllowSSL ) {
+				$options['sslVerifyCert'] = isset( $options['sslVerifyCert'] ) ? $options['sslVerifyCert'] : false;
+				$options['followRedirects'] = isset( $options['followRedirects'] ) ? $options['followRedirects'] : false;
+			}
+			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
+			// Actually send a request.
+			do {
+				$contents = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
+			} while ( !$contents && ++$tries <= self::$http_number_of_tries );
+			if ( $contents ) {
+				// Fetched successfully.
+				$status = self::STATUS_OK;
+				// Handle non-UTF-8 encodings.
+				// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
 				$contents = mb_convert_encoding( $contents, 'UTF-8',
 					mb_detect_encoding( $contents, 'UTF-8, ISO-8859-1', true ) );
-			}
-			return $contents;
-		}
-
-		// check the cache (only the first 254 chars of the url)
-		$row = $dbr->selectRow( $edgCacheTable, '*', [ 'url' => substr( $url, 0, 254 ) ], __METHOD__ );
-
-		if ( $row && ( ( time() - $row->req_time ) > $cacheExpireTime ) ) {
-			$get_fresh = true;
-		}
-
-		if ( !$row || $get_fresh ) {
-			$page = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
-			if ( $page === false ) {
-				sleep( 1 );
-				if ( $try_count >= self::$http_number_of_tries ) {
-					wfDebug( wfMessage( 'externaldata-db-could-not-get-url', self::$http_number_of_tries )->text() );
-					return '';
+				$stale = false;
+				$time = time();
+				// Update cache, if possible and required.
+				if ( $cache_set_up && $cacheExpireTime !== 0 ) {
+					$dbw = wfGetDB( DB_MASTER );
+					// Delete the old entry, if one exists.
+					if ( $cache_present ) {
+						$dbw->delete( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ) ] );
+					}
+					// Insert contents into the cache table.
+					$dbw->insert( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ), 'result' => $contents, 'req_time' => time() ] );
 				}
-				$try_count++;
-				return self::fetchURL( $url, $post_vars, $cacheExpireTime, $get_fresh, $try_count );
-			}
-			if ( $page != '' ) {
-				$dbw = wfGetDB( DB_MASTER );
-				// Delete the old entry, if one exists.
-				$dbw->delete( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ) ] );
-				// Insert contents into the cache table.
-				$dbw->insert( $edgCacheTable, [ 'url' => substr( $url, 0, 254 ), 'result' => $page, 'req_time' => time() ] );
-				return $page;
+			} else {
+				// Not fetched.
+				if ( $cache_present && $useStaleCache ) {
+					// But can serve stale cache, if any and allowed.
+					$status = self::STATUS_STALE;
+					$contents = $cached;
+					$stale = true;
+					$time = $cached_time;
+				} else {
+					// Nothing to serve.
+					// In debug, $url with secret parts is OK.
+					wfDebug( wfMessage( 'externaldata-db-could-not-get-url', $url, self::$http_number_of_tries )->text() );
+					$status = self::STATUS_URL_NO_DATA;
+					$contents = '';
+					$stale = false;
+					$time = null;
+				}
 			}
 		} else {
-			return $row->result;
+			// We have a fresh cache; so serve it.
+			$status = self::STATUS_CACHE_HIT;
+			$contents = $cached;
+			$stale = false;
+			$time = $cached_time;
 		}
+		return [ $status, $contents, $time, $stale, $tries ];
 	}
 
 	private static function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null ) {
@@ -1058,13 +1105,28 @@ END;
 		}
 	}
 
-	public static function getDataFromURL( $url, $format, $mappings, $postData = null, $cacheExpireTime, $prefixLength, $regex ) {
-		$url_contents = self::fetchURL( $url, $postData, $cacheExpireTime );
-		// Show an error message if there's nothing there.
-		if ( empty( $url_contents ) ) {
-			return "Error: No contents found at URL $url.";
+	public static function getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex ) {
+		list( $status, $url_contents, $time, $stale, $tries )
+			= self::fetchURL( $url, $postData, $cacheExpireTime, $useStaleCache );
+		switch ( $status ) {
+			case self::STATUS_OK:
+			case self::STATUS_CACHE_HIT:
+			case self::STATUS_STALE:
+				$parsed = self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex );
+				if ( is_array( $parsed ) ) {
+					$parsed['__time'] = [ $time ];
+					$parsed['__stale'] = [ $stale ? 'stale' : 'fresh' ];
+					$parsed['__tries'] = [ $tries ];
+				}
+				return $parsed;
+			case self::STATUS_URL_NO_DATA:
+				return wfMessage( 'externaldata-db-could-not-get-url', $url, self::$http_number_of_tries )->text();
+			case self::STATUS_POST_FAILED:
+				return wfMessage( 'externaldata-post-failed', $url )->text();
+			default:
+				// This code should never be reached.
+				return wfMessage( 'externaldata-url-unknown-error', $url )->text();
 		}
-		return self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex );
 	}
 
 	private static function getDataFromPath( $path, $format, $mappings, $regex ) {

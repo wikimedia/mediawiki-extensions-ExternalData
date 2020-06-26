@@ -73,11 +73,11 @@ class EDParserFunctions {
 
 		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
 
-		// Preliminary format:
+		// Preliminary format.
 		$format = array_key_exists( 'format', $args ) ? strtolower( $args['format'] ) : '';
 
-		// Final format:
-		// XPath:
+		// Final format.
+		// XPath.
 		if ( array_key_exists( 'use xpath', $args ) && ( $format === 'xml' || $format === 'html' ) ) {
 			$format .= ' with xpath';
 		}
@@ -87,12 +87,12 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-css-selector', 'symfony/css-selector', 'HTML', 'use xpath' )->parse() );
 		}
 
-		// JSONPath:
+		// JSONPath.
 		if ( array_key_exists( 'use jsonpath', $args ) && ( $format === 'json' ) ) {
 			$format .= ' with jsonpath';
 		}
 
-		// CSV:
+		// CSV.
 		if ( $format === 'csv' || $format === 'csv with header' ) {
 			if ( array_key_exists( 'delimiter', $args ) ) {
 				$delimiter = $args['delimiter'];
@@ -103,7 +103,7 @@ class EDParserFunctions {
 			}
 		}
 
-		// Regular expression for text format:
+		// Regular expression for text format.
 		$regex = $format === 'text' && array_key_exists( 'regex', $args )
 			? html_entity_decode( $args['regex'] )
 			: null;
@@ -118,11 +118,15 @@ class EDParserFunctions {
 
 		$cacheExpireTime = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : $edgCacheExpireTime;
 
+		// Allow to use stale cache.
+		global $edgAlwaysAllowStaleCache;
+		$useStaleCache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
+
 		$prefixLength = array_key_exists( 'json offset', $args ) ? $args['json offset'] : 0;
 
 		$filters = array_key_exists( 'filters', $args ) ? EDUtils::paramToArray( $args['filters'], true, false ) : [];
 
-		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ];
+		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters ];
 	}
 
 	/**
@@ -138,8 +142,8 @@ class EDParserFunctions {
 			return $parsed;
 		}
 
-		// self::prepareTextProcessing () hasn't returned an error:
-		list( $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ) = $parsed;
+		// self::prepareTextProcessing () hasn't returned an error.
+		list( $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters ) = $parsed;
 
 		// Parameters specific to {{#get_web_data:}}
 		if ( array_key_exists( 'url', $args ) ) {
@@ -153,9 +157,9 @@ class EDParserFunctions {
 			return EDUtils::formatErrorMessage( "URL is not allowed" );
 		}
 
-		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : '';
+		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : null;
 
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $prefixLength, $regex );
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex );
 
 		if ( is_string( $external_values ) ) {
 			// It's an error message - display it on the screen.
@@ -181,8 +185,8 @@ class EDParserFunctions {
 			return $parsed;
 		}
 
-		// self::prepareTextProcessing () hasn't returned an error:
-		list( $args, $format, $regex, $mappings, $cacheExpireTime, $prefixLength, $filters ) = $parsed;
+		// self::prepareTextProcessing () hasn't returned an error.
+		list( $args, $format, $regex, $mappings, $_, $__, $prefixLength, $filters ) = $parsed;
 
 		// Parameters specific to {{#get_file_data:}}
 		if ( array_key_exists( 'file', $args ) ) {
@@ -391,6 +395,7 @@ class EDParserFunctions {
 	 */
 	static function getIndexedValue( $var, $i ) {
 		global $edgValues;
+
 		if ( array_key_exists( $var, $edgValues ) && array_key_exists( $i, $edgValues[$var] ) ) {
 			return $edgValues[$var][$i];
 		} else {
@@ -403,6 +408,7 @@ class EDParserFunctions {
 	 */
 	static function doExternalValue( Parser &$parser, $local_var = '' ) {
 		global $edgValues, $edgExternalValueVerbose;
+
 		if ( !array_key_exists( $local_var, $edgValues ) ) {
 			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
 		} elseif ( is_array( $edgValues[$local_var] ) ) {
@@ -425,7 +431,7 @@ class EDParserFunctions {
 		$variables = $matches[1];
 		$num_loops = 0;
 
-		$commands = [ "urlencode", "htmlencode" ];
+		$commands = [ 'urlencode', 'htmlencode' ];
 		// Used for a regexp check.
 		$commandsStr = implode( '|', $commands );
 
@@ -441,7 +447,7 @@ class EDParserFunctions {
 			}
 		}
 
-		$text = "";
+		$text = '';
 		for ( $i = 0; $i < $num_loops; $i++ ) {
 			$cur_expression = $expression;
 			foreach ( $variables as $variable ) {
@@ -458,10 +464,10 @@ class EDParserFunctions {
 				}
 
 				switch ( $command ) {
-					case "htmlencode":
+					case 'htmlencode':
 						$value = htmlentities( self::getIndexedValue( $real_var, $i ), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, null, false );
 						break;
-					case "urlencode":
+					case 'urlencode':
 						$value = urlencode( self::getIndexedValue( $real_var, $i ) );
 						break;
 					default:
@@ -549,7 +555,7 @@ class EDParserFunctions {
 	 * Based on Semantic Internal Objects'
 	 * SIOSubobjectHandler::doSetInternal().
 	 */
-	public static function callSubobject( Parser $parser, $params ) {
+	public static function callSubobject( Parser $parser, array $params ) {
 		// This is a hack, since SMW's SMWSubobject::render() call is
 		// not meant to be called outside of SMW. However, this seemed
 		// like the better solution than copying over all of that
