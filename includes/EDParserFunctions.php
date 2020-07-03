@@ -126,7 +126,9 @@ class EDParserFunctions {
 
 		$filters = array_key_exists( 'filters', $args ) ? EDUtils::paramToArray( $args['filters'], true, false ) : [];
 
-		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters ];
+		$encoding = array_key_exists( 'encoding', $args ) && $args['encoding'] ? $args['encoding'] : null;
+
+		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters, $encoding ];
 	}
 
 	/**
@@ -143,7 +145,7 @@ class EDParserFunctions {
 		}
 
 		// self::prepareTextProcessing () hasn't returned an error.
-		list( $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters ) = $parsed;
+		list( $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters, $encoding ) = $parsed;
 
 		// Parameters specific to {{#get_web_data:}}
 		if ( array_key_exists( 'url', $args ) ) {
@@ -159,7 +161,7 @@ class EDParserFunctions {
 
 		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : null;
 
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex );
+		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding );
 
 		if ( is_string( $external_values ) ) {
 			// It's an error message - display it on the screen.
@@ -186,7 +188,7 @@ class EDParserFunctions {
 		}
 
 		// self::prepareTextProcessing () hasn't returned an error.
-		list( $args, $format, $regex, $mappings, $_, $__, $prefixLength, $filters ) = $parsed;
+		list( $args, $format, $regex, $mappings, $_, $__, $prefixLength, $filters, $encoding ) = $parsed;
 
 		// Parameters specific to {{#get_file_data:}}
 		if ( array_key_exists( 'file', $args ) ) {
@@ -203,9 +205,9 @@ class EDParserFunctions {
 		}
 
 		if ( isset( $file ) ) {
-			$external_values = EDUtils::getDataFromFile( $file, $format, $mappings, $regex );
+			$external_values = EDUtils::getDataFromFile( $file, $format, $mappings, $regex, $encoding );
 		} else {
-			$external_values = EDUtils::getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex );
+			$external_values = EDUtils::getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding );
 		}
 
 		if ( is_string( $external_values ) ) {
@@ -244,7 +246,7 @@ class EDParserFunctions {
 		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
 		// If the URL isn't allowed (based on a whitelist), exit.
 		if ( !EDUtils::isURLAllowed( $url ) ) {
-			return EDUtils::formatErrorMessage( "URL is not allowed" );
+			return EDUtils::formatErrorMessage( 'URL is not allowed' );
 		}
 
 		if ( array_key_exists( 'request', $args ) ) {

@@ -28,13 +28,13 @@ class EDHttpWithHeaders extends Http {
 		$status = $req->execute();
 
 		if ( $status->isOK() ) {
-			return $req->getContent();
+			return [ $req->getContent(), $req->getResponseHeaders() ];
 		} else {
 			$errors = $status->getErrorsByType( 'error' );
 			$logger = LoggerFactory::getInstance( 'http' );
 			$logger->warning( Status::wrap( $status )->getWikiText( false, false, 'en' ),
 				[ 'error' => $errors, 'caller' => $caller, 'content' => $req->getContent() ] );
-			return false;
+			return [ false, null ];
 		}
 	}
 

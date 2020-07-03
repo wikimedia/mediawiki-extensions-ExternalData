@@ -45,6 +45,7 @@
 		"AllowSSL": true,
 		"ExternalValueVerbose": true,
 		"CacheExpireTime": 604800,
+		"TryEncodings": ["ASCII", "UTF-8", "Windows-1251", "Windows-1252", "Windows-1254", "KOI8-R", "ISO-8859-1"],
 		"DBServer": [],
 		"DBServerType ": [],
 		"DBName": [],

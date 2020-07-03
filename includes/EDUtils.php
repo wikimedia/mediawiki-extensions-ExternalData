@@ -13,6 +13,7 @@ class EDUtils {
 
 	// how many times to try an HTTP request
 	private static $http_number_of_tries = 3;
+
 	private static $ampersandReplacement = "THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555";
 
 	/**
@@ -135,6 +136,7 @@ END;
 
 		$ds = self::connectLDAP( $edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain] );
 		$results = self::searchLDAP( $ds, $domain, $filter, $params );
+
 		return $results;
 	}
 
@@ -216,6 +218,7 @@ END;
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		}
+
 		if ( $db_flags == '' ) {
 			$db_flags = DBO_DEFAULT;
 		}
@@ -234,14 +237,14 @@ END;
 
 		$db = Database::factory( $db_type, $dbConnectionParams );
 		if ( $db == null ) {
-			return wfMessage( "externaldata-db-unknown-type" )->text();
+			return wfMessage( 'externaldata-db-unknown-type' )->text();
 		}
 		if ( !$db->isOpen() ) {
-			return wfMessage( "externaldata-db-could-not-connect" )->text();
+			return wfMessage( 'externaldata-db-could-not-connect' )->text();
 		}
 
 		if ( count( $columns ) === 0 ) {
-			return wfMessage( "externaldata-db-no-return-values" )->text();
+			return wfMessage( 'externaldata-db-no-return-values' )->text();
 		}
 
 		$rows = self::searchDB( $db, $from, $columns, $where, $sqlOptions, $joinOn );
@@ -526,8 +529,8 @@ END;
 		$xml = str_replace( '&amp;', self::$ampersandReplacement, $xml );
 
 		$xml_parser = xml_parser_create();
-		xml_set_element_handler( $xml_parser, [ 'EDUtils', 'startElement' ], [ 'EDUtils', 'endElement' ] );
-		xml_set_character_data_handler( $xml_parser, [ 'EDUtils', 'getContent' ] );
+		xml_set_element_handler( $xml_parser, [ __CLASS__, 'startElement' ], [ __CLASS__, 'endElement' ] );
+		xml_set_character_data_handler( $xml_parser, [ __CLASS__, 'getContent' ] );
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
 			return wfMessage( 'externaldata-xml-error',
 			xml_error_string( xml_get_error_code( $xml_parser ) ),
@@ -593,17 +596,15 @@ END;
 	}
 
 	static function getHTMLData( $html, array $mappings, $css ) {
-		$doc = new DOMDocument();
+		$doc = new DOMDocument( '1.0', 'UTF-8' );
 		// Remove whitespaces.
 		$doc->preserveWhiteSpace = false;
 
-		// Otherwise, the encoding will be broken:
-		if ( !preg_match( '/^<\?xml[^>]+encoding/', $html )
-			&& preg_match( '%<meta[^>]+charset\s*=\s*(["\'])(.+?)\1[^>]*/?>%i', $html, $matches ) ) {
-			// <? - another fix for color highlighting in vi
-			$encoding = '<?xml encoding="' . $matches [2] . '" ?>';
-		} else {
-			$encoding = '';
+		// Otherwise, the encoding will be broken. Yes, it's an abstraction leak.
+		[ $encoding, $_ ] = self::findEncodingInText( $html );
+		if ( !$encoding ) {
+			$html = preg_replace( '/<\?xml[^?]+\?>/i', '', $html );
+			$html = '<?xml version="1.0" encoding="UTF-8" ?>' . $html;
 		}
 
 		// Try to recover really crappy HTML.
@@ -613,11 +614,10 @@ END;
 		$doc->strictErrorChecking = false;
 
 		// Try to parse HTML.
-
 		try {
 			// Give the log a rest. See https://stackoverflow.com/a/10482622.
 			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
-			if ( !$doc->loadHTML( $encoding . $html ) ) {
+			if ( !$doc->loadHTML( $html ) ) {
 				return wfMessage( 'externaldata-parsing-html-failed' )->text();
 			}
 			// Report errors.
@@ -638,6 +638,7 @@ END;
 			$converter = new Symfony\Component\CssSelector\CssSelectorConverter();
 		}
 		foreach ( $mappings as $local_var => $query ) {
+			// Convert CSS selectors to XPaths.
 			if ( $css ) {
 				preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $query, $matches );
 				try {
@@ -654,19 +655,26 @@ END;
 				$xpath = $query;
 				$attr = null;
 			}
+
+			// Try to select nodes with XPath:
+			$nodesArray	= [];
 			try {
-				$entries = $domxpath->query( $xpath );
+				$entries = $domxpath->evaluate( $xpath );
 			} catch ( Exception $e ) {
 				wfDebug( wfMessage( 'externaldata-xpath-invalid', $xpath, $e->getMessage() )->text() );
 				return wfMessage( 'externaldata-xpath-invalid', $xpath, $e->getMessage() )->text();
 			}
-			$nodesArray = [];
-			if ( is_iterable( $entries ) ) {
+			if ( is_a( $entries, 'DOMNodeList' ) ) {
+				// It's a list of DOM nodes.
 				foreach ( $entries as $entry ) {
 					$values = $attr ? $entry->attributes[$attr]->nodeValue : $entry->textContent;
 					$nodesArray[] = self::filterEmptyNodes( $values );
 				}
+			} else {
+				// It's some calculated value.
+				$nodesArray = is_array( $entries ) ? $entries : [ $entries ];
 			}
+
 			if ( array_key_exists( $xpath, $edgHTMLValues ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
@@ -950,7 +958,55 @@ END;
 		return $edgJSONValues;
 	}
 
-	private static function fetchURL( $url, $post_vars, $cacheExpireTime, $useStaleCache ) {
+	private static function findEncodingInText( $text ) {
+		$encoding_regexes = [
+			// charset must be in the capture #3.
+			'/<\?xml([^>]+)encoding\s*=\s*(["\']?)([^"\'>]+)\2[^>]*\?>/i' => '<?xml$1encoding="UTF-8"?>',
+			'%<meta([^>]+)(charset)\s*=\s*([^"\'>]+)([^>]*)/?>%i' => '<meta$1charset=UTF-8$4>',
+			'%<meta(\s+)charset\s*=\s*(["\']?)([^"\'>]+)\2([^>]*)/?>%i' => '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
+		];
+		foreach ( $encoding_regexes as $pattern => $replacement ) {
+			if ( preg_match( $pattern, $text, $matches ) ) {
+				$new_text = preg_replace( $pattern, $replacement, $text, 1 );
+				$encoding = $matches [3];
+				return [ $encoding, $new_text ];
+			}
+		}
+		return [ null, $text ];
+	}
+
+	private static function detectEncodingAndConvertToUTF8( &$text, $encoding = null, $headers = null ) {
+		$encoding_found_in_XML = false;
+		if ( !$encoding ) {
+			// No encoding is set in parser function call.
+
+			// First, try to find it in the XML/HTML:
+			[ $encoding, $text ] = self::findEncodingInText( $text );
+
+			// Secondly, try HTTP headers.
+			if ( !$encoding && $headers && isset( $headers['content-type'] ) ) {
+				if ( preg_match( '/charset\s*=\s*(?<charset>[^\s;]+)/i', implode( ',', $headers['content-type'] ), $matches ) ) {
+					$encoding = $matches['charset'];
+				}
+			}
+
+			// Finally, try mb_detect_encoding.
+			if ( !$encoding ) {
+				global $edgTryEncodings;
+				$encoding = mb_detect_encoding( $text, $edgTryEncodings, true ); // -- strict.
+			}
+		}
+
+		// Convert $text:
+		// Is it UTF-8 or ISO-8859-1?
+		if ( $encoding && strtoupper( $encoding ) !== 'UTF-8' ) {
+			$text = mb_convert_encoding( $text, 'UTF-8', $encoding );
+		}
+
+		return $encoding;
+	}
+
+	private static function fetchURL( $url, $post_vars, $cacheExpireTime, $useStaleCache, $encoding_override ) {
 		// Do any special variable replacements in the URLs, for
 		// secret API keys and the like.
 		global $edgStringReplacements;
@@ -964,10 +1020,12 @@ END;
 		if ( $post_vars ) {
 			$post_options = array_merge( isset( $options['postData'] ) ? $options['postData'] : [], $post_vars );
 			Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $post_options ] );
-			$result = EDHttpWithHeaders::post( $url,  $post_options );
-			return [ $result ? self::STATUS_OK : self::STATUS_POST_FAILED, $result, time(), false, 0 ];
+			list( $contents, $headers ) = EDHttpWithHeaders::post( $url,  $post_options );
+			$encoding =	self::detectEncodingAndConvertToUTF8( $contents, $encoding_override, $headers );
+			return [ $contents ? self::STATUS_OK : self::STATUS_POST_FAILED, $contents, time(), false, 0, $encoding ];
 		}
 
+		// TODO: Think of moving caching to EDUtils::getDataFromText() or EDUtils::getDataFromURL().
 		// Is the cache set up, present and fresh?
 		global $edgCacheTable;
 		$cache_set_up = (bool)$edgCacheTable;
@@ -986,6 +1044,10 @@ END;
 
 		// If there is no fresh cache, try to get from the web.
 		$tries = 0;
+		$time = null;
+		$stale = false;
+		$encoding = null;
+
 		if ( !$cache_set_up || !$cache_present || !$cache_fresh || $cacheExpireTime === 0 ) {
 			// Continue forming set HTTP request fields.
 			global $edgAllowSSL;
@@ -996,15 +1058,14 @@ END;
 			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
 			// Actually send a request.
 			do {
-				$contents = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
+				list( $contents, $headers ) = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
 			} while ( !$contents && ++$tries <= self::$http_number_of_tries );
 			if ( $contents ) {
 				// Fetched successfully.
 				$status = self::STATUS_OK;
-				// Handle non-UTF-8 encodings.
-				// Copied from http://www.php.net/manual/en/function.file-get-contents.php#85008
-				$contents = mb_convert_encoding( $contents, 'UTF-8',
-					mb_detect_encoding( $contents, 'UTF-8, ISO-8859-1', true ) );
+				// Encoding is detected here and not later in EDUtils::getDataFromText(),
+				// so that we can cache the converted text.
+				$encoding =	self::detectEncodingAndConvertToUTF8( $contents, $encoding_override, $headers );
 				$stale = false;
 				$time = time();
 				// Update cache, if possible and required.
@@ -1031,21 +1092,22 @@ END;
 					wfDebug( wfMessage( 'externaldata-db-could-not-get-url', $url, self::$http_number_of_tries )->text() );
 					$status = self::STATUS_URL_NO_DATA;
 					$contents = '';
-					$stale = false;
-					$time = null;
 				}
 			}
 		} else {
 			// We have a fresh cache; so serve it.
 			$status = self::STATUS_CACHE_HIT;
 			$contents = $cached;
-			$stale = false;
 			$time = $cached_time;
 		}
-		return [ $status, $contents, $time, $stale, $tries ];
+		return [ $status, $contents, $time, $stale, $tries, $encoding ];
 	}
 
-	private static function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null ) {
+	private static function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null, $encoding = null ) {
+		if ( !$encoding ) {
+			// Encoding has not been detected earlier by EDUtils::fetchURL(). So, detect now.
+			$encoding = self::detectEncodingAndConvertToUTF8( $contents, $encoding );
+		}
 		// For now, this is only done for the CSV formats.
 		if ( is_array( $format ) ) {
 			list( $format, $delimiter ) = $format;
@@ -1105,14 +1167,15 @@ END;
 		}
 	}
 
-	public static function getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex ) {
-		list( $status, $url_contents, $time, $stale, $tries )
-			= self::fetchURL( $url, $postData, $cacheExpireTime, $useStaleCache );
+	public static function getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding ) {
+		// We need encoding this early, because we want to cache text converted to UTF-8.
+		list( $status, $url_contents, $time, $stale, $tries, $encoding )
+			= self::fetchURL( $url, $postData, $cacheExpireTime, $useStaleCache, $encoding );
 		switch ( $status ) {
 			case self::STATUS_OK:
 			case self::STATUS_CACHE_HIT:
 			case self::STATUS_STALE:
-				$parsed = self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex );
+				$parsed = self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex, $encoding );
 				if ( is_array( $parsed ) ) {
 					$parsed['__time'] = [ $time ];
 					$parsed['__stale'] = [ $stale ? 'stale' : 'fresh' ];
@@ -1129,9 +1192,9 @@ END;
 		}
 	}
 
-	private static function getDataFromPath( $path, $format, $mappings, $regex ) {
+	private static function getDataFromPath( $path, $format, $mappings, $regex, $encoding ) {
 		if ( !file_exists( $path ) ) {
-			return "Error: No file found.";
+			return 'Error: No file found.';
 		}
 		$file_contents = file_get_contents( $path );
 		// Show an error message if there's nothing there.
@@ -1139,27 +1202,27 @@ END;
 			return "Error: Unable to get file contents.";
 		}
 
-		return self::getDataFromText( $file_contents, $format, $mappings, $path, 0, $regex );
+		return self::getDataFromText( $file_contents, $format, $mappings, $path, 0, $regex, $encoding );
 	}
 
-	public static function getDataFromFile( $file, $format, $mappings, $regex ) {
+	public static function getDataFromFile( $file, $format, $mappings, $regex, $encoding ) {
 		global $edgFilePath;
 
 		if ( array_key_exists( $file, $edgFilePath ) ) {
-			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings, $regex );
+			return self::getDataFromPath( $edgFilePath[$file], $format, $mappings, $regex, $encoding );
 		} else {
 			return "Error: No file is set for ID \"$file\".";
 		}
 	}
 
-	public static function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex ) {
+	public static function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding ) {
 		global $edgDirectoryPath;
 
 		if ( array_key_exists( $directory, $edgDirectoryPath ) ) {
 			$directoryPath = $edgDirectoryPath[$directory];
 			$path = realpath( $directoryPath . $fileName );
 			if ( $path !== false && strpos( $path, $directoryPath ) === 0 ) {
-				return self::getDataFromPath( $path, $format, $mappings, $regex );
+				return self::getDataFromPath( $path, $format, $mappings, $regex, $encoding );
 			} else {
 				return "Error: File name \"$fileName\" is not allowed for directory ID \"$directory\".";
 			}
