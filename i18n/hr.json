@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bugoslav"
+		]
+	},
+	"externaldata-db-could-not-get-url": "Nije bilo moguće dohvaćanje URL-a $1 nakon $2 {{PLURAL:$2|pokušaj|pokušaja}}.",
+	"externaldata-url-unknown-error": "Nepoznata pogrješka pri dohvaćaju podataka s URL-a $1."
+}

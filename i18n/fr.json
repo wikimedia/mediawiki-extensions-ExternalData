@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Crochet.david",
+			"Golmore",
 			"Gomoko",
 			"IAlex",
 			"McDutchie",
@@ -21,11 +22,17 @@
 	"externaldata-invalid-json": "Erreur : JSON non valide",
 	"externaldata-jsonpath-error": "Erreur : notation JSONPath non valide.",
 	"externaldata-db-incomplete-information": "Erreur : Informations incomplètes pour cet identifiant de serveur.",
-	"externaldata-db-could-not-get-url": "Impossible d'obtenir l'URL après $1 {{PLURAL:$1|essais}}.",
+	"externaldata-db-could-not-get-url": "Impossible d'obtenir l'URL $1 après $2 {{PLURAL:$2|essai|essais}}.",
 	"externaldata-db-unknown-type": "ERREUR: Type de base de données inconnu.",
 	"externaldata-db-could-not-connect": "Erreur : Impossible de se connecter à la base de données.",
 	"externaldata-db-unknown-collection": "Erreur: Collection MongoDB inconnue.",
 	"externaldata-db-no-return-values": "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	"externaldata-db-invalid-query": "Requête invalide.",
-	"externaldata-no-css-selector": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente."
+	"externaldata-no-css-selector": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
+	"externaldata-post-failed": "La requête POST vers $1 a échoué.",
+	"externaldata-url-unknown-error": "Erreur inconnue pendant la récupération des données de l'URL $1 .",
+	"externaldata-parsing-html-failed": "Échec de l'analyse du HTML.",
+	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
+	"externaldata-error-converting-css-to-xpath": "Exception de conversion d’un sélecteur CSS en XPath interceptée :\n$1",
+	"externaldata-xpath-invalid": "La recherche XPath ($1) a échoué: $2"
 }

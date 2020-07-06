@@ -19,10 +19,17 @@
 	"externaldata-invalid-json": "Fehler: Ungültiges JSON",
 	"externaldata-jsonpath-error": "Fehler: Ungültige JSONPath-Notation.",
 	"externaldata-db-incomplete-information": "Fehler: Es liegen nur unvollständige Informationen für diese Serverkennung vor.",
-	"externaldata-db-could-not-get-url": "Die URL konnte mit {{PLURAL:$1|einem Versuch|$1 Versuchen}} nicht abgerufen werden.",
+	"externaldata-db-could-not-get-url": "Die URL $1 konnte mit {{PLURAL:$2|einem Versuch|$2 Versuchen}} nicht abgerufen werden.",
 	"externaldata-db-unknown-type": "Fehler: Es handelt sich um einen unbekannten Datenbanktyp.",
 	"externaldata-db-could-not-connect": "Fehler: Es konnte keine Verbindung zur Datenbank hergestellt werden.",
 	"externaldata-db-unknown-collection": "Fehler: Unbekannte MongoDB-Sammlung",
 	"externaldata-db-no-return-values": "Fehler: Es wurden keine Rückgabewerte festgelegt.",
-	"externaldata-db-invalid-query": "Ungültige Abfrage."
+	"externaldata-db-invalid-query": "Ungültige Abfrage.",
+	"externaldata-no-css-selector": "Die Bibliothek $1, die benötigt wird, um das „$2“-Format ohne die „$3“-Option zu verwenden, fehlt.",
+	"externaldata-post-failed": "POST-Anforderung an $1 fehlgeschlagen.",
+	"externaldata-url-unknown-error": "Unbekannter Fehler beim Abrufen von Daten von URL $1.",
+	"externaldata-parsing-html-failed": "HTML konnte nicht geparst werden",
+	"externaldata-caught-exception-parsing-html": "Ausnahme beim Parsen von HTML abgefangen. Die Fehlermeldung lautet „$1“.",
+	"externaldata-error-converting-css-to-xpath": "Ausnahme bei der Konvertierung des CSS-Selektors nach XPath abgefangen: $1",
+	"externaldata-xpath-invalid": "XPath-Suche ($1) fehlgeschlagen: $2"
 }

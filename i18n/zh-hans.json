@@ -3,6 +3,7 @@
 		"authors": [
 			"Hydra",
 			"Liuxinyu970226",
+			"Shuiwater",
 			"Yfdyh000"
 		]
 	},
@@ -19,5 +20,10 @@
 	"externaldata-db-could-not-connect": "错误：无法连接到数据库。",
 	"externaldata-db-unknown-collection": "错误：未知的MongoDB集合。",
 	"externaldata-db-no-return-values": "错误：没有返回指定的值。",
-	"externaldata-db-invalid-query": "无效的查询。"
+	"externaldata-db-invalid-query": "无效的查询。",
+	"externaldata-post-failed": "$1POST请求失败",
+	"externaldata-url-unknown-error": "从URL$1获取数据时出现错误。",
+	"externaldata-parsing-html-failed": "无法识别HTML。",
+	"externaldata-caught-exception-parsing-html": "捕捉到HTML语法错误。错误信息是：&quot;$1&quot;",
+	"externaldata-xpath-invalid": "XPath 搜索($1)失败：($2)"
 }

@@ -13,7 +13,7 @@
 	"externaldata-xml-error": "Errore XML: $1 alla linea $2",
 	"externaldata-invalid-json": "Errore: JSON non valido",
 	"externaldata-db-incomplete-information": "Errore: informazioni incomplete per questo server ID.",
-	"externaldata-db-could-not-get-url": "Impossibile raggiungere l'URL dopo $1 {{PLURAL:$1|tentativo|tentativi}}.",
+	"externaldata-db-could-not-get-url": "Impossibile raggiungere l'URL $1 dopo $2 {{PLURAL:$2|tentativo|tentativi}}.",
 	"externaldata-db-unknown-type": "Errore: tipo di database sconosciuto.",
 	"externaldata-db-could-not-connect": "Errore: impossibile connettersi al database.",
 	"externaldata-db-unknown-collection": "Errore: collezione MongoDB sconosciuta.",

@@ -3,6 +3,7 @@
 		"authors": [
 			"Amire80",
 			"Rotemliss",
+			"Steeve815",
 			"YaronSh",
 			"Yona b"
 		]
@@ -20,5 +21,7 @@
 	"externaldata-db-could-not-connect": "שגיאה: לא ניתן להתחבר אל מסד הנתונים.",
 	"externaldata-db-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",
 	"externaldata-db-no-return-values": "שגיאה: לא הוגדרו ערכים להחזרה.",
-	"externaldata-db-invalid-query": "שאילתה בלתי תקינה."
+	"externaldata-db-invalid-query": "שאילתה בלתי תקינה.",
+	"externaldata-post-failed": "בקשת POST אל $1 נכשלה.",
+	"externaldata-parsing-html-failed": "לא ניתן לפענח HTML."
 }

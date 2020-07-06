@@ -4,6 +4,7 @@
 			"BeginaFelicysym",
 			"Chrumps",
 			"Leinad",
+			"Rail",
 			"Sp5uhe",
 			"WaldiSt"
 		]
@@ -11,16 +12,23 @@
 	"getdata": "Pobierz dane",
 	"externaldata-desc": "Umożliwia pobieranie strukturalnych danych z zewnętrznych adresów URL, baz danych i innych źródeł",
 	"externaldata-no-param-specified": "Błąd: Nie podano parametru „$1”.",
-	"externaldata-web-invalid-format": "Nieprawidłowy format: \"$1\"",
-	"externaldata-ldap-unable-to-connect": "Nie można połączyć się z $1",
-	"externaldata-xml-error": "Błąd XML – $1 w wierszu $2",
-	"externaldata-invalid-json": "Błąd: Nieprawidłowy JSON",
+	"externaldata-web-invalid-format": "Nieprawidłowy format: „$1”.",
+	"externaldata-ldap-unable-to-connect": "Nie można połączyć się z $1.",
+	"externaldata-xml-error": "Błąd XML – $1 w wierszu $2.",
+	"externaldata-invalid-json": "Błąd: Nieprawidłowy JSON.",
+	"externaldata-jsonpath-error": "Błąd: Nieprawidłowa notacja JSONPath.",
 	"externaldata-db-incomplete-information": "Błąd – niepełne informacje o tym identyfikatorze serwera.",
-	"externaldata-db-could-not-get-url": "Nie można uzyskać adresu URL po $1 {{PLURAL:$1|próbie|próbach}}.",
+	"externaldata-db-could-not-get-url": "Nie można uzyskać adresu URL $1 po $2 {{PLURAL:$2|próbie|próbach}}.",
 	"externaldata-db-unknown-type": "Błąd: Nieznany typ bazy danych.",
 	"externaldata-db-could-not-connect": "Błąd: Nie można połączyć się z bazą danych.",
 	"externaldata-db-unknown-collection": "Błąd: Nieznany zbiór MongoDB.",
 	"externaldata-db-no-return-values": "Błąd – nie określono zwracanej wartości.",
 	"externaldata-db-invalid-query": "Nieprawidłowe zapytanie.",
-	"externaldata-no-css-selector": "Brakuje biblioteki $1 wymaganej do użycia formatu '$2' bez opcji '$3'."
+	"externaldata-no-css-selector": "Brakuje biblioteki $1 wymaganej do użycia formatu „$2” bez opcji „$3”.",
+	"externaldata-post-failed": "Żądanie POST do $1 zakończyło się niepowodzeniem.",
+	"externaldata-url-unknown-error": "Podczas pobierania danych z adresu URL $1 wystąpił błąd.",
+	"externaldata-parsing-html-failed": "Nie udało się sparsować kodu HTML.",
+	"externaldata-caught-exception-parsing-html": "Podczas parsowania kodu HTML wystąpił błąd. Komunikat błędu: „$1”.",
+	"externaldata-error-converting-css-to-xpath": "Podczas konwersji selektora CSS na XPath wystąpił błąd:\n$1",
+	"externaldata-xpath-invalid": "Wyszukiwanie XPath ($1) zakończyło się niepowodzeniem: $2"
 }

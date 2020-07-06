@@ -13,11 +13,17 @@
 	"externaldata-invalid-json": "Грешка: Неважечки JSON",
 	"externaldata-jsonpath-error": "Грешка: Неважечки JSONPath-запис.",
 	"externaldata-db-incomplete-information": "Грешка: Нецелосни информации за овој опслужувачки ид. бр.",
-	"externaldata-db-could-not-get-url": "Не можев да ја добијам URL адресата по $1 {{PLURAL:$1|обид|обиди}}.",
+	"externaldata-db-could-not-get-url": "Не можев да ја добијам URL-адресата $1 по $2 {{PLURAL:$1|обид|обиди}}.",
 	"externaldata-db-unknown-type": "Грешка: Непознат тип на база на податоци.",
 	"externaldata-db-could-not-connect": "Грешка: Не можев да се поврзам со базата на податоци.",
 	"externaldata-db-unknown-collection": "Грешка: Непозната збирка од MongoDB.",
 	"externaldata-db-no-return-values": "Грешка: Нема назначено повратни вредности.",
 	"externaldata-db-invalid-query": "Грешно барање.",
-	"externaldata-no-css-selector": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“."
+	"externaldata-no-css-selector": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“.",
+	"externaldata-post-failed": "POST-барањето од $1 не успеа.",
+	"externaldata-url-unknown-error": "Непозната грешка при добивањето на податоците од URL-то $1.",
+	"externaldata-parsing-html-failed": "Не можав да го расчленам HTML.",
+	"externaldata-caught-exception-parsing-html": "Добив исклучок при расчленувањето на HTML. Пораката гласи &quot;$1&quot;.",
+	"externaldata-error-converting-css-to-xpath": "Добив грешка при претворањето на CSS-изборникот во XPath:\n$1",
+	"externaldata-xpath-invalid": "Пребарувањето на XPath ($1) не успеа: $2"
 }
