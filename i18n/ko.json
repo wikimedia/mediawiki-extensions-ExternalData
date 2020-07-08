@@ -22,5 +22,11 @@
 	"externaldata-db-could-not-connect": "오류: 데이터베이스에 연결할 수 없습니다.",
 	"externaldata-db-unknown-collection": "오류: 알 수 없는 MongoDB 집합입니다.",
 	"externaldata-db-no-return-values": "오류: 지정된 반환 값이 없습니다.",
-	"externaldata-db-invalid-query": "유효하지 않은 쿼리"
+	"externaldata-db-invalid-query": "유효하지 않은 쿼리",
+	"externaldata-post-failed": "$1 POST 요청을 실패했습니다.",
+	"externaldata-url-unknown-error": "$1 URL로부터 데이터를 가져오는 동안 알 수 없는 오류가 발생했습니다.",
+	"externaldata-parsing-html-failed": "HTML의 구문을 분석하지 못했습니다.",
+	"externaldata-caught-exception-parsing-html": "HTML 구문 분석 예외가 발생했습니다. 오류 메시지: &quot;$1&quot;.",
+	"externaldata-error-converting-css-to-xpath": "CSS 선택자를 XPath로 변환하는 동안 예외가 발생했습니다:\n$1",
+	"externaldata-xpath-invalid": "XPath 검색($1) 실패: $2"
 }
