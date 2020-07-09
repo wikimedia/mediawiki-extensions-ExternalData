@@ -1026,6 +1026,10 @@ END;
 		}
 
 		// TODO: Think of moving caching to EDUtils::getDataFromText() or EDUtils::getDataFromURL().
+		// Initialize some caching variables.
+		$cache_present = false;
+		$cached = false;
+		$cached_time = null;
 		// Is the cache set up, present and fresh?
 		global $edgCacheTable;
 		$cache_set_up = (bool)$edgCacheTable;
