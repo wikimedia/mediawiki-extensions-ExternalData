@@ -2,7 +2,9 @@
 	"name": "mediawiki/external-data",
 	"description": "Allows retrieving structured data from external URLs, databases and other sources into MediaWiki-powered wikis",
 	"license": "GPL-2.0-or-later",
-	"require": {"symfony/css-selector": "~5.1"},
+	"require": {
+		"symfony/css-selector": "~5.1"
+	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "31.0.0",
 		"mediawiki/minus-x": "1.1.0",
