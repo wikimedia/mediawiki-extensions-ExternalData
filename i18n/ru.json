@@ -22,11 +22,12 @@
 	"externaldata-db-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB.",
 	"externaldata-db-no-return-values": "ОШИБКА. Не указаны возвращаемые значение.",
 	"externaldata-db-invalid-query": "Ошибочный запрос.",
-	"externaldata-no-css-selector": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",
+	"externaldata-format-unavailable": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",
 	"externaldata-post-failed": "Запрос POST к $1 не удался или возвратил ошибку.",
 	"externaldata-url-unknown-error": "По неизвестной причине, данные по адресу $1 не получены.",
 	"externaldata-parsing-html-failed": "HTML не был разобран.",
 	"externaldata-caught-exception-parsing-html": "При разборе HTML выброшено исключение. Текст ошибки: &laquo;$1&raquo;.",
 	"externaldata-error-converting-css-to-xpath": "При преобразовании селектора CSS в XPath выброшено исключение:\n$1",
-	"externaldata-xpath-invalid": "Поиск по XPath $1 закончился ошибкой: $2"
+	"externaldata-xpath-invalid": "Поиск по XPath $1 закончился ошибкой: $2",
+	"externaldata-missing-library": "Отсутствует библиотека $1, необходимая для использования функции парсера $2 или функции Lua $3."
 }

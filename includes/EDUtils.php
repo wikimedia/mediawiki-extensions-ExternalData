@@ -16,47 +16,354 @@ class EDUtils {
 
 	private static $ampersandReplacement = "THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555";
 
+	private static $currentXMLTag = null;
+	private static $currentValue = null;
+	private static $XMLValues = [];
+
 	/**
 	 * Wraps error message in a span with the "error" class, for better
 	 * display, and so that it can be handled correctly by #iferror and
 	 * possibly others.
 	 */
-	static function formatErrorMessage( $msg ) {
+	public static function formatErrorMessage( $msg ) {
 		return '<span class="error">' . $msg . '</span>';
+	}
+
+	/**
+	 * A helper function, called by EDParserFunctions::saveMappedAndFilteredValues and by Lua functions in Scribunto_ExternalData.
+	 */
+	private static function mapAndFilterValues( array $external_values, array $filters, array $mappings ) {
+		foreach ( $filters as $filter_var => $filter_value ) {
+			// Find the entry of $external_values that matches
+			// the filter variable; if none exists, just ignore
+			// the filter.
+			if ( array_key_exists( $filter_var, $external_values ) ) {
+				if ( is_array( $external_values[$filter_var] ) ) {
+					$column_values = $external_values[$filter_var];
+					foreach ( $column_values as $i => $single_value ) {
+						// if a value doesn't match
+						// the filter value, remove
+						// the value from this row for
+						// all columns
+						if ( trim( $single_value ) !== trim( $filter_value ) ) {
+							foreach ( $external_values as $external_var => $external_value ) {
+								unset( $external_values[$external_var][$i] );
+							}
+						}
+					}
+				} else {
+					// if we have only one row of values,
+					// and the filter doesn't match, just
+					// keep the results array blank and
+					// return
+					if ( $external_values[$filter_var] != $filter_value ) {
+						return;
+					}
+				}
+			}
+		}
+		// for each external variable name specified in the function
+		// call, get its value or values (if any exist), and attach it
+		// or them to the local variable name
+		$result = [];
+		foreach ( $mappings as $local_var => $external_var ) {
+			if ( array_key_exists( $external_var, $external_values ) ) {
+				if ( is_array( $external_values[$external_var] ) ) {
+					// array_values() restores regular
+					// 1, 2, 3 indexes to array, after unset()
+					// in filtering may have removed some
+					$result[$local_var] = array_values( $external_values[$external_var] );
+				} else {
+					$result[$local_var][] = $external_values[$external_var];
+				}
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Preprocess parameter needed to make a web connection.
+	 */
+	private static function getWebParams( array $args ) {
+		if ( array_key_exists( 'url', $args ) ) {
+			$url = $args['url'];
+		} else {
+			return [ false, self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() ) ];
+		}
+		$url = str_replace( ' ', '%20', $url ); // -- do some minor URL-encoding.
+		// If the URL isn't allowed (based on a whitelist), exit.
+		if ( !self::isURLAllowed( $url ) ) {
+			return [ false, self::formatErrorMessage( 'URL is not allowed' ) ];
+		}
+
+		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : null;
+
+		// Cache expiration.
+		global $edgCacheExpireTime;
+		$cacheExpireTime = array_key_exists( 'cache seconds', $args ) ? max( $args['cache seconds'], $edgCacheExpireTime ) : $edgCacheExpireTime;
+
+		// Allow to use stale cache.
+		global $edgAlwaysAllowStaleCache;
+		$useStaleCache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
+
+		return [ true, $url, $postData, $cacheExpireTime, $useStaleCache ];
+	}
+
+	/**
+	 * Common parameters for {{#get_web_data:}}, mw.external.web, {{#get_file_data:}} and mw.external.file.
+	 */
+	private static function getTextParams( array $args ) {
+		// Preliminary format.
+		$format = array_key_exists( 'format', $args ) ? strtolower( $args['format'] ) : '';
+
+		// Final format.
+		// XPath.
+		if ( array_key_exists( 'use xpath', $args ) && ( $format === 'xml' || $format === 'html' ) ) {
+			$format .= ' with xpath';
+		}
+
+		if ( $format === 'html' && !class_exists( 'Symfony\Component\CssSelector\CssSelectorConverter' ) ) {
+			// Addressing DOM nodes with CSS/jQuery-like selectors requires symfony/css-selector.
+			return self::formatErrorMessage( wfMessage( 'externaldata-format-unavailable', 'symfony/css-selector', 'HTML', 'use xpath' )->parse() );
+		}
+
+		// JSONPath.
+		if ( array_key_exists( 'use jsonpath', $args ) && ( $format === 'json' ) ) {
+			$format .= ' with jsonpath';
+		}
+
+		// CSV.
+		if ( $format === 'csv' || $format === 'csv with header' ) {
+			if ( array_key_exists( 'delimiter', $args ) ) {
+				$delimiter = $args['delimiter'];
+				// Allow for tab delimiters, using \t.
+				$delimiter = str_replace( '\t', "\t", $delimiter );
+				// Hopefully this solution isn't "too clever".
+				$format = [ $format, $delimiter ];
+			}
+		}
+
+		// Regular expression for text format.
+		$regex = $format === 'text' && array_key_exists( 'regex', $args )
+			? html_entity_decode( $args['regex'] )
+			: null;
+
+		if ( array_key_exists( 'data', $args ) ) {
+			$lc_values = !( $format === 'xml with xpath' || $format === 'html with xpath' || $format === 'text' || $format === 'json with jsonpath' );
+			// data may be astring, or already be an array, if so passed from Lua.
+			$mappings = self::paramToArray( $args['data'], false, $lc_values );
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
+		}
+
+		$prefixLength = array_key_exists( 'json offset', $args ) ? $args['json offset'] : 0;
+
+		if ( array_key_exists( 'filters', $args ) ) {
+			// filters may be a string or already be an array, if so passed from Lua.
+			$filters = self::paramToArray( $args['filters'], true, false );
+		} else {
+			$filters = [];
+		}
+
+		$encoding = array_key_exists( 'encoding', $args ) && $args['encoding'] ? $args['encoding'] : null;
+
+		return [ $args, $format, $regex, $mappings, $prefixLength, $filters, $encoding ];
+	}
+
+	/**
+	 * Core of the {{#get_web_data:}} parser function and mw.external.web.
+	 */
+	public static function doGetWebData( array $params ) {
+		// Common parameters for web and file data.
+		$common = self::getTextParams( self::paramToArray( $params, true, false ) );
+
+		if ( !is_array( $common ) ) {
+			// Parsing parameters ended in error.
+			return $common;
+		}
+
+		// self::getTextParams () hasn't returned an error.
+		list( $args, $format, $regex, $mappings, $prefixLength, $filters, $encoding ) = $common;
+
+		// URL and other connection settings.
+		list( $success, $url, $postData, $cacheExpireTime, $useStaleCache ) = self::getWebParams( $args );
+		if ( !$success ) {
+			// URL is not supplied, valid or allowed. $url is an error message.
+			return $url;
+		}
+
+		// Actually fetch data from URL.
+		$method = __METHOD__;
+		$external_values = self::getDataFromURL( function ( $url, array $options ) use( $method ) {
+			// This function actually handles HTTP request.
+			return EDHttpWithHeaders::get( $url, $options, $method );
+		}, $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding );
+
+		if ( is_string( $external_values ) ) {
+			// It's an error message - display it on the screen.
+			return self::formatErrorMessage( $external_values );
+		}
+		if ( count( $external_values ) === 0 ) {
+			return;
+		}
+
+		// Map, filter and return external values.
+		return self::mapAndFilterValues( $external_values, $filters, $mappings );
+	}
+
+	/**
+	 * Core of the {{#get_file_data:}} parser function and mw.external.file.
+	 */
+	public static function doGetFileData( array $params ) {
+		// Common parameters for web and file data.
+		$common = self::getTextParams( self::paramToArray( $params, true, false ) );
+
+		if ( !is_array( $common ) ) {
+			// Parsing parameters ended in error.
+			return $common;
+		}
+
+		// self::getTextParams () hasn't returned an error.
+		list( $args, $format, $regex, $mappings, $prefixLength, $filters, $encoding ) = $common;
+
+		// Parameters specific to {{#get_file_data:}} / mw.external.file.
+		$file = null;
+		$directory = null;
+		$fileName = null;
+		if ( array_key_exists( 'file', $args ) ) {
+			$file = $args['file'];
+		} elseif ( array_key_exists( 'directory', $args ) ) {
+			$directory = $args['directory'];
+			if ( array_key_exists( 'file name', $args ) ) {
+				$fileName = $args['file name'];
+			} else {
+				return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file name' )->parse() );
+			}
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory' )->parse() );
+		}
+
+		// Actually fetch data from file/directory.
+		if ( $file ) {
+			$external_values = self::getDataFromFile( $file, $format, $mappings, $regex, $encoding );
+		} else {
+			$external_values = self::getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding );
+		}
+
+		if ( is_string( $external_values ) ) {
+			// It's an error message - display it on the screen.
+			return self::formatErrorMessage( $external_values );
+		}
+		if ( count( $external_values ) === 0 ) {
+			return;
+		}
+
+		// Map, filter and return external values.
+		return self::mapAndFilterValues( $external_values, $filters, $mappings );
+	}
+
+	/**
+	 * Core of the {{#get_soap_data:}} parser function and mw.external.soap.
+	 */
+	public static function doGetSoapData( array $params ) {
+		if ( !class_exists( 'SoapClient' ) ) {
+			return self::formatErrorMessage(
+				wfMessage( 'externaldata-missing-library', 'SOAP', '{{#get_soap_data:}}', 'mw.external.soap' )->text()
+			);
+		}
+		$args = self::paramToArray( $params, true, false );
+
+		// URL and other connection settings.
+		list( $success, $url, $postData, $cacheExpireTime, $useStaleCache ) = self::getWebParams( $args );
+		if ( !$success ) {
+			// URL is not supplied, valid or allowed. $url is an error message.
+			return $url;
+		}
+
+		if ( array_key_exists( 'request', $args ) ) {
+			$requestName = $args['request'];
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'request' )->parse() );
+		}
+
+		$requestData = array_key_exists( 'requestData', $args ) ? self::paramToArray( $args['requestData'] ) : null;
+
+		if ( array_key_exists( 'response', $args ) ) {
+			$responseName = $args['response'];
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'response' )->parse() );
+		}
+
+		$format = array_key_exists( 'format', $args ) ? strtolower( $args['format'] ) : 'json';
+		// Final format.
+		// XPath.
+		if ( array_key_exists( 'use xpath', $args ) && $format === 'xml' ) {
+			$format .= ' with xpath';
+		}
+		// JSONPath.
+		if ( array_key_exists( 'use jsonpath', $args ) && ( $format === 'json' ) ) {
+			$format .= ' with jsonpath';
+		}
+
+		if ( array_key_exists( 'data', $args ) ) {
+			$mappings = self::paramToArray( $args['data'] ); // parse the data arg into mappings
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
+		}
+
+		$encoding = array_key_exists( 'encoding', $args ) && $args['encoding'] ? $args['encoding'] : null;
+
+		// Actually fetch SOAP data from URL.
+		$external_values = self::getDataFromURL( function ( $url, array $options ) use ( $requestName, $requestData, $responseName ) {
+			// This function actually handles SOAP request.
+			$client = new SoapClient( $url, [ 'trace' => true ] );
+			try {
+				$result = $client->$requestName( $requestData );
+			} catch ( Exception $e ) {
+				$result = null;
+			}
+			if ( $result ) {
+				$contents = $result->$responseName;
+			}
+			return [ $contents, $client->__getLastResponseHeaders() ];
+		}, $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, 0, null, $encoding );
+
+		if ( is_string( $external_values ) ) {
+			// It's an error message - display it on the screen.
+			return self::formatErrorMessage( $external_values );
+		}
+
+		// Map, filter and return external values.
+		return self::mapAndFilterValues( $external_values, [], $mappings );
 	}
 
 	/**
 	 * This method and endElement() below it are both based on code found at
 	 * http://us.php.net/xml_set_element_handler
 	 */
-	static function startElement( $parser, $name, $attrs ) {
-		global $edgCurrentXMLTag, $edgCurrentValue, $edgXMLValues;
-
+	private static function startElement( $parser, $name, $attrs ) {
 		// Set to all lowercase to avoid casing issues.
-		$edgCurrentXMLTag = strtolower( $name );
-		$edgCurrentValue = '';
+		self::$currentXMLTag = strtolower( $name );
+		self::$currentValue = '';
 		foreach ( $attrs as $attr => $value ) {
 			$attr = strtolower( $attr );
 			$value = str_replace( self::$ampersandReplacement, '&amp;', $value );
-			if ( array_key_exists( $attr, $edgXMLValues ) ) {
-				$edgXMLValues[$attr][] = $value;
+			if ( array_key_exists( $attr, self::$XMLValues ) ) {
+				self::$XMLValues[$attr][] = $value;
 			} else {
-				$edgXMLValues[$attr] = [ $value ];
+				self::$XMLValues[$attr] = [ $value ];
 			}
 		}
 	}
 
-	static function endElement( $parser, $name ) {
-		global $edgCurrentXMLTag, $edgCurrentValue, $edgXMLValues;
-
-		if ( array_key_exists( $edgCurrentXMLTag, $edgXMLValues ) ) {
-			$edgXMLValues[$edgCurrentXMLTag][] = $edgCurrentValue;
-		} else {
-			$edgXMLValues[$edgCurrentXMLTag] = [ $edgCurrentValue ];
+	private static function endElement( $parser, $name ) {
+		if ( !array_key_exists( self::$currentXMLTag, self::$XMLValues ) ) {
+			self::$XMLValues[self::$currentXMLTag] = [];
 		}
+		self::$XMLValues[self::$currentXMLTag][] = self::$currentValue;
 		// Clear the value both here and in startElement(), in case this
 		// is an embedded tag.
-		$edgCurrentValue = '';
+		self::$currentValue = '';
 	}
 
 	/**
@@ -65,87 +372,122 @@ class EDUtils {
 	 * of the text, for very long XML values. Given that, we keep a global
 	 * variable with the current value and add to it.
 	 */
-	static function getContent( $parser, $content ) {
-		global $edgCurrentValue;
-
+	private static function getContent( $parser, $content ) {
 		// Replace ampersands, to avoid the XML getting split up
 		// around them.
 		// Note that this is *escaped* ampersands being replaced -
 		// this is unrelated to the fact that bare ampersands aren't
 		// allowed in XML.
 		$content = str_replace( self::$ampersandReplacement, '&amp;', $content );
-		$edgCurrentValue .= $content;
-	}
-
-	static function parseParams( $params ) {
-		$args = [];
-		foreach ( $params as $param ) {
-			$param = preg_replace( "/\s\s+/", ' ', $param ); // whitespace
-			$param_parts = explode( "=", $param, 2 );
-			if ( count( $param_parts ) < 2 ) {
-				$args[$param_parts[0]] = null;
-			} else {
-				list( $name, $value ) = $param_parts;
-				$args[$name] = $value;
-			}
-		}
-		return $args;
+		self::$currentValue .= $content;
 	}
 
 	/**
-	 * Parses an argument of the form "a=b,c=d,..." into an array
+	 * Parses an argument of the form "a=b,c=d,..." into an array. If it is already an array, only converts the case.
 	 */
-	static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
-		$arg = preg_replace( "/\s\s+/", ' ', $arg ); // whitespace
+	public static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
+		if ( !is_array( $arg ) ) {
+			// Not an array. Splitting needed.
+			$arg = preg_replace( "/\s\s+/", ' ', $arg ); // whitespace
 
-		// Split text on commas, except for commas found within quotes
-		// and parentheses. Regular expression based on:
-		// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
-		// ...with modifications by Nick Lindridge, ionCube Ltd.
-		$pattern = <<<END
-		/
-	[,]
-	(?=(?:(?:[^"]*"){2})*[^"]*$)
-	(?=(?:(?:[^']*'){2})*[^']*$)
-	(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
-	/x
+			// Split text on commas, except for commas found within quotes
+			// and parentheses. Regular expression based on:
+			// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
+			// ...with modifications by Nick Lindridge, ionCube Ltd.
+			$pattern = <<<END
+			/
+			[,]
+			(?=(?:(?:[^"]*"){2})*[^"]*$)
+			(?=(?:(?:[^']*'){2})*[^']*$)
+			(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
+			/x
 END;
-		// " - fix for color highlighting in vi :)
-		$keyValuePairs = preg_split( $pattern, $arg );
-
-		$returnArray = [];
-		foreach ( $keyValuePairs as $keyValuePair ) {
-			$keyAndValue = explode( '=', $keyValuePair, 2 );
-			if ( count( $keyAndValue ) == 2 ) {
-				$key = trim( $keyAndValue[0] );
-				if ( $lowercaseKeys ) {
-					$key = strtolower( $key );
+			// " - fix for color highlighting in vi :)
+			$keyValuePairs = preg_split( $pattern, $arg );
+			$splitArray = [];
+			foreach ( $keyValuePairs as $keyValuePair ) {
+				$keyAndValue = explode( '=', $keyValuePair, 2 );
+				if ( count( $keyAndValue ) === 2 ) {
+					$splitArray[trim( $keyAndValue[0] )] = trim( $keyAndValue[1] );
 				}
-				$value = trim( $keyAndValue[1] );
-				if ( $lowercaseValues ) {
-					$value = strtolower( $value );
-				}
-				$returnArray[$key] = $value;
 			}
+		} else {
+			// It's already an array.
+			$splitArray = $arg;
 		}
-		return $returnArray;
+		// Set the letter case as required.
+		$caseConvertedArray = [];
+		foreach ( $splitArray as $key => $value ) {
+			$caseConvertedArray[$lowercaseKeys ? strtolower( $key ) : $key] = $lowercaseValues ? strtolower( $value ) : $value;
+		}
+		return $caseConvertedArray;
 	}
 
-	static function getLDAPData( $filter, $domain, $params ) {
+	/**
+	 * Called by both {{#get_ldap_data:}} and mw.external.ldap.
+	 */
+	public static function doGetLDAPData( array $params ) {
+		if ( !function_exists( 'ldap_connect' ) ) {
+			return self::formatErrorMessage(
+				wfMessage( 'externaldata-missing-library', 'LDAP', '{{#get_ldap_data:}}', 'mw.external.ldap' )->text()
+			);
+		}
+		$args = self::paramToArray( $params, true, false ); // parse params into name-value pairs
+		if ( array_key_exists( 'data', $args ) ) {
+			$mappings = self::paramToArray( $args['data'] ); // parse the data arg into mappings
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
+		}
+		if ( !array_key_exists( 'filter', $args ) ) {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter' )->parse() );
+		}
+		if ( !array_key_exists( 'filter', $args ) ) {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter' )->parse() );
+		}
+		$all = array_key_exists( 'all', $args );
+		$external_values = self::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
+		if ( !is_array( $external_values ) ) {
+			// This is an error message.
+			return self::formatErrorMessage( $external_values );
+		}
+		$result = [];
+		$all = true;
+		foreach ( $external_values as $i => $row ) {
+			if ( !is_array( $row ) ) {
+				continue;
+			}
+			foreach ( $mappings as $local_var => $external_var ) {
+				if ( array_key_exists( $external_var, $row ) ) {
+					if ( $all ) {
+						foreach ( $row[$external_var] as $j => $value ) {
+							if ( $j !== 'count' ) {
+								$result[$local_var][] = $value;
+							}
+						}
+					} else {
+						$result[$local_var][] = $row[$external_var][0];
+					}
+				} else {
+					$result[$local_var][] = '';
+				}
+			}
+		}
+		return $result;
+	}
+
+	private static function getLDAPData( $filter, $domain, $params ) {
 		global $edgLDAPServer, $edgLDAPUser, $edgLDAPPass;
 
 		$ds = self::connectLDAP( $edgLDAPServer[$domain], $edgLDAPUser[$domain], $edgLDAPPass[$domain] );
+		if ( !is_resource( $ds ) ) {
+			// This is an error message.
+			return $ds;
+		}
 		$results = self::searchLDAP( $ds, $domain, $filter, $params );
-
 		return $results;
 	}
 
-	static function connectLDAP( $server, $username, $password ) {
-		// Check that the PHP LDAP library is installed.
-		if ( !function_exists( 'ldap_connect' ) ) {
-			echo ( "Error: you must have a PHP LDAP library installed in order to call #get_ldap_data." );
-		}
-
+	private static function connectLDAP( $server, $username, $password ) {
 		$ds = ldap_connect( $server );
 		if ( $ds ) {
 			// these options for Active Directory only?
@@ -166,7 +508,7 @@ END;
 		}
 	}
 
-	static function searchLDAP( $ds, $domain, $filter, $attributes ) {
+	private static function searchLDAP( $ds, $domain, $filter, $attributes ) {
 		global $edgLDAPBaseDN;
 
 		$sr = ldap_search( $ds, $edgLDAPBaseDN[$domain], $filter, $attributes );
@@ -174,7 +516,7 @@ END;
 		return $results;
 	}
 
-	static function getArrayValue( $arrayName, $key ) {
+	private static function getArrayValue( $arrayName, $key ) {
 		if ( array_key_exists( $key, $arrayName ) ) {
 			return $arrayName[$key];
 		} else {
@@ -182,7 +524,54 @@ END;
 		}
 	}
 
-	static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $joinOn, $otherParams ) {
+	/**
+	 * Called by both {{#get_db_data:}} and mw.external.db.
+	 */
+	public static function doGetDBData( array $args ) {
+		$data = ( array_key_exists( 'data', $args ) ) ? $args['data'] : null;
+		if ( array_key_exists( 'db', $args ) ) {
+			$dbID = $args['db'];
+		} elseif ( array_key_exists( 'server', $args ) ) {
+			// For backwards-compatibility - 'db' parameter was
+			// added in External Data version 1.3.
+			$dbID = $args['server'];
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'db' )->parse() );
+		}
+		if ( array_key_exists( 'from', $args ) ) {
+			$from = $args['from'];
+		} else {
+			return self::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from' )->parse() );
+		}
+		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
+		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
+		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
+		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
+		$sqlOptions = [ 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy ];
+		$joinOn = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : null;
+		$otherParams = [];
+		if ( array_key_exists( 'aggregate', $args ) ) {
+			$otherParams['aggregate'] = $args['aggregate'];
+		} elseif ( array_key_exists( 'find query', $args ) ) {
+			$otherParams['find query'] = $args['find query'];
+		}
+		$mappings = self::paramToArray( $data ); // parse the data arg into mappings
+
+		$external_values = self::getDBData( $dbID, $from, array_values( $mappings ), $conds, $sqlOptions, $joinOn, $otherParams );
+
+		// Handle error cases.
+		if ( !is_array( $external_values ) ) {
+			return self::formatErrorMessage( $external_values );
+		}
+
+		// Map, filter and return external values.
+		return self::mapAndFilterValues( $external_values, [], $mappings );
+	}
+
+	/**
+	 * Actually query the database.
+	 */
+	private static function getDBData( $dbID, $from, $columns, $where, $sqlOptions, $joinOn, $otherParams ) {
 		global $edgDBServerType, $edgDBServer, $edgDBDirectory, $edgDBName,
 			$edgDBUser, $edgDBPass, $edgDBFlags, $edgDBTablePrefix;
 
@@ -198,28 +587,28 @@ END;
 
 		// MongoDB has entirely different handling from the rest.
 		if ( $db_type === 'mongodb' ) {
-			if ( $db_name == '' ) {
+			if ( !$db_name ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 			return self::getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams );
 		}
 
 		// Validate parameters
-		if ( $db_type == '' ) {
+		if ( !$db_type ) {
 			return wfMessage( "externaldata-db-incomplete-information" )->text();
 		} elseif ( $db_type == 'sqlite' ) {
-			if ( $db_directory == '' || $db_name == '' ) {
+			if ( !$db_directory || !$db_name ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		} else {
 			// We don't check the username or password because they
 			// could legitimately be blank or null.
-			if ( $db_server == '' || $db_name == '' ) {
+			if ( !$db_server || !$db_name ) {
 				return wfMessage( "externaldata-db-incomplete-information" )->text();
 			}
 		}
 
-		if ( $db_flags == '' ) {
+		if ( !$db_flags ) {
 			$db_flags = DBO_DEFAULT;
 		}
 
@@ -236,7 +625,7 @@ END;
 		}
 
 		$db = Database::factory( $db_type, $dbConnectionParams );
-		if ( $db == null ) {
+		if ( !$db ) {
 			return wfMessage( 'externaldata-db-unknown-type' )->text();
 		}
 		if ( !$db->isOpen() ) {
@@ -265,7 +654,7 @@ END;
 		return $values;
 	}
 
-	static function getValueFromJSONArray( array $origArray, $path, $default = null ) {
+	private static function getValueFromJSONArray( array $origArray, $path, $default = null ) {
 		$current = $origArray;
 		$token = strtok( $path, '.' );
 
@@ -283,7 +672,7 @@ END;
 	 * Handles #get_db_data for the non-relational database system
 	 * MongoDB.
 	 */
-	static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
+	private static function getMongoDBData( $db_server, $db_username, $db_password, $db_name, $from, $columns, $where, $sqlOptions, $otherParams ) {
 		global $wgMainCacheType, $wgMemc, $edgMemCachedMongoDBSeconds;
 
 		// Use MEMCACHED if configured to cache mongodb queries.
@@ -451,7 +840,7 @@ END;
 		return $values;
 	}
 
-	static function searchDB( $db, $from, $vars, $conds, $sqlOptions, $joinOn ) {
+	private static function searchDB( $db, $from, $vars, $conds, $sqlOptions, $joinOn ) {
 		// The format of $from can be just "TableName", or the more
 		// complex "Table1=Alias1,Table2=Alias2,...".
 		$tables = [];
@@ -516,9 +905,8 @@ END;
 		return $rows;
 	}
 
-	static function getXMLData( $xml ) {
-		global $edgXMLValues;
-		$edgXMLValues = [];
+	private static function getXMLData( $xml ) {
+		self::$XMLValues = [];
 
 		// Remove comments from XML - for some reason, xml_parse()
 		// can't handle them.
@@ -537,29 +925,27 @@ END;
 			xml_get_current_line_number( $xml_parser ) )->text();
 		}
 		xml_parser_free( $xml_parser );
-		return $edgXMLValues;
+		return self::$XMLValues;
 	}
 
-	static function isNodeNotEmpty( $node ) {
+	private static function isNodeNotEmpty( $node ) {
 		return trim( $node[0] ) !== '';
 	}
 
-	static function filterEmptyNodes( $nodes ) {
+	private static function filterEmptyNodes( $nodes ) {
 		if ( !is_array( $nodes ) ) {
 			return $nodes;
 		}
 		return array_filter( $nodes, [ 'EDUtils', 'isNodeNotEmpty' ] );
 	}
 
-	static function getXMLXPathData( $xml, $mappings, $ns ) {
-		global $edgXMLValues;
-
+	private static function getXMLXPathData( $xml, $mappings, $ns ) {
 		try {
 			$sxml = new SimpleXMLElement( $xml );
 		} catch ( Exception $e ) {
 			return "Caught exception parsing XML: " . $e->getMessage();
 		}
-		$edgXMLValues = [];
+		self::$XMLValues = [];
 
 		foreach ( $mappings as $local_var => $xpath ) {
 			// First, register any necessary XML namespaces, to
@@ -583,19 +969,19 @@ END;
 				$nodesArray[] = (string)$xmlNode;
 			}
 
-			if ( array_key_exists( $xpath, $edgXMLValues ) ) {
+			if ( array_key_exists( $xpath, self::$XMLValues ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
 				// $mappings will have been removed already.
-				$edgXMLValues[$xpath] = array_merge( $edgXMLValues[$xpath], $nodesArray );
+				self::$XMLValues[$xpath] = array_merge( self::$XMLValues[$xpath], $nodesArray );
 			} else {
-				$edgXMLValues[$xpath] = $nodesArray;
+				self::$XMLValues[$xpath] = $nodesArray;
 			}
 		}
-		return $edgXMLValues;
+		return self::$XMLValues;
 	}
 
-	static function getHTMLData( $html, array $mappings, $css ) {
+	private static function getHTMLData( $html, array $mappings, $css ) {
 		$doc = new DOMDocument( '1.0', 'UTF-8' );
 		// Remove whitespaces.
 		$doc->preserveWhiteSpace = false;
@@ -604,6 +990,7 @@ END;
 		[ $encoding, $_ ] = self::findEncodingInText( $html );
 		if ( !$encoding ) {
 			$html = preg_replace( '/<\?xml[^?]+\?>/i', '', $html );
+			// <? fix for color highlighting in vi
 			$html = '<?xml version="1.0" encoding="UTF-8" ?>' . $html;
 		}
 
@@ -687,7 +1074,7 @@ END;
 		return $edgHTMLValues;
 	}
 
-	static function getValuesFromCSVLine( $csv_line ) {
+	public static function getValuesFromCSVLine( $csv_line ) {
 		// regular expression copied from http://us.php.net/fgetcsv
 		$vals = preg_split( '/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv_line );
 		$vals2 = [];
@@ -697,7 +1084,7 @@ END;
 		return $vals2;
 	}
 
-	static function getCSVData( $csv, $has_header, $delimiter = ',' ) {
+	private static function getCSVData( $csv, $has_header, $delimiter = ',' ) {
 		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
 		// str_getcsv() is a function that was only added in PHP 5.3.0,
 		// so use the much older fgetcsv() if it's not there
@@ -818,7 +1205,7 @@ END;
 	 * defined here:
 	 * http://www.sequenceontology.org/gff3.shtml
 	 */
-	static function getGFFData( $gff ) {
+	private static function getGFFData( $gff ) {
 		// use an fgetcsv() call, similar to the one in getCSVData()
 		// (fgetcsv() can handle delimiters other than commas, in this
 		// case a tab)
@@ -890,7 +1277,7 @@ END;
 	 * list of scalar values, with no keys (i.e., not an associative
 	 * array).
 	 */
-	static function holdsSimpleList( $arr ) {
+	private static function holdsSimpleList( $arr ) {
 		$expectedKey = 0;
 		foreach ( $arr as $key => $val ) {
 			if ( is_array( $val ) || $key != $expectedKey++ ) {
@@ -903,7 +1290,7 @@ END;
 	/**
 	 * Recursive JSON-parsing function for use by getJSONData().
 	 */
-	static function parseTree( $tree, &$retrieved_values ) {
+	private static function parseTree( $tree, &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {
 			// TODO - this logic could probably be a little nicer.
 			if ( is_array( $val ) && self::holdsSimpleList( $val ) ) {
@@ -934,7 +1321,7 @@ END;
 		}
 	}
 
-	static function getJSONData( $json, $prefixLength ) {
+	private static function getJSONData( $json, $prefixLength ) {
 		$json = substr( $json, $prefixLength );
 		$json_tree = FormatJson::decode( $json, true );
 		if ( $json_tree === null ) {
@@ -948,7 +1335,7 @@ END;
 		return $values;
 	}
 
-	static function getJSONPathData( $json, $mappings ) {
+	private static function getJSONPathData( $json, $mappings ) {
 		global $edgJSONValues;
 
 		$jsonObject = new EDJsonObject( $json );
@@ -1006,7 +1393,11 @@ END;
 		return $encoding;
 	}
 
-	private static function fetchURL( $url, $post_vars, $cacheExpireTime, $useStaleCache, $encoding_override ) {
+	/**
+	 * Common code for fetching URL and sending SOAP request. Handles caching.
+	 * @param callable $fetcher should get two arguments: URL and an array of HTTP options.
+	 */
+	private static function fetch( callable $fetcher, $url, $post_vars, $cacheExpireTime, $useStaleCache, $encoding_override ) {
 		// Do any special variable replacements in the URLs, for
 		// secret API keys and the like.
 		global $edgStringReplacements;
@@ -1014,6 +1405,7 @@ END;
 			$url = str_replace( $key, $value, $url );
 		}
 		global $edgHTTPOptions;
+		// TODO: handle HTTP options per site.
 		$options = $edgHTTPOptions;
 
 		// We do not cache POST requests.
@@ -1025,7 +1417,6 @@ END;
 			return [ $contents ? self::STATUS_OK : self::STATUS_POST_FAILED, $contents, time(), false, 0, $encoding ];
 		}
 
-		// TODO: Think of moving caching to EDUtils::getDataFromText() or EDUtils::getDataFromURL().
 		// Initialize some caching variables.
 		$cache_present = false;
 		$cached = false;
@@ -1060,9 +1451,9 @@ END;
 				$options['followRedirects'] = isset( $options['followRedirects'] ) ? $options['followRedirects'] : false;
 			}
 			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
-			// Actually send a request.
 			do {
-				list( $contents, $headers ) = EDHttpWithHeaders::get( $url, $options, __METHOD__ );
+				// Actually send a request.
+				list( $contents, $headers ) = call_user_func( $fetcher, $url, $options );
 			} while ( !$contents && ++$tries <= self::$http_number_of_tries );
 			if ( $contents ) {
 				// Fetched successfully.
@@ -1109,7 +1500,7 @@ END;
 
 	private static function getDataFromText( $contents, $format, $mappings, $source, $prefixLength = 0, $regex = null, $encoding = null ) {
 		if ( !$encoding ) {
-			// Encoding has not been detected earlier by EDUtils::fetchURL(). So, detect now.
+			// Encoding has not been detected earlier by EDUtils::fetch(). So, detect now.
 			$encoding = self::detectEncodingAndConvertToUTF8( $contents, $encoding );
 		}
 		// For now, this is only done for the CSV formats.
@@ -1148,7 +1539,7 @@ END;
 	 * Checks whether this URL is allowed, based on the
 	 * $edgAllowExternalDataFrom whitelist
 	 */
-	public static function isURLAllowed( $url ) {
+	private static function isURLAllowed( $url ) {
 		// this code is based on Parser::maybeMakeExternalImage()
 		global $edgAllowExternalDataFrom;
 		$data_from = $edgAllowExternalDataFrom;
@@ -1171,15 +1562,20 @@ END;
 		}
 	}
 
-	public static function getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding ) {
+	/**
+	 * This function gets and processes data from both HTTP GET and POST requests and SOAP requests.
+	 *
+	 * @param callable $fetcher is the function that implements either HTTP or SOAP.
+	 */
+	private static function getDataFromURL( callable $fetcher, $url, $format, array $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding ) {
 		// We need encoding this early, because we want to cache text converted to UTF-8.
-		list( $status, $url_contents, $time, $stale, $tries, $encoding )
-			= self::fetchURL( $url, $postData, $cacheExpireTime, $useStaleCache, $encoding );
+		list( $status, $contents, $time, $stale, $tries, $encoding )
+			= self::fetch( $fetcher, $url, $postData, $cacheExpireTime, $useStaleCache, $encoding );
 		switch ( $status ) {
 			case self::STATUS_OK:
 			case self::STATUS_CACHE_HIT:
 			case self::STATUS_STALE:
-				$parsed = self::getDataFromText( $url_contents, $format, $mappings, $url, $prefixLength, $regex, $encoding );
+				$parsed = self::getDataFromText( $contents, $format, $mappings, $url, $prefixLength, $regex, $encoding );
 				if ( is_array( $parsed ) ) {
 					$parsed['__time'] = [ $time ];
 					$parsed['__stale'] = [ $stale ? 'stale' : 'fresh' ];
@@ -1209,7 +1605,7 @@ END;
 		return self::getDataFromText( $file_contents, $format, $mappings, $path, 0, $regex, $encoding );
 	}
 
-	public static function getDataFromFile( $file, $format, $mappings, $regex, $encoding ) {
+	private static function getDataFromFile( $file, $format, $mappings, $regex, $encoding ) {
 		global $edgFilePath;
 
 		if ( array_key_exists( $file, $edgFilePath ) ) {
@@ -1219,7 +1615,7 @@ END;
 		}
 	}
 
-	public static function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding ) {
+	private static function getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding ) {
 		global $edgDirectoryPath;
 
 		if ( array_key_exists( $directory, $edgDirectoryPath ) ) {
@@ -1238,7 +1634,7 @@ END;
 	/**
 	 * Recursive function, used by getSOAPData().
 	 */
-	public static function getValuesForKeyInTree( $key, $tree ) {
+	private static function getValuesForKeyInTree( $key, $tree ) {
 		// The passed-in tree can be either an array or a stdObject -
 		// we need it to be an array.
 		if ( is_object( $tree ) ) {
@@ -1256,45 +1652,19 @@ END;
 		return $values;
 	}
 
-	public static function getSOAPData( $url, $requestName, $requestData, $responseName, $mappings ) {
-		$client = new SoapClient( $url );
-		try {
-			$result = $client->$requestName( $requestData );
-		} catch ( Exception $e ) {
-			return "Caught exception: " . $e->getMessage();
-		}
-
-		$realResultJSON = $result->$responseName;
-		if ( $realResultJSON == '' ) {
-			return 'Error: no data found for this set of "requestData" fields.';
-		}
-
-		$realResult = json_decode( $realResultJSON );
-		$errorKey = '#Error:';
-		if ( array_key_exists( $errorKey, $realResult ) ) {
-			return 'Error: ' . $realResult->$errorKey;
-		}
-
-		$values = [];
-		foreach ( $mappings as $fieldName ) {
-			$values[$fieldName] = self::getValuesForKeyInTree( $fieldName, $realResult );
-		}
-		return $values;
-	}
-
-	public static function getRegexData( $text, $regex ): array {
+	private static function getRegexData( $text, $regex ): array {
 		$matches = [];
 
-		if ( method_exists( AtEase::class, 'suppressWarnings' ) ) {
+		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'suppressWarnings' ) ) {
 			// MW >= 1.33
-			AtEase::suppressWarnings();
+			\Wikimedia\AtEase\AtEase::suppressWarnings();
 		} else {
 			\MediaWiki\suppressWarnings();
 		}
 		preg_match_all( $regex, $text, $matches, PREG_PATTERN_ORDER );
-		if ( method_exists( AtEase::class, 'restoreWarnings' ) ) {
+		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
 			// MW >= 1.33
-			AtEase::restoreWarnings();
+			\Wikimedia\AtEase\AtEase::restoreWarnings();
 		} else {
 			\MediaWiki\restoreWarnings();
 		}

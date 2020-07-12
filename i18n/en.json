@@ -19,11 +19,12 @@
 	"externaldata-db-unknown-collection": "Error: Unknown MongoDB collection.",
 	"externaldata-db-no-return-values": "Error: No return values specified.",
 	"externaldata-db-invalid-query": "Invalid query.",
-	"externaldata-no-css-selector": "The library $1, required to use the '$2' format without the '$3' option, is missing.",
+	"externaldata-format-unavailable": "The library $1, required to use the '$2' format without the '$3' option, is missing.",
 	"externaldata-post-failed": "POST request to $1 failed.",
 	"externaldata-url-unknown-error": "Unknown error while fetching data from URL $1.",
 	"externaldata-parsing-html-failed": "Could not parse HTML.",
 	"externaldata-caught-exception-parsing-html": "Caught exception parsing HTML. The error message is &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Caught exception converting CSS selector to XPath:\n$1",
-	"externaldata-xpath-invalid": "XPath search ($1) failed: $2"
+	"externaldata-xpath-invalid": "XPath search ($1) failed: $2",
+	"externaldata-missing-library": "The library $1, required to use the '$2' parser function or '$3' Lua function, is missing."
 }

@@ -5,401 +5,169 @@
 
 class EDParserFunctions {
 
-	/**
-	 * A helper function, called by doGetWebData().
-	 */
-	public static function setGlobalValuesArray( array $external_values, array $filters, array $mappings ) {
-		global $edgValues;
-
-		foreach ( $filters as $filter_var => $filter_value ) {
-			// Find the entry of $external_values that matches
-			// the filter variable; if none exists, just ignore
-			// the filter.
-			if ( array_key_exists( $filter_var, $external_values ) ) {
-				if ( is_array( $external_values[$filter_var] ) ) {
-					$column_values = $external_values[$filter_var];
-					foreach ( $column_values as $i => $single_value ) {
-						// if a value doesn't match
-						// the filter value, remove
-						// the value from this row for
-						// all columns
-						if ( trim( $single_value ) != trim( $filter_value ) ) {
-							foreach ( $external_values as $external_var => $external_value ) {
-								unset( $external_values[$external_var][$i] );
-							}
-						}
-					}
-				} else {
-					// if we have only one row of values,
-					// and the filter doesn't match, just
-					// keep the results array blank and
-					// return
-					if ( $external_values[$filter_var] != $filter_value ) {
-						return;
-					}
-				}
-			}
-		}
-		// for each external variable name specified in the function
-		// call, get its value or values (if any exist), and attach it
-		// or them to the local variable name
-		foreach ( $mappings as $local_var => $external_var ) {
-			if ( array_key_exists( $external_var, $external_values ) ) {
-				if ( is_array( $external_values[$external_var] ) ) {
-					// array_values() restores regular
-					// 1, 2, 3 indexes to array, after unset()
-					// in filtering may have removed some
-					$edgValues[$local_var] = array_values( $external_values[$external_var] );
-				} else {
-					$edgValues[$local_var][] = $external_values[$external_var];
-				}
-			}
-		}
-	}
+	private static $values = [];
+	private static $current_page = null;
 
 	/**
-	 * Common code for doGetWebData and doGetFileData.
+	 * Parse numbered params of a parser functions into a named array.
 	 */
-	private static function prepareTextProcessing( Parser &$parser, array $params ) {
-		global $edgCurPageName, $edgValues, $edgCacheExpireTime;
-
-		// If we're handling multiple pages, reset $edgValues
-		// when we move from one page to another.
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName !== $cur_page_name ) {
-			$edgValues = [];
-			$edgCurPageName = $cur_page_name;
-		}
-
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-
-		// Preliminary format.
-		$format = array_key_exists( 'format', $args ) ? strtolower( $args['format'] ) : '';
-
-		// Final format.
-		// XPath.
-		if ( array_key_exists( 'use xpath', $args ) && ( $format === 'xml' || $format === 'html' ) ) {
-			$format .= ' with xpath';
-		}
-
-		if ( $format === 'html' && !class_exists( 'Symfony\Component\CssSelector\CssSelectorConverter' ) ) {
-			// Addressing DOM nodes with CSS/jQuery-like selectors requires symfony/css-selector.
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-css-selector', 'symfony/css-selector', 'HTML', 'use xpath' )->parse() );
-		}
-
-		// JSONPath.
-		if ( array_key_exists( 'use jsonpath', $args ) && ( $format === 'json' ) ) {
-			$format .= ' with jsonpath';
-		}
-
-		// CSV.
-		if ( $format === 'csv' || $format === 'csv with header' ) {
-			if ( array_key_exists( 'delimiter', $args ) ) {
-				$delimiter = $args['delimiter'];
-				// Allow for tab delimiters, using \t.
-				$delimiter = str_replace( '\t', "\t", $delimiter );
-				// Hopefully this solution isn't "too clever".
-				$format = [ $format, $delimiter ];
-			}
-		}
-
-		// Regular expression for text format.
-		$regex = $format === 'text' && array_key_exists( 'regex', $args )
-			? html_entity_decode( $args['regex'] )
-			: null;
-
-		if ( array_key_exists( 'data', $args ) ) {
-			// Parse the 'data' arg into mappings.
-			$lc_values = !( $format === 'xml with xpath' || $format === 'html with xpath' || $format === 'text' || $format === 'json with jsonpath' );
-			$mappings = EDUtils::paramToArray( $args['data'], false, $lc_values );
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
-		}
-
-		$cacheExpireTime = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : $edgCacheExpireTime;
-
-		// Allow to use stale cache.
-		global $edgAlwaysAllowStaleCache;
-		$useStaleCache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
-
-		$prefixLength = array_key_exists( 'json offset', $args ) ? $args['json offset'] : 0;
-
-		$filters = array_key_exists( 'filters', $args ) ? EDUtils::paramToArray( $args['filters'], true, false ) : [];
-
-		$encoding = array_key_exists( 'encoding', $args ) && $args['encoding'] ? $args['encoding'] : null;
-
-		return [ $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters, $encoding ];
-	}
-
-	/**
-	 * Render the #get_web_data parser function.
-	 */
-	static function doGetWebData( Parser &$parser ) {
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-		$parsed = self::prepareTextProcessing( $parser, $params );
-
-		if ( !is_array( $parsed ) ) {
-			// Parsing parameters ended in error.
-			return $parsed;
-		}
-
-		// self::prepareTextProcessing () hasn't returned an error.
-		list( $args, $format, $regex, $mappings, $cacheExpireTime, $useStaleCache, $prefixLength, $filters, $encoding ) = $parsed;
-
-		// Parameters specific to {{#get_web_data:}}
-		if ( array_key_exists( 'url', $args ) ) {
-			$url = $args['url'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() );
-		}
-		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
-		// if the URL isn't allowed (based on a whitelist), exit
-		if ( !EDUtils::isURLAllowed( $url ) ) {
-			return EDUtils::formatErrorMessage( "URL is not allowed" );
-		}
-
-		$postData = array_key_exists( 'post data', $args ) ? $args['post data'] : null;
-
-		$external_values = EDUtils::getDataFromURL( $url, $format, $mappings, $postData, $cacheExpireTime, $useStaleCache, $prefixLength, $regex, $encoding );
-
-		if ( is_string( $external_values ) ) {
-			// It's an error message - display it on the screen.
-			return EDUtils::formatErrorMessage( $external_values );
-		}
-		if ( count( $external_values ) === 0 ) {
-			return;
-		}
-
-		self::setGlobalValuesArray( $external_values, $filters, $mappings );
-	}
-
-	/**
-	 * Render the #get_file_data parser function.
-	 */
-	static function doGetFileData( Parser &$parser ) {
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-		$parsed = self::prepareTextProcessing( $parser, $params );
-
-		if ( !is_array( $parsed ) ) {
-			// Parsing parameters ended in error.
-			return $parsed;
-		}
-
-		// self::prepareTextProcessing () hasn't returned an error.
-		list( $args, $format, $regex, $mappings, $_, $__, $prefixLength, $filters, $encoding ) = $parsed;
-
-		// Parameters specific to {{#get_file_data:}}
-		if ( array_key_exists( 'file', $args ) ) {
-			$file = $args['file'];
-		} elseif ( array_key_exists( 'directory', $args ) ) {
-			$directory = $args['directory'];
-			if ( array_key_exists( 'file name', $args ) ) {
-				$fileName = $args['file name'];
+	private static function parseParams( $params ) {
+		$args = [];
+		foreach ( $params as $param ) {
+			$param = preg_replace( "/\s\s+/", ' ', $param ); // whitespace
+			$param_parts = explode( "=", $param, 2 );
+			if ( count( $param_parts ) < 2 ) {
+				$args[$param_parts[0]] = null;
 			} else {
-				return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file name' )->parse() );
+				list( $name, $value ) = $param_parts;
+				$args[$name] = $value;
 			}
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'file|directory' )->parse() );
+		}
+		return $args;
+	}
+
+	/**
+	 * Save filtered and mapped results a query to an external source to a static attribute.
+	 */
+	private static function saveValues( array $values ) {
+		foreach ( $values as $key => $value ) {
+			self::$values[$key] = $value;
+		}
+	}
+
+	/**
+	 * Unset self::$values if the current page changed during this script run.
+	 * Looks like it is relevant for maintenance scripts.
+	 */
+	private static function clearValuesIfNecessary( $page_name ) {
+		// If we're handling multiple pages, reset self::$values
+		// when we move from one page to another.
+		if ( self::$current_page !== $page_name ) {
+			self::$values = [];
+			self::$current_page = $page_name;
+		}
+	}
+
+	/**
+	 * Implementation of the {{#get_web_data:}} parser function.
+	 */
+	public static function getWebData( Parser &$parser ) {
+		// Unset self::$values if the current page changed during this script run.
+		// Looks like it is relevant for maintenance scripts.
+		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+
+		// Actually retrieve external values.
+		$external_values = EDUtils::doGetWebData( self::parseParams( $params ) );
+
+		if ( !is_array( $external_values ) ) {
+			// An error message was returned.
+			return $external_values;
 		}
 
-		if ( isset( $file ) ) {
-			$external_values = EDUtils::getDataFromFile( $file, $format, $mappings, $regex, $encoding );
-		} else {
-			$external_values = EDUtils::getDataFromDirectory( $directory, $fileName, $format, $mappings, $regex, $encoding );
+		// Results are valid and can be saved in self::$values.
+		self::saveValues( $external_values );
+	}
+
+	/**
+	 * Implementation of the {{#get_file_data:}} parser function.
+	 */
+	public static function getFileData( Parser &$parser ) {
+		// Unset self::$values if the current page changed during this script run.
+		// Looks like it is relevant for maintenance scripts.
+		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
+
+		$params = func_get_args();
+		array_shift( $params ); // we already know the $parser ...
+
+		// Actually retrieve external values.
+		$external_values = EDUtils::doGetFileData( self::parseParams( $params ) );
+
+		if ( !is_array( $external_values ) ) {
+			// An error message was returned.
+			return $external_values;
 		}
 
-		if ( is_string( $external_values ) ) {
-			// It's an error message - display it on the screen.
-			return EDUtils::formatErrorMessage( $external_values );
-		}
-		if ( count( $external_values ) === 0 ) {
-			return;
-		}
-
-		self::setGlobalValuesArray( $external_values, $filters, $mappings );
+		// Results are valid and can be saved in self::$values.
+		self::saveValues( $external_values );
 	}
 
 	/**
 	 * Render the #get_soap_data parser function.
 	 */
-	static function doGetSOAPData( Parser &$parser ) {
-		global $edgCurPageName, $edgValues;
-
-		// If we're handling multiple pages, reset $edgValues
-		// when we move from one page to another.
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = [];
-			$edgCurPageName = $cur_page_name;
-		}
+	public static function getSOAPData( Parser &$parser ) {
+		// Unset self::$values if the current page changed during this script run.
+		// Looks like it is relevant for maintenance scripts.
+		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
 
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		if ( array_key_exists( 'url', $args ) ) {
-			$url = $args['url'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'url' )->parse() );
-		}
-		$url = str_replace( ' ', '%20', $url ); // do some minor URL-encoding
-		// If the URL isn't allowed (based on a whitelist), exit.
-		if ( !EDUtils::isURLAllowed( $url ) ) {
-			return EDUtils::formatErrorMessage( 'URL is not allowed' );
+
+		// Actually retrieve external values.
+		$external_values = EDUtils::doGetSoapData( self::parseParams( $params ) );
+
+		if ( !is_array( $external_values ) ) {
+			// An error message was returned.
+			return $external_values;
 		}
 
-		if ( array_key_exists( 'request', $args ) ) {
-			$requestName = $args['request'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'request' )->parse() );
-		}
-
-		if ( array_key_exists( 'requestData', $args ) ) {
-			$requestData = EDUtils::paramToArray( $args['requestData'] );
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'requestData' )->parse() );
-		}
-
-		if ( array_key_exists( 'response', $args ) ) {
-			$responseName = $args['response'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'response' )->parse() );
-		}
-
-		if ( array_key_exists( 'data', $args ) ) {
-			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
-		}
-
-		$external_values = EDUtils::getSOAPData( $url, $requestName, $requestData, $responseName, $mappings );
-		if ( is_string( $external_values ) ) {
-			// It's an error message - display it on the screen.
-			return EDUtils::formatErrorMessage( $external_values );
-		}
-
-		self::setGlobalValuesArray( $external_values, [], $mappings );
+		// Results are valid and can be saved in self::$values.
+		self::saveValues( $external_values );
 	}
 
 	/**
 	 * Render the #get_ldap_data parser function.
 	 */
-	static function doGetLDAPData( Parser &$parser ) {
-		global $edgCurPageName, $edgValues;
-
-		// If we're handling multiple pages, reset $edgValues
-		// when we move from one page to another.
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = [];
-			$edgCurPageName = $cur_page_name;
-		}
+	public static function getLDAPData( Parser &$parser ) {
+		// Unset self::$values if the current page changed during this script run.
+		// Looks like it is relevant for maintenance scripts.
+		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
 
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		if ( array_key_exists( 'data', $args ) ) {
-			$mappings = EDUtils::paramToArray( $args['data'] ); // parse the data arg into mappings
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'data' )->parse() );
+
+		$external_values = EDUtils::doGetLDAPData( self::parseParams( $params ) );
+
+		if ( !is_array( $external_values ) ) {
+			// An error message was returned.
+			return $external_values;
 		}
 
-		if ( !array_key_exists( 'filter', $args ) ) {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'filter' )->parse() );
-		} elseif ( !array_key_exists( 'domain', $args ) ) {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'domain' )->parse() );
-		} else {
-			$external_values = EDUtils::getLDAPData( $args['filter'], $args['domain'], array_values( $mappings ) );
-		}
-
-		// Build $edgValues
-		foreach ( $external_values as $i => $row ) {
-			if ( !is_array( $row ) ) {
-				continue;
-			}
-			foreach ( $mappings as $local_var => $external_var ) {
-				if ( array_key_exists( $external_var, $row ) ) {
-					$edgValues[$local_var][] = $row[$external_var][0];
-				} else {
-					$edgValues[$local_var][] = '';
-				}
-			}
-		}
+		// Results are valid ang can be saved in self::$values.
+		self::saveValues( $external_values );
 	}
 
 	/**
 	 * Render the #get_db_data parser function.
 	 */
-	static function doGetDBData( Parser &$parser ) {
-		global $edgCurPageName, $edgValues;
-
-		// If we're handling multiple pages, reset $edgValues
-		// when we move from one page to another.
-		$cur_page_name = $parser->getTitle()->getText();
-		if ( !isset( $edgCurPageName ) || $edgCurPageName != $cur_page_name ) {
-			$edgValues = [];
-			$edgCurPageName = $cur_page_name;
-		}
+	public static function getDBData( Parser &$parser ) {
+		// Unset self::$values if the current page changed during this script run.
+		// Looks like it is relevant for maintenance scripts.
+		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
 
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
-		$data = ( array_key_exists( 'data', $args ) ) ? $args['data'] : null;
-		if ( array_key_exists( 'db', $args ) ) {
-			$dbID = $args['db'];
-		} elseif ( array_key_exists( 'server', $args ) ) {
-			// For backwards-compatibility - 'db' parameter was
-			// added in External Data version 1.3.
-			$dbID = $args['server'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'db' )->parse() );
-		}
-		if ( array_key_exists( 'from', $args ) ) {
-			$from = $args['from'];
-		} else {
-			return EDUtils::formatErrorMessage( wfMessage( 'externaldata-no-param-specified', 'from' )->parse() );
-		}
-		$conds = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
-		$limit = ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null;
-		$orderBy = ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null;
-		$groupBy = ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null;
-		$sqlOptions = [ 'LIMIT' => $limit, 'ORDER BY' => $orderBy, 'GROUP BY' => $groupBy ];
-		$joinOn = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : null;
-		$otherParams = [];
-		if ( array_key_exists( 'aggregate', $args ) ) {
-			$otherParams['aggregate'] = $args['aggregate'];
-		} elseif ( array_key_exists( 'find query', $args ) ) {
-			$otherParams['find query'] = $args['find query'];
-		}
-		$mappings = EDUtils::paramToArray( $data ); // parse the data arg into mappings
 
-		$external_values = EDUtils::getDBData( $dbID, $from, array_values( $mappings ), $conds, $sqlOptions, $joinOn, $otherParams );
+		$external_values = EDUtils::doGetDBData( self::parseParams( $params ) );
 
-		// Handle error cases.
 		if ( !is_array( $external_values ) ) {
-			return EDUtils::formatErrorMessage( $external_values );
+			// An error message was returned.
+			return $external_values;
 		}
 
-		// Build $edgValues.
-		foreach ( $mappings as $local_var => $external_var ) {
-			if ( array_key_exists( $external_var, $external_values ) ) {
-				foreach ( $external_values[$external_var] as $value ) {
-					$edgValues[$local_var][] = $value;
-				}
-			}
-		}
+		// Results are valid ang can be saved in self::$values.
+		self::saveValues( $external_values );
 	}
 
 	/**
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by one of the #get... parser functions.
 	 */
-	static function getIndexedValue( $var, $i ) {
-		global $edgValues;
-
-		if ( array_key_exists( $var, $edgValues ) && array_key_exists( $i, $edgValues[$var] ) ) {
-			return $edgValues[$var][$i];
+	private static function getIndexedValue( $var, $i ) {
+		if ( array_key_exists( $var, self::$values ) && array_key_exists( $i, self::$values[$var] ) ) {
+			return self::$values[$var][$i];
 		} else {
 			return '';
 		}
@@ -408,24 +176,21 @@ class EDParserFunctions {
 	/**
 	 * Render the #external_value parser function.
 	 */
-	static function doExternalValue( Parser &$parser, $local_var = '' ) {
-		global $edgValues, $edgExternalValueVerbose;
-
-		if ( !array_key_exists( $local_var, $edgValues ) ) {
+	public static function doExternalValue( Parser &$parser, $local_var = '' ) {
+		global $edgExternalValueVerbose;
+		if ( !array_key_exists( $local_var, self::$values ) ) {
 			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
-		} elseif ( is_array( $edgValues[$local_var] ) ) {
-			return $edgValues[$local_var][0];
+		} elseif ( is_array( self::$values[$local_var] ) ) {
+			return isset( self::$values[$local_var][0] ) ? self::$values[$local_var][0] : null;
 		} else {
-			return $edgValues[$local_var];
+			return self::$values[$local_var];
 		}
 	}
 
 	/**
 	 * Render the #for_external_table parser function.
 	 */
-	static function doForExternalTable( Parser &$parser, $expression = '' ) {
-		global $edgValues;
-
+	public static function doForExternalTable( Parser &$parser, $expression = '' ) {
 		// Get the variables used in this expression, get the number
 		// of values for each, and loop through.
 		$matches = [];
@@ -444,8 +209,8 @@ class EDParserFunctions {
 				$variable = str_replace( $command, '', $variable );
 			}
 			$variable = str_replace( '.urlencode', '', $variable );
-			if ( array_key_exists( $variable, $edgValues ) ) {
-				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
+			if ( array_key_exists( $variable, self::$values ) ) {
+				$num_loops = max( $num_loops, count( self::$values[$variable] ) );
 			}
 		}
 
@@ -488,12 +253,10 @@ class EDParserFunctions {
 	 *
 	 * @author Dan Bolser
 	 */
-	static function doDisplayExternalTable( Parser &$parser ) {
-		global $edgValues;
-
+	public static function doDisplayExternalTable( Parser &$parser ) {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
-		$args = EDUtils::parseParams( $params ); // parse params into name-value pairs
+		$args = self::parseParams( $params ); // parse params into name-value pairs
 
 		if ( array_key_exists( 'template', $args ) ) {
 			$template = $args['template'];
@@ -506,7 +269,7 @@ class EDParserFunctions {
 			$mappings = EDUtils::paramToArray( $args['data'], false, false );
 		} else {
 			// or just use keys from edgValues
-			foreach ( $edgValues as $local_variable => $values ) {
+			foreach ( self::$values as $local_variable => $values ) {
 				$mappings[$local_variable] = $local_variable;
 			}
 		}
@@ -521,12 +284,12 @@ class EDParserFunctions {
 
 		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
 		foreach ( $mappings as $template_param => $local_variable ) {
-			if ( !array_key_exists( $local_variable, $edgValues ) ) {
+			if ( !array_key_exists( $local_variable, self::$values ) ) {
 				// Don't throw an error message - the source may just
 				// not publish this variable.
 				continue;
 			}
-			$num_loops = max( $num_loops, count( $edgValues[$local_variable] ) );
+			$num_loops = max( $num_loops, count( self::$values[$local_variable] ) );
 		}
 
 		if ( array_key_exists( 'intro template', $args ) && $num_loops > 0 ) {
@@ -592,9 +355,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #store_external_table parser function.
 	 */
-	static function doStoreExternalTable( Parser &$parser ) {
-		global $edgValues;
-
+	public static function doStoreExternalTable( Parser &$parser ) {
 		// Quick exit if Semantic MediaWiki is not installed.
 		if ( !class_exists( '\SMW\ParserFunctionFactory' ) ) {
 			return '<div class="error">Error: Semantic MediaWiki must be installed in order to call #store_external_table.</div>';
@@ -614,8 +375,8 @@ class EDParserFunctions {
 			// ignore the presence of '.urlencode' - it's a command,
 			// not part of the actual variable name
 			$variable = str_replace( '.urlencode', '', $variable );
-			if ( array_key_exists( $variable, $edgValues ) ) {
-				$num_loops = max( $num_loops, count( $edgValues[$variable] ) );
+			if ( array_key_exists( $variable, self::$values ) ) {
+				$num_loops = max( $num_loops, count( self::$values[$variable] ) );
 			}
 		}
 		$text = "";
@@ -646,8 +407,7 @@ class EDParserFunctions {
 	/**
 	 * Render the #clear_external_data parser function.
 	 */
-	static function doClearExternalData( Parser &$parser ) {
-		global $edgValues;
-		$edgValues = [];
+	public static function doClearExternalData( Parser &$parser ) {
+		self::$values = [];
 	}
 }

@@ -25,7 +25,14 @@ class EDHttpWithHeaders extends Http {
 				$req->setHeader( $headerName, $headerValue );
 			}
 		}
-		$status = $req->execute();
+		try {
+			$status = $req->execute();
+		} catch ( Exception $e ) {
+			$logger = LoggerFactory::getInstance( 'http' );
+			$logger->warning( 'Exception from ' . $caller . ' (' . $e->getMessage() . ')',
+				[ 'error' => $e->getMessage(), 'caller' => $caller, 'content' => $req->getContent() ] );
+			return [ false, null ];
+		}
 
 		if ( $status->isOK() ) {
 			return [ $req->getContent(), $req->getResponseHeaders() ];

@@ -34,7 +34,8 @@
 		"EDArraySlice": "includes/EDArraySlice.php"
 	},
 	"Hooks": {
-		"ParserFirstCallInit": "ExternalDataHooks::registerParser"
+		"ParserFirstCallInit": "ExternalDataHooks::registerParser",
+		"ScribuntoExternalLibraries": "ExternalDataHooks::registerLua"
 	},
 	"config": {
 		"_prefix": "edg",

@@ -23,11 +23,12 @@
 	"externaldata-db-unknown-collection": "The error message if #get_db_data can't find the specified \"collection\" when connecting to MongoDB.",
 	"externaldata-db-no-return-values": "Used as error message, if the number of the specified columns is zero.\n\nIf successful, the system returns values in the specified columns.",
 	"externaldata-db-invalid-query": "Used as error message, if the query has been failed.",
-	"externaldata-no-css-selector": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function",
+	"externaldata-format-unavailable": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function",
 	"externaldata-post-failed": "Used as error message if #get_web_data sent a POST request that returned an error or was not executed.\n$1 is the URL",
 	"externaldata-url-unknown-error": "Used as a default fallback when an unknown error prevents fetching data from URL.\n$1 is the URL.",
 	"externaldata-parsing-html-failed": "This message is shown if DOMDocument::loadHTML() returns false when trying to parse HTML.",
 	"externaldata-caught-exception-parsing-html": "This message is shown if DOMDocument::loadHTML() throws an exception when trying to parse HTML.\n$1 is the exception text.",
 	"externaldata-error-converting-css-to-xpath": "This message is shown when an exception is thrown converting CSS selector to XPath.\n$1 is the exception text.",
-	"externaldata-xpath-invalid": "This message is shown if XPath search throws an exception. Parameters:\n$1 is the XPath expression, \n$2 is the exception text."
+	"externaldata-xpath-invalid": "This message is shown if XPath search throws an exception. Parameters:\n$1 is the XPath expression, \n$2 is the exception text.",
+	"externaldata-missing-library": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing library,\n* $2 - the name of the parser function that needs the library,\n* $3 - the name of the Lua function."
 }
