@@ -16,12 +16,16 @@
 	"externaldata-invalid-json": "Erro: JSON inválido.",
 	"externaldata-jsonpath-error": "Erro: notação JSONPath inválida.",
 	"externaldata-db-incomplete-information": "Erro: informação incompleta para o ID deste servidor</P>",
-	"externaldata-db-could-not-get-url": "Não foi possível obter o URL após $1 {{PLURAL:$1|tentativa|tentativas}}.",
+	"externaldata-db-could-not-get-url": "Não foi possível obter o URL $1 após $2 {{PLURAL:$1|tentativa|tentativas}}.",
 	"externaldata-db-unknown-type": "Erro: tipo de base de dados desconhecido.",
 	"externaldata-db-could-not-connect": "Erro: não foi possível conectar-se a base de dados.",
 	"externaldata-db-unknown-collection": "Erro: coleção do MongoDB desconhecida.",
 	"externaldata-db-no-return-values": "Erro: nenhum valor de retorno especificado.",
 	"externaldata-db-invalid-query": "Consulta inválida.",
 	"externaldata-no-css-selector": "A biblioteca $1, necessária para usar o formato '$2' sem a opção '$3', está ausente.",
-	"externaldata-url-unknown-error": "Erro desconhecido ao buscar dados do URL $1."
+	"externaldata-post-failed": "A solicitação POST para $1 falhou.",
+	"externaldata-url-unknown-error": "Erro desconhecido ao buscar dados do URL $1.",
+	"externaldata-parsing-html-failed": "Não foi possível analisar o HTML.",
+	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS para XPath:\n$1",
+	"externaldata-xpath-invalid": "Falha na pesquisa XPath ($1): $2"
 }
