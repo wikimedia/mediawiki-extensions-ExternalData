@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Botuzhaleny-sodamo"
+			"Botuzhaleny-sodamo",
+			"Rueter"
 		]
 	},
-	"getdata": "Дата мельга"
+	"getdata": "Дата мельга",
+	"externaldata-parsing-html-failed": "HTML парсось эзь лисе."
 }
