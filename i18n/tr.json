@@ -21,11 +21,12 @@
 	"externaldata-db-unknown-collection": "Hata: Bilinmeyen MongoDB koleksiyonu.",
 	"externaldata-db-no-return-values": "Hata: Dönüş değeri belirtilmedi.",
 	"externaldata-db-invalid-query": "Geçersiz sorgu.",
-	"externaldata-no-css-selector": "'$3' seçeneği olmadan '$2' biçimini kullanmak için gereken $1 kitaplığı eksik.",
+	"externaldata-format-unavailable": "'$3' seçeneği olmadan '$2' biçimini kullanmak için gereken $1 kitaplığı eksik.",
 	"externaldata-post-failed": "$1 için POST isteği başarısız oldu.",
 	"externaldata-url-unknown-error": "$1 URL'sinden veri getirilirken bilinmeyen hata.",
 	"externaldata-parsing-html-failed": "HTML ayrıştırılamadı.",
 	"externaldata-caught-exception-parsing-html": "HTML ayrıştırılırken kural dışı durum saptandı.  Hata mesajı &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "CSS seçiciyi XPath'e dönüştürürken kural dışı durum yakalandı:\n$1",
-	"externaldata-xpath-invalid": "XPath araması ($1) başarısız oldu: $2"
+	"externaldata-xpath-invalid": "XPath araması ($1) başarısız oldu: $2",
+	"externaldata-missing-library": "'$2' ayrıştırıcı işlevini veya '$3' Lua işlevini kullanmak için gereken $1 kitaplığı eksik."
 }

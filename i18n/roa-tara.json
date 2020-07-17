@@ -13,7 +13,7 @@
 	"externaldata-invalid-json": "Errore: JSON invalide.",
 	"externaldata-jsonpath-error": "Errore: Notazione JSONPath non valide.",
 	"externaldata-db-incomplete-information": "Errore: 'Mbormazione ingomblete pe stu ID d'u database.",
-	"externaldata-db-could-not-get-url": "Non ge pozze pigghià 'a URL apprisse $1 {{PLURAL:$1|prove}}.",
+	"externaldata-db-could-not-get-url": "Non ge pozze pigghià 'a URL $1 apprisse $2 {{PLURAL:$2|prove}}.",
 	"externaldata-db-unknown-type": "Errore: Tipe de database scanusciute.",
 	"externaldata-db-could-not-connect": "Errore: Non ge me pozze collegà a 'u database.",
 	"externaldata-db-unknown-collection": "Errore: Collezzione scanusciute MongoDB.",

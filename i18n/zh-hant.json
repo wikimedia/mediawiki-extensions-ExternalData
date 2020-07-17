@@ -20,11 +20,12 @@
 	"externaldata-db-unknown-collection": "錯誤：未知的 MongoDB 集合。",
 	"externaldata-db-no-return-values": "錯誤：沒有回傳指定的值。",
 	"externaldata-db-invalid-query": "無效的查詢。",
-	"externaldata-no-css-selector": "缺少函式庫：$1，在使用不帶 '$3' 選項的 '$2' 格式時為必須。",
+	"externaldata-format-unavailable": "缺少函式庫：$1，在使用不帶 '$3' 選項的 '$2' 格式時為必須。",
 	"externaldata-post-failed": "發送到 $1 的 POST 請求失敗。",
 	"externaldata-url-unknown-error": "在取得來自 URL $1 的資料時發生未知錯誤。",
 	"externaldata-parsing-html-failed": "無法解析 HTML。",
 	"externaldata-caught-exception-parsing-html": "捕獲解析 HTML 時的例外狀況。錯誤訊息為 &quot;$1&quot;。",
 	"externaldata-error-converting-css-to-xpath": "捕獲轉換 CSS 選擇器成 XPath 時的例外狀況。錯誤訊息為：\n$1",
-	"externaldata-xpath-invalid": "XPath 搜尋（$1）失敗：$2"
+	"externaldata-xpath-invalid": "XPath 搜尋（$1）失敗：$2",
+	"externaldata-missing-library": "缺少使用解析函式 '$2' 或 Lua 函式 '$3' 時所需的函式庫 $1。"
 }

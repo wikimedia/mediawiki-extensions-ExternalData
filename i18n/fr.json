@@ -28,7 +28,7 @@
 	"externaldata-db-unknown-collection": "Erreur: Collection MongoDB inconnue.",
 	"externaldata-db-no-return-values": "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	"externaldata-db-invalid-query": "Requête invalide.",
-	"externaldata-no-css-selector": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
+	"externaldata-format-unavailable": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
 	"externaldata-post-failed": "La requête POST vers $1 a échoué.",
 	"externaldata-url-unknown-error": "Erreur inconnue pendant la récupération des données de l'URL $1 .",
 	"externaldata-parsing-html-failed": "Échec de l'analyse du HTML.",

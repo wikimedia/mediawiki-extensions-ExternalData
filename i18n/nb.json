@@ -23,7 +23,7 @@
 	"externaldata-db-unknown-collection": "Feil: Ukjent MongoDB-samling.",
 	"externaldata-db-no-return-values": "Feil: Ingen returverdi spesifisert.",
 	"externaldata-db-invalid-query": "Ugyldig spørring.",
-	"externaldata-no-css-selector": "Biblioteket $1, som kreves for å bruke formatet «$2» uten alternativet «$3», mangler.",
+	"externaldata-format-unavailable": "Biblioteket $1, som kreves for å bruke formatet «$2» uten alternativet «$3», mangler.",
 	"externaldata-post-failed": "POST-forespørsel til $1 feilet.",
 	"externaldata-url-unknown-error": "Ukjent feil under henting av data fra URL-en $1.",
 	"externaldata-parsing-html-failed": "Kunne ikke tolke HTML.",

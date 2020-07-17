@@ -19,7 +19,7 @@
 	"externaldata-db-unknown-collection": "Грешка: Непозната збирка од MongoDB.",
 	"externaldata-db-no-return-values": "Грешка: Нема назначено повратни вредности.",
 	"externaldata-db-invalid-query": "Грешно барање.",
-	"externaldata-no-css-selector": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“.",
+	"externaldata-format-unavailable": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“.",
 	"externaldata-post-failed": "POST-барањето од $1 не успеа.",
 	"externaldata-url-unknown-error": "Непозната грешка при добивањето на податоците од URL-то $1.",
 	"externaldata-parsing-html-failed": "Не можав да го расчленам HTML.",
