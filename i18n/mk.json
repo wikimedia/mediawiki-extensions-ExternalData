@@ -25,5 +25,6 @@
 	"externaldata-parsing-html-failed": "Не можав да го расчленам HTML.",
 	"externaldata-caught-exception-parsing-html": "Добив исклучок при расчленувањето на HTML. Пораката гласи &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Добив грешка при претворањето на CSS-изборникот во XPath:\n$1",
-	"externaldata-xpath-invalid": "Пребарувањето на XPath ($1) не успеа: $2"
+	"externaldata-xpath-invalid": "Пребарувањето на XPath ($1) не успеа: $2",
+	"externaldata-missing-library": "Недостасува библиотеката $1, потребна за употреба на расчленувачката функција „$2“ или Lua-функцијата „$3“."
 }
