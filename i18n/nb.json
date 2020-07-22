@@ -29,5 +29,6 @@
 	"externaldata-parsing-html-failed": "Kunne ikke tolke HTML.",
 	"externaldata-caught-exception-parsing-html": "Fant feil under tolking av HTML. Feilbeskjeden er «$1».",
 	"externaldata-error-converting-css-to-xpath": "Fant unntak under konvertering av CSS-selektor til XPath:\n$1",
-	"externaldata-xpath-invalid": "XPath-søk ($1) feilet: $2"
+	"externaldata-xpath-invalid": "XPath-søk ($1) feilet: $2",
+	"externaldata-missing-library": "Biblioteket $1, som er påkrevd for å bruke parserfunksjonen «$2» eller Lua-funksjonen «$3», mangler."
 }
