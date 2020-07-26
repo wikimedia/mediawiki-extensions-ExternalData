@@ -5,6 +5,8 @@ use MediaWiki\MediaWikiServices;
 /**
  * A special page for retrieving selected rows of any wiki page that contains
  * data in CSV format
+ *
+ * @author Yaron Koren
  */
 
 class EDGetData extends SpecialPage {
@@ -52,7 +54,7 @@ class EDGetData extends SpecialPage {
 				$page_lines[] = $line;
 			}
 		}
-		$headers = EDUtils::getValuesFromCSVLine( $page_lines[0] );
+		$headers = self::getValuesFromCSVLine( $page_lines[0] );
 		$queried_headers = [];
 		$queryStringValues = $this->getRequest()->getValues();
 		foreach ( $queryStringValues as $key => $value ) {
@@ -69,7 +71,7 @@ class EDGetData extends SpecialPage {
 			if ( $i == 0 ) {
 				continue;
 			}
-			$row_values = EDUtils::getValuesFromCSVLine( $line );
+			$row_values = self::getValuesFromCSVLine( $line );
 			$found_match = true;
 			foreach ( $queried_headers as $i => $query_value ) {
 				$single_value = str_replace( ' ', '_', $row_values[$i] );
@@ -90,5 +92,22 @@ class EDGetData extends SpecialPage {
 	// phpcs:ignore MediaWiki.Commenting.FunctionComment.MissingDocumentationProtected
 	protected function getGroupName() {
 		return 'pagetools';
+	}
+
+	/**
+	 * Split $csv_line as a CSV line.
+	 *
+	 * @param string $csv_line The line to split.
+	 *
+	 * @return array Split values.
+	 */
+	private static function getValuesFromCSVLine( $csv_line ) {
+		// regular expression copied from http://us.php.net/fgetcsv
+		$vals = preg_split( '/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $csv_line );
+		$vals2 = [];
+		foreach ( $vals as $val ) {
+			$vals2[] = trim( $val, '"' );
+		}
+		return $vals2;
 	}
 }
