@@ -15,9 +15,11 @@
 	"externaldata-no-param-specified": "Fehler: Kein Parameter „$1“ angegeben.",
 	"externaldata-web-invalid-format": "Ungültiges Format: „$1“",
 	"externaldata-ldap-unable-to-connect": "Es konnte keine Verbindung zu $1 hergestellt werden",
+	"externaldata-invalid-xml": "Ausnahme beim Parsen von XML: $1.",
 	"externaldata-xml-error": "XML-Fehler: $1 in Zeile $2",
 	"externaldata-invalid-json": "Fehler: Ungültiges JSON",
-	"externaldata-jsonpath-error": "Fehler: Ungültige JSONPath-Notation.",
+	"externaldata-jsonpath-error": "Fehler: Ungültige JSONPath-Notation $1.",
+	"externaldata-invalid-regex": "Fehler: $1 ist kein gültiger Perl-kompatibler regulärer Ausdruck.",
 	"externaldata-db-incomplete-information": "Fehler: Es liegen nur unvollständige Informationen für diese Serverkennung vor.",
 	"externaldata-db-could-not-get-url": "Die URL $1 konnte mit {{PLURAL:$2|einem Versuch|$2 Versuchen}} nicht abgerufen werden.",
 	"externaldata-db-unknown-type": "Fehler: Es handelt sich um einen unbekannten Datenbanktyp.",
@@ -30,7 +32,7 @@
 	"externaldata-url-unknown-error": "Unbekannter Fehler beim Abrufen von Daten von URL $1.",
 	"externaldata-parsing-html-failed": "HTML konnte nicht geparst werden",
 	"externaldata-caught-exception-parsing-html": "Ausnahme beim Parsen von HTML abgefangen. Die Fehlermeldung lautet „$1“.",
-	"externaldata-error-converting-css-to-xpath": "Ausnahme bei der Konvertierung des CSS-Selektors nach XPath abgefangen: $1",
+	"externaldata-error-converting-css-to-xpath": "Ausnahme bei der Konvertierung des CSS-Selektors $1 nach XPath abgefangen:\n$2",
 	"externaldata-xpath-invalid": "XPath-Suche ($1) fehlgeschlagen: $2",
 	"externaldata-missing-library": "Die Bibliothek $1, die für die Verwendung der Parserfunktion „$2“ oder der Lua-Funktion „$3“ erforderlich ist, fehlt."
 }

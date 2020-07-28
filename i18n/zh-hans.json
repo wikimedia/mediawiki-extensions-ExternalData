@@ -5,6 +5,7 @@
 			"Liuxinyu970226",
 			"Shuiwater",
 			"Yfdyh000",
+			"列维劳德",
 			"沈澄心"
 		]
 	},
@@ -26,6 +27,6 @@
 	"externaldata-url-unknown-error": "从URL$1获取数据时出现错误。",
 	"externaldata-parsing-html-failed": "无法识别HTML。",
 	"externaldata-caught-exception-parsing-html": "捕捉到HTML语法错误。错误信息是：&quot;$1&quot;",
-	"externaldata-error-converting-css-to-xpath": "在CSS选择器到XPath的转换中捕获异常：$1",
+	"externaldata-error-converting-css-to-xpath": "在CSS选择器$1到XPath的转换中捕获异常：$2",
 	"externaldata-xpath-invalid": "XPath 搜索($1)失败：($2)"
 }

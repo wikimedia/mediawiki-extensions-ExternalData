@@ -10,9 +10,11 @@
 	"externaldata-no-param-specified": "錯誤：未指定「$1」參數。",
 	"externaldata-web-invalid-format": "無效格式：「$1」。",
 	"externaldata-ldap-unable-to-connect": "無法連結至 $1。",
+	"externaldata-invalid-xml": "解析 XML 異常：$1。",
 	"externaldata-xml-error": "XML 錯誤：在第 $2 行出現 $1。",
 	"externaldata-invalid-json": "錯誤：無效的 JSON。",
-	"externaldata-jsonpath-error": "錯誤：無效的 JSONPath 表示。",
+	"externaldata-jsonpath-error": "錯誤：無效的 JSONPath 表示 $1。",
+	"externaldata-invalid-regex": "錯誤：$1 不是有效的 Perl 兼容正規表達式。",
 	"externaldata-db-incomplete-information": "錯誤：此資料庫的 ID 訊息不完整。",
 	"externaldata-db-could-not-get-url": "在 $2 {{PLURAL:$2|次嘗試}}後仍無法取得 URL $1。",
 	"externaldata-db-unknown-type": "錯誤：無效資料庫類型。",
@@ -25,7 +27,7 @@
 	"externaldata-url-unknown-error": "在取得來自 URL $1 的資料時發生未知錯誤。",
 	"externaldata-parsing-html-failed": "無法解析 HTML。",
 	"externaldata-caught-exception-parsing-html": "捕獲解析 HTML 時的例外狀況。錯誤訊息為 &quot;$1&quot;。",
-	"externaldata-error-converting-css-to-xpath": "捕獲轉換 CSS 選擇器成 XPath 時的例外狀況。錯誤訊息為：\n$1",
+	"externaldata-error-converting-css-to-xpath": "捕獲轉換 CSS 選擇器 $1 成 XPath 時的例外狀況。錯誤訊息為：\n$2",
 	"externaldata-xpath-invalid": "XPath 搜尋（$1）失敗：$2",
 	"externaldata-missing-library": "缺少使用解析函式 '$2' 或 Lua 函式 '$3' 時所需的函式庫 $1。"
 }

@@ -3,6 +3,7 @@
 		"authors": [
 			"BaRaN6161 TURK",
 			"Karduelis",
+			"MuratTheTurkish",
 			"Vito Genovese"
 		]
 	},
@@ -13,7 +14,7 @@
 	"externaldata-ldap-unable-to-connect": "$1 ile bağlantı kurulamıyor.",
 	"externaldata-xml-error": "XML hatası: $1 satırında $2.",
 	"externaldata-invalid-json": "Hata: Geçersiz JSON.",
-	"externaldata-jsonpath-error": "Hata: Geçersiz JSONPath gösterimi.",
+	"externaldata-jsonpath-error": "Hata: Geçersiz JSONPath gösterimi $1.",
 	"externaldata-db-incomplete-information": "Hata: Bu veritabanı kimliği için eksik bilgi.",
 	"externaldata-db-could-not-get-url": "$2 denemeden sonra URL $1 alınamadı.",
 	"externaldata-db-unknown-type": "Hata: Bilinmeyen veritabanı türü.",
@@ -26,7 +27,7 @@
 	"externaldata-url-unknown-error": "$1 URL'sinden veri getirilirken bilinmeyen hata.",
 	"externaldata-parsing-html-failed": "HTML ayrıştırılamadı.",
 	"externaldata-caught-exception-parsing-html": "HTML ayrıştırılırken kural dışı durum saptandı.  Hata mesajı &quot;$1&quot;.",
-	"externaldata-error-converting-css-to-xpath": "CSS seçiciyi XPath'e dönüştürürken kural dışı durum yakalandı:\n$1",
+	"externaldata-error-converting-css-to-xpath": "$1 CSS seçiciyi XPath ile dönüştürürken istisna yakalandı:\n$2",
 	"externaldata-xpath-invalid": "XPath araması ($1) başarısız oldu: $2",
 	"externaldata-missing-library": "'$2' ayrıştırıcı işlevini veya '$3' Lua işlevini kullanmak için gereken $1 kitaplığı eksik."
 }
