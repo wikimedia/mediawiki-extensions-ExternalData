@@ -18,9 +18,11 @@
 	"externaldata-no-param-specified": "Erreur : Aucun paramètre « $1 » spécifié.",
 	"externaldata-web-invalid-format": "Format invalide: \"$1\"",
 	"externaldata-ldap-unable-to-connect": "Impossible de se connecter à $1",
+	"externaldata-invalid-xml": "Exception d’analyse du XML : $1.",
 	"externaldata-xml-error": "Erreur XML : $1 à la ligne $2",
 	"externaldata-invalid-json": "Erreur : JSON non valide",
-	"externaldata-jsonpath-error": "Erreur : notation JSONPath non valide.",
+	"externaldata-jsonpath-error": "Erreur : notation JSONPath $1 non valide.",
+	"externaldata-invalid-regex": "Erreur : $1 n’est pas une expression régulière compatible avec Perl valide.",
 	"externaldata-db-incomplete-information": "Erreur : Informations incomplètes pour cet identifiant de serveur.",
 	"externaldata-db-could-not-get-url": "Impossible d'obtenir l'URL $1 après $2 {{PLURAL:$2|essai|essais}}.",
 	"externaldata-db-unknown-type": "ERREUR: Type de base de données inconnu.",
@@ -32,8 +34,8 @@
 	"externaldata-post-failed": "La requête POST vers $1 a échoué.",
 	"externaldata-url-unknown-error": "Erreur inconnue pendant la récupération des données de l'URL $1 .",
 	"externaldata-parsing-html-failed": "Échec de l'analyse du HTML.",
-	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
-	"externaldata-error-converting-css-to-xpath": "Exception de conversion d’un sélecteur CSS en XPath interceptée :\n$1",
+	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
+	"externaldata-error-converting-css-to-xpath": "Exception de conversion d’un sélecteur CSS en XPath $1 interceptée :\n$2",
 	"externaldata-xpath-invalid": "La recherche XPath ($1) a échoué: $2",
 	"externaldata-missing-library": "Il manque la bibliothèque $1 nécessaire pour utiliser la fonction '$2' de l'analyseur syntaxique ou la fonction Lua '$3'."
 }

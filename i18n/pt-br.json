@@ -14,7 +14,7 @@
 	"externaldata-ldap-unable-to-connect": "Não foi possível conectar-se a $1",
 	"externaldata-xml-error": "Erro no XML: $1 na linha $2",
 	"externaldata-invalid-json": "Erro: JSON inválido.",
-	"externaldata-jsonpath-error": "Erro: notação JSONPath inválida.",
+	"externaldata-jsonpath-error": "Erro: notação JSONPath inválida $1.",
 	"externaldata-db-incomplete-information": "Erro: informação incompleta para o ID deste servidor</P>",
 	"externaldata-db-could-not-get-url": "Não foi possível obter o URL $1 após $2 {{PLURAL:$1|tentativa|tentativas}}.",
 	"externaldata-db-unknown-type": "Erro: tipo de base de dados desconhecido.",
@@ -27,6 +27,6 @@
 	"externaldata-url-unknown-error": "Erro desconhecido ao buscar dados do URL $1.",
 	"externaldata-parsing-html-failed": "Não foi possível analisar o HTML.",
 	"externaldata-caught-exception-parsing-html": "Captura de exceção ao analisar HTML. A mensagem de erro é &quot;$1&quot;.",
-	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS para XPath:\n$1",
+	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS $1 em XPath:\n$2",
 	"externaldata-xpath-invalid": "Falha na pesquisa XPath ($1): $2"
 }
