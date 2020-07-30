@@ -2,14 +2,12 @@
 /**
  * Class for GFF parser.
  *
- * @var array $columns Pre-defined names of GFF columns.
- *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserGFF extends EDParserBase {
-	// Pre-defined names of GFF columns.
+	/** @var array $columns Pre-defined names of GFF columns. */
 	private static $columns = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes' ];
 
 	/**
@@ -19,6 +17,7 @@ class EDParserGFF extends EDParserBase {
 	 *
 	 */
 	public function __construct( array $params ) {
+		parent::__construct( $params );
 	}
 
 	/**
@@ -72,6 +71,6 @@ class EDParserGFF extends EDParserBase {
 				$values[$column][] = $row_val;
 			}
 		}
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 }

@@ -2,12 +2,10 @@
 /**
  * Class for HTML parser extracting data using XPath notation.
  *
- * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
-
 	/**
 	 * Constructor.
 	 *
@@ -28,19 +26,18 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
+	 * @throws EDParserException
+	 *
 	 */
 	public function __invoke( $text, $defaults = [] ) {
 		$doc = new DOMDocument( '1.0', 'UTF-8' );
 		// Remove whitespaces.
 		$doc->preserveWhiteSpace = false;
 
-		// TODO: move?
 		// Otherwise, the encoding will be broken. Yes, it's an abstraction leak.
-		if ( !$this->encoding() ) {
-			$text = preg_replace( '/<\?xml[^?]+\?>/i', '', $text );
-			// <? fix for color highlighting in vi
-			$text = '<?xml version="1.0" encoding="UTF-8" ?>' . $text;
-		}
+		$text = preg_replace( '/<\?xml[^?]+\?>/i', '', $text );
+		// <? fix for color highlighting in vi
+		$text = '<?xml version="1.0" encoding="UTF-8" ?>' . $text;
 
 		// Try to recover really crappy HTML.
 		$html = preg_replace( [ '/\\\\"/' ], [ '&quot;' ], $text );
@@ -53,7 +50,7 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			// Give the log a rest. See https://stackoverflow.com/a/10482622.
 			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 			if ( !$doc->loadHTML( $html ) ) {
-				return wfMessage( 'externaldata-parsing-html-failed' )->text();
+				throw EDParserException( 'externaldata-parsing-html-failed' );
 			}
 			// Report errors.
 			foreach ( libxml_get_errors() as $error ) {
@@ -62,18 +59,17 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			libxml_clear_errors();
 			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		} catch ( Exception $e ) {
-			return wfMessage( 'externaldata-caught-exception-parsing-html', $e->getMessage() )->text();
+			throw new EDParserException( 'externaldata-caught-exception-parsing-html', $e->getMessage() );
 		}
 		$values = EDParserBase::__invoke( $text, $defaults );
-
 		$domxpath = new DOMXPath( $doc );
-		foreach ( $this->mappings as $local_var => $xpath ) {
+		foreach ( $this->external as $xpath ) {
 			// Try to select nodes with XPath:
 			$nodesArray	= [];
 			try {
 				$entries = $domxpath->evaluate( $xpath );
 			} catch ( Exception $e ) {
-				return wfMessage( 'externaldata-xpath-invalid', $xpath, $e->getMessage() )->text();
+				throw new EDParserException( 'externaldata-xpath-invalid', $xpath, $e->getMessage() );
 			}
 			if ( is_a( $entries, 'DOMNodeList' ) ) {
 				// It's a list of DOM nodes.
@@ -84,7 +80,6 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 				// It's some calculated value.
 				$nodesArray = is_array( $entries ) ? $entries : [ $entries ];
 			}
-
 			if ( array_key_exists( $xpath, $values ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
@@ -95,6 +90,6 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			}
 		}
 
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 }

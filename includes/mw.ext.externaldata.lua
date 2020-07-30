@@ -37,7 +37,9 @@ function external.setupInterface()
 					args[key] = value
 				end
 			end
-			return php[name]( args )
+			-- PHP exports an associative array with two elements.
+			local pair = php[name]( args )
+			return pair.values, pair.errors
 		end
 	end
 

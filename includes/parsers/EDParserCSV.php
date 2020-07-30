@@ -2,15 +2,14 @@
 /**
  * Class for comma separated text (with a header line or without) parser.
  *
- * @var bool $header The processed text contains a header line.
- * @var string $delimiter Column delimiter.
- *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserCSV extends EDParserBase {
+	/** @var bool $header The processed text contains a header line. */
 	private $header = false;
+	/** @var string $delimiter Column delimiter. */
 	private $delimiter = ',';
 
 	/**
@@ -151,6 +150,6 @@ class EDParserCSV extends EDParserBase {
 				$values[$column][] = $row_val;
 			}
 		}
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 }

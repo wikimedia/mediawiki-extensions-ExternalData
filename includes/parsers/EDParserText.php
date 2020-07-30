@@ -2,12 +2,11 @@
 /**
  * Class for plain text parser.
  *
- * @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format.
- *
  * @author Alexander Mashin
  */
 
 class EDParserText extends EDParserBase {
+	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
 	protected static $preserve_external_variables_case = true;
 
 	/**
@@ -32,6 +31,6 @@ class EDParserText extends EDParserBase {
 	public function __invoke( $text, $defaults = [] ) {
 		$values = parent::__invoke( $text, $defaults );
 		$values['text'] = [ $text ];
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 }

@@ -2,14 +2,12 @@
 /**
  * Class for JSON parser.
  *
- * @var int $prefix_length Optional length of the ignored prefix.
- *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserJSON extends EDParserBase {
-
+	/** @var int $prefix_length Optional length of the ignored prefix. */
 	private $prefix_length = 0;
 
 	/**
@@ -30,6 +28,7 @@ class EDParserJSON extends EDParserBase {
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
+	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $defaults = [] ) {
 		$json = substr( $text, $this->prefix_length );
@@ -37,13 +36,13 @@ class EDParserJSON extends EDParserBase {
 		$json_tree = FormatJson::decode( $json, true );
 		if ( $json_tree === null ) {
 			// It's probably invalid JSON.
-			return wfMessage( 'externaldata-invalid-json' )->text();
+			throw new EDParserException( 'externaldata-invalid-json' );
 		}
 		$values = parent::__invoke( $text, $defaults );
 		if ( is_array( $json_tree ) ) {
 			self::parseTree( $json_tree, $values );
 		}
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 
 	/**

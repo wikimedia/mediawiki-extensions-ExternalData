@@ -1,33 +1,23 @@
 <?php
 /**
  * Class for handling the parser functions for External Data.
+ *
+ * @author Yaron Koren
+ * @author Alexander Mashin
+ *
  */
-
 class EDParserFunctions {
+	use EDParsesParams;	// Needs paramToArray().
 
+	/** @var array $values Values saved statically to be available form elsewhere on the page. */
 	private static $values = [];
+	/** $var string|null Current page name.	*/
 	private static $current_page = null;
 
 	/**
-	 * Parse numbered params of a parser functions into a named array.
-	 */
-	private static function parseParams( $params ) {
-		$args = [];
-		foreach ( $params as $param ) {
-			$param = preg_replace( "/\s\s+/", ' ', $param ); // whitespace
-			$param_parts = explode( "=", $param, 2 );
-			if ( count( $param_parts ) < 2 ) {
-				$args[$param_parts[0]] = null;
-			} else {
-				list( $name, $value ) = $param_parts;
-				$args[$name] = $value;
-			}
-		}
-		return $args;
-	}
-
-	/**
 	 * Save filtered and mapped results a query to an external source to a static attribute.
+	 *
+	 * @param array $values Value to save.
 	 */
 	private static function saveValues( array $values ) {
 		foreach ( $values as $key => $value ) {
@@ -38,6 +28,8 @@ class EDParserFunctions {
 	/**
 	 * Unset self::$values if the current page changed during this script run.
 	 * Looks like it is relevant for maintenance scripts.
+	 *
+	 * @param string $page_name Page name.
 	 */
 	private static function clearValuesIfNecessary( $page_name ) {
 		// If we're handling multiple pages, reset self::$values
@@ -49,116 +41,111 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Implementation of the {{#get_web_data:}} parser function.
+	 * Wraps error messages in a span with the "error" class, for better
+	 * display, and so that it can be handled correctly by #iferror and
+	 * possibly others.
+	 *
+	 * @param array|string $messages An array of error messages.
+	 *
+	 * @return string Wrapped error message.
 	 */
-	public static function getWebData( Parser &$parser ) {
+	private static function formatErrorMessages( $messages ) {
+		if ( !is_array( $messages ) ) {
+			$messages = [ $messages ];
+		}
+		return '<span class="error">' . implode( "<br />", $messages ) . '</span>';
+	}
+
+	/**
+	 * Universal interface to EDConnector* classes.
+	 * Also includes all the boilerplate code that processes parameters,
+	 * saves external values, etc.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $name Parser function name.
+	 * @param array $args Parser function parameters ($parser not included).
+	 *
+	 * @return string|null Return null on success, an error message otherwise.
+	 */
+	private static function fetch( Parser &$parser, $name, array $args ) {
 		// Unset self::$values if the current page changed during this script run.
 		// Looks like it is relevant for maintenance scripts.
 		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
 
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
+		$connector = EDConnectorBase::getConnector( $name, self::parseParams( $args ) );
 
-		// Actually retrieve external values.
-		$external_values = EDUtils::doGetWebData( self::parseParams( $params ) );
-
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return $external_values;
+		if ( !$connector->errors() ) {
+			// The parameters seem to be right; try to actually get the external data.
+			if ( $connector->run() ) {
+				// The external data have been fetched without run-time errors.
+				// Results are valid and can be saved in self::$values.
+				self::saveValues( $connector->result() );
+				return;	// these functions are humble in their success.
+			}
 		}
 
-		// Results are valid and can be saved in self::$values.
-		self::saveValues( $external_values );
+		// There have been errors and a red error message ought to be returned.
+		return self::formatErrorMessages( $connector->errors() );
+	}
+
+	/**
+	 * Implementation of the {{#get_web_data:}} parser function.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
+	 */
+	public static function getWebData( Parser &$parser, ...$params ) {
+		return self::fetch( $parser, 'get_web_data', $params );
 	}
 
 	/**
 	 * Implementation of the {{#get_file_data:}} parser function.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
 	 */
-	public static function getFileData( Parser &$parser ) {
-		// Unset self::$values if the current page changed during this script run.
-		// Looks like it is relevant for maintenance scripts.
-		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
-
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-
-		// Actually retrieve external values.
-		$external_values = EDUtils::doGetFileData( self::parseParams( $params ) );
-
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return $external_values;
-		}
-
-		// Results are valid and can be saved in self::$values.
-		self::saveValues( $external_values );
+	public static function getFileData( Parser &$parser, ...$params ) {
+		return self::fetch( $parser, 'get_file_data', $params );
 	}
 
 	/**
-	 * Render the #get_soap_data parser function.
+	 * Implementation of the {{#get_soap_data:}} parser function.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
 	 */
-	public static function getSOAPData( Parser &$parser ) {
-		// Unset self::$values if the current page changed during this script run.
-		// Looks like it is relevant for maintenance scripts.
-		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
-
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-
-		// Actually retrieve external values.
-		$external_values = EDUtils::doGetSoapData( self::parseParams( $params ) );
-
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return $external_values;
-		}
-
-		// Results are valid and can be saved in self::$values.
-		self::saveValues( $external_values );
+	public static function getSoapData( Parser &$parser, ...$params ) {
+		return self::fetch( $parser, 'get_soap_data', $params );
 	}
 
 	/**
-	 * Render the #get_ldap_data parser function.
+	 * Implementation of the {{#get_ldap_data:}} parser function.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
 	 */
-	public static function getLDAPData( Parser &$parser ) {
-		// Unset self::$values if the current page changed during this script run.
-		// Looks like it is relevant for maintenance scripts.
-		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
-
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-
-		$external_values = EDUtils::doGetLDAPData( self::parseParams( $params ) );
-
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return $external_values;
-		}
-
-		// Results are valid ang can be saved in self::$values.
-		self::saveValues( $external_values );
+	public static function getLdapData( Parser &$parser, ...$params ) {
+		return self::fetch( $parser, 'get_ldap_data', $params );
 	}
 
 	/**
-	 * Render the #get_db_data parser function.
+	 * Implementation of the {{#get_db_data:}} parser function.
+	 *
+	 * @param Parser &$parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
 	 */
-	public static function getDBData( Parser &$parser ) {
-		// Unset self::$values if the current page changed during this script run.
-		// Looks like it is relevant for maintenance scripts.
-		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
-
-		$params = func_get_args();
-		array_shift( $params ); // we already know the $parser ...
-
-		$external_values = EDUtils::doGetDBData( self::parseParams( $params ) );
-
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return $external_values;
-		}
-
-		// Results are valid ang can be saved in self::$values.
-		self::saveValues( $external_values );
+	public static function getDBData( Parser &$parser, ...$params ) {
+		return self::fetch( $parser, 'get_db_data', $params );
 	}
 
 	/**
@@ -179,7 +166,9 @@ class EDParserFunctions {
 	public static function doExternalValue( Parser &$parser, $local_var = '' ) {
 		global $edgExternalValueVerbose;
 		if ( !array_key_exists( $local_var, self::$values ) ) {
-			return $edgExternalValueVerbose ? EDUtils::formatErrorMessage( "Error: no local variable \"$local_var\" was set." ) : '';
+			return $edgExternalValueVerbose
+				 ? self::formatErrorMessages( wfMessage( 'externaldata-no-local-variable', $local_var )->inContentLanguage()->text() )
+				 : '';
 		} elseif ( is_array( self::$values[$local_var] ) ) {
 			return isset( self::$values[$local_var][0] ) ? self::$values[$local_var][0] : null;
 		} else {
@@ -261,12 +250,12 @@ class EDParserFunctions {
 		if ( array_key_exists( 'template', $args ) ) {
 			$template = $args['template'];
 		} else {
-			return EDUtils::formatErrorMessage( "No template specified" );
+			return self::formatErrorMessages( wfMessage( 'externaldata-no-template' )->inContentLanguage()->text() );
 		}
 
 		if ( array_key_exists( 'data', $args ) ) {
 			// parse the 'data' arg into mappings
-			$mappings = EDUtils::paramToArray( $args['data'], false, false );
+			$mappings = self::paramToArray( $args['data'], false, false );
 		} else {
 			// or just use keys from edgValues
 			foreach ( self::$values as $local_variable => $values ) {

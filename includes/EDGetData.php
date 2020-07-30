@@ -10,7 +10,6 @@ use MediaWiki\MediaWikiServices;
  */
 
 class EDGetData extends SpecialPage {
-
 	/**
 	 * Constructor
 	 */

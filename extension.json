@@ -26,12 +26,27 @@
 	},
 	"AutoloadClasses": {
 		"ExternalDataHooks": "includes/ExternalDataHooks.php",
-		"EDUtils": "includes/EDUtils.php",
 		"EDHttpWithHeaders": "includes/EDHttpWithHeaders.php",
 		"EDParserFunctions": "includes/EDParserFunctions.php",
 		"EDGetData": "includes/EDGetData.php",
 		"EDJsonObject": "includes/EDJsonObject.php",
 		"EDArraySlice": "includes/EDArraySlice.php",
+		"EDParsesParams": "includes/EDParsesParams.php",
+		"EDEncodingConverter": "includes/EDEncodingConverter.php",
+		"EDConnectorBase": "includes/connectors/EDConnectorBase.php",
+		"EDConnectorHttp": "includes/connectors/EDConnectorHttp.php",
+		"EDConnectorPost": "includes/connectors/EDConnectorPost.php",
+		"EDConnectorGet": "includes/connectors/EDConnectorGet.php",
+		"EDConnectorWeb": "includes/connectors/EDConnectorWeb.php",
+		"EDConnectorSoap": "includes/connectors/EDConnectorSoap.php",
+		"EDConnectorLdap": "includes/connectors/EDConnectorLdap.php",
+		"EDConnectorPath": "includes/connectors/EDConnectorPath.php",
+		"EDConnectorFile": "includes/connectors/EDConnectorFile.php",
+		"EDConnectorDirectory": "includes/connectors/EDConnectorDirectory.php",
+		"EDConnectorDb": "includes/connectors/EDConnectorDb.php",
+		"EDConnectorRelational": "includes/connectors/EDConnectorRelational.php",
+		"EDConnectorSqlite": "includes/connectors/EDConnectorSqlite.php",
+		"EDConnectorMongodb": "includes/connectors/EDConnectorMongodb.php",
 		"EDParserBase": "includes/parsers/EDParserBase.php",
 		"EDParserText": "includes/parsers/EDParserText.php",
 		"EDParserRegex": "includes/parsers/EDParserRegex.php",
@@ -42,7 +57,8 @@
 		"EDParserJSON": "includes/parsers/EDParserJSON.php",
 		"EDParserJSONwithJSONPath": "includes/parsers/EDParserJSONwithJSONPath.php",
 		"EDParserCSV": "includes/parsers/EDParserCSV.php",
-		"EDParserGFF": "includes/parsers/EDParserGFF.php"
+		"EDParserGFF": "includes/parsers/EDParserGFF.php",
+		"EDParserException": "includes/parsers/EDParserException.php"
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "ExternalDataHooks::registerParser",
@@ -68,9 +84,31 @@
 		"DBTablePrefix": [],
 		"DirectoryPath": [],
 		"FilePath": [],
+		"LDAPServer": [],
+		"LDAPUser": [],
+		"LDAPPass": [],
+		"LDAPBaseDN": [],
 		"HTTPOptions": {
 			"timeout": "default"
 		},
+		"Secrets": {
+			"server" : [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix" ],
+			"db" : [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix" ],
+			"directory": [ "DirectoryPath" ],
+			"file": [ "FilePath" ],
+			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN"]
+		},
+		"Connectors": [
+			[{"__pf": "get_web_data", "post data": true}, "EDConnectorPost"],
+			[{"__pf": "get_web_data"}, "EDConnectorWeb"],
+			[{"__pf": "get_file_data", "directory": true}, "EDConnectorDirectory"],
+			[{"__pf": "get_file_data"}, "EDConnectorFile"],
+			[{"__pf": "get_soap_data"}, "EDConnectorSoap"],
+			[{"__pf": "get_ldap_data"}, "EDConnectorLdap"],
+			[{"__pf": "get_db_data", "DBServerType": "sqlite"}, "EDConnectorSqlite"],
+			[{"__pf": "get_db_data", "DBServerType": "mondodb"}, "EDConnectorMongodb"],
+			[{"__pf": "get_db_data"}, "EDConnectorRelational"]
+		],
 		"Parsers": [
 			[{"format": "text", "regex": true}, "EDParserRegex"],
 			[{"format": "text with regex"}, "EDParserRegex"],

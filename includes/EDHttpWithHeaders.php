@@ -1,11 +1,19 @@
 <?php
-
 use MediaWiki\Logger\LoggerFactory;
 
 class EDHttpWithHeaders extends Http {
 	/**
 	 * @see Http::request()
 	 * Only diffrence - $options variable an also have value 'headers', and would append to request before sending
+	 *
+	 * @param string $method HTTP reuest method.
+	 * @param string $url URL to fetch.
+	 * @param array $options HTTP options.
+	 * @param string $caller Calling function.
+	 *
+	 * @return array [ Fetched text, HTTP response headers, [ Errors ] ].
+	 *
+	 * @todo Also return error report.
 	 */
 	public static function request( $method, $url, $options = [], $caller = __METHOD__ ) {
 		wfDebug( "HTTP: $method: $url\n" );
@@ -31,17 +39,17 @@ class EDHttpWithHeaders extends Http {
 			$logger = LoggerFactory::getInstance( 'http' );
 			$logger->warning( 'Exception from ' . $caller . ' (' . $e->getMessage() . ')',
 				[ 'error' => $e->getMessage(), 'caller' => $caller, 'content' => $req->getContent() ] );
-			return [ false, null ];
+			return [ null, null, [ 'Exception: ' . $e->getMessage() ] ];
 		}
 
 		if ( $status->isOK() ) {
-			return [ $req->getContent(), $req->getResponseHeaders() ];
+			return [ $req->getContent(), $req->getResponseHeaders(), null ];
 		} else {
 			$errors = $status->getErrorsByType( 'error' );
 			$logger = LoggerFactory::getInstance( 'http' );
 			$logger->warning( Status::wrap( $status )->getWikiText( false, false, 'en' ),
 				[ 'error' => $errors, 'caller' => $caller, 'content' => $req->getContent() ] );
-			return [ false, null ];
+			return [ null, null, $errors ];
 		}
 	}
 
@@ -53,7 +61,7 @@ class EDHttpWithHeaders extends Http {
 	 * @param string $url
 	 * @param array $options
 	 * @param string $caller The method making this request, for profiling
-	 * @return string|bool false on error
+	 * @return array [ Fetched text, HTTP response headers, [ Errors ] ].
 	 */
 	public static function post( $url, $options = [], $caller = __METHOD__ ) {
 		return self::request( 'POST', $url, $options, $caller );
@@ -69,7 +77,7 @@ class EDHttpWithHeaders extends Http {
 	 * @param string $url
 	 * @param array $options
 	 * @param string $caller The method making this request, for profiling
-	 * @return string|bool false on error
+	 * @return array [ Fetched text, HTTP response headers, [ Errors ] ].
 	 */
 	public static function get( $url, $options = [], $caller = __METHOD__ ) {
 		$args = func_get_args();

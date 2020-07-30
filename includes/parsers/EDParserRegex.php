@@ -2,21 +2,19 @@
 /**
  * Class for text parser based on PERL-compatible regular expressions.
  *
- * @var string $regex The regular expression.
- *
  * @author Alexander Mashin
  */
 
 class EDParserRegex extends EDParserBase {
-
-	private $regex;	// the regular expression.
+	/** @var string $regex The regular expression. */
+	private $regex;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
-	 * @throws MWException.
+	 * @throws EDParserException
 	 *
 	 */
 	public function __construct( array $params ) {
@@ -39,7 +37,7 @@ class EDParserRegex extends EDParserBase {
 			$this->regex = $regex;
 		} else {
 			// A broken regular expression.
-			throw new MWException( wfMessage( 'externaldata-invalid-regex', $regex )->text() );
+			throw new EDParserException( 'externaldata-invalid-regex', $regex );
 		}
 		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
 			// MW >= 1.33
@@ -62,6 +60,6 @@ class EDParserRegex extends EDParserBase {
 		$matches = [];
 		// The regular expression has been validated in the constructor.
 		preg_match_all( $this->regex, $text, $matches, PREG_PATTERN_ORDER );
-		return $this->mapAndFilter( array_merge( $defaults, $matches ) );
+		return array_merge( $defaults, $matches );
 	}
 }

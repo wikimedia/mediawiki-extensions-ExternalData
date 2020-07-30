@@ -2,15 +2,12 @@
 /**
  * Class for XML parser extracting data using XPath notation.
  *
- * @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format.
- *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserXMLwithXPath extends EDParserBase {
-
-	// Whether external variables' names are case-sensitive for this format.
+	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
 	protected static $preserve_external_variables_case = true;
 
 	/**
@@ -33,16 +30,18 @@ class EDParserXMLwithXPath extends EDParserBase {
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
+	 * @throws EDParserException
+	 *
 	 */
 	public function __invoke( $text, $defaults = [] ) {
 		try {
 			$xml = new SimpleXMLElement( $text );
 		} catch ( Exception $e ) {
-			return wfMessage( 'externaldata-invalid-xml', $e->getMessage() )->text();
+			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
 		}
 		$values = parent::__invoke( $text, $defaults );
 
-		foreach ( $this->mappings as $local_var => $xpath ) {
+		foreach ( $this->external as $xpath ) {
 			// First, register any necessary XML namespaces, to
 			// avoid "Undefined namespace prefix" errors.
 			$matches = [];
@@ -72,7 +71,7 @@ class EDParserXMLwithXPath extends EDParserBase {
 				$values[$xpath] = $nodesArray;
 			}
 		}
-		return $this->mapAndFilter( $values );
+		return $values;
 	}
 
 	/**

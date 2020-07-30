@@ -2,20 +2,18 @@
 /**
  * Class for XML parser based on lowest level XML tags and attributes.
  *
- * @var array $XMLValues Stores XML values between calls.
- * @var string $currentXMLTag Stores current XML tag between calls.
- * @var string $currentValue Stores value of the current XML tag between calls.
- * @var string $ampersandReplacement A temporary replacement for ampersands, not likely to be met in a real XML.
- *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
 
 class EDParserXML extends EDParserBase {
-
+	/** @var array $XMLValues Stores XML values between calls. */
 	private static $XMLValues = [];
+	/** @var string $currentXMLTag Stores current XML tag between calls. */
 	private static $currentXMLTag = null;
+	/** @var string $currentValue Stores value of the current XML tag between calls. */
 	private static $currentValue = null;
+	/** @var string $ampersandReplacement A temporary replacement for ampersands, not likely to be met in a real XML. */
 	private static $ampersandReplacement = 'THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555';
 
 	/**
@@ -23,7 +21,7 @@ class EDParserXML extends EDParserBase {
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
-	 * @throws MWException.
+	 * @throws EDParserException.
 	 *
 	 */
 	public function __construct( array $params ) {
@@ -37,6 +35,8 @@ class EDParserXML extends EDParserBase {
 	 * @param ?array $defaults The intial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
+	 *
+	 * @throws EDParserException
 	 *
 	 */
 	public function __invoke( $text, $defaults = [] ) {
@@ -54,13 +54,13 @@ class EDParserXML extends EDParserBase {
 		xml_set_element_handler( $xml_parser, [ __CLASS__, 'startElement' ], [ __CLASS__, 'endElement' ] );
 		xml_set_character_data_handler( $xml_parser, [ __CLASS__, 'getContent' ] );
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
-			return wfMessage( 'externaldata-xml-error',
+			throw new EDParserException( 'externaldata-xml-error',
 				xml_error_string( xml_get_error_code( $xml_parser ) ),
 				xml_get_current_line_number( $xml_parser )
-			)->text();
+			);
 		}
 		xml_parser_free( $xml_parser );
-		return $this->mapAndFilter( self::$XMLValues );
+		return self::$XMLValues;
 	}
 
 	/**

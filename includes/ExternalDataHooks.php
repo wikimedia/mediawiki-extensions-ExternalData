@@ -41,5 +41,4 @@ class ExternalDataHooks {
 		$extraLibraries['mw.ext.externaldata'] = $class;
 		return true; // always return true, in order not to stop MW's hook processing!
 	}
-
 }

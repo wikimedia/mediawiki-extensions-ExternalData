@@ -1,66 +1,59 @@
 <?php
 /**
  * Class for exposing the parser functions for External Data to Lua.
+ * The functions are available via mw.ext.externalData Lua table.
+ *
+ * @author Alexander Mashin.
  */
 class EDScribunto extends Scribunto_LuaLibraryBase {
+	/** @var array $funcs A list of exported Lua functions mapping the ID ised by ExternalDataHooks::connector(). */
+	private static $funcs = [
+		'getWebData'	=> 'get_web_data',
+		'getFileData'	=> 'get_file_data',
+		'getSoapData'	=> 'get_soap_data',
+		'getLdapData'	=> 'get_ldap_data',
+		'getDbData'		=> 'get_db_data'
+	];
+
+	/**
+	 * A function that registeres the exported functions with Lua.
+	 */
 	public function register() {
-		$functions = [
-			'getWebData'	=> [ __CLASS__, 'getWebData' ],
-			'getFileData'	=> [ __CLASS__, 'getFileData' ],
-			'getSoapData'	=> [ __CLASS__, 'getSOAPData' ],
-			'getLdapData'	=> [ __CLASS__, 'getLDAPData' ],
-			'getDbData'		=> [ __CLASS__, 'getDBData' ]
-		];
+		$functions = [];
+		foreach ( self::$funcs as $lua => $parser ) {
+			$functions[$lua] = function ( array $arguments ) use( $parser ) {
+				return self::fetch( $parser, $arguments );
+			};
+		}
 		$this->getEngine()->registerInterface( __DIR__ . '/mw.ext.externaldata.lua', $functions, [] );
 	}
 
 	/**
 	 * Common code.
+	 *
+	 * @param string $func The name of the corresponding parser function.
+	 * @param array $arguments Arguments coming from Lua code.
+	 *
+	 * @return array [ 'values' => a row-based array of values on success or null on failure, 'errors' => null on success or an array of error messages on failure ].
 	 */
-	private static function get( callable $doer, array $arguments ) {
-		// Actually retrieve external values.
-		$external_values = call_user_func( $doer, $arguments );
-		if ( !is_array( $external_values ) ) {
-			// An error message was returned.
-			return [ $external_values ];
+	private static function fetch( $func, array $arguments ) {
+		$connector = EDConnectorBase::getConnector( $func, $arguments );
+
+		$values = null;
+		$errors = $connector->errors();
+
+		if ( !$errors ) {
+			// The parameters seem to be right; try to actually get the external data.
+			if ( $connector->run() ) {
+				// The external data have been fetched without run-time errors.
+				// Results are valid and can be returned (flipped to row-based).
+				$values = self::convertArrayToLuaTable( self::flip( $connector->result() ) );
+			} else {
+				// Run-time errors:
+				$errors = $connector->errors();
+			}
 		}
-		// Always flip.
-		return [ self::convertArrayToLuaTable( self::flip( $external_values ) ) ];
-	}
-
-	/**
-	 * mw.ext.externaldata.getWebData.
-	 */
-	public static function getWebData( array $arguments ) {
-		return self::get( 'EDUtils::doGetWebData', $arguments );
-	}
-
-	/**
-	 * mw.ext.externaldata.getFileData.
-	 */
-	public static function getFileData( array $arguments ) {
-		return self::get( 'EDUtils::doGetFileData', $arguments );
-	}
-
-	/**
-	 * mw.ext.externaldata.getSoapData.
-	 */
-	public static function getSOAPData( array $arguments ) {
-		return self::get( 'EDUtils::doGetSoapData', $arguments );
-	}
-
-	/**
-	 * mw.ext.externaldata.getLdapData.
-	 */
-	public static function getLDAPData( array $arguments ) {
-		return self::get( 'EDUtils::doGetLDAPData', $arguments );
-	}
-
-	/**
-	 * mw.ext.externaldata.getDbData.
-	 */
-	public static function getDBData( array $arguments ) {
-		return self::get( 'EDUtils::doGetDBData', $arguments );
+		return [ [ 'values' => $values, 'errors' => self::convertArrayToLuaTable( $errors ) ] ];
 	}
 
 	/**
