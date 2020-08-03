@@ -9,9 +9,11 @@
 	"externaldata-no-param-specified": "Грешка: Го немате укажано параметарот „$1“.",
 	"externaldata-web-invalid-format": "Неважечки формат: „$1“",
 	"externaldata-ldap-unable-to-connect": "Не можам да се поврзам со  $1",
+	"externaldata-invalid-xml": "Исклучок при расчленувањето на XML: $1.",
 	"externaldata-xml-error": "XML грешка: $1 во ред $2",
 	"externaldata-invalid-json": "Грешка: Неважечки JSON",
-	"externaldata-jsonpath-error": "Грешка: Неважечки JSONPath-запис.",
+	"externaldata-jsonpath-error": "Грешка: Неважечки JSONPath-запис $1.",
+	"externaldata-invalid-regex": "Грешка: $1 не претставува важечки регуларен израз складен со Perl.",
 	"externaldata-db-incomplete-information": "Грешка: Нецелосни информации за овој опслужувачки ид. бр.",
 	"externaldata-db-could-not-get-url": "Не можев да ја добијам URL-адресата $1 по $2 {{PLURAL:$1|обид|обиди}}.",
 	"externaldata-db-unknown-type": "Грешка: Непознат тип на база на податоци.",
@@ -24,7 +26,7 @@
 	"externaldata-url-unknown-error": "Непозната грешка при добивањето на податоците од URL-то $1.",
 	"externaldata-parsing-html-failed": "Не можав да го расчленам HTML.",
 	"externaldata-caught-exception-parsing-html": "Добив исклучок при расчленувањето на HTML. Пораката гласи &quot;$1&quot;.",
-	"externaldata-error-converting-css-to-xpath": "Добив грешка при претворањето на CSS-изборникот во XPath:\n$1",
+	"externaldata-error-converting-css-to-xpath": "Добив грешка при претворањето на CSS-изборникот $1 во XPath:\n$2",
 	"externaldata-xpath-invalid": "Пребарувањето на XPath ($1) не успеа: $2",
 	"externaldata-missing-library": "Недостасува библиотеката $1, потребна за употреба на расчленувачката функција „$2“ или Lua-функцијата „$3“."
 }
