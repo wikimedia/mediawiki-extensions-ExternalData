@@ -39,6 +39,7 @@ class EDParserRegex extends EDParserBase {
 			// A broken regular expression.
 			throw new EDParserException( 'externaldata-invalid-regex', $regex );
 		}
+		// Restore warnings.
 		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
 			// MW >= 1.33
 			\Wikimedia\AtEase\AtEase::restoreWarnings();

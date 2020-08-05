@@ -52,6 +52,13 @@ class EDConnectorSoap extends EDConnectorGet {
 		// We do not want to repeat error messages self::$tries times.
 		static $log_errors_client = true;
 		static $log_errors_request = true;
+		// Suppress warnings.
+		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'suppressWarnings' ) ) {
+			// MW >= 1.33
+			\Wikimedia\AtEase\AtEase::suppressWarnings();
+		} else {
+			\MediaWiki\suppressWarnings();
+		}
 		try {
 			$client = new SoapClient( $this->real_url, [ 'trace' => true ] );
 		} catch ( Exception $e ) {
@@ -60,6 +67,13 @@ class EDConnectorSoap extends EDConnectorGet {
 			}
 			$log_errors_client = false;	// once is enough.
 			return null;
+		}
+		// Restore warnings.
+		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
+			// MW >= 1.33
+			\Wikimedia\AtEase\AtEase::restoreWarnings();
+		} else {
+			\MediaWiki\restoreWarnings();
 		}
 		$request = $this->request_name;
 		try {

@@ -1,6 +1,6 @@
 {
 	"name": "External Data",
-	"version": "2.2-alpha",
+	"version": "2.2-beta",
 	"author": [
 		"Yaron Koren",
 		"..."
@@ -12,6 +12,7 @@
 	"requires": {
 		"MediaWiki": ">= 1.28.0"
 	},
+	"load_composer_autoloader": true,
 	"SpecialPages": {
 		"GetData": "EDGetData"
 	},
@@ -47,6 +48,8 @@
 		"EDConnectorRelational": "includes/connectors/EDConnectorRelational.php",
 		"EDConnectorSqlite": "includes/connectors/EDConnectorSqlite.php",
 		"EDConnectorMongodb": "includes/connectors/EDConnectorMongodb.php",
+		"EDConnectorMongodb5": "includes/connectors/EDConnectorMongodb5.php",
+		"EDConnectorMongodb7": "includes/connectors/EDConnectorMongodb7.php",
 		"EDParserBase": "includes/parsers/EDParserBase.php",
 		"EDParserText": "includes/parsers/EDParserText.php",
 		"EDParserRegex": "includes/parsers/EDParserRegex.php",
@@ -106,7 +109,8 @@
 			[{"__pf": "get_soap_data"}, "EDConnectorSoap"],
 			[{"__pf": "get_ldap_data"}, "EDConnectorLdap"],
 			[{"__pf": "get_db_data", "DBServerType": "sqlite"}, "EDConnectorSqlite"],
-			[{"__pf": "get_db_data", "DBServerType": "mondodb"}, "EDConnectorMongodb"],
+			[{"__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoDB\\Client"}, "EDConnectorMongodb7"],
+			[{"__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoClient"}, "EDConnectorMongodb5"],
 			[{"__pf": "get_db_data"}, "EDConnectorRelational"]
 		],
 		"Parsers": [

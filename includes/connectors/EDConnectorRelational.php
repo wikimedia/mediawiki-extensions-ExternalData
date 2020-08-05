@@ -94,7 +94,7 @@ class EDConnectorRelational extends EDConnectorDb {
 			$this->error( 'externaldata-db-incomplete-information', $this->db_id, 'edgDBServer' );
 		}
 		$this->connection['flags'] = isset( $params['DBFlags'] ) ? $params['DBFlags'] : DBO_DEFAULT;
-		$this->connection['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : null;
+		$this->connection['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : '';
 	}
 
 	/**

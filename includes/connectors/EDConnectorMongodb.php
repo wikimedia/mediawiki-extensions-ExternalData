@@ -1,16 +1,17 @@
 <?php
 /**
- * Class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
+ * Abstract class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
  * for MongoDB database type.
  *
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-class EDConnectorMongodb extends EDConnectorDb {
-	/** @var string $mongo_client_class The name of relevant class for MongoDB client. */
-	private $mongo_client_class;
+abstract class EDConnectorMongodb extends EDConnectorDb {
+	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
+	protected static $preserve_external_variables_case = true;
+
 	/** @var string $connect_string MondoDB connection string. */
-	private $connect_string;
+	protected $connect_string;
 	/** @var array $aggregate MongoDB aggregate. */
 	private $aggregate = [];
 	/** @var array $find MongoDB find query. */
@@ -25,14 +26,8 @@ class EDConnectorMongodb extends EDConnectorDb {
 	 *
 	 * @param array $args An array of arguments for parser/Lua function.
 	 */
-	protected function __construct( array $args ) {
+	public function __construct( array $args ) {
 		parent::__construct( $args );
-
-		// TODO: check if MongoDB is at all available.
-		// PHP 7: MongoDB.
-		// PHP 5: mongo.
-		$mongo_regex_class = class_exists( 'MongoDB\BSON\Regex' ) ? 'MongoDB\BSON\Regex' : 'MongoRegex';
-		$this->mongo_client_class = class_exists( 'MongoDB\Driver\Manager' ) ? 'MongoDB\Driver\Manager' : 'MongoClient';
 
 		// Was an aggregation pipeline command issued?
 		if ( isset( $args['aggregate'] ) ) {
@@ -42,6 +37,9 @@ class EDConnectorMongodb extends EDConnectorDb {
 			// brackets in the 'aggregate' JSON so as not to trip up the
 			// MW parser.
 			$this->aggregate = json_decode( $args['aggregate'], true );
+			if ( !$this->aggregate ) {
+				$this->error( 'externaldata-invalid-json' );
+			}
 		} elseif ( isset( $args['find query'] ) ) {
 			// Otherwise, was a direct MongoDB "find" query JSON string provided?
 			// If so, use that. As with 'aggregate' JSON, use spaces
@@ -53,10 +51,14 @@ class EDConnectorMongodb extends EDConnectorDb {
 			// is only appropriate for simple find queries, that
 			// use the operators OR, AND, >=, >, <=, < and LIKE
 			// - and NO NUMERIC LITERALS.
-			$where = str_ireplace( ' and ', ' AND ', $this->conditions );
-			$where = str_ireplace( ' like ', ' LIKE ', $where );
-			$whereElements = explode( ' AND ', $where );
-			foreach ( $whereElements as $whereElement ) {
+			if ( is_array( $this->conditions ) ) {
+				$whereElements = $this->conditions;
+			} else {
+				$where = str_ireplace( ' and ', ' AND ', $this->conditions );
+				$whereElements = explode( ' AND ', $where );
+			}
+			foreach ( $whereElements as $key => $whereElement ) {
+				$whereElement = str_ireplace( ' like ', ' LIKE ', $whereElement );
 				if ( strpos( $whereElement, '>=' ) ) {
 					list( $fieldName, $value ) = explode( '>=', $whereElement );
 					$this->find[trim( $fieldName )] = [ '$gte' => trim( $value ) ];
@@ -72,10 +74,13 @@ class EDConnectorMongodb extends EDConnectorDb {
 				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
 					list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
 					$value = trim( $value );
-					$this->find[trim( $fieldName )] = new $mongo_regex_class( "/$value/i" );
-				} else {
+					$regex_class = static::$regex_class; // late binding.
+					$this->find[trim( $fieldName )] = new $regex_class( "/$value/i" );
+				} elseif ( strpos( $whereElement, '=' ) ) {
 					list( $fieldName, $value ) = explode( '=', $whereElement );
 					$this->find[trim( $fieldName )] = trim( $value );
+				} elseif ( is_string( $key ) ) {
+					$this->find[$key] = $whereElement;
 				}
 			}
 		}
@@ -84,23 +89,24 @@ class EDConnectorMongodb extends EDConnectorDb {
 		if ( $this->sql_options['ORDER BY'] ) {
 			$sortElements = explode( ',', $this->sql_options['ORDER BY'] );
 			foreach ( $sortElements as $sortElement ) {
-				$parts = explode( ' ', $sortElement );
-				$fieldName = $parts[0];
-				$orderingNum = 1;
-				if ( count( $parts ) > 1 ) {
-					if ( strtolower( $parts[1] ) === 'desc' ) {
+				if ( strpos( $sortElement, ' ' ) !== false ) {
+					list( $fieldName, $order ) = explode( ' ', $sortElement, 2 );
+					$orderingNum = 1;
+					if ( $order && strtolower( trim( $order ) ) === 'desc' ) {
 						$orderingNum = -1;
 					}
+				} else {
+					$fieldName = $sortElement;
 				}
-				$this->sort[$fieldName] = $orderingNum;
+				$this->sort[trim( $fieldName )] = $orderingNum;
 			}
 		}
 
-		if ( count( $this->aggregate ) > 0 ) {
-			if ( $this->sql_options['ORDER BY'] ) {
+		if ( $this->aggregate && count( $this->aggregate ) > 0 ) {
+			if ( isset( $this->sql_options['ORDER BY'] ) ) {
 				$this->aggregate[] = [ '$sort' => $this->sort ];
 			}
-			if ( $this->sql_options['LIMIT'] ) {
+			if ( isset( $this->sql_options['LIMIT'] ) ) {
 				$this->aggregate[] = [ '$limit' => intval( $this->sql_options['LIMIT'] ) ];
 			}
 		}
@@ -122,6 +128,45 @@ class EDConnectorMongodb extends EDConnectorDb {
 	}
 
 	/**
+	 * Create a MongoDB connection.
+	 *
+	 * @return MongoClient|MongoDB\Client|null
+	 */
+	abstract protected function connect();
+
+	/**
+	 * Get the MongoDB collection $name provided the connection is established.
+	 *
+	 * @param string $collection The collection name.
+	 *
+	 * @return MongoCollection|MongoDB\Collection|null MongoDB collection.
+	 */
+	abstract protected function getCollection( $collection );
+
+	/**
+	 * Run a query against MongoDB $collection.
+	 *
+	 * @param MongoCollection|MongoDB\Collection $collection
+	 * @param array $filter
+	 * @param array $columns
+	 * @param array $sort
+	 * @param int $limit
+	 *
+	 * @return array MongoCursor|MongoDB\Driver\Cursor
+	 */
+	abstract protected function find( $collection, array $filter, array $columns, array $sort, $limit );
+
+	/**
+	 * Run a aggregation query against MongoDB $collection.
+	 *
+	 * @param MongoCollection|MongoDB\Collection $collection
+	 * @param array $aggregate
+	 *
+	 * @return array
+	 */
+	abstract protected function aggregate( $collection, array $aggregate );
+
+	/**
 	 * Actually connect to the external data source.
 	 * It is presumed that there are no errors in parameters and wiki settings.
 	 * Set $this->values and $this->errors.
@@ -136,44 +181,25 @@ class EDConnectorMongodb extends EDConnectorDb {
 			return true;
 		}
 
-		// Use try/catch to suppress error messages, which would show
-		// the MongoDB connect string, which may have sensitive
-		// information.
-		$class = $this->mongo_client_class;
-		try {
-			$m = new $class( $this->connect_string );
-		} catch ( Exception $e ) {
-			$this->error( 'externaldata-db-could-not-connect' );
+		$collection = $this->getCollection( $this->from ); // late binding.
+		if ( !$collection ) {
 			return false;
 		}
-
-		$db = $m->selectDB( $this->connection['dbname'] );
-
-		// Check if collection exists.
-		if ( !in_array( $this->from, $db->getCollectionNames(), true ) ) {
-			$this->error( 'externaldata-db-unknown-collection', $this->db_id . ':' . $this->from ); // Not $this->connection['dbname']!
-			return false;
-		}
-
-		$collection = new MongoCollection( $db, $this->from );
 
 		// Get the data!
 		if ( count( $this->aggregate ) > 0 ) {
-			$aggregateResult = $collection->aggregate( $this->aggregate );
-			if ( !$aggregateResult['ok'] ) {
-				$this->error( 'externaldata-db-aggregation-failed', $aggregateResult['errmsg'] );
-				return false;
-			}
-			$resultsCursor = $aggregateResult['result'];
+			$results = $this->aggregate( $collection, $this->aggregate ); // late binding.
 		} else {
-			$resultsCursor = $collection->find( $this->find, $this->columns )->sort( $this->sort )->limit( $this->sql_options['LIMIT'] );
+			$results = $this->find( $collection, $this->find, $this->columns, $this->sort, $this->sql_options['LIMIT'] ); // late binding.
 		}
 
 		// Arrange values returned by MongoDB in a column-based array.
-		$this->values = $this->arrange( $resultsCursor );
+		$this->values = $this->arrange( $results );
 
-		// Cache, is so configured.
-		$this->cache( $this->values );
+		// Cache, if so configured.
+		if ( count( $this->values ) > 0 ) {
+			$this->cache( $this->values );
+		}
 
 		return true;
 	}
@@ -194,11 +220,14 @@ class EDConnectorMongodb extends EDConnectorDb {
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
 					$values[$column][] = self::getValueFromJSONArray( $doc, $column );
-				} elseif ( isset( $doc[$column] ) && is_array( $doc[$column] ) ) {
+				} elseif ( isset( $doc[$column] )
+						&& ( ( is_array( $doc[$column] )
+							|| is_a( $doc[$column], 'MongoDB\Model\BSONArray' )
+							|| is_a( $doc[$column], 'MongoDB\Model\BSONDocument' ) ) ) ) {
 					// If MongoDB returns an array for a column,
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
-					if ( $column == 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
+					if ( $column === 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
 						// Check if it's GeoJSON geometry.
 						// http://www.geojson.org/geojson-spec.html#geometry-objects
 						// If so, return it in a format that
@@ -216,7 +245,7 @@ class EDConnectorMongodb extends EDConnectorDb {
 					}
 				} else {
 					// It's a simple literal.
-					$values[$column][] = ( isset( $doc[$column] ) ? $doc[$column] : null );
+					$values[$column][] = ( isset( $doc[$column] ) ? (string)$doc[$column] : null );
 				}
 			}
 		}

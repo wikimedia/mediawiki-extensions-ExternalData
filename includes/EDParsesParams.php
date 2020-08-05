@@ -40,16 +40,17 @@ trait EDParsesParams {
 	/**
 	 * Make choice of needed data based on an array of parameters and array of patterns to match.
 	 *
-	 * @param array $params A named array of parameters passed from parser or Lua function.
+	 * @param array $args A named array of parameters passed from parser or Lua function.
 	 * @param array $patterns An array of patterns that $params has to match.
 	 *
 	 * @return string|null ID of matched pattern.
 	 *
 	 * @throws EDParserException
 	 */
-	protected static function getMatch( array $params, array $patterns ) {
-		// Add secrets to user-supplied praramaters:
-		$supplemented_params = self::supplementParams( $params );
+	protected static function getMatch( array $args, array $patterns ) {
+		// Bring keys to lowercase:
+		$args = self::paramToArray( $args, true, false );
+		$supplemented_params = self::supplementParams( $args );
 		foreach ( $patterns as list( $pattern, $match ) ) {
 			if ( self::paramsFit( $supplemented_params, $pattern ) ) {
 				return $match;
@@ -110,9 +111,11 @@ END;
 			$keyValuePairs = preg_split( $pattern, $arg );
 			$splitArray = [];
 			foreach ( $keyValuePairs as $keyValuePair ) {
-				$keyAndValue = explode( '=', $keyValuePair, 2 );
-				if ( count( $keyAndValue ) === 2 ) {
-					$splitArray[trim( $keyAndValue[0] )] = trim( $keyAndValue[1] );
+				if ( strpos( $keyValuePair, '=' ) !== false ) {
+					list( $key, $value ) = explode( '=', $keyValuePair, 2 );
+					$splitArray[trim( $key )] = trim( $value );
+				} else {
+					$splitArray[trim( $keyValuePair )] = null;
 				}
 			}
 		} else {
@@ -122,7 +125,13 @@ END;
 		// Set the letter case as required.
 		$caseConvertedArray = [];
 		foreach ( $splitArray as $key => $value ) {
-			$caseConvertedArray[$lowercaseKeys ? strtolower( $key ) : $key] = $lowercaseValues ? strtolower( $value ) : $value;
+			$new_key = trim( $lowercaseKeys ? strtolower( $key ) : $key );
+			if ( is_string( $value ) ) {
+				$new_value = trim( $lowercaseValues ? strtolower( $value ) : $value );
+			} else {
+				$new_value = $value;
+			}
+			$caseConvertedArray[$new_key] = $new_value;
 		}
 		return $caseConvertedArray;
 	}

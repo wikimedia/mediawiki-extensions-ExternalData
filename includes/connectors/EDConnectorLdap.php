@@ -35,7 +35,7 @@ class EDConnectorLdap extends EDConnectorBase {
 
 		// Parameters specific for {{#get_ldap_data:}} and mw.ext.externalData.getLdapData.
 		if ( !function_exists( 'ldap_connect' ) ) {
-			$this->error( 'externaldata-missing-library', 'LDAP', '{{#get_ldap_data:}}', 'mw.ext.externalData.getLdapData' );
+			$this->error( 'externaldata-missing-library', 'php-ldap', '{{#get_ldap_data:}}', 'mw.ext.externalData.getLdapData' );
 		}
 		if ( isset( $args['filter'] ) ) {
 			$this->filter = $args['filter'];

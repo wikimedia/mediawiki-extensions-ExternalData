@@ -21,5 +21,9 @@
 			"minus-x fix .",
 			"phpcbf"
 		]
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"prepend-autoloader": false
 	}
 }

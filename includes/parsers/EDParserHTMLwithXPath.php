@@ -53,9 +53,11 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 				throw EDParserException( 'externaldata-parsing-html-failed' );
 			}
 			// Report errors.
+			/*
 			foreach ( libxml_get_errors() as $error ) {
 				wfDebug( "HTML parsing error {$error->code} in line {$error->line}, column {$error->column}: {$error->message}" );
 			}
+			*/
 			libxml_clear_errors();
 			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		} catch ( Exception $e ) {

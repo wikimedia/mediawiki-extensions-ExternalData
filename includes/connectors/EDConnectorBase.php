@@ -29,34 +29,34 @@ abstract class EDConnectorBase {
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
 	 */
 	protected function __construct( array &$args ) {
+		// Bring keys to lowercase:
+		$args = self::paramToArray( $args, true, false );
 		// Add secrets from wiki settings:
 		$args = self::supplementParams( $args );
-		// Bring keys to lowercase:
-		$params = self::paramToArray( $args, true, false );
 
 		// Text parser, if needed.
 		if ( static::$needs_parser ) {	// late binding.
 			// Encoding override supplied by wiki user may also be needed.
-			$this->encoding = isset( $params['encoding'] ) && $params['encoding'] ? $params['encoding'] : null;
+			$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
 			try {
-				$this->parser = EDParserBase::getParser( $params );
+				$this->parser = EDParserBase::getParser( $args );
 			} catch ( EDParserException $e ) {
 				$this->error( $e->code(), $e->params() );
 			}
 		}
 
 		// Data mappings. May be handled by the parser or by self.
-		if ( array_key_exists( 'data', $params ) ) {
+		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
 			$lower = !( $this->parser ? $this->parser : $this )->preservesCase();	// late binding in both.
-			$this->mappings = self::paramToArray( $params['data'], false, $lower );
+			$this->mappings = self::paramToArray( $args['data'], false, $lower );
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'data' );
 		}
 
 		// Filters.
-		$this->filters = array_key_exists( 'filters', $params ) && $params['filters']
-					   ? self::paramToArray( $params['filters'], true, false )
+		$this->filters = array_key_exists( 'filters', $args ) && $args['filters']
+					   ? self::paramToArray( $args['filters'], true, false )
 					   : [];
 	}
 
@@ -82,17 +82,18 @@ abstract class EDConnectorBase {
 	 * A factory method that chooses and instantiates the proper EDConnector* class.
 	 *
 	 * @param string $name Parser function name.
-	 * @param array $params Its parameters.
+	 * @param array $args Its parameters.
 	 *
 	 * @return EDConnectorBase An EDConnector* object.
 	 */
-	public static function getConnector( $name, array $params ) {
-		$params['__pf'] = $name;
+	public static function getConnector( $name, array $args ) {
+		$args['__pf'] = $name;
+		$args['__mongo'] = class_exists( 'MongoDB\Client' ) ? 'MongoDB\Client'
+					   : ( class_exists( 'MongoClient' ) ? 'MongoClient' : null );
 		global $edgConnectors;
-		$class = self::getMatch( $params, $edgConnectors );
-
+		$class = self::getMatch( $args, $edgConnectors );
 		// Instantiate the connector. If $class is empty, either this extension or $edgConnectors is broken.
-		return new $class( $params );
+		return new $class( $args );
 	}
 
 	/**
@@ -124,7 +125,7 @@ abstract class EDConnectorBase {
 	private function filteredAndMappedValues() {
 		$external_values = $this->values;
 		if ( !$external_values ) {
-			return null;
+			return [];
 		}
 		foreach ( $this->filters as $filter_var => $filter_value ) {
 			// Find the entry of $external_values that matches
@@ -150,7 +151,7 @@ abstract class EDConnectorBase {
 					// keep the results array blank and
 					// return
 					if ( $external_values[$filter_var] != $filter_value ) {
-						return;
+						return [];
 					}
 				}
 			}
@@ -184,7 +185,7 @@ abstract class EDConnectorBase {
 		if ( !$this->errors ) {
 			$this->errors = [];
 		}
-		if ( is_array( $params[0] ) ) {
+		if ( isset( $params[0] ) && is_array( $params[0] ) ) {
 			// Overwrapped $params.
 			$params = $params[0];
 		}

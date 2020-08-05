@@ -60,10 +60,17 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		$this->columns = array_values( $this->mappings );
 		$this->conditions = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
 		$this->sql_options = [
-			'LIMIT'		=> ( array_key_exists( 'limit', $args ) ) ? $args['limit'] : null,
 			'ORDER BY'	=> ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null,
-			'GROUP BY'	=> ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null
+			'GROUP BY'	=> ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null,
+			'HAVING'	=> ( array_key_exists( 'having', $args ) ) ? $args['having'] : null
 		];
+		if ( isset( $args['limit'] ) ) {
+			if ( is_numeric( $args['limit'] ) ) {
+				$this->sql_options['LIMIT'] = intval( $args['limit'] );
+			} else {
+				$this->error( 'externaldata-param-type-error', 'limit', 'integer' );
+			}
+		}
 	}
 
 	/**
