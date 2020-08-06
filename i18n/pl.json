@@ -29,6 +29,7 @@
 	"externaldata-format-unavailable": "Brakuje biblioteki $1 wymaganej do użycia formatu „$2” bez opcji „$3”.",
 	"externaldata-post-failed": "Żądanie POST do $1 zakończyło się niepowodzeniem.",
 	"externaldata-url-unknown-error": "Podczas pobierania danych z adresu URL $1 wystąpił błąd.",
+	"externaldata-url-not-allowed": "Adres URL $1 nie jest dozwolony na tej wiki.",
 	"externaldata-parsing-html-failed": "Nie udało się sparsować kodu HTML.",
 	"externaldata-caught-exception-parsing-html": "Podczas parsowania kodu HTML wystąpił błąd. Komunikat błędu: „$1”.",
 	"externaldata-error-converting-css-to-xpath": "Podczas konwersji selektora CSS $1 na XPath wystąpił błąd:\n$2",
