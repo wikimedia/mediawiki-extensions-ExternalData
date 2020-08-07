@@ -4,6 +4,7 @@
 			"Centerlink",
 			"Crt",
 			"Nedergard",
+			"Pyscowicz",
 			"Silvonen",
 			"Str4nd",
 			"Valtlait"
@@ -16,9 +17,9 @@
 	"externaldata-xml-error": "XML-virhe: $1 rivillä $2",
 	"externaldata-db-incomplete-information": "Virhe: Vaillinaiset tiedot tälle palvelintunnukselle.",
 	"externaldata-db-could-not-get-url": "Ei voitu hakea verkko-osoitetta $1 {{PLURAL:$1|yrityksen|yrityksen}} jälkeen.",
-	"externaldata-db-unknown-type": "Virhe: Tuntematon tietokantatyyppi.",
+	"externaldata-db-unknown-type": "Virhe: Tuntematon tietokantatyyppi $1.",
 	"externaldata-db-could-not-connect": "Virhe: Ei yhteyttä tietokantaan.",
 	"externaldata-db-unknown-collection": "Virhe: Tuntematon MongoDB-kokoelma.",
 	"externaldata-db-no-return-values": "Virhe: Paluuarvoja ei ole annettu.",
-	"externaldata-db-invalid-query": "Virheellinen kysely."
+	"externaldata-db-invalid-query": "Kysely $1 on virheellinen."
 }
