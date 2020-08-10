@@ -17,9 +17,11 @@
 	"externaldata-invalid-json": "Грешка: Неважећи JSON.",
 	"externaldata-db-incomplete-information": "Грешка: Непотпуни подаци за овај ID сервера.",
 	"externaldata-db-could-not-get-url": "Преузимање адресе после $1 {{PLURAL:$1|покушаја}} није успело.",
-	"externaldata-db-unknown-type": "Грешка: Непозната врста базе података.",
+	"externaldata-db-unknown-type": "Грешка: Непознат тип базе података $1.",
 	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело.",
 	"externaldata-db-unknown-collection": "Грешка: Непозната MongoDB колекција.",
 	"externaldata-db-no-return-values": "Грешка: Повратне вредности нису одређене.",
-	"externaldata-db-invalid-query": "Неисправан упит."
+	"externaldata-db-invalid-query": "Упит $1 није важећи.",
+	"externaldata-undefined-file": "Датотека $1 није дефинисана.",
+	"externaldata-no-template": "Грешка: Није наведен шаблон (параметар: <code>template</code>)."
 }

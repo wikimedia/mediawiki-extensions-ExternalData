@@ -6,6 +6,7 @@
 			"Lokal Profil",
 			"Najami",
 			"Per",
+			"Sabelöga",
 			"Tobulos1",
 			"WikiPhoenix"
 		]
@@ -23,5 +24,8 @@
 	"externaldata-db-could-not-connect": "Fel: Kunde inte koppla till databasen.",
 	"externaldata-db-unknown-collection": "Fel: Okänd MongoDB samling.",
 	"externaldata-db-no-return-values": "Fel: Inga returvärden specificerade.",
-	"externaldata-db-invalid-query": "Ogiltig fråga."
+	"externaldata-db-invalid-query": "Frågan $1 är ogiltig.",
+	"externaldata-url-not-allowed": "URL:en $1 tillåts inte på den här wikin.",
+	"externaldata-undefined-file": "Filen $1 har inte definierats.",
+	"externaldata-missing-file": "Filen $1 saknas."
 }

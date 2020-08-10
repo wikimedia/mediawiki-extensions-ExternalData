@@ -13,9 +13,12 @@
 	"externaldata-invalid-json": "Feeler:JSON net valabel.",
 	"externaldata-db-incomplete-information": "Feeler: Informatioun fir dës Server ID net komplett.",
 	"externaldata-db-could-not-get-url": "D'URL konnt no {{PLURAL:$1|enger Kéier|$1 Versich}} net opgemaach ginn.",
-	"externaldata-db-unknown-type": "Feeler: Onbekannten Datebank-Typ.",
+	"externaldata-db-unknown-type": "Feeler: Onbekannten Datebank-Typ $1.",
 	"externaldata-db-could-not-connect": "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
-	"externaldata-db-unknown-collection": "Feeler:Onbekannte MongoDB Sammlung.",
+	"externaldata-db-unknown-collection": "Feeler:Onbekannte MongoDB Sammlung $1.",
 	"externaldata-db-no-return-values": "Feeler: Kee Retour-Wäert festgeluecht.",
-	"externaldata-db-invalid-query": "Net valabel Ufro."
+	"externaldata-db-invalid-query": "D'Ufro $1 ass net valabel.",
+	"externaldata-undefined-file": "De Fichier $1 ass net definéiert.",
+	"externaldata-missing-file": "De Fichier $1 feelt.",
+	"externaldata-no-template": "Feeler: keng Schabloun spezifizéiert,"
 }

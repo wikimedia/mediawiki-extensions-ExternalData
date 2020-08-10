@@ -6,5 +6,5 @@
 		]
 	},
 	"externaldata-invalid-json": "Fejl: Ugyldigt JSON.",
-	"externaldata-db-invalid-query": "Ugyldig forespørgsel."
+	"externaldata-db-invalid-query": "Forespørgslen $1 er ugyldig."
 }
