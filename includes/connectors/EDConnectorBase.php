@@ -11,6 +11,9 @@ abstract class EDConnectorBase {
 	/** @var array|null $errors An array of errors. */
 	private $errors = null;
 
+	/** @var bool $suppress_error Whether error messages are to be suppressed in wikitext. */
+	private $suppress_error = false;
+
 	/** @var bool $need_parser True, if the connector needs one of EDParser* objects. */
 	protected static $needs_parser = false;
 	/** @var EDParserBase $parser A Parser. */
@@ -58,6 +61,11 @@ abstract class EDConnectorBase {
 		$this->filters = array_key_exists( 'filters', $args ) && $args['filters']
 					   ? self::paramToArray( $args['filters'], true, false )
 					   : [];
+
+		// Whether to suppress error messages.
+		if ( array_key_exists( 'suppress error', $args ) ) {
+			$this->suppress_error = true;
+		}
 	}
 
 	/**
@@ -199,5 +207,14 @@ abstract class EDConnectorBase {
 	 */
 	public function errors() {
 		return $this->errors;
+	}
+
+	/**
+	 * Whether to suppress error messages.
+	 *
+	 * @return bool The message.
+	 */
+	public function suppressError() {
+		return $this->suppress_error;
 	}
 }

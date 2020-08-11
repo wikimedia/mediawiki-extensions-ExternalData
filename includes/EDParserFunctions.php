@@ -80,12 +80,13 @@ class EDParserFunctions {
 				// The external data have been fetched without run-time errors.
 				// Results are valid and can be saved in self::$values.
 				self::saveValues( $connector->result() );
-				return;	// these functions are humble in their success.
+				// These functions are humble in their success.
+				return;
 			}
 		}
 
-		// There have been errors and a red error message ought to be returned.
-		return self::formatErrorMessages( $connector->errors() );
+		// There have been errors.
+		return $connector->suppressError() ? null : self::formatErrorMessages( $connector->errors() );
 	}
 
 	/**
