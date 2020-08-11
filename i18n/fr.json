@@ -34,7 +34,7 @@
 	"externaldata-db-no-return-values": "Erreur : Aucune valeur de retour n'a été spécifiée.",
 	"externaldata-db-invalid-query": "La requête $1 n’est pas valide.",
 	"externaldata-db-too-many-joins": "Le nombre de conditions JOIN ($1 maintenant) ne doit pas dépasser le nombre de tables ($2)",
-	"externaldata-db-invalid-join": "Condition JOIN $1 non valide : chaque partie doit contenir un signe « = ».",
+	"externaldata-db-invalid-join": "Condition JOIN $1 non valide : chaque partie doit contenir un signe « = ».",
 	"externaldata-db-aggregation-failed": "L’agrégation MongoDB a échoué avec l’erreur $1",
 	"externaldata-format-unavailable": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
 	"externaldata-post-failed": "La requête POST vers $1 a échoué : $2.",
@@ -52,6 +52,6 @@
 	"externaldata-empty-file": "Impossible d’obtenir le contenu du fichier $1.",
 	"externaldata-no-file-in-directory": "Le répertoire $1 n’a pas de fichier $1.",
 	"externaldata-no-directory": "Le répertoire $1 n’est pas défini.",
-	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
+	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié."
 }
