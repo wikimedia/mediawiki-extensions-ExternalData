@@ -15,11 +15,12 @@
 	"externaldata-web-invalid-format": "Virheellinen muoto: ”$1”.",
 	"externaldata-ldap-unable-to-connect": "Ei voitu yhdistää palvelimelle $1",
 	"externaldata-xml-error": "XML-virhe: $1 rivillä $2",
-	"externaldata-db-incomplete-information": "Virhe: Vaillinaiset tiedot tälle palvelintunnukselle.",
+	"externaldata-db-incomplete-information": "Virhe: Vaillinaiset tiedot tälle palvelintunnukselle $1 ($2).",
 	"externaldata-db-could-not-get-url": "Ei voitu hakea verkko-osoitetta $1 {{PLURAL:$1|yrityksen|yrityksen}} jälkeen.",
 	"externaldata-db-unknown-type": "Virhe: Tuntematon tietokantatyyppi $1.",
 	"externaldata-db-could-not-connect": "Virhe: Ei yhteyttä tietokantaan.",
-	"externaldata-db-unknown-collection": "Virhe: Tuntematon MongoDB-kokoelma.",
+	"externaldata-db-unknown-collection": "Virhe: Tuntematon MongoDB-kokoelma $1.",
 	"externaldata-db-no-return-values": "Virhe: Paluuarvoja ei ole annettu.",
-	"externaldata-db-invalid-query": "Kysely $1 on virheellinen."
+	"externaldata-db-invalid-query": "Kysely $1 on virheellinen.",
+	"externaldata-missing-file": "Tiedosto $1 puuttuu."
 }
