@@ -52,6 +52,6 @@
 	"externaldata-empty-file": "Der Inhalt der Datei $1 konnte nicht abgerufen werden.",
 	"externaldata-no-file-in-directory": "Verzeichnis $1 hat keine Datei $1.",
 	"externaldata-no-directory": "Das Verzeichnis $1 ist nicht definiert.",
-	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable \"$1\" gesetzt.",
+	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable „$1“ gesetzt.",
 	"externaldata-no-template": "Fehler: keine Vorlage angegeben."
 }
