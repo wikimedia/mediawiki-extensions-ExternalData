@@ -11,12 +11,12 @@
 	"externaldata-ldap-unable-to-connect": "Indisponibbile a collegarse a $1",
 	"externaldata-xml-error": "Errore XML: $1 sus a linèe $2",
 	"externaldata-invalid-json": "Errore: JSON invalide.",
-	"externaldata-jsonpath-error": "Errore: Notazione JSONPath non valide.",
-	"externaldata-db-incomplete-information": "Errore: 'Mbormazione ingomblete pe stu ID d'u database.",
+	"externaldata-jsonpath-error": "Errore: Notazione JSONPath $1 non valide.",
+	"externaldata-db-incomplete-information": "Errore: 'Mbormazione ingomblete pe stu ID $1 ($2) d'u database.",
 	"externaldata-db-could-not-get-url": "Non ge pozze pigghià 'a URL $1 apprisse $2 {{PLURAL:$2|prove}}.",
-	"externaldata-db-unknown-type": "Errore: Tipe de database scanusciute.",
+	"externaldata-db-unknown-type": "Errore: Tipe de database scanusciute $1.",
 	"externaldata-db-could-not-connect": "Errore: Non ge me pozze collegà a 'u database.",
-	"externaldata-db-unknown-collection": "Errore: Collezzione scanusciute MongoDB.",
+	"externaldata-db-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1.",
 	"externaldata-db-no-return-values": "Errore: Nisciune valore de retorne specificate.",
-	"externaldata-db-invalid-query": "Inderrogazione invalide."
+	"externaldata-db-invalid-query": "Inderrogazione $1 invalide."
 }
