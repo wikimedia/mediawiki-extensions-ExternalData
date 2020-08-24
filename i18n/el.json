@@ -23,7 +23,7 @@
 	"externaldata-db-could-not-connect": "Σφάλμα: Αδυναμία σύνδεσης στη βάση δεδομένων.",
 	"externaldata-db-unknown-collection": "Σφάλμα: Άγνωστη συλλογή $1 MongoDB.",
 	"externaldata-db-no-return-values": "Σφάλμα: Δεν καθορίστηκαν τιμές επιστροφής.",
-	"externaldata-db-invalid-query": "Το ερώτημα $1 δεν είναι σωστό.",
+	"externaldata-db-invalid-query": "Το ερώτημα $1 δεν είναι έγκυρο.",
 	"externaldata-url-not-allowed": "Η διεύθυνση URL $1 δεν επιτρέπεται σε αυτή τη βίκι.",
 	"externaldata-missing-file": "Το αρχείο $1 απουσιάζει.",
 	"externaldata-empty-file": "Δεν δύναται να ληφθεί το περιεχόμενο του αρχείου $1.",

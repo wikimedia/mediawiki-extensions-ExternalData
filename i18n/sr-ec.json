@@ -17,7 +17,7 @@
 	"externaldata-invalid-json": "Грешка: Неважећи JSON.",
 	"externaldata-db-incomplete-information": "Грешка: Непотпуни подаци за ID базе података $1 ($2).",
 	"externaldata-db-could-not-get-url": "Преузимање адресе после $1 {{PLURAL:$1|покушаја}} није успело.",
-	"externaldata-db-unknown-type": "Грешка: Непознат тип базе података $1.",
+	"externaldata-db-unknown-type": "Грешка: Непозната врста базе података $1.",
 	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело.",
 	"externaldata-db-unknown-collection": "Грешка: Непозната MongoDB збирка $1.",
 	"externaldata-db-no-return-values": "Грешка: Повратне вредности нису одређене.",
