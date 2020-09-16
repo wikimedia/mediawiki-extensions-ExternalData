@@ -12,7 +12,7 @@
 	"externaldata-no-param-specified": "Hata: \"$1\" parametresi belirtilmedi.",
 	"externaldata-param-type-error": "Hata: $1 parametresi $2 türünde olmalıdır.",
 	"externaldata-php-library-missing": "Hata: $2 kullanmak için gereken PHP kitaplığı $1 eksik.",
-	"externaldata-web-invalid-format": "Geçersiz format: \"$1\".",
+	"externaldata-web-invalid-format": "Geçersiz biçim: \"$1\".",
 	"externaldata-ldap-domain-not-defined": "$1 LDAP alanı tanımlanmadı.",
 	"externaldata-ldap-unable-to-connect": "$1 ile bağlantı kurulamıyor.",
 	"externaldata-ldap-unable-to-bind": "Bu etki alanı için kullanıcı adı ve parola ayarlanmış olarak $1 LDAP alanına bağlanılamıyor.",
