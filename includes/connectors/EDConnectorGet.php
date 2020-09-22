@@ -120,7 +120,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 			'__stale' => [ !$this->cache_fresh ],
 			'__tries' => [ $tries ]
 		] );
-		return true;
+		return !$this->errors();
 	}
 
 	/**

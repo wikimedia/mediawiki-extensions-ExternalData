@@ -35,7 +35,11 @@ class EDParserJSONwithJSONPath extends EDParserBase {
 		$json = new EDJsonObject( $text );
 		$values = parent::__invoke( $text, $defaults );
 		foreach ( $this->external as $jsonpath ) {
-			$values[$jsonpath] = $json->get( $jsonpath );
+			try {
+				$values[$jsonpath] = $json->get( $jsonpath );
+			} catch ( MWException $e ) {
+				throw new EDParserException( 'externaldata-jsonpath-error', $jsonpath );
+			}
 		}
 		return $values;
 	}
