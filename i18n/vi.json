@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ioe2015",
 			"Minh Nguyen",
 			"Vinhtantran"
 		]
 	},
 	"getdata": "Lấy dữ liệu",
 	"externaldata-desc": "Cho phép truy xuất dữ liệu từ các địa chỉ URL bên ngoài, cơ sở dữ liệu, và nguồn khác",
-	"externaldata-xml-error": "Lỗi XML ở dòng $2: $1"
+	"externaldata-xml-error": "Lỗi XML ở dòng $2: $1",
+	"externaldata-invalid-regex": "Lỗi: $1 không phải là một biểu thức chính quy tương thích với Perl."
 }
