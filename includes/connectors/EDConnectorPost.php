@@ -8,9 +8,6 @@
  *
  */
 class EDConnectorPost extends EDConnectorHttp {
-	/** @var array $post_data POST data to send */
-	private $post_data;
-
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
@@ -19,11 +16,9 @@ class EDConnectorPost extends EDConnectorHttp {
 	 */
 	public function __construct( array $args ) {
 		parent::__construct( $args );
-		$this->post_data = $args['post data'];
-		// Merge POST data from $$edgHTTPOptions['postData'] and |post data parameter.
-		$post_options = array_merge( isset( $this->options['postData'] ) ? $this->options['postData'] : [], $this->post_data );
-		// Allow extensions or LocalSettings.php to alter HTTP options.
-		Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $this->real_url, $post_options ] );
+		$this->options['postData']
+			= isset( $args['post data'] ) ? $args['post data']
+			: ( isset( $this->options['postData'] ) ? $this->options['postData'] : null );
 	}
 
 	/**
@@ -34,9 +29,14 @@ class EDConnectorPost extends EDConnectorHttp {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		list( $contents, $this->headers, $errors ) = EDHttpWithHeaders::post( $url,  $post_options );
+		// Allow extensions or LocalSettings.php to alter HTTP options.
+		Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $this->real_url, $this->options ] );
+		list( $contents, $this->headers, $errors ) = EDHttpWithHeaders::post( $this->real_url, $this->options );
 		if ( !$contents ) {
-			$this->error( 'externaldata-post-failed', $this->original_url, implode( ', ', $errors ) );
+			if ( is_array( $errors ) ) {
+				$errors = implode( ',', $errors );
+			}
+			$this->error( 'externaldata-post-failed', $this->original_url, $errors );
 			return false;
 		}
 
@@ -52,6 +52,6 @@ class EDConnectorPost extends EDConnectorHttp {
 			'__stale' => [ false ],
 			'__tries' => [ 1 ]
 		] );
-		return true;
+		return !$this->errors();
 	}
 }
