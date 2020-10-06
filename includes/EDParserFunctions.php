@@ -258,7 +258,8 @@ class EDParserFunctions {
 			// parse the 'data' arg into mappings
 			$mappings = self::paramToArray( $args['data'], false, false );
 		} else {
-			// or just use keys from edgValues
+			// ...or just use the previously-obtained values.
+			$mappings = [];
 			foreach ( self::$values as $local_variable => $values ) {
 				$mappings[$local_variable] = $local_variable;
 			}
