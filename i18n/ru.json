@@ -3,6 +3,7 @@
 		"authors": [
 			"Ferrer",
 			"Kaganer",
+			"Megakott",
 			"Okras",
 			"Александр Сигачёв"
 		]
@@ -24,7 +25,7 @@
 	"externaldata-invalid-regex": "Ошибка: $1 не является действительным Perl-совместимым регулярным выражением.",
 	"externaldata-db-incomplete-information": "В настройках вики неполная информация для БД ID $1. Отсутствует $2.",
 	"externaldata-db-could-not-get-url": "Не удалось получить URL $1 после $2 {{PLURAL:$2|попытки|попыток}}.",
-	"externaldata-db-unknown-type": "ОШИБКА. Неизвестный тип базы данных $1.",
+	"externaldata-db-unknown-type": "Ошибка: Неизвестный тип базы данных $1.",
 	"externaldata-db-could-not-connect": "ОШИБКА. Не удаётся подключиться к базе данных.",
 	"externaldata-db-unknown-database": "Ошибка: невозможно выбрать базу данных, указанную в настройках вики для $1.",
 	"externaldata-db-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB $1.",
