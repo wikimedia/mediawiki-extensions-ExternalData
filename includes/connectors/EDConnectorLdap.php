@@ -7,21 +7,21 @@
  *
  */
 class EDConnectorLdap extends EDConnectorBase {
-	/** @var string $filter LDAP filter. */
+	/** @var string LDAP filter. */
 	private $filter;
-	/** @var bool $all Get all LDAP data. */
+	/** @var bool Get all LDAP data. */
 	private $all;
-	/** @var string $domain LDAP domain (key to $edgLDAPServer, etc.). */
+	/** @var string LDAP domain (key to $edgLDAPServer, etc.). */
 	private $domain;
-	/** @var string $base_dn Base DN for the directory.	*/
+	/** @var string Base DN for the directory. */
 	private $base_dn;
-	/** @var string $server Real LDAP server. */
+	/** @var string Real LDAP server. */
 	private $server;
-	/** @var string $user Real LDAP user. */
+	/** @var string Real LDAP user. */
 	private $user;
-	/** @var string $password Real LDAP password. */
+	/** @var string Real LDAP password. */
 	private $password;
-	/** @var resource $connection Connection to LDAP server. */
+	/** @var resource Connection to LDAP server. */
 	private $connection;
 
 	/**

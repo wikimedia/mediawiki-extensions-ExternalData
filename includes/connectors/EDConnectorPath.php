@@ -10,7 +10,7 @@ abstract class EDConnectorPath extends EDConnectorBase {
 	/** @var bool $needs_parser Needs a EDParser* object. */
 	protected static $needs_parser = true;
 
-	/** @var string $real_path Real filepath. */
+	/** @var string Real filepath. */
 	protected $real_path;
 
 	/**

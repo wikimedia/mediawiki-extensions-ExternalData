@@ -10,11 +10,11 @@ class EDConnectorSoap extends EDConnectorGet {
 	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
 	protected static $preserve_external_variables_case = true;
 
-	/** @var string $request_name SOAP request name. */
+	/** @var string SOAP request name. */
 	private $request_name;
-	/** @var array $request_data SOAP request data. */
+	/** @var array SOAP request data. */
 	private $request_data;
-	/** @var string $response_name SOAP response name. */
+	/** @var string SOAP response name. */
 	private $response_name;
 
 	/**

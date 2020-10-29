@@ -7,22 +7,22 @@
  *
  */
 abstract class EDConnectorDb extends EDConnectorBase {
-	/** @var string $db_id Database ID. */
+	/** @var string Database ID. */
 	protected $db_id;	// Database ID.
 
-	/** @var string $type Database type. */
+	/** @var string Database type. */
 	protected $type;
-	/** @var array $connection Connection settings. */
+	/** @var array Connection settings. */
 	protected $connection = [];
 
 	// SQL query components.
-	/** @var string $from FROM clause as a string. */
+	/** @var string FROM clause as a string. */
 	protected $from;
-	/** @var array $columns Columns to query. */
+	/** @var array Columns to query. */
 	protected $columns;
-	/** @var string $conditions Select conditions. */
+	/** @var string Select conditions. */
 	protected $conditions;
-	/** @var array $sql_options LIMIT, ORDER BY and GROUP BY clauses. */
+	/** @var array LIMIT, ORDER BY and GROUP BY clauses. */
 	protected $sql_options;
 
 	/**

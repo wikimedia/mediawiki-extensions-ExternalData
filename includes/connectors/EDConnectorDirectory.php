@@ -10,9 +10,9 @@
 class EDConnectorDirectory extends EDConnectorPath {
 	/** @var string $directrory Directory. */
 	private $directory;
-	/** @var string $file_name File in directory. */
+	/** @var string File in directory. */
 	private $file_name;
-	/** @var string $real_directory Real path to $directory. */
+	/** @var string Real path to $directory. */
 	private $real_directory;
 
 	/**

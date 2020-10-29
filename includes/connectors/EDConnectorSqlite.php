@@ -8,7 +8,7 @@
  *
  */
 class EDConnectorSqlite extends EDConnectorRelational {
-	/** @var string $directory Database directory. */
+	/** @var string Database directory. */
 	private $directory;
 
 	/**

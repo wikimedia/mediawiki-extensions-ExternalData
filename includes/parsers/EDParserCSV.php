@@ -7,9 +7,9 @@
  */
 
 class EDParserCSV extends EDParserBase {
-	/** @var bool $header The processed text contains a header line. */
+	/** @var bool The processed text contains a header line. */
 	private $header = false;
-	/** @var string $delimiter Column delimiter. */
+	/** @var string Column delimiter. */
 	private $delimiter = ',';
 
 	/**

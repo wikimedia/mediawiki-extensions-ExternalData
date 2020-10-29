@@ -10,15 +10,15 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
 	protected static $preserve_external_variables_case = true;
 
-	/** @var string $connect_string MondoDB connection string. */
+	/** @var string MondoDB connection string. */
 	protected $connect_string;
-	/** @var array $aggregate MongoDB aggregate. */
+	/** @var array MongoDB aggregate. */
 	private $aggregate = [];
-	/** @var array $find MongoDB find query. */
+	/** @var array MongoDB find query. */
 	private $find = [];
-	/** @var array $sort MongoDB sort. */
+	/** @var array MongoDB sort. */
 	private $sort = [];
-	/** @var string|null $cache_key A key for Memcached/APC. */
+	/** @var string|null A key for Memcached/APC. */
 	private $cache_key = null;
 
 	/**

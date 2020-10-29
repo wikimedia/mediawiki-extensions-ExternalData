@@ -8,7 +8,7 @@
  *
  */
 class EDConnectorFile extends EDConnectorPath {
-	/** @var string $file File name. */
+	/** @var string File name. */
 	private $file;
 
 	/**

@@ -7,7 +7,7 @@
  */
 
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
-	/** @var array $css_to_xpath Mappings of CSS selectors to XPaths. */
+	/** @var array Mappings of CSS selectors to XPaths. */
 	private $css_to_xpath = [];
 
 	/**

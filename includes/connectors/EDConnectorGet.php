@@ -12,21 +12,21 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	private static $tries = 3;
 
 	// Cache variables.
-	/** @var	bool $cache_set_up Is the cache set up? */
+	/** @var bool $cache_set_up Is the cache set up? */
 	private static $cache_set_up;
 	/** @var string|null $cache_table Cache table name. */
 	private static $cache_table;
 
-	/** @var int $cache_expiration Number of seconds before cache expires. */
+	/** @var int Number of seconds before cache expires. */
 	private $cache_expiration;
-	/** @var bool $allow_stale_cache Whether the data can be fetched from stale cache. */
+	/** @var bool Whether the data can be fetched from stale cache. */
 	private $allow_stale_cache;
 
-	/** @var int $cached_time When the cache was cached. */
+	/** @var int When the cache was cached. */
 	private $cached_time;
-	/** @var bool $cache_fresh Is the cache fresh. */
+	/** @var bool Is the cache fresh. */
 	private $cache_fresh;
-	/** @var int $time Timestamp of when the result was fetched. */
+	/** @var int Timestamp of when the result was fetched. */
 	private $time;
 
 	/**

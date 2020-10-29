@@ -6,7 +6,7 @@
  */
 
 class EDParserRegex extends EDParserBase {
-	/** @var string $regex The regular expression. */
+	/** @var string The regular expression. */
 	private $regex;
 
 	/**

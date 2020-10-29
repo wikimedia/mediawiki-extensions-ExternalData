@@ -8,11 +8,11 @@
  *
  */
 class EDConnectorRelational extends EDConnectorDb {
-	/** @var Database $db The database object. */
+	/** @var Database The database object. */
 	private $db;
-	/** @var array $tables Tables to query. */
+	/** @var array Tables to query. */
 	private $tables = [];
-	/** @var array $joins JOIN conditions. */
+	/** @var array JOIN conditions. */
 	private $joins = [];
 
 	/**

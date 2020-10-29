@@ -8,22 +8,22 @@
 abstract class EDConnectorBase {
 	use EDParsesParams;	// Needs paramToArray().
 
-	/** @var array|null $errors An array of errors. */
+	/** @var array|null An array of errors. */
 	private $errors = null;
 
-	/** @var bool $suppress_error Whether error messages are to be suppressed in wikitext. */
+	/** @var bool Whether error messages are to be suppressed in wikitext. */
 	private $suppress_error = false;
 
-	/** @var bool $need_parser True, if the connector needs one of EDParser* objects. */
+	/** @var bool True, if the connector needs one of EDParser* objects. */
 	protected static $needs_parser = false;
-	/** @var EDParserBase $parser A Parser. */
+	/** @var EDParserBase A Parser. */
 	private $parser = null;
 
-	/** @var array $mappings An associative array mapping internal variables to external. */
+	/** @var array An associative array mapping internal variables to external. */
 	protected $mappings = [];
-	/** @var array $filters Data filters. */
+	/** @var array Data filters. */
 	protected $filters = [];
-	/** @var array $values Fetched data before filtering and mapping. */
+	/** @var array Fetched data before filtering and mapping. */
 	protected $values = [];
 
 	/**

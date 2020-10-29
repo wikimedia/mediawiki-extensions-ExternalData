@@ -7,7 +7,7 @@
  */
 
 class EDParserJSON extends EDParserBase {
-	/** @var int $prefix_length Optional length of the ignored prefix. */
+	/** @var int Optional length of the ignored prefix. */
 	private $prefix_length = 0;
 
 	/**

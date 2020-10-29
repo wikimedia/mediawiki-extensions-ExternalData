@@ -9,15 +9,15 @@
 abstract class EDConnectorHttp extends EDConnectorBase {
 	/** @var bool $needs_parser True, if the connector needs one of EDParser* objects. */
 	protected static $needs_parser = true;
-	/** @var string $original_url URL to fetch data from as provided by user. */
+	/** @var string URL to fetch data from as provided by user. */
 	protected $original_url;
-	/** @var string $real_url URL to fetch data from after substitutions. */
+	/** @var string URL to fetch data from after substitutions. */
 	protected $real_url;
-	/** @var array $options HTTP options. */
+	/** @var array HTTP options. */
 	protected $options;
-	/** @var array $headers HTTP headers. */
+	/** @var array HTTP headers. */
 	protected $headers;
-	/** @var int $time When the result was actually retched. */
+	/** @var int When the result was actually retched. */
 	private $time;
 
 	/**

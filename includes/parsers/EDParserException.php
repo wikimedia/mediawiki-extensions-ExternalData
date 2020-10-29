@@ -7,9 +7,9 @@
  */
 
 class EDParserException extends Exception {
-	/** @var string $msg_code MW message code. */
+	/** @var string MW message code. */
 	private $msg_code;
-	/** @var array $params Parameters to that message. */
+	/** @var array Parameters to that message. */
 	private $params;
 
 	/**
