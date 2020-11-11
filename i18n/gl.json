@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"ArenaL5",
 			"Toliño"
 		]
 	},
@@ -13,9 +14,9 @@
 	"externaldata-invalid-json": "Erro: JSON non válido.",
 	"externaldata-db-incomplete-information": "Erro: Información incompleta para este ID de servidor.",
 	"externaldata-db-could-not-get-url": "Non se puido obter o enderezo URL despois de $1 {{PLURAL:$1|intento|intentos}}.",
-	"externaldata-db-unknown-type": "Erro: Tipo de base de datos descoñecido.",
+	"externaldata-db-unknown-type": "Erro: Tipo de base de datos $1 descoñecido.",
 	"externaldata-db-could-not-connect": "Erro: Non se puido conectar coa base de datos.",
-	"externaldata-db-unknown-collection": "Erro: Colección MongoDB descoñecida.",
+	"externaldata-db-unknown-collection": "Erro: Colección MongoDB $1 descoñecida.",
 	"externaldata-db-no-return-values": "Erro: Non se especificou ningún valor de retorno.",
-	"externaldata-db-invalid-query": "A consulta non é válida."
+	"externaldata-db-invalid-query": "A consulta $1 non é válida."
 }
