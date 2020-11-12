@@ -58,6 +58,8 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 
 	/**
 	 * Flip the results array (make it row-based rather than column-based) to make it more usable in Lua.
+	 * @param array[] $ar
+	 * @return array[]
 	 */
 	private static function flip( array $ar ) {
 		$flipped = [];

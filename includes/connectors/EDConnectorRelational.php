@@ -99,6 +99,7 @@ class EDConnectorRelational extends EDConnectorDb {
 
 	/**
 	 * Run a query in an open database.
+	 * @return string[][]|void
 	 */
 	private function searchDB() {
 		$rows = $this->db->select( $this->tables, $this->columns, $this->conditions, __METHOD__, $this->sql_options, $this->joins );

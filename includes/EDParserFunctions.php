@@ -11,7 +11,7 @@ class EDParserFunctions {
 
 	/** @var array $values Values saved statically to be available form elsewhere on the page. */
 	private static $values = [];
-	/** $var string|null Current page name.	*/
+	/** @var string|null Current page name. */
 	private static $current_page = null;
 
 	/**
@@ -152,6 +152,9 @@ class EDParserFunctions {
 	/**
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by one of the #get... parser functions.
+	 * @param string $var
+	 * @param int $i
+	 * @return string
 	 */
 	private static function getIndexedValue( $var, $i ) {
 		if ( array_key_exists( $var, self::$values ) && array_key_exists( $i, self::$values[$var] ) ) {
@@ -163,6 +166,9 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #external_value parser function.
+	 * @param Parser &$parser
+	 * @param string $local_var
+	 * @return string|null
 	 */
 	public static function doExternalValue( Parser &$parser, $local_var = '' ) {
 		global $edgExternalValueVerbose;
@@ -179,6 +185,9 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #for_external_table parser function.
+	 * @param Parser &$parser
+	 * @param string $expression
+	 * @return string
 	 */
 	public static function doForExternalTable( Parser &$parser, $expression = '' ) {
 		// Get the variables used in this expression, get the number
@@ -242,6 +251,8 @@ class EDParserFunctions {
 	 * Render the #display_external_table parser function.
 	 *
 	 * @author Dan Bolser
+	 * @param Parser &$parser
+	 * @return array|string
 	 */
 	public static function doDisplayExternalTable( Parser &$parser ) {
 		$params = func_get_args();
@@ -310,6 +321,9 @@ class EDParserFunctions {
 	/**
 	 * Based on Semantic Internal Objects'
 	 * SIOSubobjectHandler::doSetInternal().
+	 * @param Parser $parser
+	 * @param array $params
+	 * @return string|null
 	 */
 	public static function callSubobject( Parser $parser, array $params ) {
 		// This is a hack, since SMW's SMWSubobject::render() call is
@@ -345,6 +359,8 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #store_external_table parser function.
+	 * @param Parser &$parser
+	 * @return string|null
 	 */
 	public static function doStoreExternalTable( Parser &$parser ) {
 		// Quick exit if Semantic MediaWiki is not installed.
@@ -397,6 +413,7 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #clear_external_data parser function.
+	 * @param Parser &$parser
 	 */
 	public static function doClearExternalData( Parser &$parser ) {
 		self::$values = [];
