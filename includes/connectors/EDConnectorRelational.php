@@ -8,6 +8,9 @@
  *
  */
 class EDConnectorRelational extends EDConnectorDb {
+	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
+	protected static $preserve_external_variables_case = true;
+
 	/** @var Database The database object. */
 	private $db;
 	/** @var array Tables to query. */
