@@ -32,7 +32,7 @@
 	"externaldata-db-aggregation-failed": "MongoDB aggregation failed with error $1",
 	"externaldata-format-unavailable": "The library $1, required to use the '$2' format without the '$3' option, is missing.",
 	"externaldata-post-failed": "POST request to $1 failed: $2.",
-	"externaldata-url-not-fetched": "Error while fetching data from URL $1.",
+	"externaldata-url-not-fetched": "Error while fetching data from URL $1: $2.",
 	"externaldata-url-unknown-error": "Unknown error while fetching data from URL $1.",
 	"externaldata-url-not-allowed": "URL $1 is not allowed on this wiki.",
 	"externaldata-caught-exception-soap": "Caught exception $1 while creating SOAP client.",

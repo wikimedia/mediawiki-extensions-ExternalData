@@ -37,7 +37,7 @@
 	"externaldata-db-aggregation-failed": "An error message produced when an aggregation query against a MongoDB collection fails. $1 is the error message.",
 	"externaldata-format-unavailable": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function",
 	"externaldata-post-failed": "Used as error message if #get_web_data sent a POST request that returned an error or was not executed. Parameters:\n* $1 is the URL,\n* $2 is the error message",
-	"externaldata-url-not-fetched": "Used as an error message if the URL could not be fetched. Parameters:\n* $1 is the URL.",
+	"externaldata-url-not-fetched": "Used as an error message if the URL could not be fetched. Parameters:\n* $1 is the URL,\n* $2 is the error message.",
 	"externaldata-url-unknown-error": "Used as a default fallback when an unknown error prevents fetching data from URL.\n$1 is the URL.",
 	"externaldata-url-not-allowed": "This message is shown if the URL $1 is not whitelisted by $edgAllowExternalDataFrom. Parameters:\n* $1 is the URL not allowed.",
 	"externaldata-caught-exception-soap": "This message is shown when new SoapClient throws an exception. $1 is the exception text.",

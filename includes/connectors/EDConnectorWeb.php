@@ -24,11 +24,15 @@ class EDConnectorWeb extends EDConnectorGet {
 	protected function fetcher() {
 		// We do not want to repeat error messages self::$tries times.
 		static $log_errors = true;
-		list( $result, $this->headers, $errors ) = EDHttpWithHeaders::get( $this->real_url, $this->options, __METHOD__ );
+		[ $result, $this->headers, $errors ] = EDHttpWithHeaders::get( $this->real_url, $this->options, __METHOD__ );
 		if ( $errors && $log_errors ) {
 			$this->error( 'externaldata-url-not-fetched', $this->original_url );
 			foreach ( $errors as $error ) {
-				$this->error( $error['message'], $error['params'] );
+				if ( is_array( $error ) && isset( $error['message'] ) && isset( $error['params'] ) ) {
+					$this->error( $error['message'], $error['params'] );    // -- MW message.
+				} else {
+					$this->error( 'externaldata-url-not-fetched', $error ); // -- plain string.
+				}
 			}
 			$log_errors = false; // once is enough.
 		}
