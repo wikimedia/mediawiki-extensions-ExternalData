@@ -59,6 +59,9 @@ abstract class EDParserBase {
 	 * @throws EDParserException
 	 */
 	public static function getParser( array $params ) {
+		if ( !isset( $params['format'] ) || !$params['format'] ) {
+			throw new EDParserException( 'externaldata-no-param-specified', 'format' );
+		}
 		global $edgParsers;
 		$class = self::getMatch( $params, $edgParsers );
 		if ( $class ) {
