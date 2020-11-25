@@ -52,12 +52,6 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			if ( !$doc->loadHTML( $html ) ) {
 				throw EDParserException( 'externaldata-parsing-html-failed' );
 			}
-			// Report errors.
-			/*
-			foreach ( libxml_get_errors() as $error ) {
-				wfDebug( "HTML parsing error {$error->code} in line {$error->line}, column {$error->column}: {$error->message}" );
-			}
-			*/
 			libxml_clear_errors();
 			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		} catch ( Exception $e ) {
@@ -65,6 +59,7 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 		}
 		$values = EDParserBase::__invoke( $text, $defaults );
 		$domxpath = new DOMXPath( $doc );
+		$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 		foreach ( $this->external as $xpath ) {
 			// Try to select nodes with XPath:
 			$nodesArray	= [];
@@ -91,6 +86,8 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 				$values[$xpath] = $nodesArray;
 			}
 		}
+		libxml_clear_errors();
+		libxml_use_internal_errors( $internalErrors ); // -- restore.
 
 		return $values;
 	}
