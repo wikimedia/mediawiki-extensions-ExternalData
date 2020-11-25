@@ -25,7 +25,7 @@ class EDParserJSON extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param array $defaults
+	 * @param ?array $defaults
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
