@@ -35,7 +35,7 @@
 	"externaldata-db-aggregation-failed": "MongoDB toplama $1 hatasıyla başarısız oldu",
 	"externaldata-format-unavailable": "'$3' seçeneği olmadan '$2' biçimini kullanmak için gereken $1 kitaplığı eksik.",
 	"externaldata-post-failed": "$1 için POST isteği başarısız oldu: $2.",
-	"externaldata-url-not-fetched": "URL $1 üzerinden veri alınırken hata oluştu.",
+	"externaldata-url-not-fetched": "URL $1 üzerinden veri alınırken hata oluştu: $2.",
 	"externaldata-url-unknown-error": "$1 URL'sinden veri getirilirken bilinmeyen hata.",
 	"externaldata-url-not-allowed": "Bu vikide URL $1 izin verilmiyor.",
 	"externaldata-caught-exception-soap": "SOAP istemcisi oluşturulurken $1 istisna yakalandı.",

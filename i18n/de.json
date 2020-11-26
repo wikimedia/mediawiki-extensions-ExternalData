@@ -38,7 +38,7 @@
 	"externaldata-db-aggregation-failed": "MongoDB-Aggregation schlug mit Fehler $1 fehl",
 	"externaldata-format-unavailable": "Die Bibliothek $1, die benötigt wird, um das „$2“-Format ohne die „$3“-Option zu verwenden, fehlt.",
 	"externaldata-post-failed": "POST-Anforderung an $1 fehlgeschlagen: $2",
-	"externaldata-url-not-fetched": "Fehler beim Abrufen von Daten von URL $1.",
+	"externaldata-url-not-fetched": "Fehler beim Abrufen von Daten von URL $1: $2.",
 	"externaldata-url-unknown-error": "Unbekannter Fehler beim Abrufen von Daten von URL $1.",
 	"externaldata-url-not-allowed": "Die URL $1 ist in diesem Wiki nicht erlaubt.",
 	"externaldata-caught-exception-soap": "Ausnahme $1 beim Erstellen des SOAP-Clients abgefangen.",
