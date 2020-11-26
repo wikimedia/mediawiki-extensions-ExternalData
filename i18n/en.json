@@ -40,6 +40,7 @@
 	"externaldata-caught-exception-parsing-html": "Caught exception parsing HTML. The error message is &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Caught exception converting CSS selector $1 to XPath:\n$2",
 	"externaldata-xpath-invalid": "XPath search ($1) failed: $2",
+	"externaldata-css-invalid": "CSS selector $1 is invalid",
 	"externaldata-missing-library": "The library $1, required to use the '$2' parser function or '$3' Lua function, is missing.",
 	"externaldata-undefined-file": "File $1 is not defined.",
 	"externaldata-missing-file": "File $1 is missing.",

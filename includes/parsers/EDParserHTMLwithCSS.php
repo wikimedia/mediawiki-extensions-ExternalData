@@ -29,7 +29,9 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 		// Convert CSS selectors to XPaths and record them in $mappings.
 		$converter = new Symfony\Component\CssSelector\CssSelectorConverter();
 		foreach ( $this->external as &$selector ) {
-			preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $selector, $matches );
+			if ( !preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $selector, $matches ) ) {
+				throw new EDParserException( 'externaldata-css-invalid', $selector );
+			}
 			try {
 				$xpath = $converter->toXPath( $matches ['selector'] );
 			} catch ( Exception $e ) {
