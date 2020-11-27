@@ -46,6 +46,7 @@
 	"externaldata-caught-exception-parsing-html": "Ausnahme beim Parsen von HTML abgefangen. Die Fehlermeldung lautet „$1“.",
 	"externaldata-error-converting-css-to-xpath": "Ausnahme bei der Konvertierung des CSS-Selektors $1 nach XPath abgefangen:\n$2",
 	"externaldata-xpath-invalid": "XPath-Suche ($1) fehlgeschlagen: $2",
+	"externaldata-css-invalid": "Der CSS-Selektor $1 ist ungültig",
 	"externaldata-missing-library": "Die Bibliothek $1, die für die Verwendung der Parserfunktion „$2“ oder der Lua-Funktion „$3“ erforderlich ist, fehlt.",
 	"externaldata-undefined-file": "Die Datei $1 ist nicht definiert.",
 	"externaldata-missing-file": "Die Datei $1 fehlt.",

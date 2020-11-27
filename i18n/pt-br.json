@@ -35,7 +35,7 @@
 	"externaldata-db-aggregation-failed": "A agregação do MongoDB falhou com o erro $1",
 	"externaldata-format-unavailable": "A biblioteca $1, necessária para usar o formato '$2' sem a opção '$3', está ausente.",
 	"externaldata-post-failed": "A solicitação POST para $1 falhou: $2.",
-	"externaldata-url-not-fetched": "Erro ao buscar dados do URL $1.",
+	"externaldata-url-not-fetched": "Erro ao buscar dados do URL $1: $2.",
 	"externaldata-url-unknown-error": "Erro desconhecido ao buscar dados do URL $1.",
 	"externaldata-url-not-allowed": "O URL $1 não é permitido nessa wiki.",
 	"externaldata-caught-exception-soap": "Detectou a exceção $1 ao criar o cliente SOAP.",
