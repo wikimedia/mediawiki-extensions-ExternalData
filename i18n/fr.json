@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Crochet.david",
+			"Florian COLLIN",
 			"Golmore",
 			"Gomoko",
 			"IAlex",
@@ -49,6 +50,7 @@
 	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
 	"externaldata-error-converting-css-to-xpath": "Exception de conversion interceptée du sélecteur CSS $1 en XPath :\n$2",
 	"externaldata-xpath-invalid": "La recherche XPath ($1) a échoué: $2",
+	"externaldata-css-invalid": "Le sélecteur CSS $1 n'est pas valide",
 	"externaldata-missing-library": "Il manque la bibliothèque $1 nécessaire pour utiliser la fonction '$2' de l'analyseur syntaxique ou la fonction Lua '$3'.",
 	"externaldata-undefined-file": "Le fichier $1 n’est pas défini.",
 	"externaldata-missing-file": "Le fichier $1 est manquant.",

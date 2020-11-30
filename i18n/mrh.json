@@ -11,5 +11,6 @@
 	"externaldata-parsing-html-failed": "HTML a pachhaih thei vei",
 	"externaldata-caught-exception-parsing-html": "HTML pachhaihna liata pipasina. Pâna mesei cha &quot;$1&quot; a châ.",
 	"externaldata-error-converting-css-to-xpath": "Caught exception converting CSS selector $1 to XPath:\n$2",
-	"externaldata-xpath-invalid": "XLâpi tlua ($1) atla haw: $2"
+	"externaldata-xpath-invalid": "XLâpi tlua ($1) atla haw: $2",
+	"externaldata-css-invalid": "CSS a tlyna $1 cha pha vei"
 }

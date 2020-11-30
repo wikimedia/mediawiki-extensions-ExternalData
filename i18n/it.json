@@ -19,5 +19,6 @@
 	"externaldata-db-unknown-collection": "Errore: collezione MongoDB $1 sconosciuta.",
 	"externaldata-db-no-return-values": "Errore: non è stato specificato alcun valore di ritorno.",
 	"externaldata-db-invalid-query": "La query $1 non è valida.",
-	"externaldata-url-unknown-error": "Errore sconosciuto durante il recupero dei dati dall'URL $1."
+	"externaldata-url-unknown-error": "Errore sconosciuto durante il recupero dei dati dall'URL $1.",
+	"externaldata-css-invalid": "Il selettore CSS $1 non è valido"
 }

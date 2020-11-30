@@ -43,6 +43,7 @@
 	"externaldata-caught-exception-parsing-html": "HTML ayrıştırılırken kural dışı durum saptandı.  Hata mesajı &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "$1 CSS seçiciyi XPath ile dönüştürürken istisna yakalandı:\n$2",
 	"externaldata-xpath-invalid": "XPath araması ($1) başarısız oldu: $2",
+	"externaldata-css-invalid": "CSS seçici $1 geçersiz",
 	"externaldata-missing-library": "'$2' ayrıştırıcı işlevini veya '$3' Lua işlevini kullanmak için gereken $1 kitaplığı eksik.",
 	"externaldata-undefined-file": "$1 dosyası tanımlanmadı.",
 	"externaldata-missing-file": "$1 dosyası eksik.",
