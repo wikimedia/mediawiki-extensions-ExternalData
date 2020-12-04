@@ -11,11 +11,11 @@
 	"externaldata-ldap-unable-to-connect": "Impossibile connecter se a $1",
 	"externaldata-xml-error": "Error de XML: $1 al linea $2",
 	"externaldata-invalid-json": "Error: JSON invalide.",
-	"externaldata-db-incomplete-information": "Error: Information incomplete pro iste ID de servitor.",
-	"externaldata-db-could-not-get-url": "Non poteva obtener le URL post $1 {{PLURAL:$1|tentativa|tentativas}}.",
-	"externaldata-db-unknown-type": "Error: Typo de base de datos incognite.",
+	"externaldata-db-incomplete-information": "Error: Information incomplete pro le base de datos con ID $1 ($2).",
+	"externaldata-db-could-not-get-url": "Non poteva obtener le URL $1 post $2 {{PLURAL:$1|tentativa|tentativas}}.",
+	"externaldata-db-unknown-type": "Error: Typo de base de datos $1 incognite.",
 	"externaldata-db-could-not-connect": "Error: Impossibile connecter se al base de datos.",
-	"externaldata-db-unknown-collection": "Error: Collection MongoDB incognite.",
+	"externaldata-db-unknown-collection": "Error: Collection MongoDB $1 incognite.",
 	"externaldata-db-no-return-values": "Error: Nulle valor de retorno specificate.",
-	"externaldata-db-invalid-query": "Consulta invalide."
+	"externaldata-db-invalid-query": "Le consulta $1 non es valide."
 }
