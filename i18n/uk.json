@@ -3,6 +3,7 @@
 		"authors": [
 			"Andriykopanytsia",
 			"Base",
+			"Renamerr",
 			"Ата",
 			"Тест"
 		]
@@ -24,7 +25,7 @@
 	"externaldata-db-invalid-query": "Неприпустимий запит $1.",
 	"externaldata-format-unavailable": "Відсутня бібліотека $1, необхідна для використання формату «$2» без опції «$3».",
 	"externaldata-post-failed": "POST-запит до $1 не вдався: $2.",
-	"externaldata-url-not-fetched": "Помилка під час отримання даних з URL $1.",
+	"externaldata-url-not-fetched": "Помилка під час отримання даних з URL $1: $2.",
 	"externaldata-url-unknown-error": "Невідома помилка під час отримання даних з URL $1.",
 	"externaldata-parsing-html-failed": "Не вдалось розібрати HTML.",
 	"externaldata-caught-exception-parsing-html": "Отримано виняток розбору HTML. Повідомлення помилки — «$1».",
