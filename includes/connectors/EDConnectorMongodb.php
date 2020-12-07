@@ -114,7 +114,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		// Make a key for Memcached/APC.
 		global $wgMainCacheType, $edgMemCachedMongoDBSeconds;
 		if ( ( $wgMainCacheType === CACHE_MEMCACHED || $wgMainCacheType === CACHE_ACCEL ) && $edgMemCachedMongoDBSeconds > 0 ) {
-			$this->cache_key = wfMemcKey( 'mongodb', $this->from, md5(
+			$this->cache_key = ObjectCache::getLocalClusterInstance()->makeKey( 'mongodb', $this->from, md5(
 				json_encode( $this->aggregate ) .
 				json_encode( $this->find ) .
 				json_encode( $this->sort ) .
@@ -303,7 +303,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	private function cached() {
 		if ( $this->cache_key ) {
 			// Check if cache entry exists.
-			return wfGetMainCache()->get( $this->cache_key );
+			return ObjectCache::getLocalClusterInstance()->get( $this->cache_key );
 		} else {
 			return null;
 		}
@@ -317,7 +317,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	private function cache( array $values ) {
 		if ( $this->cache_key ) {
 			global $edgMemCachedMongoDBSeconds;
-			wfGetMainCache()->set( $this->cache_key, $values, $edgMemCachedMongoDBSeconds );
+			ObjectCache::getLocalClusterInstance()->set( $this->cache_key, $values, $edgMemCachedMongoDBSeconds );
 		}
 	}
 }
