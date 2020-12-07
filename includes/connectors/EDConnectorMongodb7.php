@@ -22,7 +22,6 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 		try {
 			return new MongoDB\Client( $this->connect_string );
 		} catch ( Exception $e ) {
-			$this->error( 'externaldata-db-could-not-connect' );
 			return null;
 		}
 	}
@@ -37,6 +36,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	protected function getCollection( $collection ) {
 		$connection = $this->connect();
 		if ( !$connection ) {
+			$this->error( 'externaldata-db-could-not-connect' );
 			return null;
 		}
 		return $connection->selectCollection( $this->connection['dbname'], $collection );
@@ -54,7 +54,13 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 * @return array MongoDB\Driver\Cursor
 	 */
 	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
-		return $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
+		try {
+			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
+		} catch ( Exception $e ) {
+			$this->error( 'externaldata-db-could-not-connect' );
+			return null;
+		}
+		return $found;
 	}
 
 	/**
@@ -69,7 +75,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 		try {
 			return $collection->aggregate( $aggregate, [ 'useCursor' => true ] )->toArray();
 		} catch ( Exception $e ) {
-			$this->error( 'externaldata-db-aggregation-failed', $e->getMessage() );
+			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
 			return null;
 		}
 	}

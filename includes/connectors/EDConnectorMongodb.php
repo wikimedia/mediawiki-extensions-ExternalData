@@ -193,6 +193,11 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 			$results = $this->find( $collection, $this->find, $this->columns, $this->sort, $this->sql_options['LIMIT'] ); // late binding.
 		}
 
+		// Handle failure:
+		if ( !$results ) {
+			return false;
+		}
+
 		// Arrange values returned by MongoDB in a column-based array.
 		$this->values = $this->arrange( $results );
 

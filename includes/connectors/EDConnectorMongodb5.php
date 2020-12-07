@@ -47,7 +47,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		}
 		// Check if collection exists.
 		if ( !in_array( $this->from, $db->getCollectionNames(), true ) ) {
-			$this->error( 'externaldata-db-unknown-collection', $this->db_id . ':' . $this->from ); // Not $this->connection['dbname']!
+			$this->error( 'externaldata-mongodb-unknown-collection', $this->db_id . ':' . $this->from ); // Not $this->connection['dbname']!
 			return null;
 		}
 		return new MongoCollection( $db, $collection );
@@ -81,7 +81,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		if ( $aggregateResult['ok'] ) {
 			return $aggregateResult['result'];
 		} else {
-			$this->error( 'externaldata-db-aggregation-failed', $aggregateResult['errmsg'] );
+			$this->error( 'externaldata-mongodb-aggregation-failed', $aggregateResult['errmsg'] );
 			return null;
 		}
 	}
