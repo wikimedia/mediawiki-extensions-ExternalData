@@ -418,4 +418,9 @@ class EDParserFunctions {
 	public static function doClearExternalData( Parser &$parser ) {
 		self::$values = [];
 	}
+
+	public static function getAllValues() {
+		return self::$values;
+	}
+
 }
