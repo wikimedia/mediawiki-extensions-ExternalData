@@ -19,7 +19,7 @@
 	"externaldata-db-could-not-get-url": "تعذّر الحصول على المسار بعد {{PLURAL:$1||محاولة واحدة|محاوتين|$1 محاولات|$1 محاولة }}.",
 	"externaldata-db-unknown-type": "خطأ: نوع قاعدة بيانات غير معروف.",
 	"externaldata-db-could-not-connect": "خطأ: تعذّر الاتصال بقاعدة البيانات.",
-	"externaldata-db-unknown-collection": "خطأ: مجموعة مونغو دي بي غير معروفة.",
 	"externaldata-db-no-return-values": "خطأ: لم تحدد أي قيم عائدة.",
-	"externaldata-db-invalid-query": "استعلام غير صالح."
+	"externaldata-db-invalid-query": "استعلام غير صالح.",
+	"externaldata-mongodb-unknown-collection": "خطأ: مجموعة مونغو دي بي غير معروفة."
 }

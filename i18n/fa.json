@@ -16,7 +16,7 @@
 	"externaldata-db-could-not-get-url": "پس از $1 {{PLURAL:$1|try|tries}}، یوآرال نتوانست دریافت شود.",
 	"externaldata-db-unknown-type": "خطا: نوع پایگاه اطلاعاتی ناشناخته.",
 	"externaldata-db-could-not-connect": "خطا: نتوانست به پایگاه اطلاعاتی متصل شود.",
-	"externaldata-db-unknown-collection": "خطا: مجموعهٔ مونگودی‌بی ناشناخته.",
 	"externaldata-db-no-return-values": "خطا: بدون بازگشت ارزش‌های تعیین شده.",
-	"externaldata-db-invalid-query": "سوال نامعتبر."
+	"externaldata-db-invalid-query": "سوال نامعتبر.",
+	"externaldata-mongodb-unknown-collection": "خطا: مجموعهٔ مونگودی‌بی ناشناخته."
 }

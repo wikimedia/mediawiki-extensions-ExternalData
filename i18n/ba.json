@@ -17,7 +17,7 @@
 	"externaldata-db-could-not-get-url": "$1 {{PLURAL:$1|мөмкинлектән}} һуң URL алып булманы.",
 	"externaldata-db-unknown-type": "ХАТА: Билдәһеҙ мәғлүмәт базаһы.",
 	"externaldata-db-could-not-connect": "ХАТА: Мәғлүмәт базаһы менән бәйләнеш булдырып булмай.",
-	"externaldata-db-unknown-collection": "Хата: Билдәһеҙ коллекция MongoDB.",
 	"externaldata-db-no-return-values": "Хата: Кире ҡайтара торған билдәләр күрһәтелмәгән",
-	"externaldata-db-invalid-query": "Хаталы һорау"
+	"externaldata-db-invalid-query": "Хаталы һорау",
+	"externaldata-mongodb-unknown-collection": "Хата: Билдәһеҙ коллекция MongoDB."
 }

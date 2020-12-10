@@ -20,7 +20,7 @@
 	"externaldata-db-could-not-get-url": "$2 {{PLURAL:$2|回}}試行しましたが URL $1 を取得できませんでした。",
 	"externaldata-db-unknown-type": "エラー: データベースの種類 $1 が不明です。",
 	"externaldata-db-could-not-connect": "エラー: データベースに接続できませんでした。",
-	"externaldata-db-unknown-collection": "エラー: 不明な MongoDB コレクション $1。",
 	"externaldata-db-no-return-values": "エラー: 戻り値が指定されていません。",
-	"externaldata-db-invalid-query": "利用者名 $1 が無効です。"
+	"externaldata-db-invalid-query": "利用者名 $1 が無効です。",
+	"externaldata-mongodb-unknown-collection": "エラー: 不明な MongoDB コレクション $1。"
 }

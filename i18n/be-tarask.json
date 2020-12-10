@@ -4,6 +4,7 @@
 			"EugeneZelenko",
 			"Jim-by",
 			"Red Winged Duck",
+			"Renessaince",
 			"Wizardist"
 		]
 	},
@@ -14,11 +15,11 @@
 	"externaldata-ldap-unable-to-connect": "Немагчыма далучыцца да $1",
 	"externaldata-xml-error": "Памылка XML: $1 у радку $2",
 	"externaldata-invalid-json": "Памылка: няправільны JSON.",
-	"externaldata-db-incomplete-information": "Памылка: Няпоўная інфармацыя для гэтага ідэнтыфікатара сэрвэра.",
-	"externaldata-db-could-not-get-url": "Немагчыма атрымаць URL-адрас пасьля $1 {{PLURAL:$1|спробы|спробаў|спробаў}}.",
-	"externaldata-db-unknown-type": "Памылка: Невядомы тып базы зьвестак.",
+	"externaldata-db-incomplete-information": "Памылка: Няпоўная інфармацыя для гэтай базы зьвестак ID $1 ($2).",
+	"externaldata-db-could-not-get-url": "Немагчыма атрымаць URL-адрас $1 пасьля $2 {{PLURAL:$2|спробы|спробаў}}.",
+	"externaldata-db-unknown-type": "Памылка: Невядомы тып базы зьвестак $1.",
 	"externaldata-db-could-not-connect": "Памылка: Немагчыма далучыцца да базы зьвестак.",
-	"externaldata-db-unknown-collection": "Памылка: невядомая калецыя MongoDB.",
 	"externaldata-db-no-return-values": "Памылка: Не пазначаныя выніковыя значэньні.",
-	"externaldata-db-invalid-query": "Няслушны запыт."
+	"externaldata-db-invalid-query": "Няслушны запыт $1.",
+	"externaldata-mongodb-unknown-collection": "Памылка: невядомая калецыя MongoDB."
 }

@@ -16,7 +16,7 @@
 	"externaldata-db-could-not-get-url": "Non ge pozze pigghià 'a URL $1 apprisse $2 {{PLURAL:$2|prove}}.",
 	"externaldata-db-unknown-type": "Errore: Tipe de database scanusciute $1.",
 	"externaldata-db-could-not-connect": "Errore: Non ge me pozze collegà a 'u database.",
-	"externaldata-db-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1.",
 	"externaldata-db-no-return-values": "Errore: Nisciune valore de retorne specificate.",
-	"externaldata-db-invalid-query": "Inderrogazione $1 invalide."
+	"externaldata-db-invalid-query": "Inderrogazione $1 invalide.",
+	"externaldata-mongodb-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1."
 }

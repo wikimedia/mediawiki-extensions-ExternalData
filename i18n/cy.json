@@ -15,7 +15,7 @@
 	"externaldata-db-could-not-get-url": "Ni chafwyd hyd i'r URL o geisio {{PLURAL:$1||unwaith|dwywaith|teirgwaith|$1 gwaith}}.",
 	"externaldata-db-unknown-type": "Gwall: Math anhysbys i'r gronfa ddata.",
 	"externaldata-db-could-not-connect": "Gwall: Ni lwyddwyd i gysylltu â'r gronfa ddata.",
-	"externaldata-db-unknown-collection": "Gwall: Casgliad MongoDB anhysbys.",
 	"externaldata-db-no-return-values": "Gwall: Ni phenwyd unrhyw werthoedd i'w nôl.",
-	"externaldata-db-invalid-query": "Gofyniad annilys."
+	"externaldata-db-invalid-query": "Gofyniad annilys.",
+	"externaldata-mongodb-unknown-collection": "Gwall: Casgliad MongoDB anhysbys."
 }

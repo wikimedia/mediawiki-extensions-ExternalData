@@ -16,7 +16,7 @@
 	"externaldata-db-could-not-get-url": "Nun se pudo recuperar la URL dempués de $1 {{PLURAL:$1|intentu|intentos}}.",
 	"externaldata-db-unknown-type": "Error: desconozse la triba de base de datos $1.",
 	"externaldata-db-could-not-connect": "Error: Nun se pudo coneutar cola base de datos.",
-	"externaldata-db-unknown-collection": "Fallu: Coleición MongoDB desconocida.",
 	"externaldata-db-no-return-values": "Error: Nun s'especificaron valores de retornu.",
-	"externaldata-db-invalid-query": "Consulta inválida."
+	"externaldata-db-invalid-query": "Consulta inválida.",
+	"externaldata-mongodb-unknown-collection": "Fallu: Coleición MongoDB desconocida."
 }

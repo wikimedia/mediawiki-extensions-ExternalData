@@ -19,7 +19,7 @@
 	"externaldata-db-could-not-get-url": "Nepodařilo se získat URL po $1 {{PLURAL:$1|pokusu|pokusech}}.",
 	"externaldata-db-unknown-type": "Chyba: Neznámý typ databáze.",
 	"externaldata-db-could-not-connect": "Chyba: Nepodařilo se připojit k databázi.",
-	"externaldata-db-unknown-collection": "Chyba: Neznámá kolekce MongoDB.",
 	"externaldata-db-no-return-values": "Chyba: Nebyly zadány návratové hodnoty.",
-	"externaldata-db-invalid-query": "Neplatný požadavek."
+	"externaldata-db-invalid-query": "Neplatný požadavek.",
+	"externaldata-mongodb-unknown-collection": "Chyba: Neznámá kolekce MongoDB."
 }

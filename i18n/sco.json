@@ -15,7 +15,7 @@
 	"externaldata-db-could-not-get-url": "Couldna get URL efter $1 {{PLURAL:$1|try|tries}}.",
 	"externaldata-db-unknown-type": "Error: Unkent database teep.",
 	"externaldata-db-could-not-connect": "Error: Couldna connect tae database.",
-	"externaldata-db-unknown-collection": "Error: Unkent MongoDB collection.",
 	"externaldata-db-no-return-values": "Error: No return values specified.",
-	"externaldata-db-invalid-query": "Invalid query."
+	"externaldata-db-invalid-query": "Invalid query.",
+	"externaldata-mongodb-unknown-collection": "Error: Unkent MongoDB collection."
 }

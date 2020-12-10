@@ -19,9 +19,9 @@
 	"externaldata-db-could-not-get-url": "לא ניתן לקבל את כתובת ה־URL לאחר {{PLURAL:$1|נסיון אחד|$1 נסיונות}}.",
 	"externaldata-db-unknown-type": "שגיאה: סוג מסד הנתונים אינו מוכר.",
 	"externaldata-db-could-not-connect": "שגיאה: לא ניתן להתחבר אל מסד הנתונים.",
-	"externaldata-db-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",
 	"externaldata-db-no-return-values": "שגיאה: לא הוגדרו ערכים להחזרה.",
 	"externaldata-db-invalid-query": "שאילתה בלתי תקינה.",
+	"externaldata-mongodb-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",
 	"externaldata-post-failed": "בקשת POST אל $1 נכשלה.",
 	"externaldata-parsing-html-failed": "לא ניתן לפענח HTML."
 }
