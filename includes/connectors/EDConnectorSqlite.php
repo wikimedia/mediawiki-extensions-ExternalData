@@ -26,7 +26,7 @@ class EDConnectorSqlite extends EDConnectorRelational {
 	 * @param array $params Supplemented parameters.
 	 */
 	protected function setConnection( array $params ) {
-		parent::setConnection();
+		parent::setConnection( $params );
 
 		if ( isset( $params['DBDirectory'] ) ) {
 			$this->connection['dbDirectory'] = $params['DBDirectory'];
