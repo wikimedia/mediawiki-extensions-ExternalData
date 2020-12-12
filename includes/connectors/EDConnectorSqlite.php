@@ -8,6 +8,9 @@
  *
  */
 class EDConnectorSqlite extends EDConnectorRelational {
+	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
+	protected static $preserve_external_variables_case = true;
+
 	/** @var string Database directory. */
 	private $directory;
 

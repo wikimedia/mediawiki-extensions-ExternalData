@@ -46,6 +46,7 @@
 		"EDConnectorDirectory": "includes/connectors/EDConnectorDirectory.php",
 		"EDConnectorDb": "includes/connectors/EDConnectorDb.php",
 		"EDConnectorRelational": "includes/connectors/EDConnectorRelational.php",
+		"EDConnectorSql": "includes/connectors/EDConnectorSql.php",
 		"EDConnectorSqlite": "includes/connectors/EDConnectorSqlite.php",
 		"EDConnectorMongodb": "includes/connectors/EDConnectorMongodb.php",
 		"EDConnectorMongodb5": "includes/connectors/EDConnectorMongodb5.php",
@@ -111,7 +112,7 @@
 			[{"__pf": "get_db_data", "DBServerType": "sqlite"}, "EDConnectorSqlite"],
 			[{"__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoDB\\Client"}, "EDConnectorMongodb7"],
 			[{"__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoClient"}, "EDConnectorMongodb5"],
-			[{"__pf": "get_db_data"}, "EDConnectorRelational"]
+			[{"__pf": "get_db_data"}, "EDConnectorSql"]
 		],
 		"Parsers": [
 			[{"format": "text", "regex": true}, "EDParserRegex"],

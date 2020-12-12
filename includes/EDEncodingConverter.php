@@ -58,8 +58,9 @@ class EDEncodingConverter {
 	 */
 	public static function fromHeaders( array $headers ) {
 		if ( $headers && isset( $headers['content-type'] ) ) {
-			if ( preg_match( '/charset\s*=\s*(?<charset>[^\s;]+)/i', implode( ',', $headers['content-type'] ), $matches ) ) {
-				wfDebug( 'In ' . __METHOD__ . '. encoding from headers = ' . var_export( $matches['charset'], true ) );
+			$header = is_array( $headers['content-type'] ) ? implode( ',', $headers['content-type'] ) : $headers['content-type'];
+			if ( preg_match( '/charset\s*=\s*(?<charset>[^\s;]+)/i', $header, $matches ) ) {
+				wfDebug( 'In ' . __METHOD__ . '. encoding from headers = ' . var_export( $header, true ) );
 				return $matches['charset'];
 			}
 		}

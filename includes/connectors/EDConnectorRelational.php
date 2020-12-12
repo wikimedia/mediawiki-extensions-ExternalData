@@ -7,10 +7,7 @@
  * @author Yaron Koren
  *
  */
-class EDConnectorRelational extends EDConnectorDb {
-	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
-	protected static $preserve_external_variables_case = true;
-
+abstract class EDConnectorRelational extends EDConnectorDb {
 	/** @var Database The database object. */
 	private $db;
 	/** @var array Tables to query. */
@@ -89,13 +86,6 @@ class EDConnectorRelational extends EDConnectorDb {
 	 */
 	protected function setConnection( array $params ) {
 		parent::setConnection( $params );
-
-		// Database credentials.
-		if ( isset( $params['DBServer'] ) ) {
-			$this->connection['host'] = $params['DBServer'];
-		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->db_id, 'edgDBServer' );
-		}
 		$this->connection['flags'] = isset( $params['DBFlags'] ) ? $params['DBFlags'] : DBO_DEFAULT;
 		$this->connection['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : '';
 	}
