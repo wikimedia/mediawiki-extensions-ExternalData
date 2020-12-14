@@ -17,5 +17,5 @@
 	"externaldata-db-could-not-connect": "<span style=\"text-transform: uppercase\">Fähler:</span> Kunnt kein Verbendung noh dä Datebangk krijje.",
 	"externaldata-db-no-return-values": "<span style=\"text-transform: uppercase\">Fähler:</span> Kein Wääte för Zerökzeävve aanjejovve.",
 	"externaldata-db-invalid-query": "Onjöltesch Frooch aan de Datebangk.",
-	"externaldata-mongodb-unknown-collection": "<span style=\"text-transform: uppercase\">Fähler:</span> Dat es en onbikannte <i lang\"en\">MongoDB</i>-Zosammeschtällong."
+	"externaldata-mongodb-unknown-collection": "Fähler: Dat es en onbikannte MongoDB-Zosammeschtällong $1"
 }
