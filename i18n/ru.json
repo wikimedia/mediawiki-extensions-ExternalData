@@ -36,7 +36,7 @@
 	"externaldata-mongodb-aggregation-failed": "Ошибка при агрегации MongoDB: $1",
 	"externaldata-format-unavailable": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",
 	"externaldata-post-failed": "Запрос POST к $1 не удался или возвратил ошибку ($2).",
-	"externaldata-url-not-fetched": "Ошибка при получении URL $1: $2.",
+	"externaldata-url-not-fetched": "Ошибка при получении данных из URL-адреса $1: $2.",
 	"externaldata-url-unknown-error": "По неизвестной причине, данные по адресу $1 не получены.",
 	"externaldata-url-not-allowed": "URL $1 на этой вики не разрешён.",
 	"externaldata-caught-exception-soap": "При создании клиента SOAP выброшено исключение $1.",
