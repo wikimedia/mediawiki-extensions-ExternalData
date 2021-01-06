@@ -87,7 +87,7 @@ class EDParserCSV extends EDParserBase {
 		];
 		$decodedFirstCell = utf8_decode( $table[0][0] );
 		foreach ( $sets as $set ) {
-			if ( 0 === strncmp( $decodedFirstCell, $set, strlen( $set ) ) ) {
+			if ( strncmp( $decodedFirstCell, $set, strlen( $set ) ) === 0 ) {
 				$table[0][0] = substr( $decodedFirstCell, strlen( $set ) + 1 );
 				break;
 			}
@@ -97,7 +97,7 @@ class EDParserCSV extends EDParserBase {
 		// Data Transfer extension - somehow the first one doesn't work
 		// in all cases.
 		$byteOrderMark = pack( "CCC", 0xef, 0xbb, 0xbf );
-		if ( 0 === strncmp( $table[0][0], $byteOrderMark, 3 ) ) {
+		if ( strncmp( $table[0][0], $byteOrderMark, 3 ) === 0 ) {
 			$table[0][0] = substr( $table[0][0], 3 );
 		}
 
