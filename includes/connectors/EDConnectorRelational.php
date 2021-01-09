@@ -98,14 +98,14 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 		$rows = $this->db->select( $this->tables, $this->columns, $this->conditions, __METHOD__, $this->sql_options, $this->joins );
 		if ( $rows ) {
 			$result = [];
-			while ( $row = $this->db->fetchRow( $rows ) ) {
+			foreach ( $rows as $row ) {
 				// Create a new row object that uses the passed-in
 				// column names as keys, so that there's always an
 				// exact match between what's in the query and what's
 				// in the return value (so that "a.b", for instance,
 				// doesn't get chopped off to just "b").
 				foreach ( $this->columns as $column ) {
-					$field = $row[$column];
+					$field = $row->$column;
 					// This can happen with MSSQL.
 					if ( $field instanceof DateTime ) {
 						$field = $field->format( 'Y-m-d H:i:s' );

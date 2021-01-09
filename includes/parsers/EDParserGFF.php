@@ -38,6 +38,7 @@ class EDParserGFF extends EDParserBase {
 		fputs( $fp, $text );
 		rewind( $fp );
 		$table = [];
+		// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
 		while ( $line = fgetcsv( $fp, null, "\t" ) ) {
 			// ignore comment lines
 			if ( strpos( $line[0], '##' ) !== 0 ) {

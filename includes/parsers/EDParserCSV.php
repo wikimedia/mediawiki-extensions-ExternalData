@@ -54,6 +54,7 @@ class EDParserCSV extends EDParserBase {
 			fputs( $fp, $text );
 			rewind( $fp );
 			$table = [];
+			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
 			while ( $line = fgetcsv( $fp, 0, $this->delimiter ) ) {
 				array_push( $table, $line );
 			}
