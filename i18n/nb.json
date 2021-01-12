@@ -36,7 +36,7 @@
 	"externaldata-mongodb-aggregation-failed": "MongoDB-aggregering feilet: $1",
 	"externaldata-format-unavailable": "Biblioteket $1, som kreves for å bruke formatet «$2» uten alternativet «$3», mangler.",
 	"externaldata-post-failed": "POST-forespørsel til $1 feilet: $2.",
-	"externaldata-url-not-fetched": "Feil under henting av data fra URL-en $1.",
+	"externaldata-url-not-fetched": "Feil under henting av data fra URL-en $1: $2.",
 	"externaldata-url-unknown-error": "Ukjent feil under henting av data fra URL-en $1.",
 	"externaldata-url-not-allowed": "URL-en $1 er ikke tillatt på denne wikien.",
 	"externaldata-caught-exception-soap": "Fanget unntak $1 når under oppretting av SOAP-klient.",
