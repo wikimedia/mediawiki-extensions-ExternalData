@@ -81,7 +81,7 @@ class EDParserFunctions {
 				// Results are valid and can be saved in self::$values.
 				self::saveValues( $connector->result() );
 				// These functions are humble in their success.
-				return;
+				return null;
 			}
 		}
 
