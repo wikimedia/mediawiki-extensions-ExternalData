@@ -30,7 +30,7 @@ class EDEncodingConverter {
 				// Pretend it's already UTF-8.
 				$text = preg_replace( $pattern, $replacement, $text, 1 );
 				if ( !$encoding ) {
-					$encoding = $matches [3];
+					$encoding = $matches[3];
 				}
 				break;
 			}

@@ -33,7 +33,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 				throw new EDParserException( 'externaldata-css-invalid', $selector );
 			}
 			try {
-				$xpath = $converter->toXPath( $matches ['selector'] );
+				$xpath = $converter->toXPath( $matches['selector'] );
 			} catch ( Exception $e ) {
 				throw new EDParserException( 'externaldata-error-converting-css-to-xpath', $selector, $e->getMessage() );
 			}
@@ -42,7 +42,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 				'descendant-or-self::' => '/'
 			] );
 			// CSS selector syntax extension: .attr(href).
-			$xpath .= isset( $matches ['attr'] ) ? '/@' . $matches ['attr'] : '';
+			$xpath .= isset( $matches['attr'] ) ? '/@' . $matches['attr'] : '';
 			$this->css_to_xpath[$selector] = $xpath;
 			$selector = $xpath;
 		}

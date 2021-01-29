@@ -21,7 +21,7 @@ class EDParserRegex extends EDParserBase {
 		parent::__construct( $params );
 
 		// self::claim() has made sure that this parameter is set.
-		$regex = $params ['regex'];
+		$regex = $params['regex'];
 
 		// Validate regex.
 		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'suppressWarnings' ) ) {
