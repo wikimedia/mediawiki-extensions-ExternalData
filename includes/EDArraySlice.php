@@ -35,7 +35,7 @@ class EDArraySlice {
 	 * @param int|null $step step
 	 * @param bool $byReference byReference
 	 *
-	 * @return void
+	 * @return array
 	 */
 	public static function slice( &$array, $start = null, $stop = null, $step = null, $byReference = false ) {
 		$result = [];
