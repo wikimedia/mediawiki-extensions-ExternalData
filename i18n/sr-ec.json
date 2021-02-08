@@ -3,6 +3,7 @@
 		"authors": [
 			"BadDog",
 			"Charmed94",
+			"Kizule",
 			"Milicevic01",
 			"Zoranzoki21",
 			"Михајло Анђелковић"
@@ -16,7 +17,7 @@
 	"externaldata-xml-error": "XML грешка: $1 по линији $2",
 	"externaldata-invalid-json": "Грешка: Неважећи JSON.",
 	"externaldata-db-incomplete-information": "Грешка: Непотпуни подаци за ID базе података $1 ($2).",
-	"externaldata-db-could-not-get-url": "Преузимање адресе после $1 {{PLURAL:$1|покушаја}} није успело.",
+	"externaldata-db-could-not-get-url": "Преузимање адресе $1 после $2 {{PLURAL:$2|покушаја}} није успело.",
 	"externaldata-db-unknown-type": "Грешка: Непозната врста базе података $1.",
 	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело.",
 	"externaldata-db-no-return-values": "Грешка: Повратне вредности нису одређене.",
