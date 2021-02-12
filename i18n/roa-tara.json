@@ -7,6 +7,7 @@
 	"getdata": "Pigghie le date",
 	"externaldata-desc": "Permette de repigghià data strutturate da URL fore a Uicchipèdie, database e otre sorgende",
 	"externaldata-no-param-specified": "Errore: Nisciune parametre \"$1\" specificate.",
+	"externaldata-param-type-error": "Errore: 'u parametre $1 adda essere d'u tipe $2.",
 	"externaldata-web-invalid-format": "Formate invalide: \"$1\"",
 	"externaldata-ldap-unable-to-connect": "Indisponibbile a collegarse a $1",
 	"externaldata-xml-error": "Errore XML: $1 sus a linèe $2",
