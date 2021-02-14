@@ -45,7 +45,7 @@
 	"externaldata-undefined-file": "File $1 is not defined.",
 	"externaldata-missing-file": "File $1 is missing.",
 	"externaldata-empty-file": "Unable to get the contents of file $1.",
-	"externaldata-no-file-in-directory": "Directory $1 does not have file $1.",
+	"externaldata-no-file-in-directory": "Directory $1 does not have file $2.",
 	"externaldata-no-directory": "Directory $1 is not defined.",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error: no template specified."
