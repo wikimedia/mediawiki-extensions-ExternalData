@@ -20,5 +20,6 @@
 	"externaldata-db-invalid-query": "La query $1 non è valida.",
 	"externaldata-mongodb-unknown-collection": "Errore: collezione MongoDB $1 sconosciuta.",
 	"externaldata-url-unknown-error": "Errore sconosciuto durante il recupero dei dati dall'URL $1.",
-	"externaldata-css-invalid": "Il selettore CSS $1 non è valido"
+	"externaldata-css-invalid": "Il selettore CSS $1 non è valido",
+	"externaldata-no-file-in-directory": "La cartella $1 non contiene il file $2."
 }

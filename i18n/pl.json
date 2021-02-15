@@ -5,6 +5,7 @@
 			"Chrumps",
 			"Leinad",
 			"Rail",
+			"SemanticPioneer",
 			"Sp5uhe",
 			"WaldiSt"
 		]
@@ -17,6 +18,8 @@
 	"externaldata-web-invalid-format": "Nieprawidłowy format: „$1”.",
 	"externaldata-ldap-domain-not-defined": "Domena LDAP $1 nie jest zdefiniowana.",
 	"externaldata-ldap-unable-to-connect": "Nie można połączyć się z $1.",
+	"externaldata-ldap-unable-to-bind": "Nie można się powiązać z domeną LDAP $1 za pomocą nazwy użytkownika i hasła ustawionych dla tej domeny.",
+	"externaldata-ldap-base-dn-not-defined": "Podstawowy DN nie został ustawiony dla domeny LDAP $1.",
 	"externaldata-invalid-xml": "Błąd parsowania XML-a: $1",
 	"externaldata-xml-error": "Błąd XML – $1 w wierszu $2.",
 	"externaldata-invalid-json": "Błąd: Nieprawidłowy JSON.",
@@ -32,6 +35,7 @@
 	"externaldata-db-too-many-joins": "Liczba warunków JOIN ($1) nie może przekraczać liczby tabel ($2)",
 	"externaldata-db-invalid-join": "Nieprawidłowe wyrażenie JSON: $1. Każda część musi zawierać znak „=”.",
 	"externaldata-mongodb-unknown-collection": "Błąd: Nieznany zbiór MongoDB $1.",
+	"externaldata-mongodb-aggregation-failed": "Agregacja MongoDB nie powiodła się i wystąpił błąd $1.",
 	"externaldata-format-unavailable": "Brakuje biblioteki $1 wymaganej do użycia formatu „$2” bez opcji „$3”.",
 	"externaldata-post-failed": "Żądanie POST do $1 zakończyło się niepowodzeniem: $2.",
 	"externaldata-url-not-fetched": "Podczas pobierania danych z adresu URL $1 wystąpił błąd: $2.",

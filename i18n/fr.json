@@ -11,6 +11,7 @@
 			"PieRRoMaN",
 			"Shirayuki",
 			"Thibaut120094",
+			"Verdy p",
 			"Wladek92"
 		]
 	},
@@ -55,7 +56,7 @@
 	"externaldata-undefined-file": "Le fichier $1 n’est pas défini.",
 	"externaldata-missing-file": "Le fichier $1 est manquant.",
 	"externaldata-empty-file": "Impossible d’obtenir le contenu du fichier $1.",
-	"externaldata-no-file-in-directory": "Le répertoire $1 n’a pas de fichier $1.",
+	"externaldata-no-file-in-directory": "Le répertoire $1 ne contient pas de fichier $2.",
 	"externaldata-no-directory": "Le répertoire $1 n’est pas défini.",
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié."

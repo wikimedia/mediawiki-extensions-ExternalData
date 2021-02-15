@@ -39,7 +39,7 @@
 	"externaldata-undefined-file": "$1 파일이 정의되어 있지 않습니다.",
 	"externaldata-missing-file": "$1 파일이 없습니다.",
 	"externaldata-empty-file": "$1 파일의 내용을 가져올 수 없습니다.",
-	"externaldata-no-file-in-directory": "$1 디렉터리에 $1 파일이 없습니다.",
+	"externaldata-no-file-in-directory": "$1 디렉터리에 $2 파일이 없습니다.",
 	"externaldata-no-directory": "$1 디렉터리가 정의되어 있지 않습니다.",
 	"externaldata-no-local-variable": "오류: \"$1\" 지역 변수가 설정되어 있지 않습니다.",
 	"externaldata-no-template": "오류: 지정된 틀이 없습니다."
