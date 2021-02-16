@@ -3,6 +3,7 @@
 		"authors": [
 			"Ferrer",
 			"Kaganer",
+			"Kareyac",
 			"Megakott",
 			"Okras",
 			"Александр Сигачёв"
@@ -49,7 +50,7 @@
 	"externaldata-undefined-file": "Файл $1 не определён.",
 	"externaldata-missing-file": "Файл $1 отсутствует.",
 	"externaldata-empty-file": "Невозможно получить содержимое файла $1.",
-	"externaldata-no-file-in-directory": "В директории $1 нет файла $1.",
+	"externaldata-no-file-in-directory": "В директории $1 нет файла $2.",
 	"externaldata-no-directory": "Директория $1 не определена.",
 	"externaldata-no-local-variable": "Ошибка: локальная переменная &laquo;$1&raquo; не установлена.",
 	"externaldata-no-template": "Ошибка: не указан шаблон (параметр <code>template</code>)."

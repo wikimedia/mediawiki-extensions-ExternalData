@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"BaRaN6161 TURK",
+			"Joseph",
 			"Karduelis",
 			"MuratTheTurkish",
 			"Vito Genovese"
@@ -48,7 +49,7 @@
 	"externaldata-undefined-file": "$1 dosyası tanımlanmadı.",
 	"externaldata-missing-file": "$1 dosyası eksik.",
 	"externaldata-empty-file": "$1 dosyasının içeriği alınamıyor.",
-	"externaldata-no-file-in-directory": "$1 dizininde $1 dosyası yok.",
+	"externaldata-no-file-in-directory": "$1 dizininde $2 dosyası yok.",
 	"externaldata-no-directory": "$1 dizini tanımlanmadı.",
 	"externaldata-no-local-variable": "Hata: yerel değişken \"$1\" ayarlanmadı.",
 	"externaldata-no-template": "Hata: şablon belirtilmedi."
