@@ -48,7 +48,7 @@
 	"externaldata-undefined-file": "Fila $1 er ikke definert.",
 	"externaldata-missing-file": "Fila $1 mangler.",
 	"externaldata-empty-file": "Kunne ikke hente innholdet fra fila $1.",
-	"externaldata-no-file-in-directory": "Mappa $1 har ikke fila $1.",
+	"externaldata-no-file-in-directory": "Mappa $1 har ikke fila $2.",
 	"externaldata-no-directory": "Mappa $1 er ikke definert.",
 	"externaldata-no-local-variable": "Feil: ingen lokal variabel «$1» har blitt satt.",
 	"externaldata-no-template": "Feil: ingen mal angitt."
