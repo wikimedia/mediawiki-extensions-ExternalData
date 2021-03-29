@@ -10,6 +10,9 @@ class EDParserXMLwithXPath extends EDParserBase {
 	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
 	protected static $preserve_external_variables_case = true;
 
+	/** @var string $default_xmlns_prefix Default prefix for xmlns. */
+	private $default_xmlns_prefix;
+
 	/**
 	 * Constructor.
 	 *
@@ -20,13 +23,16 @@ class EDParserXMLwithXPath extends EDParserBase {
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );
+		if ( array_key_exists( 'default xmlns prefix', $params ) ) {
+			$this->default_xmlns_prefix = $params['default xmlns prefix'];
+		}
 	}
 
 	/**
 	 * Parse the text as XML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The intial values.
+	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
@@ -39,15 +45,29 @@ class EDParserXMLwithXPath extends EDParserBase {
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
 		}
+
 		$values = parent::__invoke( $text, $defaults );
 
+		// Set default prefix for unprefixed xmlns's.
+		$namespaces = $xml->getDocNamespaces( true );
+		foreach ( $namespaces as $prefix => $namespace ) {
+			if ( !$prefix && $this->default_xmlns_prefix ) {
+				$namespaces[$this->default_xmlns_prefix] = $namespace;
+				$xml->registerXPathNamespace( $this->default_xmlns_prefix, $namespace );
+			}
+		}
+
 		foreach ( $this->external as $xpath ) {
-			// First, register any necessary XML namespaces, to
+			// Register any necessary XML namespaces, if not yet, to
 			// avoid "Undefined namespace prefix" errors.
-			$matches = [];
-			preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches );
-			foreach ( $matches[1] as $namespace ) {
-				$xml->registerXPathNamespace( $namespace, $ns );
+			// It's just a dirty hack.
+			if ( preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches ) ) {
+				foreach ( $matches[1] as $prefix ) {
+					if ( !array_key_exists( $prefix, $namespaces ) ) {
+						$namespaces[$prefix] = $prefix;
+						$xml->registerXPathNamespace( $prefix, $prefix );
+					}
+				}
 			}
 
 			// Now, get all the matching values, and remove any empty results.
