@@ -88,7 +88,7 @@ class EDGetData extends SpecialPage {
 		print $text;
 	}
 
-	// phpcs:ignore MediaWiki.Commenting.FunctionComment.MissingDocumentationProtected
+	/** @inheritDoc */
 	protected function getGroupName() {
 		return 'pagetools';
 	}
