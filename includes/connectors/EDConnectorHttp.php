@@ -59,8 +59,12 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$this->options = $edgHTTPOptions;
 		global $edgAllowSSL;
 		if ( $edgAllowSSL ) {
-			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] ) ? $this->options['sslVerifyCert'] : false;
-			$this->options['followRedirects'] = isset( $this->options['followRedirects'] ) ? $this->options['followRedirects'] : false;
+			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] )
+											? $this->options['sslVerifyCert']
+											: false;
+			$this->options['followRedirects'] = isset( $this->options['followRedirects'] )
+											  ? $this->options['followRedirects']
+											  : false;
 		}
 	}
 

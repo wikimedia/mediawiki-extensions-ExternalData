@@ -23,7 +23,8 @@ class EDEncodingConverter {
 			// charset must be in the capture #3.
 			'/<\?xml([^>]+)encoding\s*=\s*(["\']?)([^"\'>]+)\2[^>]*\?>/i' => '<?xml$1encoding="UTF-8"?>',
 			'%<meta([^>]+)(charset)\s*=\s*([^"\'>]+)([^>]*)/?>%i' => '<meta$1charset=UTF-8$4>',
-			'%<meta(\s+)charset\s*=\s*(["\']?)([^"\'>]+)\2([^>]*)/?>%i' => '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
+			'%<meta(\s+)charset\s*=\s*(["\']?)([^"\'>]+)\2([^>]*)/?>%i'
+				=> '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
 		];
 		foreach ( $encoding_regexes as $pattern => $replacement ) {
 			if ( preg_match( $pattern, $text, $matches ) ) {
@@ -58,7 +59,9 @@ class EDEncodingConverter {
 	 */
 	public static function fromHeaders( array $headers ) {
 		if ( $headers && isset( $headers['content-type'] ) ) {
-			$header = is_array( $headers['content-type'] ) ? implode( ',', $headers['content-type'] ) : $headers['content-type'];
+			$header = is_array( $headers['content-type'] )
+					? implode( ',', $headers['content-type'] )
+					: $headers['content-type'];
 			if ( preg_match( '/charset\s*=\s*(?<charset>[^\s;]+)/i', $header, $matches ) ) {
 				wfDebug( 'In ' . __METHOD__ . '. encoding from headers = ' . var_export( $header, true ) );
 				return $matches['charset'];

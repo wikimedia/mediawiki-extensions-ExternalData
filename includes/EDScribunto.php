@@ -34,7 +34,7 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	 * @param string $func The name of the corresponding parser function.
 	 * @param array $arguments Arguments coming from Lua code.
 	 *
-	 * @return array [ 'values' => a row-based array of values on success or null on failure, 'errors' => null on success or an array of error messages on failure ].
+	 * @return array Depending on success, [ 'values' => [values]/null, 'errors' => null/[error messages] ].
 	 */
 	private static function fetch( $func, array $arguments ) {
 		$connector = EDConnectorBase::getConnector( $func, $arguments );

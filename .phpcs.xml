@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
-		<exclude name="Generic.Files.LineLength.TooLong" />
-		<exclude name="MediaWiki.Commenting.FunctionComment.MissingDocumentationPrivate" />
-		<exclude name="MediaWiki.Commenting.FunctionComment.MissingDocumentationPublic" />
-		<exclude name="MediaWiki.Commenting.PropertyDocumentation.MissingDocumentationPrivate" />
 		<!-- RedundantVarName is currently too sensitive, incompatible with default Doxygen. -->
 		<exclude name="MediaWiki.Commenting.RedundantVarName.Found"/>
+		<!-- Until T279814 is resolved -->
 		<exclude name="MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix" />
+		<!-- <properties>
+				<property name="allowedPrefixes" type="array">
+					<element value="edg" />
+					<element value="wg" />
+				</property>
+			</properties> -->
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
-		<exclude name="Squiz.Scope.MethodScope.Missing" />
 	</rule>
 	<file>.</file>
 	<arg name="extensions" value="php"/>

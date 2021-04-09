@@ -27,7 +27,7 @@ trait EDParsesParams {
 			if ( isset( $params[$key] ) ) {
 				foreach ( $globals as $global ) {
 					$prefixed_global = $prefix . $global;
-					global $$prefixed_global;
+					global $$prefixed_global; // phpcs:ignore MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix
 					if ( isset( $$prefixed_global[$params[$key]] ) ) {
 						$supplemented[$global] = $$prefixed_global[$params[$key]];
 					}

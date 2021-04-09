@@ -55,7 +55,8 @@ class EDHttpWithHeaders extends Http {
 
 	/**
 	 * Simple wrapper for Http::request( 'POST' )
-	 * this is copy of Http::post, the only reason to redeclare it is becouse Http calls Http::request instead of self::request
+	 * this is copy of Http::post, the only reason to redeclare it is because Http calls Http::request
+	 * instead of self::request
 	 * @see Http::request()
 	 *
 	 * @param string $url
@@ -69,7 +70,8 @@ class EDHttpWithHeaders extends Http {
 
 	/**
 	 * Simple wrapper for Http::request( 'GET' )
-	 * this is copy of Http::get, the only reason to redeclare it is becouse Http calls Http::request instead of self::request
+	 * this is copy of Http::get, the only reason to redeclare it is because Http calls Http::request
+	 * instead of self::request
 	 * @see Http::request()
 	 * @since 1.25 Second parameter $timeout removed. Second parameter
 	 * is now $options which can be given a 'timeout'

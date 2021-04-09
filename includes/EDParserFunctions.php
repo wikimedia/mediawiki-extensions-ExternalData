@@ -174,8 +174,10 @@ class EDParserFunctions {
 		global $edgExternalValueVerbose;
 		if ( !array_key_exists( $local_var, self::$values ) ) {
 			return $edgExternalValueVerbose
-				 ? self::formatErrorMessages( wfMessage( 'externaldata-no-local-variable', $local_var )->inContentLanguage()->text() )
-				 : '';
+				? self::formatErrorMessages(
+					wfMessage( 'externaldata-no-local-variable', $local_var )->inContentLanguage()->text()
+				)
+				: '';
 		} elseif ( is_array( self::$values[$local_var] ) ) {
 			return isset( self::$values[$local_var][0] ) ? self::$values[$local_var][0] : null;
 		} else {
@@ -231,7 +233,12 @@ class EDParserFunctions {
 
 				switch ( $command ) {
 					case 'htmlencode':
-						$value = htmlentities( self::getIndexedValue( $real_var, $i ), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, null, false );
+						$value = htmlentities(
+							self::getIndexedValue( $real_var, $i ),
+							ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE,
+							null,
+							false
+						);
 						break;
 					case 'urlencode':
 						$value = urlencode( self::getIndexedValue( $real_var, $i ) );
@@ -365,7 +372,7 @@ class EDParserFunctions {
 	public static function doStoreExternalTable( Parser &$parser ) {
 		// Quick exit if Semantic MediaWiki is not installed.
 		if ( !class_exists( '\SMW\ParserFunctionFactory' ) ) {
-			return '<div class="error">Error: Semantic MediaWiki must be installed in order to call #store_external_table.</div>';
+			return self::formatErrorMessages( wfMessage( 'externaldata-smw-needed' )->inContentLanguage()->text() );
 		}
 
 		$params = func_get_args();
@@ -386,7 +393,6 @@ class EDParserFunctions {
 				$num_loops = max( $num_loops, count( self::$values[$variable] ) );
 			}
 		}
-		$text = "";
 		for ( $i = 0; $i < $num_loops; $i++ ) {
 			// re-get $params
 			$params = func_get_args();
@@ -413,14 +419,10 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #clear_external_data parser function.
+	 *
 	 * @param Parser &$parser
 	 */
 	public static function doClearExternalData( Parser &$parser ) {
 		self::$values = [];
 	}
-
-	public static function getAllValues() {
-		return self::$values;
-	}
-
 }

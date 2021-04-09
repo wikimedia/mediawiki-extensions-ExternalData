@@ -52,6 +52,12 @@ class EDArraySlice {
 		return $result;
 	}
 
+	/**
+	 * @param int $length
+	 * @param int $endpoint
+	 * @param int $step
+	 * @return int
+	 */
 	private static function adjustEndpoint( $length, $endpoint, $step ) {
 		if ( $endpoint < 0 ) {
 			$endpoint += $length;
@@ -64,11 +70,18 @@ class EDArraySlice {
 		return $endpoint;
 	}
 
+	/**
+	 * @param int $length
+	 * @param int &$start
+	 * @param int &$stop
+	 * @param int &$step
+	 * @throws MWException
+	 */
 	private static function adjustSlice( $length, &$start, &$stop, &$step ) {
 		if ( $step === null ) {
 			$step = 1;
 		} elseif ( $step === 0 ) {
-			throw new MWException( "Step cannot be 0" );
+			throw new MWException( 'Step cannot be 0' );
 		}
 
 		if ( $start === null ) {
@@ -84,6 +97,14 @@ class EDArraySlice {
 		}
 	}
 
+	/**
+	 * @param int $length
+	 * @param int $start
+	 * @param int $stop
+	 * @param int $step
+	 * @return array
+	 * @throws MWException
+	 */
 	private static function sliceIndices( $length, $start, $stop, $step ) {
 		$result = [];
 		self::adjustSlice( $length, $start, $stop, $step );

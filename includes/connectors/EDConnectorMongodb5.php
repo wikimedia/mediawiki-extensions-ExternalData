@@ -47,7 +47,8 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		}
 		// Check if collection exists.
 		if ( !in_array( $this->from, $db->getCollectionNames(), true ) ) {
-			$this->error( 'externaldata-mongodb-unknown-collection', $this->db_id . ':' . $this->from ); // Not $this->connection['dbname']!
+			// Not $this->connection['dbname']!
+			$this->error( 'externaldata-mongodb-unknown-collection', $this->db_id . ':' . $this->from );
 			return null;
 		}
 		return new MongoCollection( $db, $collection );

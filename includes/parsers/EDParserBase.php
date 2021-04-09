@@ -27,7 +27,9 @@ abstract class EDParserBase {
 			// Data may be a string, or already be an array, if so passed from Lua.
 			// We need only external variables.
 			// For some parsers, they may be brought lo lower case.
-			$this->external = array_values( self::paramToArray( $params['data'], false, !static::$preserve_external_variables_case ) );
+			$this->external = array_values(
+				self::paramToArray( $params['data'], false, !static::$preserve_external_variables_case )
+			);
 		} else {
 			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
 		}

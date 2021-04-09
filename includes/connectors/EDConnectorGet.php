@@ -18,7 +18,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	private static $cache_table;
 
 	/** @var int Number of seconds before cache expires. */
-	private $cache_expiration;
+	private $cache_expires;
 	/** @var bool Whether the data can be fetched from stale cache. */
 	private $allow_stale_cache;
 
@@ -44,7 +44,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 
 		// Cache expiration.
 		global $edgCacheExpireTime;
-		$this->cache_expiration = array_key_exists( 'cache seconds', $args )
+		$this->cache_expires = array_key_exists( 'cache seconds', $args )
 			? max( $args['cache seconds'], $edgCacheExpireTime )
 			: $edgCacheExpireTime;
 
@@ -66,7 +66,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 
 		$cached = false;
 		// Is the cache set up, present and fresh?
-		if ( self::$cache_set_up && ( $this->cache_expiration !== 0 || $this->allow_stale_cache ) ) {
+		if ( self::$cache_set_up && ( $this->cache_expires !== 0 || $this->allow_stale_cache ) ) {
 			// Cache set up and can be used.
 			$cached = $this->cached();
 		}
@@ -74,7 +74,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		// If there is no fresh cache, try to get from the web.
 		$cache_present = (bool)$cached;
 		$tries = 0;
-		if ( !self::$cache_set_up || !$cache_present || !$this->cache_fresh || $this->cache_expiration === 0 ) {
+		if ( !self::$cache_set_up || !$cache_present || !$this->cache_fresh || $this->cache_expires === 0 ) {
 			// Allow extensions or LocalSettings.php to alter HTTP options.
 			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $this->real_url, $this->options ] );
 			do {
@@ -93,7 +93,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 				$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
 				$this->time = time();
 				// Update cache, if possible and required.
-				if ( self::$cache_set_up && $this->cache_expiration !== 0 ) {
+				if ( self::$cache_set_up && $this->cache_expires !== 0 ) {
 					$this->cache( $contents, $cache_present );
 				}
 			} else {
@@ -143,7 +143,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		$row = $dbr->selectRow( self::$cache_table, '*', [ 'url' => substr( $this->real_url, 0, 254 ) ], __METHOD__ );
 		if ( $row ) {
 			$this->cached_time = $row->req_time;
-			$this->cache_fresh = $this->cache_expiration !== 0 && time() - $this->cached_time <= $this->cache_expiration;
+			$this->cache_fresh = $this->cache_expires !== 0 && time() - $this->cached_time <= $this->cache_expires;
 			return $row->result;
 		} else {
 			return null;
@@ -163,6 +163,9 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 			$dbw->delete( self::$cache_table, [ 'url' => substr( $this->real_url, 0, 254 ) ] );
 		}
 		// Insert contents into the cache table.
-		$dbw->insert( self::$cache_table, [ 'url' => substr( $this->real_url, 0, 254 ), 'result' => $contents, 'req_time' => time() ] );
+		$dbw->insert(
+			self::$cache_table,
+			[ 'url' => substr( $this->real_url, 0, 254 ), 'result' => $contents, 'req_time' => time() ]
+		);
 	}
 }

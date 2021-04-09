@@ -40,7 +40,11 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 		$joins = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : '';
 		$join_strings = explode( ',', $joins );
 		if ( count( $join_strings ) > count( $this->tables ) ) {
-			$this->error( 'externaldata-db-too-many-joins', (string)count( $join_strings ), (string)count( $this->tables ) );
+			$this->error(
+				'externaldata-db-too-many-joins',
+				(string)count( $join_strings ),
+				(string)count( $this->tables )
+			);
 		}
 		foreach ( $join_strings as $i => $join_string ) {
 			if ( $join_string === '' ) {
@@ -95,7 +99,14 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 	 * @return string[][]|void
 	 */
 	private function searchDB() {
-		$rows = $this->db->select( $this->tables, $this->columns, $this->conditions, __METHOD__, $this->sql_options, $this->joins );
+		$rows = $this->db->select(
+			$this->tables,
+			$this->columns,
+			$this->conditions,
+			__METHOD__,
+			$this->sql_options,
+			$this->joins
+		);
 		if ( $rows ) {
 			$result = [];
 			foreach ( $rows as $row ) {
@@ -127,7 +138,14 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 			// No result.
 			$this->error(
 				'externaldata-db-invalid-query',
-				$this->db->selectSQLText( $this->tables, $this->columns, $this->conditions, __METHOD__, $this->options, $this->joins )
+				$this->db->selectSQLText(
+					$this->tables,
+					$this->columns,
+					$this->conditions,
+					__METHOD__,
+					$this->options,
+					$this->joins
+				)
 			);
 		}
 	}

@@ -28,14 +28,21 @@ class EDConnectorSoap extends EDConnectorGet {
 
 		// Check for SOAP-specific errors.
 		if ( !class_exists( 'SoapClient' ) ) {
-			$this->error( 'externaldata-missing-library', 'SOAP', '{{#get_soap_data:}}', 'mw.ext.getExternalData.getSoapData' );
+			$this->error(
+				'externaldata-missing-library',
+				'SOAP',
+				'{{#get_soap_data:}}',
+				'mw.ext.getExternalData.getSoapData'
+			);
 		}
 		if ( array_key_exists( 'request', $args ) ) {
 			$this->request_name = $args['request'];
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'request' );
 		}
-		$this->request_data = array_key_exists( 'requestData', $args ) ? self::paramToArray( $args['requestData'] ) : [];
+		$this->request_data = array_key_exists( 'requestData', $args )
+							? self::paramToArray( $args['requestData'] )
+							: [];
 		if ( array_key_exists( 'response', $args ) ) {
 			$this->response_name = $args['response'];
 		} else {

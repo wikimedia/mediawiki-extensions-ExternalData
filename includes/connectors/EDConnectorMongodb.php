@@ -113,7 +113,9 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 
 		// Make a key for Memcached/APC.
 		global $wgMainCacheType, $edgMemCachedMongoDBSeconds;
-		if ( ( $wgMainCacheType === CACHE_MEMCACHED || $wgMainCacheType === CACHE_ACCEL ) && $edgMemCachedMongoDBSeconds > 0 ) {
+		if ( ( $wgMainCacheType === CACHE_MEMCACHED || $wgMainCacheType === CACHE_ACCEL )
+			&& $edgMemCachedMongoDBSeconds > 0
+		) {
 			$this->cache_key = ObjectCache::getLocalClusterInstance()->makeKey( 'mongodb', $this->from, md5(
 				json_encode( $this->aggregate ) .
 				json_encode( $this->find ) .
@@ -190,7 +192,13 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		if ( count( $this->aggregate ) > 0 ) {
 			$results = $this->aggregate( $collection, $this->aggregate ); // late binding.
 		} else {
-			$results = $this->find( $collection, $this->find, $this->columns, $this->sort, $this->sql_options['LIMIT'] ); // late binding.
+			$results = $this->find(
+				$collection,
+				$this->find,
+				$this->columns,
+				$this->sort,
+				$this->sql_options['LIMIT']
+			); // late binding.
 		}
 
 		// Handle failure:

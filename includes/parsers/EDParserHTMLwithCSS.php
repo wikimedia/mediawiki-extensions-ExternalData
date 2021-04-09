@@ -23,19 +23,29 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 
 		if ( !class_exists( 'Symfony\Component\CssSelector\CssSelectorConverter' ) ) {
 			// Addressing DOM nodes with CSS/jQuery-like selectors requires symfony/css-selector.
-			throw new EDParserException( 'externaldata-format-unavailable', 'symfony/css-selector', 'HTML', 'use xpath' );
+			throw new EDParserException(
+				'externaldata-format-unavailable',
+				'symfony/css-selector',
+				'HTML',
+				'use xpath'
+			);
 		}
 
 		// Convert CSS selectors to XPaths and record them in $mappings.
 		$converter = new Symfony\Component\CssSelector\CssSelectorConverter();
+		$selector_regex = '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i';
 		foreach ( $this->external as &$selector ) {
-			if ( !preg_match( '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i', $selector, $matches ) ) {
+			if ( !preg_match( $selector_regex, $selector, $matches ) ) {
 				throw new EDParserException( 'externaldata-css-invalid', $selector );
 			}
 			try {
 				$xpath = $converter->toXPath( $matches['selector'] );
 			} catch ( Exception $e ) {
-				throw new EDParserException( 'externaldata-error-converting-css-to-xpath', $selector, $e->getMessage() );
+				throw new EDParserException(
+					'externaldata-error-converting-css-to-xpath',
+					$selector,
+					$e->getMessage()
+				);
 			}
 			$xpath = '/' . strtr( $xpath, [
 				'descendant-or-self::*' => '',

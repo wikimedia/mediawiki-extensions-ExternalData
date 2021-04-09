@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Taken from https://github.com/Galbar/JsonPath-PHP/blob/master/src/Galbar/JsonPath/JsonObject.php
  */
-
 /**
  * This is a [JSONPath](http://goessner.net/articles/JsonPath/) implementation for PHP.
  *
@@ -30,7 +27,7 @@
  *  * Regex match comparisons (p.e. `$.store.book[?(@.author =~ /.*Tolkien/)]`)__toString
  *  * For the child operator `[]` there is no need to surround child names with quotes (p.e. `$.[store][book, bicycle]`)
  *    except if the name of the field is a non-valid javascript variable name.
- *  * `.length` can be used to get the length of a string, get the length of an array and to check if a node has children.
+ *  * `.length` can be used to get the length of a string or an array and to check if a node has children.
  * Usage
  * =====
  *       // $json can be a string containing json, a PHP array, a PHP object or null.
@@ -46,20 +43,16 @@
 class EDJsonObject {
 	// Root regex
 	private const RE_ROOT_OBJECT = '/^\$(.*)/';
-
 	// Child regex
 	private const RE_CHILD_NAME = '/^\.([\w\_\$^\d][\w\-\$]*|\*)(.*)/u';
 	private const RE_RECURSIVE_SELECTOR = '/^\.\.([\w\_\$^\d][\w\-\$]*|\*)(.*)/u';
 	private const RE_PARENT_LENGTH = '/^\.length$/';
-
 	// Array expressions
 	private const RE_ARRAY_INTERVAL = '/^(?:(-?\d*:-?\d*)|(-?\d*:-?\d*:-?\d*))$/';
 	private const RE_INDEX_LIST = '/^(-?\d+)(\s*,\s*-?\d+)*$/';
 	private const RE_LENGTH = '/^(.*)\.length$/';
-
 	// Object expression
-	private const RE_CHILD_NAME_LIST = '/^(:?([\w\_\$^\d][\w\-\$]*?|".*?"|\'.*?\')(\s*,\s*([\w\_\$^\d][\w\-\$]*|".*?"|\'.*?\'))*)$/u';
-
+	private const RE_CHILD_NAME_LIST = '/^(:?([\w$^][\w$-]*?|".*?"|\'.*?\')(\s*,\s*([\w$^][\w$-]*|".*?"|\'.*?\'))*)$/u';
 	// Conditional expressions
 	private const RE_COMPARISON = '/^(.+)\s*(==|!=|<=|>=|<|>|=\~)\s*(.+)$/';
 	private const RE_STRING = '/^(?:\'(.*)\'|"(.*)")$/';
@@ -68,7 +61,6 @@ class EDJsonObject {
 	private const RE_OR = '/\s+or\s+/';
 	private const RE_AND = '/\s+and\s+/';
 	private const RE_NOT = '/^not\s+(.*)/';
-
 	// Tokens
 	private const TOK_ROOT = '$';
 	private const TOK_CHILD = '@';
@@ -78,7 +70,7 @@ class EDJsonObject {
 	private const TOK_EXPRESSION_BEGIN = '(';
 	private const TOK_EXPRESSION_END = ')';
 	private const TOK_ALL = '*';
-	private const TOK_COMA = ',';
+	private const TOC_COMMA = ',';
 	private const TOK_COLON = ':';
 	private const TOK_COMP_EQ = '==';
 	private const TOK_COMP_NEQ = '!=';
@@ -91,7 +83,9 @@ class EDJsonObject {
 	private const TOK_FALSE = 'false';
 	private const TOK_NULL = 'null';
 
+	/** @var array|mixed|null JSON object */
 	private $jsonObject = null;
+	/** @var bool */
 	private $hasDiverged = false;
 
 	/**
@@ -102,8 +96,10 @@ class EDJsonObject {
 	 * @param mixed $json json
 	 *
 	 * @return void
+	 *
+	 * @throws MWException
 	 */
-	function __construct( $json = null ) {
+	public function __construct( $json = null ) {
 		if ( $json === null ) {
 			$this->jsonObject = [];
 		} elseif ( is_string( $json ) ) {
@@ -127,7 +123,9 @@ class EDJsonObject {
 	 *
 	 * @param string $jsonPath jsonPath
 	 *
-	 * @return mixed
+	 * @return array|bool
+	 *
+	 * @throws MWException
 	 */
 	public function get( $jsonPath ) {
 		$this->hasDiverged = false;
@@ -135,6 +133,16 @@ class EDJsonObject {
 		return $result;
 	}
 
+	/**
+	 * Evaluates an expression of any type.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $expression jsonPath expression
+	 *
+	 * @return mixed
+	 *
+	 * @throws MWException
+	 */
 	private function expressionValue( &$jsonObject, $expression ) {
 		if ( $expression === self::TOK_NULL ) {
 			return null;
@@ -180,6 +188,18 @@ class EDJsonObject {
 		}
 	}
 
+	/**
+	 * Compares two expressions.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $leftExpr Left expression to compare
+	 * @param string $comparator Comparison operator
+	 * @param string $rightExpr Right expression to compare
+	 *
+	 * @return bool
+	 *
+	 * @throws MWException
+	 */
 	private function booleanExpressionComparison( &$jsonObject, $leftExpr, $comparator, $rightExpr ) {
 		$left = $this->expressionValue( $jsonObject, trim( $leftExpr ) );
 		$right = $this->expressionValue( $jsonObject, trim( $rightExpr ) );
@@ -203,6 +223,16 @@ class EDJsonObject {
 		}
 	}
 
+	/**
+	 * Evaluates a conjunction.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $expression A conjunction of expressions
+	 *
+	 * @return bool
+	 *
+	 * @throws MWException
+	 */
 	private function booleanExpressionAnds( &$jsonObject, $expression ) {
 		$values = preg_split( self::RE_AND, $expression );
 		$match = [];
@@ -212,7 +242,6 @@ class EDJsonObject {
 				$subexpr = $match[1];
 				$not = true;
 			}
-
 			$result = false;
 			if ( preg_match( self::RE_COMPARISON, $subexpr, $match ) ) {
 				$result = $this->booleanExpressionComparison( $jsonObject, $match[1], $match[2], $match[3] );
@@ -232,6 +261,16 @@ class EDJsonObject {
 		return true;
 	}
 
+	/**
+	 * Evaluates a disjunction.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $expression A disjunction of boolean expressions
+	 *
+	 * @return bool
+	 *
+	 * @throws MWException
+	 */
 	private function booleanExpression( &$jsonObject, $expression ) {
 		$ands = preg_split( self::RE_OR, $expression );
 		foreach ( $ands as $subexpr ) {
@@ -242,7 +281,16 @@ class EDJsonObject {
 		return false;
 	}
 
-	private function matchValidExpression( $jsonPath, &$result, $offset = 0 ) {
+	/**
+	 * Splits a jsonPath.
+	 *
+	 * @param string $jsonPath jsonPath
+	 * @param array &$result Split jsonPath
+	 * @param int $offset Initial offset in jsonPath
+	 *
+	 * @return int|bool
+	 */
+	private function matchValidExpression( $jsonPath, array &$result, $offset = 0 ) {
 		if ( $jsonPath[$offset] != self::TOK_SELECTOR_BEGIN ) {
 			return false;
 		}
@@ -280,6 +328,16 @@ class EDJsonObject {
 		return 0;
 	}
 
+	/**
+	 * Get a child JSON object.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $childName Name of the child JSON object
+	 * @param array &$result An enumerated array of child JSON objects
+	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
+	 *
+	 * @return bool
+	 */
 	private function opChildName( &$jsonObject, $childName, &$result, $createInexistent = false ) {
 		if ( is_array( $jsonObject ) ) {
 			if ( $childName === self::TOK_ALL ) {
@@ -298,6 +356,17 @@ class EDJsonObject {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $contents
+	 * @param array &$result An enumerated array of child JSON objects
+	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
+	 *
+	 * @return bool
+	 *
+	 * @throws MWException
+	 */
 	private function opChildSelector( &$jsonObject, $contents, &$result, $createInexistent = false ) {
 		if ( is_array( $jsonObject ) ) {
 			$match = [];
@@ -312,12 +381,11 @@ class EDJsonObject {
 					function ( $x ) {
 						return trim( $x, " \t\n\r\0\x0B'\"" );
 					},
-					explode( self::TOK_COMA, $contents )
+					explode( self::TOC_COMMA, $contents )
 				);
 				if ( count( $names ) > 1 ) {
 					$this->hasDiverged = true;
 				}
-
 				$names = array_filter(
 					$names,
 					function ( $x ) use ( $createInexistent, $jsonObject ) {
@@ -333,7 +401,7 @@ class EDJsonObject {
 			} elseif ( preg_match( self::RE_INDEX_LIST, $contents ) ) {
 				$index = array_map(
 					function ( $x ) use ( $jsonObject ) {
-						$i = intval( trim( $x ) );
+						$i = (int)trim( $x );
 						if ( $i < 0 ) {
 							$n = count( $jsonObject );
 							$i = $i % $n;
@@ -343,12 +411,11 @@ class EDJsonObject {
 						}
 						return $i;
 					},
-					explode( self::TOK_COMA, $contents )
+					explode( self::TOC_COMMA, $contents )
 				);
 				if ( count( $index ) > 1 ) {
 					$this->hasDiverged = true;
 				}
-
 				$index = array_filter(
 					$index,
 					function ( $x ) use ( $createInexistent, $jsonObject ) {
@@ -376,7 +443,6 @@ class EDJsonObject {
 				}
 				$end = ( $numbers[1] !== '' ? intval( $numbers[1] ) : $end );
 				$begin = ( $numbers[0] !== '' ? intval( $numbers[0] ) : $begin );
-
 				$slice = EDArraySlice::slice( $jsonObject, $begin, $end, $step, true );
 				foreach ( $slice as $i => $x ) {
 					if ( $x !== null ) {
@@ -403,6 +469,17 @@ class EDJsonObject {
 		return false;
 	}
 
+	/**
+	 *
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $childName Name of JSON child object
+	 * @param array &$result An enumerated array of child JSON objects
+	 *
+	 * @return bool
+	 *
+	 * @throws MWException
+	 */
 	private function opRecursiveSelector( &$jsonObject, $childName, &$result ) {
 		$this->opChildName( $jsonObject, $childName, $result );
 		if ( is_array( $jsonObject ) ) {
@@ -412,12 +489,22 @@ class EDJsonObject {
 		}
 	}
 
+	/**
+	 * Really evaluate an expression.
+	 *
+	 * @param mixed &$jsonObject
+	 * @param string $jsonPath jsonPath
+	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
+	 *
+	 * @return mixed
+	 *
+	 * @throws MWException
+	 */
 	private function getReal( &$jsonObject, $jsonPath, $createInexistent = false ) {
 		$match = [];
 		if ( preg_match( self::RE_ROOT_OBJECT, $jsonPath, $match ) === 0 ) {
 			throw new MWException( wfMessage( 'externaldata-jsonpath-error' )->text() );
 		}
-
 		$jsonPath = $match[1];
 		$rootObjectPrev = &$this->jsonObject;
 		$this->jsonObject = &$jsonObject;
@@ -481,7 +568,6 @@ class EDJsonObject {
 			}
 			$selection = $newSelection;
 		}
-
 		$this->jsonObject = &$rootObjectPrev;
 		return $selection;
 	}
