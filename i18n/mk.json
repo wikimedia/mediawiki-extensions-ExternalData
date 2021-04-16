@@ -6,6 +6,7 @@
 	},
 	"getdata": "Земи податоци",
 	"externaldata-desc": "Овозможува добивање структурирани податоци од надворешни URL-адреси, бази на податоци и други извори",
+	"externaldata-smw-needed": "Грешка: Мора да биде воспоставен Семантички МедијаВики за да може да се повика {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Грешка: Го немате укажано параметарот „$1“.",
 	"externaldata-param-type-error": "Грешка: Параметарот $1 мора да биде од видот $2.",
 	"externaldata-php-library-missing": "Грешка: Недостасува PHP-библиотеката $1, потребна за употреба на $2.",
@@ -45,7 +46,7 @@
 	"externaldata-undefined-file": "Податотеката $1 не е зададена.",
 	"externaldata-missing-file": "Податотеката $1 недостасува.",
 	"externaldata-empty-file": "Не можам да ја најдам содржината на податотеката $1.",
-	"externaldata-no-file-in-directory": "Во папката $1 нема податотека $1.",
+	"externaldata-no-file-in-directory": "Во папката $1 нема податотека $2.",
 	"externaldata-no-directory": "Папката $1 не е зададена.",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
 	"externaldata-no-template": "Грешка: нема укажано параметар."

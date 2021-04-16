@@ -10,6 +10,7 @@
 	},
 	"getdata": "Veri al",
 	"externaldata-desc": "Dış URL'lerden, veritabanlarından ve diğer kaynaklardan yapılandırılmış veri almaya izin verir",
+	"externaldata-smw-needed": "Hata: {{#store_external_table:}} çağırabilmek için Semantic MediaWiki yüklenmelidir.",
 	"externaldata-no-param-specified": "Hata: \"$1\" parametresi belirtilmedi.",
 	"externaldata-param-type-error": "Hata: $1 parametresi $2 türünde olmalıdır.",
 	"externaldata-php-library-missing": "Hata: $2 kullanmak için gereken PHP kitaplığı $1 eksik.",
