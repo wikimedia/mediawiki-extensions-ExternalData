@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AJBot2",
 			"Akmaie Ajam",
 			"Bennylin",
 			"Farras",
@@ -16,12 +17,12 @@
 	"externaldata-xml-error": "Galat XML: $1 pada baris $2",
 	"externaldata-jsonpath-error": "Kesalahan: Notasi JSONPath tidak valid.",
 	"externaldata-db-incomplete-information": "Galat: Informasi tak lengkap untuk ID $1 server ini. ($2)",
-	"externaldata-db-could-not-get-url": "Tidak dapat mengambil URL setelah dicoba {{PLURAL:$1||}}$1 kali.",
+	"externaldata-db-could-not-get-url": "Tidak bisa mendapatkan URL $1 setelah $2 {{PLURAL:$2|try|tries}}.",
 	"externaldata-db-unknown-type": "Galat: Jenis $1 basis data tidak diketahui.",
 	"externaldata-db-could-not-connect": "Galat: Tidak dapat terhubung ke basis data.",
 	"externaldata-db-no-return-values": "Galat: Nilai pengembalian tidak dispesifikasi.",
 	"externaldata-db-invalid-query": "Kueri $1 tidak sah.",
-	"externaldata-url-not-fetched": "Kesalahan ketika mengambil data dari URL $1.",
+	"externaldata-url-not-fetched": "Terjadi kesalahan saat mengambil data dari URL $1:$2.",
 	"externaldata-caught-exception-soap": "Kesalahan $1 ketika membuat klien SOAP.",
 	"externaldata-undefined-file": "Berkas $1 tidak diketahui.",
 	"externaldata-missing-file": "Berkas $1 hilang.",
