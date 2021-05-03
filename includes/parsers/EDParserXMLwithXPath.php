@@ -106,7 +106,7 @@ class EDParserXMLwithXPath extends EDParserBase {
 		if ( !is_array( $nodes ) ) {
 			return $nodes;
 		}
-		return array_filter( $nodes, function ( $node ) {
+		return array_filter( $nodes, static function ( $node ) {
 			return trim( $node[0] ) !== '';
 		} );
 	}

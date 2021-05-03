@@ -378,7 +378,7 @@ class EDJsonObject {
 				}
 			} elseif ( preg_match( self::RE_CHILD_NAME_LIST, $contents, $match ) ) {
 				$names = array_map(
-					function ( $x ) {
+					static function ( $x ) {
 						return trim( $x, " \t\n\r\0\x0B'\"" );
 					},
 					explode( self::TOC_COMMA, $contents )
@@ -388,7 +388,7 @@ class EDJsonObject {
 				}
 				$names = array_filter(
 					$names,
-					function ( $x ) use ( $createInexistent, $jsonObject ) {
+					static function ( $x ) use ( $createInexistent, $jsonObject ) {
 						return $createInexistent || array_key_exists( $x, $jsonObject );
 					}
 				);
@@ -400,7 +400,7 @@ class EDJsonObject {
 				}
 			} elseif ( preg_match( self::RE_INDEX_LIST, $contents ) ) {
 				$index = array_map(
-					function ( $x ) use ( $jsonObject ) {
+					static function ( $x ) use ( $jsonObject ) {
 						$i = (int)trim( $x );
 						if ( $i < 0 ) {
 							$n = count( $jsonObject );
@@ -418,7 +418,7 @@ class EDJsonObject {
 				}
 				$index = array_filter(
 					$index,
-					function ( $x ) use ( $createInexistent, $jsonObject ) {
+					static function ( $x ) use ( $createInexistent, $jsonObject ) {
 						return $createInexistent || array_key_exists( $x, $jsonObject );
 					}
 				);

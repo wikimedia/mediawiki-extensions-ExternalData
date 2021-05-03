@@ -121,7 +121,7 @@ class EDConnectorLdap extends EDConnectorBase {
 			$bound = false;
 			$exception = false;
 			// Suppress warnings.
-			set_error_handler( function () {
+			set_error_handler( static function () {
 				throw new Exception();
 			} );
 			try {
