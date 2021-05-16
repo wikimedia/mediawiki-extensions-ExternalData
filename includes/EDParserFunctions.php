@@ -425,4 +425,13 @@ class EDParserFunctions {
 	public static function doClearExternalData( Parser &$parser ) {
 		self::$values = [];
 	}
+
+	/**
+	 * This function is needed by the PageForms extension.
+	 *
+	 * @return array
+	 */
+	public static function getAllValues() {
+		return self::$values;
+	}
 }
