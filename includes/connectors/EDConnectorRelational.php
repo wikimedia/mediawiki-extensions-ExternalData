@@ -117,10 +117,6 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 				// doesn't get chopped off to just "b").
 				foreach ( $this->columns as $column ) {
 					$field = $row->$column;
-					// This can happen with MSSQL.
-					if ( $field instanceof DateTime ) {
-						$field = $field->format( 'Y-m-d H:i:s' );
-					}
 					// Convert the encoding to UTF-8
 					// if necessary - based on code at
 					// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
