@@ -20,7 +20,7 @@
 	"externaldata-db-unknown-type": "שגיאה: סוג מסד הנתונים אינו מוכר.",
 	"externaldata-db-could-not-connect": "שגיאה: לא ניתן להתחבר אל מסד הנתונים.",
 	"externaldata-db-no-return-values": "שגיאה: לא הוגדרו ערכים להחזרה.",
-	"externaldata-db-invalid-query": "שאילתה בלתי תקינה.",
+	"externaldata-db-invalid-query": "השאילתה $1 אינה תקינה.",
 	"externaldata-mongodb-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",
 	"externaldata-post-failed": "בקשת POST אל $1 נכשלה.",
 	"externaldata-parsing-html-failed": "לא ניתן לפענח HTML."
