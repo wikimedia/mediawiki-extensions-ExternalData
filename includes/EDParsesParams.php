@@ -111,7 +111,9 @@ END;
 			$keyValuePairs = preg_split( $pattern, $arg );
 			$splitArray = [];
 			foreach ( $keyValuePairs as $keyValuePair ) {
-				if ( strpos( $keyValuePair, '=' ) !== false ) {
+				if ( $keyValuePair == '' ) {
+					// Ignore.
+				} elseif ( strpos( $keyValuePair, '=' ) !== false ) {
 					list( $key, $value ) = explode( '=', $keyValuePair, 2 );
 					$splitArray[trim( $key )] = trim( $value );
 				} else {
