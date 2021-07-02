@@ -7,6 +7,7 @@
 	},
 	"getdata": "取得資料",
 	"externaldata-desc": "允許外部 URL、資料庫，以及其它來源檢索結構化資料",
+	"externaldata-smw-needed": "錯誤：必須安裝 Semantic MediaWiki 才能調用{{#store_external_table:}}。",
 	"externaldata-no-param-specified": "錯誤：未指定「$1」參數。",
 	"externaldata-param-type-error": "錯誤：參數 $1 必須是 $2 類型。",
 	"externaldata-php-library-missing": "錯誤：缺少 $2 所需的 PHP 函式庫 $1。",
@@ -46,7 +47,7 @@
 	"externaldata-undefined-file": "檔案 $1 未定義。",
 	"externaldata-missing-file": "缺少檔案 $1。",
 	"externaldata-empty-file": "無法取得檔案 $1 的內容。",
-	"externaldata-no-file-in-directory": "目錄 $1 下沒有檔案 $1。",
+	"externaldata-no-file-in-directory": "目錄 $1 下沒有檔案 $2。",
 	"externaldata-no-directory": "目錄 $1 未定義。",
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",
 	"externaldata-no-template": "錯誤：沒有指定模板。"
