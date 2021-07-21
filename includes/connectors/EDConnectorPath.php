@@ -16,26 +16,27 @@ abstract class EDConnectorPath extends EDConnectorBase {
 	/**
 	 * Get data from absolute filepath. Set $this->values.
 	 *
+	 * @param string $path Real path to the file.
 	 * @param string $alias An alias for real file path to show in error messages.
 	 *
-	 * @return bool True on success, false if error were encountered.
+	 * @return array|null An array of values on success, null if error were encountered.
 	 *
 	 */
-	protected function getDataFromPath( $alias ) {
-		if ( !file_exists( $this->realPath ) ) {
+	protected function getDataFromPath( $path, $alias ) {
+		if ( !file_exists( $path ) ) {
 			$this->error( 'externaldata-missing-file', $alias );
-			return false;
+			return null;
 		}
-		$file_contents = file_get_contents( $this->realPath );
+		$file_contents = file_get_contents( $path );
 		if ( empty( $file_contents ) ) {
 			// Show an error message if there's nothing there.
 			$this->error( 'externaldata-empty-file', $alias );
-			return false;
+			return null;
 		}
 		$file_contents = EDEncodingConverter::toUTF8( $file_contents, $this->encoding );
-		$this->values = $this->parse( $file_contents, [
+		return $this->parse( $file_contents, [
+			'__file' => [ $alias ],
 			'__time' => [ time() ]
 		] );
-		return true;
 	}
 }

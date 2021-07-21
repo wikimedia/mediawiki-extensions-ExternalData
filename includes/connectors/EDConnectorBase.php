@@ -101,6 +101,9 @@ abstract class EDConnectorBase {
 		$args['__pf'] = $name;
 		$args['__mongo'] = class_exists( 'MongoDB\Client' ) ? 'MongoDB\Client'
 					   : ( class_exists( 'MongoClient' ) ? 'MongoClient' : null );
+		if ( isset( $args['file name'] ) && strpbrk( $args['file name'], '*?[]' ) ) {
+			$args['file pattern'] = $args['file name'];
+		}
 		global $edgConnectors;
 		$class = self::getMatch( $args, $edgConnectors );
 		// Instantiate the connector. If $class is empty, either this extension or $edgConnectors is broken.

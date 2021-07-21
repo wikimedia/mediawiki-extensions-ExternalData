@@ -71,10 +71,9 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	 */
 	public function __invoke( $text, $defaults = [] ) {
 		$xpath_values = parent::__invoke( $text, $defaults );
-		$css_values = [];
 		foreach ( $this->cssToXpath as $css => $xpath ) {
-			$css_values[$css] = $xpath_values[$xpath];
+			$xpath_values[$css] = $xpath_values[$xpath];
 		}
-		return $css_values;
+		return $xpath_values;
 	}
 }

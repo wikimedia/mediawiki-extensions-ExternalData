@@ -46,6 +46,7 @@
 		"EDConnectorPath": "includes/connectors/EDConnectorPath.php",
 		"EDConnectorFile": "includes/connectors/EDConnectorFile.php",
 		"EDConnectorDirectory": "includes/connectors/EDConnectorDirectory.php",
+		"EDConnectorDirectoryWalker": "includes/connectors/EDConnectorDirectoryWalker.php",
 		"EDConnectorDb": "includes/connectors/EDConnectorDb.php",
 		"EDConnectorComposed": "includes/connectors/EDConnectorComposed.php",
 		"EDConnectorRelational": "includes/connectors/EDConnectorRelational.php",
@@ -90,7 +91,7 @@
 		"Secrets": {
 			"server": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"db": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
-			"directory": [ "DirectoryPath" ],
+			"directory": [ "DirectoryPath", "DirectoryDepth" ],
 			"file": [ "FilePath" ],
 			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN" ],
 			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand" ]
@@ -98,6 +99,7 @@
 		"Connectors": [
 			[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],
 			[ { "__pf": "get_web_data" }, "EDConnectorWeb" ],
+			[ { "__pf": "get_file_data", "directory": true, "file pattern": true }, "EDConnectorDirectoryWalker" ],
 			[ { "__pf": "get_file_data", "directory": true }, "EDConnectorDirectory" ],
 			[ { "__pf": "get_file_data" }, "EDConnectorFile" ],
 			[ { "__pf": "get_soap_data" }, "EDConnectorSoap" ],

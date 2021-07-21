@@ -13,7 +13,7 @@ class EDConnectorDirectory extends EDConnectorPath {
 	/** @var string File in directory. */
 	private $file_name;
 	/** @var string Real path to $directory. */
-	private $real_directory;
+	protected $real_directory;
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -53,11 +53,15 @@ class EDConnectorDirectory extends EDConnectorPath {
 	 */
 	public function run() {
 		$this->realPath = realpath( $this->real_directory . $this->file_name );
-		if ( $this->realPath === false || strpos( $this->realPath, $this->real_directory ) !== 0 ) {
+		if (
+			$this->realPath === false ||
+			strpos( $this->realPath, $this->real_directory ) !== 0 // no .
+		) {
 			// No file found in directory.
 			$this->error( 'externaldata-no-file-in-directory', $this->directory, $this->file_name );
 			return false;
 		}
-		return $this->getDataFromPath( $this->directory . $this->file_name );
+		$this->values = $this->getDataFromPath( $this->realPath, $this->directory . ':' . $this->file_name );
+		return $this->values !== null;
 	}
 }

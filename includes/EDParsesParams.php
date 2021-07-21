@@ -155,7 +155,7 @@ END;
 	protected static function parseParams( $params ) {
 		$args = [];
 		foreach ( $params as $param ) {
-			$param_parts = explode( "=", $param, 2 );
+			$param_parts = preg_split( '/\s*=\s*/', $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
 				$args[$param_parts[0]] = null;
 			} else {

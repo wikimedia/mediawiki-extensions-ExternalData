@@ -41,6 +41,7 @@ class EDConnectorFile extends EDConnectorPath {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		return $this->getDataFromPath( $this->file );
+		$this->values = $this->getDataFromPath( $this->realPath, $this->file );
+		return $this->values !== null;
 	}
 }
