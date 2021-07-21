@@ -69,6 +69,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 				'__stale' => [ !$this->cacheFresh ],
 				'__tries' => [ $this->tries ]
 			] );
+			$this->error( $this->parseErrors );
 			return !$this->errors();
 		} else {
 			// Nothing to serve.

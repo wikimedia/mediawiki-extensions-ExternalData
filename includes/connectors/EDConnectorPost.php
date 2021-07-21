@@ -15,6 +15,7 @@ class EDConnectorPost extends EDConnectorHttp {
 	 */
 	protected function __construct( array &$args ) {
 		parent::__construct( $args );
+
 		$this->options['postData']
 			= isset( $args['post data'] ) ? $args['post data']
 			: ( isset( $this->options['postData'] ) ? $this->options['postData'] : null );
@@ -51,6 +52,9 @@ class EDConnectorPost extends EDConnectorHttp {
 			'__stale' => [ false ],
 			'__tries' => [ 1 ]
 		] );
+		// Parser.
+		$this->error( $this->parseErrors );
+
 		return !$this->errors();
 	}
 }

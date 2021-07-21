@@ -7,11 +7,23 @@
  *
  */
 abstract class EDConnectorPath extends EDConnectorBase {
-	/** @var bool $needsParser Needs a EDParser* object. */
-	protected static $needsParser = true;
+	use EDConnectorParsable; // needs parser.
 
 	/** @var string Real filepath. */
 	protected $realPath;
+
+	/**
+	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
+	 *
+	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 */
+	protected function __construct( array &$args ) {
+		// Parser.
+		$this->prepareParser( $args );
+		$this->error( $this->parseErrors );
+
+		parent::__construct( $args );
+	}
 
 	/**
 	 * Get data from absolute filepath. Set $this->values.
@@ -34,9 +46,11 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			return null;
 		}
 		$file_contents = EDEncodingConverter::toUTF8( $file_contents, $this->encoding );
-		return $this->parse( $file_contents, [
+		$values = $this->parse( $file_contents, [
 			'__file' => [ $alias ],
 			'__time' => [ time() ]
 		] );
+		$this->error( $this->parseErrors );
+		return $values;
 	}
 }

@@ -7,8 +7,8 @@
  *
  */
 abstract class EDConnectorHttp extends EDConnectorBase {
-	/** @var bool $needsParser True, if the connector needs one of EDParser* objects. */
-	protected static $needsParser = true;
+	use EDConnectorParsable; // needs parser.
+
 	/** @var string URL to fetch data from as provided by user. */
 	protected $originalUrl;
 	/** @var string URL to fetch data from after substitutions. */
@@ -24,6 +24,10 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
 	 */
 	protected function __construct( array &$args ) {
+		// Parser.
+		$this->prepareParser( $args );
+		$this->error( $this->parseErrors );
+
 		parent::__construct( $args );
 
 		// Form URL.

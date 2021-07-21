@@ -10,9 +10,8 @@ use MediaWiki\Shell\Shell;
  */
 class EDConnectorExe extends EDConnectorBase {
 	use EDConnectorCached; // uses cache.
+	use EDConnectorParsable; // needs parser.
 
-	/** @var bool $needsParser Needs a EDParser* object. */
-	protected static $needsParser = true;
 	/** @var string $program Program ID. */
 	private $program;
 	/** @var array $environment An array of environment variables. */
@@ -40,6 +39,10 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
 	 */
 	protected function __construct( array &$args ) {
+		// Parser.
+		$this->prepareParser( $args );
+		$this->error( $this->parseErrors );
+
 		parent::__construct( $args );
 
 		if ( Shell::isDisabled() ) {
@@ -191,6 +194,7 @@ class EDConnectorExe extends EDConnectorBase {
 				$standard_vars['__warning'] = $error;
 			}
 			$this->values = $this->parse( $output, $standard_vars );
+			$this->error( $this->parseErrors );
 			return true;
 		} else {
 			$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );

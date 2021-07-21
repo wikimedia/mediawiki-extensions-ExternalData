@@ -36,6 +36,7 @@
 		"EDParsesParams": "includes/EDParsesParams.php",
 		"EDEncodingConverter": "includes/EDEncodingConverter.php",
 		"EDConnectorCached": "includes/connectors/EDConnectorCached.php",
+		"EDConnectorParsable": "includes/connectors/EDConnectorParsable.php",
 		"EDConnectorBase": "includes/connectors/EDConnectorBase.php",
 		"EDConnectorHttp": "includes/connectors/EDConnectorHttp.php",
 		"EDConnectorPost": "includes/connectors/EDConnectorPost.php",
