@@ -20,7 +20,7 @@ class EDParserText extends EDParserBase {
 	 */
 	public function __invoke( $text, $defaults = [] ) {
 		$values = parent::__invoke( $text, $defaults );
-		$values['text'] = [ $text ];
+		$values['__text'] = [ $text ];
 		return $values;
 	}
 }
