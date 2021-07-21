@@ -12,6 +12,7 @@ $magicWords['en'] = [
 	'get_soap_data' => [ 0, 'get_soap_data' ],
 	'get_ldap_data' => [ 0, 'get_ldap_data' ],
 	'get_db_data' => [ 0, 'get_db_data' ],
+	'get_program_data' => [ 0, 'get_program_data' ],
 	'external_value' => [ 0, 'external_value' ],
 	'for_external_table' => [ 0, 'for_external_table' ],
 	'display_external_table' => [ 0, 'display_external_table' ],
@@ -170,10 +171,16 @@ $magicWords['nl'] = [
 $magicWords['ru'] = [
 	'get_ldap_data' => [ 0, 'получить_данные_ldap' ],
 	'get_db_data' => [ 0, 'получить_данные_db' ],
+	'get_web_data' => [ 0, 'получить_данные_сети' ],
+	'get_file_data' => [ 0, 'получить_данные_файла' ],
+	'get_soap_data' => [ 0, 'получить_данные_soap' ],
+	'get_program_data' => [ 0, 'получить_данные_программы' ],
+	'display_external_table' => [ 0, 'показать внешнюю_таблицу' ],
+	'clear_external_data' => [ 0, 'очистить_внешнюю_таблицу' ],
 	'external_value' => [ 0, 'внешнее_значение' ],
 	'for_external_table' => [ 0, 'для_внешней_таблицы' ],
 	'store_external_table' => [ 0, 'внешняя_таблица_хранения' ],
-];
+	];
 
 /** Serbian (Cyrillic script) (српски (ћирилица)‎) */
 $magicWords['sr-ec'] = [

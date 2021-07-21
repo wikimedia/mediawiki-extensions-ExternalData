@@ -153,6 +153,18 @@ class EDParserFunctions {
 	}
 
 	/**
+	 * Implementation of the {{#get_program_data:}} parser function.
+	 *
+	 * @param Parser $parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
+	 */
+	public static function getProgramData( Parser $parser, ...$params ) {
+		return self::fetch( $parser, 'get_program_data', $params );
+	}
+
+	/**
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by one of the #get... parser functions.
 	 * @param string $var
@@ -168,12 +180,12 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Render the #external_value parser function.
+	 * Really really render the #external_value parser function or <external> tag.
 	 * @param Parser $parser
 	 * @param string $local_var
 	 * @return string|null
 	 */
-	public static function doExternalValue( Parser $parser, $local_var = '' ) {
+	private static function reallyExternalValue( Parser $parser, $local_var = '' ) {
 		global $edgExternalValueVerbose;
 		if ( !array_key_exists( $local_var, self::$values ) ) {
 			return $edgExternalValueVerbose
@@ -185,6 +197,36 @@ class EDParserFunctions {
 			return isset( self::$values[$local_var][0] ) ? self::$values[$local_var][0] : null;
 		} else {
 			return self::$values[$local_var];
+		}
+	}
+
+	/**
+	 * Render the #external_value parser function.
+	 * @param Parser $parser
+	 * @param string $local_var
+	 * @return string|null
+	 */
+	public static function doExternalValue( Parser $parser, $local_var = '' ) {
+		return self::reallyExternalValue( $parser, $local_var );
+	}
+
+	/**
+	 * Render the <external data="(internal variable)">(default value)</external> or <external data="(var)" /> tag.
+	 * @param string $default What is between <external></external>: the default value.
+	 * @param array $args Arguments (only one: the variable name).
+	 * @param Parser $parser
+	 * @param PFrame $frame
+	 * @return array
+	 */
+	public static function doExternalValueRaw( $default, array $args, Parser $parser, PPFrame $frame ): array {
+		if ( isset( $args['data'] ) ) {
+			$variable = $args['data'];
+			$value = self::reallyExternalValue( $parser, $variable ) ?: $default;
+			return [ $value, 'markerType' => 'nowiki' ];
+		} else {
+			return [ self::formatErrorMessages(
+				wfMessage( 'externaldata-no-param-specified', 'data' )->inContentLanguage()->text()
+			) ];
 		}
 	}
 

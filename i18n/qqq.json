@@ -38,7 +38,6 @@
 	"externaldata-db-empty-rowset": "An error message used when an SQL query returns an empty rowset. $1 is an SQL query.",
 	"externaldata-db-prepared-not-specified": "The error message shown if several prepared statements are set up for the database, but no statement key is provided in the from parameter. $1 is the database ID.",
 	"externaldata-db-no-such-prepared": "This error message is shown when prepared statements array for the database does not include the provided key. Parameters:\n\n $1 is the database ID,\n\n$2 is the prepared statement key.",
-	"externaldata-odbc-illegal": "This error message shown if an attempted SQL injection is suspected. $1 is the offending substring, and $2 is the parameter in whach it was found.",
 	"externaldata-mongodb-unknown-collection": "The error message if #get_db_data can't find the specified \"collection\" when connecting to MongoDB. $1 is the collection name",
 	"externaldata-mongodb-aggregation-failed": "An error message produced when an aggregation query against a MongoDB collection fails. $1 is the error message.",
 	"externaldata-format-unavailable": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function",
@@ -58,6 +57,10 @@
 	"externaldata-empty-file": "This message is shown if the file $1 exists but is empty for whatever reason.",
 	"externaldata-no-file-in-directory": "This message is shown when the specified file is not found in the directory. Parameters:\n* $1 is the directory alias,\n* $2 is the file name.",
 	"externaldata-no-directory": "This message is shown when directory alias $1 is not defined in $edgDirectoryPath.",
+	"externaldata-exe-shell-disabled": "The error message, when PHP admin has disabled access to shell (no proc_open() function).",
+	"externaldata-exe-incomplete-information": "Used as error message if not all necessary settings to run a program are provided in wiki settings.\n\nPath to program and its parameters are necessary params.\nParameters:\n* $1 is the program ID,\n* $2 is the name of the missing parameter.",
+	"externaldata-exe-error": "The error message when the invoked program returns an error. Parameters:\n\n* $1 is the program ID,\n\n* $2 is the exit code,\n\n* $3 is the error text.",
+	"externaldata-exe-illegal-parameter": "The error message shown when a parameter passed to #get_program_data has a value not allowed by $edgExeParamFilters. Parameters:\n\n* $1 is the program alias used in parser function,\n* $2 is the parameter name,\n* is the offending value.",
 	"externaldata-no-local-variable": "This error message is shown when no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error message if {{#display_external_table:}} has no template parameter."
 }

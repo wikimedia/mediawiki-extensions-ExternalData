@@ -8,11 +8,12 @@
 class EDScribunto extends Scribunto_LuaLibraryBase {
 	/** @var array $funcs A list of exported Lua functions mapping the ID ised by ExternalDataHooks::connector(). */
 	private static $funcs = [
-		'getWebData'	=> 'get_web_data',
-		'getFileData'	=> 'get_file_data',
-		'getSoapData'	=> 'get_soap_data',
-		'getLdapData'	=> 'get_ldap_data',
-		'getDbData'		=> 'get_db_data'
+		'getWebData'	    => 'get_web_data',
+		'getFileData'	    => 'get_file_data',
+		'getSoapData'	    => 'get_soap_data',
+		'getLdapData'	    => 'get_ldap_data',
+		'getDbData'		    => 'get_db_data',
+		'getProgramData'    => 'get_program_data'
 	];
 
 	/**

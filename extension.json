@@ -35,6 +35,7 @@
 		"EDArraySlice": "includes/EDArraySlice.php",
 		"EDParsesParams": "includes/EDParsesParams.php",
 		"EDEncodingConverter": "includes/EDEncodingConverter.php",
+		"EDConnectorCached": "includes/connectors/EDConnectorCached.php",
 		"EDConnectorBase": "includes/connectors/EDConnectorBase.php",
 		"EDConnectorHttp": "includes/connectors/EDConnectorHttp.php",
 		"EDConnectorPost": "includes/connectors/EDConnectorPost.php",
@@ -56,6 +57,7 @@
 		"EDConnectorMongodb7": "includes/connectors/EDConnectorMongodb7.php",
 		"EDConnectorPrepared": "includes/connectors/EDConnectorPrepared.php",
 		"EDConnectorPreparedMysql": "includes/connectors/EDConnectorPreparedMysql.php",
+		"EDConnectorExe": "includes/connectors/EDConnectorExe.php",
 		"EDParserBase": "includes/parsers/EDParserBase.php",
 		"EDParserText": "includes/parsers/EDParserText.php",
 		"EDParserRegex": "includes/parsers/EDParserRegex.php",
@@ -71,27 +73,27 @@
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "ExternalDataHooks::registerParser",
-		"ScribuntoExternalLibraries": "ExternalDataHooks::registerLua"
+		"ScribuntoExternalLibraries": "ExternalDataHooks::registerLua",
+		"SoftwareInfo": "ExternalDataHooks::onSoftwareInfo"
 	},
 	"config": {
 		"_prefix": "edg",
-		"ExternalValueVerbose": true,
 		"StringReplacements": [],
+		"ExternalValueVerbose": true,
 		"CacheTable": null, "AlwaysAllowStaleCache": true, "CacheExpireTime": 604800,
-		"AllowSSL": true,
-		"HTTPOptions": {
-			"timeout": "default"
-		},
 		"TryEncodings": [ "ASCII", "UTF-8", "Windows-1251", "Windows-1252", "Windows-1254", "KOI8-R", "ISO-8859-1" ],
+		"AllowSSL": true, "HTTPOptions": { "timeout": "default" },
 		"DBServer": [], "DBServerType ": [], "DBName": [], "DBUser": [], "DBPass": [], "DBDirectory": [], "DBFlags": [], "DBTablePrefix": [], "DBPrepared": [], "DBTypes": [],
 		"DirectoryPath": [], "FilePath": [],
 		"LDAPServer": [], "LDAPUser": [], "LDAPPass": [], "LDAPBaseDN": [],
+		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [],
 		"Secrets": {
 			"server": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"db": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"directory": [ "DirectoryPath" ],
 			"file": [ "FilePath" ],
-			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN" ]
+			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN" ],
+			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand" ]
 		},
 		"Connectors": [
 			[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],
@@ -104,7 +106,8 @@
 			[ { "__pf": "get_db_data", "DBServerType": "sqlite" }, "EDConnectorSqlite" ],
 			[ { "__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
 			[ { "__pf": "get_db_data", "DBServerType": "mongodb", "__mongo": "MongoClient" }, "EDConnectorMongodb5" ],
-			[ { "__pf": "get_db_data" }, "EDConnectorSql" ]
+			[ { "__pf": "get_db_data" }, "EDConnectorSql" ],
+			[ { "__pf": "get_program_data" }, "EDConnectorExe" ]
 		],
 		"Parsers": [
 			[ { "format": "text", "regex": true }, "EDParserRegex" ],

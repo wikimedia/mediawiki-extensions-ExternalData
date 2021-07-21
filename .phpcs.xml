@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
-		<!-- Until T279814 is resolved -->
-		<exclude name="MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix" />
-		<!-- <properties>
-				<property name="allowedPrefixes" type="array">
-					<element value="edg" />
-					<element value="wg" />
-				</property>
-			</properties> -->
+		<properties>
+			<property name="allowedPrefixes" type="array">
+				<element value="edg" />
+				<element value="wg" />
+			</property>
+		</properties>
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 		<!-- I want to use assignments in while loops. -->
 		<exclude name="MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures" />

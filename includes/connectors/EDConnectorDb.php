@@ -22,7 +22,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
-	 * @param array &$args An array of arguments for parser/Lua function.
+	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
 	 */
 	protected function __construct( array &$args ) {
 		parent::__construct( $args );

@@ -36,7 +36,6 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 */
 	protected function fetch() {
 		$this->mongoClient = $this->connect();
-
 		if ( !$this->mongoClient ) {
 			return null;
 		}

@@ -32,7 +32,6 @@
 	"externaldata-db-empty-rowset": "The query $1 returned an empty rowset.",
 	"externaldata-db-prepared-not-specified": "Please specify (from=), which prepared statement to use for the database ID $1.",
 	"externaldata-db-no-such-prepared": "The prepared statement $2 is not set up for the database ID $1.",
-	"externaldata-odbc-illegal": "The parameter $2 contains an illegal sequence $1. Please stop.",
 	"externaldata-mongodb-unknown-collection": "Error: Unknown MongoDB collection $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB aggregation failed with error $1",
 	"externaldata-format-unavailable": "The library $1, required to use the '$2' format without the '$3' option, is missing.",
@@ -52,6 +51,10 @@
 	"externaldata-empty-file": "Unable to get the contents of file $1.",
 	"externaldata-no-file-in-directory": "Directory $1 does not have file $2.",
 	"externaldata-no-directory": "Directory $1 is not defined.",
+	"externaldata-exe-shell-disabled": "Error: PHP admin has disabled access to shell.",
+	"externaldata-exe-incomplete-information": "Error: Incomplete information for this command ID $1 ($2).",
+	"externaldata-exe-illegal-parameter": "Error: The parameter $2 for program $1 has illegal value $3.",
+	"externaldata-exe-error": "Error: The program $1 returned exit code $2. Message: $3.",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error: no template specified."
 }
