@@ -18,9 +18,16 @@ abstract class EDConnectorBase {
 	protected static $needsParser = false;
 	/** @var EDParserBase A Parser. */
 	private $parser;
-
 	/** @var string $encoding */
 	protected $encoding;
+	/** @var string $offsetAbsolute Start from this line (absolute, zero-based). */
+	private $offsetAbsolute;
+	/** @var string $limitAbsolute End with this line (absolute, zero-based). */
+	private $limitAbsolute;
+	/** @var string $offsetPercent Start from this line (percents). */
+	private $offsetPercent;
+	/** @var string $limitPercent End with this line (percents). */
+	private $limitPercent;
 
 	/** @var array An associative array mapping internal variables to external. */
 	protected $mappings = [];
@@ -49,6 +56,10 @@ abstract class EDConnectorBase {
 			} catch ( EDParserException $e ) {
 				$this->error( $e->code(), $e->params() );
 			}
+
+			// Also, set start and end lines.
+			$this->setLine( $args, 'offset', 0 );
+			$this->setLine( $args, 'limit', 1 );
 		}
 
 		// Data mappings. May be handled by the parser or by self.
@@ -69,6 +80,45 @@ abstract class EDConnectorBase {
 		if ( array_key_exists( 'suppress error', $args ) ) {
 			$this->suppressError = true;
 		}
+	}
+
+	/**
+	 * Set start ond end line.
+	 *
+	 * @param array $args An array of parameters.
+	 * @param string $name 'offset' or 'end'.
+	 * @param float $default The default value.
+	 */
+	private function setLine( array $args, $name, $default ) {
+		$attr_absolute = "{$name}Absolute";
+		$attr_percent = "{$name}Percent";
+		if ( isset( $args[$name] ) && $args[$name] ) {
+			[ $this->$attr_absolute, $this->$attr_percent ] = self::parseAbsoluteOrPercent( $args[$name] );
+			if ( $this->$attr_absolute === null && $this->$attr_percent === null ) {
+				$this->error( 'externaldata-param-type-error', $name, 'integer or percent' );
+			}
+		}
+		if ( !$this->$attr_absolute && !$this->$attr_percent ) {
+			$this->$attr_percent = $default;
+		}
+	}
+
+	/**
+	 * Get integer or percent value from string.
+	 *
+	 * @param string $arg
+	 * @return array [absolute|null, percent|null].
+	 */
+	private static function parseAbsoluteOrPercent( $arg ): array {
+		$absolute = null;
+		$percent = null;
+		if ( is_int( $arg ) ) {
+			// An absolute value.
+			$absolute = (int)$arg;
+		} elseif ( preg_match( '/^(?<percent>-?100(\.0+)?|\d{1,2}(\.\d+)?)\s*%$/', $arg, $matches ) ) {
+			$percent = (float)$matches['percent'] / 100;
+		}
+		return [ $absolute, $percent ];
 	}
 
 	/**
@@ -118,9 +168,32 @@ abstract class EDConnectorBase {
 	 *
 	 * @return array Parsed values.
 	 */
-	protected function parse( $text, $defaults ) {
+	protected function parse( $text, $defaults ): array {
 		$parser = $this->parser;
 		if ( $parser ) {
+
+			// Trimming.
+			$split = explode( PHP_EOL, $text );
+			$total = count( $split );
+			$offset = $this->offsetAbsolute !== null
+					? $this->offsetAbsolute
+					: (int)round( $this->offsetPercent * $total );
+			$lines = $this->limitAbsolute !== null
+					? $this->limitAbsolute
+					: (int)round( $this->limitPercent * $total );
+			if ( $offset < 0 ) {
+				$offset = $total + $offset - 1;
+			}
+			if ( $lines < 0 ) {
+				$lines = $total + $lines - $offset;
+			}
+			$text = implode( PHP_EOL, array_slice( $split, $offset, $lines ) );
+			$defaults['__start'] = [ $offset ];
+			$defaults['__lines'] = [ $lines ];
+			$defaults['__end'] = [ $offset + $lines - 1 ];
+			$defaults['__total'] = [ $total ];
+
+			// Parsing itself.
 			try {
 				$parsed = $parser( $text, $defaults );
 			} catch ( EDParserException $e ) {
