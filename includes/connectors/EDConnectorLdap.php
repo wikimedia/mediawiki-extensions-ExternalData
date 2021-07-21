@@ -14,7 +14,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	/** @var string LDAP domain (key to $edgLDAPServer, etc.). */
 	private $domain;
 	/** @var string Base DN for the directory. */
-	private $base_dn;
+	private $baseDn;
 	/** @var string Real LDAP server. */
 	private $server;
 	/** @var string Real LDAP user. */
@@ -60,7 +60,7 @@ class EDConnectorLdap extends EDConnectorBase {
 		$this->user = isset( $args['LDAPUser'] ) ? $args['LDAPUser'] : null;
 		$this->password = isset( $args['LDAPPass'] ) ? $args['LDAPPass'] : null;
 		if ( isset( $args['LDAPBaseDN'] ) ) {
-			$this->base_dn = $args['LDAPBaseDN'];
+			$this->baseDn = $args['LDAPBaseDN'];
 		} else {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}
@@ -110,7 +110,7 @@ class EDConnectorLdap extends EDConnectorBase {
 
 	/**
 	 * Connect to LDAP server using server, username and password set by the constructor.
-	 * Set $this->connection.
+	 * Set $this->credentials.
 	 */
 	private function connectLDAP() {
 		$this->connection = ldap_connect( $this->server );
@@ -120,10 +120,8 @@ class EDConnectorLdap extends EDConnectorBase {
 			ldap_set_option( $this->connection, LDAP_OPT_REFERRALS, 0 );
 			$bound = false;
 			$exception = false;
-			// Suppress warnings.
-			set_error_handler( static function () {
-				throw new Exception();
-			} );
+			// Throw exceptions instead of warnings.
+			self::throwWarnings();
 			try {
 				$bound = $this->user
 					   ? ldap_bind( $this->connection, $this->user, $this->password )
@@ -134,7 +132,7 @@ class EDConnectorLdap extends EDConnectorBase {
 				$exception = true;
 			}
 			// Restore warnings.
-			restore_error_handler();
+			self::stopThrowingWarnings();
 			if ( !$bound && !$exception /* Do not repeat  twice. */ ) {
 				$this->error( 'externaldata-ldap-unable-to-bind', $this->domain ); // not $this->server!
 				$this->connection = null;
@@ -150,7 +148,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	 * @return array Search results.
 	 */
 	private function searchLDAP() {
-		$sr = ldap_search( $this->connection, $this->base_dn, $this->filter, array_values( $this->mappings ) );
+		$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings ) );
 		$results = ldap_get_entries( $this->connection, $sr );
 		return $results;
 	}

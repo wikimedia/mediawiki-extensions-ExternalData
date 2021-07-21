@@ -7,13 +7,13 @@
  * @author Yaron Koren
  *
  */
-abstract class EDConnectorRelational extends EDConnectorDb {
-	/** @var Database The database object. */
-	private $db;
+abstract class EDConnectorRelational extends EDConnectorComposed {
 	/** @var array Tables to query. */
-	private $tables = [];
+	protected $tables = [];
 	/** @var array JOIN conditions. */
-	private $joins = [];
+	protected $joins = [];
+	/** @var array $aliases Column aliases. */
+	private $aliases = [];
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -26,37 +26,32 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 		// Specific parameters.
 		// The format of $from can be just "TableName", or the more
 		// complex "Table1=Alias1,Table2=Alias2,...".
-		// TODO: check if self::paramToArray will work here.
-		foreach ( explode( ',', $this->from ) as $table_string ) {
-			if ( strpos( $table_string, '=' ) !== false ) {
-				list( $name, $alias ) = explode( '=', $table_string, 2 );
-			} else {
-				$name = $alias = $table_string;
-			}
-			$this->tables[trim( $alias )] = trim( $name );
-		}
+		$this->tables = array_flip( self::paramToArray( $this->from ) );
+		$this->joins = isset( $args['join on'] ) ? self::paramToArray( $args['join on'] ) : null;
 
-		// Join conditions.
-		$joins = ( array_key_exists( 'join on', $args ) ) ? $args['join on'] : '';
-		$join_strings = explode( ',', $joins );
-		if ( count( $join_strings ) > count( $this->tables ) ) {
-			$this->error(
-				'externaldata-db-too-many-joins',
-				(string)count( $join_strings ),
-				(string)count( $this->tables )
-			);
-		}
-		foreach ( $join_strings as $i => $join_string ) {
-			if ( $join_string === '' ) {
-				continue;
+		// Column aliases: the correspondence $external_variable => $column_name_in_query_result.
+		foreach ( $this->columns as $column ) {
+			// Deal with AS in external names.
+			$chunks = preg_split( '/\bas\s+/i', $column, 2 );
+			$alias = isset( $chunks[1] ) ? trim( $chunks[1] ) : $column;
+			// Deal with table prefixes in column names (internal_var=tbl1.col1).
+			if ( preg_match( '/[^.]+$/', $alias, $matches ) ) {
+				$alias = $matches[0];
 			}
-			if ( strpos( $join_string, '=' ) === false ) {
-				$this->error( 'externaldata-db-invalid-join', $join_string );
-			}
-			$aliases = array_keys( $this->tables );
-			$alias = $aliases[$i + 1];
-			$this->joins[$alias] = [ 'JOIN', $join_string ];
+			$this->aliases[$column] = $alias;
 		}
+	}
+
+	/**
+	 * Set credentials settings for database from $this->dbId.
+	 * Called by the constructor.
+	 *
+	 * @param array $params Supplemented parameters.
+	 */
+	protected function setCredentials( array $params ) {
+		parent::setCredentials( $params );
+		$this->credentials['flags'] = isset( $params['DBFlags'] ) ? $params['DBFlags'] : DBO_DEFAULT;
+		$this->credentials['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : '';
 	}
 
 	/**
@@ -67,98 +62,16 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		$this->db = Database::factory( $this->type, $this->connection );
-		if ( !$this->db ) {
-			// Could not create Database object.
-			$this->error( 'externaldata-db-unknown-type', $this->type );
+		if ( !$this->connect() /* late binding. */ ) {
 			return false;
 		}
-		if ( !$this->db->isOpen() ) {
-			$this->error( 'externaldata-db-could-not-connect' );
+		$rows = $this->fetch(); // late binding.
+		if ( !$rows ) {
 			return false;
 		}
-		$this->values = $this->searchDB();
-		$this->db->close();
+		$this->values = $this->processRows( $rows, $this->aliases ); // late binding.
+		$this->disconnect(); // late binding.
 		return true;
 	}
 
-	/**
-	 * Set connection settings for database from $this->db_id.
-	 * Called by the constructor.
-	 *
-	 * @param array $params Supplemented parameters.
-	 */
-	protected function setConnection( array $params ) {
-		parent::setConnection( $params );
-		$this->connection['flags'] = isset( $params['DBFlags'] ) ? $params['DBFlags'] : DBO_DEFAULT;
-		$this->connection['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : '';
-	}
-
-	/**
-	 * Extract column name from db.tbl.col identifier.
-	 * @param string $field Full column identifier.
-	 * @return string Extracted column name.
-	 */
-	private static function getColumn( $field ) {
-		if ( preg_match( '/[^.]+$/', $field, $matches ) ) {
-			return $matches[0];
-		}
-	}
-
-	/**
-	 * Run a query in an open database.
-	 * @return string[][]|void
-	 */
-	private function searchDB() {
-		$rows = $this->db->select(
-			$this->tables,
-			$this->columns,
-			$this->conditions,
-			__METHOD__,
-			$this->sql_options,
-			$this->joins
-		);
-		if ( $rows ) {
-			$result = [];
-			foreach ( $rows as $row ) {
-				// Create a new row object that uses the passed-in
-				// column names as keys, so that there's always an
-				// exact match between what's in the query and what's
-				// in the return value (so that "a.b", for instance,
-				// doesn't get chopped off to just "b").
-				foreach ( $this->columns as $column ) {
-					$stripped = self::getColumn( $column );
-					$field = $row->$stripped;
-					// This can happen with MSSQL.
-					if ( $field instanceof DateTime ) {
-						$field = $field->format( 'Y-m-d H:i:s' );
-					}
-					// Convert the encoding to UTF-8
-					// if necessary - based on code at
-					// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
-					$field = mb_detect_encoding( $field, 'UTF-8', true ) === 'UTF-8'
-						? $field
-						: utf8_encode( $field );
-					if ( !isset( $result[$column] ) ) {
-						$result[$column] = [];
-					}
-					$result[$column][] = $field;
-				}
-			}
-			return $result;
-		} else {
-			// No result.
-			$this->error(
-				'externaldata-db-invalid-query',
-				$this->db->selectSQLText(
-					$this->tables,
-					$this->columns,
-					$this->conditions,
-					__METHOD__,
-					$this->options,
-					$this->joins
-				)
-			);
-		}
-	}
 }

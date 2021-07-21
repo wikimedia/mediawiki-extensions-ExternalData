@@ -8,22 +8,16 @@
  */
 abstract class EDConnectorDb extends EDConnectorBase {
 	/** @var string Database ID. */
-	protected $db_id;	// Database ID.
+	protected $dbId;	// Database ID.
 
 	/** @var string Database type. */
 	protected $type;
 	/** @var array Connection settings. */
-	protected $connection = [];
+	protected $credentials = [];
 
 	// SQL query components.
-	/** @var string FROM clause as a string. */
-	protected $from;
 	/** @var array Columns to query. */
 	protected $columns;
-	/** @var string Select conditions. */
-	protected $conditions;
-	/** @var array LIMIT, ORDER BY and GROUP BY clauses. */
-	protected $sql_options;
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -35,57 +29,121 @@ abstract class EDConnectorDb extends EDConnectorBase {
 
 		// Specific parameters.
 		if ( isset( $args['db'] ) ) {
-			$this->db_id = $args['db'];
+			$this->dbId = $args['db'];
 		} elseif ( isset( $args['server'] ) ) {
 			// For backwards-compatibility - 'db' parameter was
 			// added in External Data version 1.3.
-			$this->db_id = $args['server'];
+			$this->dbId = $args['server'];
 		}
-		if ( !$this->db_id ) {
+		if ( !$this->dbId ) {
 			$this->error( 'externaldata-no-param-specified', 'db' );
 		}
 		if ( isset( $args['DBServerType'] ) ) {
 			$this->type = $args['DBServerType'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->db_id, 'edgDBServerType' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBServerType' );
 		}
 		// Database credentials.
-		$this->setConnection( $args );	// late binding.
+		$this->setCredentials( $args );	// late binding.
 		// Query parts.
-		if ( isset( $args['from'] ) ) {
-			$this->from = $args['from'];
-		} else {
-			$this->error( 'externaldata-no-param-specified', 'from' );
-		}
 		$this->columns = array_values( $this->mappings );
-		$this->conditions = ( array_key_exists( 'where', $args ) ) ? $args['where'] : null;
-		$this->sql_options = [
-			'ORDER BY'	=> ( array_key_exists( 'order by', $args ) ) ? $args['order by'] : null,
-			'GROUP BY'	=> ( array_key_exists( 'group by', $args ) ) ? $args['group by'] : null,
-			'HAVING'	=> ( array_key_exists( 'having', $args ) ) ? $args['having'] : null
-		];
-		if ( isset( $args['limit'] ) ) {
-			if ( is_numeric( $args['limit'] ) ) {
-				$this->sql_options['LIMIT'] = intval( $args['limit'] );
-			} else {
-				$this->error( 'externaldata-param-type-error', 'limit', 'integer' );
-			}
+	}
+
+	/**
+	 * Set credentials settings for database from $this->dbId.
+	 * Should be overloaded, with a call to parent::setCredentials().
+	 *
+	 * @param array $params Supplemented parameters.
+	 */
+	protected function setCredentials( array $params ) {
+		$this->credentials['user'] = isset( $params['DBUser' ] ) ? $params['DBUser' ] : null;
+		$this->credentials['password'] = isset( $params['DBPass' ] ) ? $params['DBPass' ] : null;
+		if ( isset( $params[ 'DBName' ] ) ) {
+			$this->credentials['dbname'] = $params['DBName'];
+		} else {
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBName' );
 		}
 	}
 
 	/**
-	 * Set connection settings for database from $this->db_id.
-	 * Should be overloaded, with parent::setConnection().
+	 * Actually connect to the external data source.
+	 * It is presumed that there are no errors in parameters and wiki settings.
+	 * Set $this->values and $this->errors.
 	 *
-	 * @param array $params Supplemented parameters.
+	 * @return bool True on success, false if error were encountered.
 	 */
-	protected function setConnection( array $params ) {
-		$this->connection['user'] = isset( $params[ 'DBUser' ] ) ? $params[ 'DBUser' ] : null;
-		$this->connection['password'] = isset( $params[ 'DBPass' ] ) ? $params[ 'DBPass' ] : null;
-		if ( isset( $params[ 'DBName' ] ) ) {
-			$this->connection['dbname'] = $params['DBName'];
-		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->db_id, 'edgDBName' );
+	public function run() {
+		if ( !$this->connect() /* late binding. */ ) {
+			return false;
 		}
+		$rows = $this->fetch(); // late binding.
+		if ( !$rows ) {
+			return false;
+		}
+		$this->values = $this->processRows( $rows ); // late binding.
+		$this->disconnect(); // late binding.
+		return true;
 	}
+
+	/**
+	 * Establish connection the database server.
+	 */
+	abstract protected function connect();
+
+	/**
+	 * Get query text.
+	 * @return string
+	 */
+	abstract protected function getQuery();
+
+	/**
+	 * Get query result as a two-dimensional array.
+	 * @return mixed
+	 */
+	abstract protected function fetch();
+
+	/**
+	 * Postprocess query result.
+	 * @param mixed $rows A two-dimensional array or result wrapper containing query results.
+	 * @param array $aliases An optional associative array of column aliases.
+	 * @return array A two-dimensional array containing post-processed query results
+	 */
+	protected function processRows( $rows, array $aliases = [] ): array {
+		$result = [];
+		foreach ( $rows as $row ) {
+			foreach ( $this->columns as $column ) {
+				$alias = isset( $aliases[$column] ) ? $aliases[$column] : $column;
+				if ( !isset( $result[$column] ) ) {
+					$result[$column] = [];
+				}
+				// Can be both array and object.
+				$result[$column][] = self::processField( is_array( $row ) ? $row[$alias] : $row->$alias );
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Process field value.
+	 *
+	 * @param string|DateTime $value
+	 * @return string
+	 */
+	protected static function processField( $value ) {
+		// This can happen with MSSQL.
+		if ( $value instanceof DateTime ) {
+			$value = $value->format( 'Y-m-d H:i:s' );
+		}
+		// Convert the encoding to UTF-8
+		// if necessary - based on code at
+		// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
+		return mb_detect_encoding( $value, 'UTF-8', true ) === 'UTF-8'
+			? $value
+			: utf8_encode( $value );
+	}
+
+	/**
+	 * Disconnect from DB server.
+	 */
+	abstract protected function disconnect();
 }

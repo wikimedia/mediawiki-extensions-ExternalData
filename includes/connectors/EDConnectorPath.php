@@ -7,11 +7,11 @@
  *
  */
 abstract class EDConnectorPath extends EDConnectorBase {
-	/** @var bool $needs_parser Needs a EDParser* object. */
-	protected static $needs_parser = true;
+	/** @var bool $needsParser Needs a EDParser* object. */
+	protected static $needsParser = true;
 
 	/** @var string Real filepath. */
-	protected $real_path;
+	protected $realPath;
 
 	/**
 	 * Get data from absolute filepath. Set $this->values.
@@ -22,11 +22,11 @@ abstract class EDConnectorPath extends EDConnectorBase {
 	 *
 	 */
 	protected function getDataFromPath( $alias ) {
-		if ( !file_exists( $this->real_path ) ) {
+		if ( !file_exists( $this->realPath ) ) {
 			$this->error( 'externaldata-missing-file', $alias );
 			return false;
 		}
-		$file_contents = file_get_contents( $this->real_path );
+		$file_contents = file_get_contents( $this->realPath );
 		if ( empty( $file_contents ) ) {
 			// Show an error message if there's nothing there.
 			$this->error( 'externaldata-empty-file', $alias );

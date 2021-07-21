@@ -10,6 +10,8 @@
 				</property>
 			</properties> -->
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
+		<!-- I want to use assignments in while loops. -->
+		<exclude name="MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures" />
 	</rule>
 	<!-- RedundantVarName is currently too sensitive, incompatible with default Doxygen. -->
 	<rule ref="MediaWiki.Commenting.RedundantVarName.Found">

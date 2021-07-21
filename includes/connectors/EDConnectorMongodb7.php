@@ -7,8 +7,10 @@
  * @author Alexander Mashin
  */
 class EDConnectorMongodb7 extends EDConnectorMongodb {
-	/** @var string $regex_class Class that stores MongoDB regular expressions. */
-	protected static $regex_class = 'MongoDB\BSON\Regex';
+	/** @var ?MongoDB\Client $mongoClient MongoDB client. */
+	private $mongoClient;
+	/** @var string $regexClass Class that stores MongoDB regular expressions. */
+	protected static $regexClass = 'MongoDB\BSON\Regex';
 
 	/**
 	 * Create a MongoDB connection.
@@ -20,7 +22,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 		// the MongoDB connect string, which may have sensitive
 		// information.
 		try {
-			return new MongoDB\Client( $this->connect_string );
+			return new MongoDB\Client( $this->connectString );
 		} catch ( Exception $e ) {
 			return null;
 		}
@@ -29,17 +31,15 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	/**
 	 * Get the MongoDB collection $name provided the connection is established.
 	 *
-	 * @param string $collection The collection name.
-	 *
 	 * @return MongoDB\Collection|null MongoDB collection.
 	 */
-	protected function getCollection( $collection ) {
-		$connection = $this->connect();
-		if ( !$connection ) {
+	protected function fetch() {
+		$this->mongoClient = $this->connect();
+		if ( !$this->mongoClient ) {
 			$this->error( 'externaldata-db-could-not-connect' );
 			return null;
 		}
-		return $connection->selectCollection( $this->connection['dbname'], $collection );
+		return $this->mongoClient->selectCollection( $this->credentials['dbname'], $this->from );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 		try {
 			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
 		} catch ( Exception $e ) {
-			$this->error( 'externaldata-db-could-not-connect' );
+			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			return null;
 		}
 		return $found;
@@ -78,5 +78,12 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
 			return null;
 		}
+	}
+
+	/**
+	 * Disconnect from MongoDB.
+	 */
+	protected function disconnect() {
+		$this->mongoClient->close();
 	}
 }

@@ -24,7 +24,7 @@ class EDParserGFF extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The intial values.
+	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
@@ -35,7 +35,7 @@ class EDParserGFF extends EDParserBase {
 		// case a tab)
 		$fiveMBs = 5 * 1024 * 1024;
 		$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
-		fputs( $fp, $text );
+		fwrite( $fp, $text );
 		rewind( $fp );
 		$table = [];
 		// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
@@ -65,7 +65,7 @@ class EDParserGFF extends EDParserBase {
 				// each of the columns in GFF have a
 				// pre-defined name - even the last column
 				// has its own name, "attributes".
-				$column = is_numeric( $i ) && isset( self::$columns[intval( $i )] ) ? self::$columns[intval( $i )] : $i;
+				$column = is_numeric( $i ) && isset( self::$columns[(int)$i] ) ? self::$columns[(int)$i] : $i;
 				if ( !array_key_exists( $column, $values ) ) {
 					$values[$column] = [];
 				}

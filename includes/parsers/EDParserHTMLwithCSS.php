@@ -8,7 +8,7 @@
 
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	/** @var array Mappings of CSS selectors to XPaths. */
-	private $css_to_xpath = [];
+	private $cssToXpath = [];
 
 	/**
 	 * Constructor.
@@ -53,7 +53,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 			] );
 			// CSS selector syntax extension: .attr(href).
 			$xpath .= isset( $matches['attr'] ) ? '/@' . $matches['attr'] : '';
-			$this->css_to_xpath[$selector] = $xpath;
+			$this->cssToXpath[$selector] = $xpath;
 			$selector = $xpath;
 		}
 	}
@@ -72,7 +72,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	public function __invoke( $text, $defaults = [] ) {
 		$xpath_values = parent::__invoke( $text, $defaults );
 		$css_values = [];
-		foreach ( $this->css_to_xpath as $css => $xpath ) {
+		foreach ( $this->cssToXpath as $css => $xpath ) {
 			$css_values[$css] = $xpath_values[$xpath];
 		}
 		return $css_values;

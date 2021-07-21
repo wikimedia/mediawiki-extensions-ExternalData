@@ -6,20 +6,20 @@
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-abstract class EDConnectorMongodb extends EDConnectorDb {
-	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
-	protected static $preserve_external_variables_case = true;
+abstract class EDConnectorMongodb extends EDConnectorComposed {
+	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
+	protected static $keepExternalVarsCase = true;
 
 	/** @var string MondoDB connection string. */
-	protected $connect_string;
+	protected $connectString;
 	/** @var array MongoDB aggregate. */
-	private $aggregate = [];
+	protected $aggregate = [];
 	/** @var array MongoDB find query. */
 	private $find = [];
 	/** @var array MongoDB sort. */
 	private $sort = [];
 	/** @var string|null A key for Memcached/APC. */
-	private $cache_key = null;
+	private $cacheKey = null;
 
 	/**
 	 * Constructor.
@@ -60,24 +60,24 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 			foreach ( $whereElements as $key => $whereElement ) {
 				$whereElement = str_ireplace( ' like ', ' LIKE ', $whereElement );
 				if ( strpos( $whereElement, '>=' ) ) {
-					list( $fieldName, $value ) = explode( '>=', $whereElement );
+					[ $fieldName, $value ] = explode( '>=', $whereElement );
 					$this->find[trim( $fieldName )] = [ '$gte' => trim( $value ) ];
 				} elseif ( strpos( $whereElement, '>' ) ) {
-					list( $fieldName, $value ) = explode( '>', $whereElement );
+					[ $fieldName, $value ] = explode( '>', $whereElement );
 					$this->find[trim( $fieldName )] = [ '$gt' => trim( $value ) ];
 				} elseif ( strpos( $whereElement, '<=' ) ) {
-					list( $fieldName, $value ) = explode( '<=', $whereElement );
+					[ $fieldName, $value ] = explode( '<=', $whereElement );
 					$this->find[trim( $fieldName )] = [ '$lte' => trim( $value ) ];
 				} elseif ( strpos( $whereElement, '<' ) ) {
-					list( $fieldName, $value ) = explode( '<', $whereElement );
+					[ $fieldName, $value ] = explode( '<', $whereElement );
 					$this->find[trim( $fieldName )] = [ '$lt' => trim( $value ) ];
 				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
-					list( $fieldName, $value ) = explode( ' LIKE ', $whereElement );
+					[ $fieldName, $value ] = explode( ' LIKE ', $whereElement );
 					$value = trim( $value );
-					$regex_class = static::$regex_class; // late binding.
+					$regex_class = static::$regexClass; // late binding.
 					$this->find[trim( $fieldName )] = new $regex_class( "/$value/i" );
 				} elseif ( strpos( $whereElement, '=' ) ) {
-					list( $fieldName, $value ) = explode( '=', $whereElement );
+					[ $fieldName, $value ] = explode( '=', $whereElement );
 					$this->find[trim( $fieldName )] = trim( $value );
 				} elseif ( is_string( $key ) ) {
 					$this->find[$key] = $whereElement;
@@ -86,11 +86,11 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		}
 
 		// Do the same for the "order=" parameter as the "where=" parameter
-		if ( $this->sql_options['ORDER BY'] ) {
-			$sortElements = explode( ',', $this->sql_options['ORDER BY'] );
+		if ( $this->sqlOptions['ORDER BY'] ) {
+			$sortElements = explode( ',', $this->sqlOptions['ORDER BY'] );
 			foreach ( $sortElements as $sortElement ) {
 				if ( strpos( $sortElement, ' ' ) !== false ) {
-					list( $fieldName, $order ) = explode( ' ', $sortElement, 2 );
+					[ $fieldName, $order ] = explode( ' ', $sortElement, 2 );
 					$orderingNum = 1;
 					if ( $order && strtolower( trim( $order ) ) === 'desc' ) {
 						$orderingNum = -1;
@@ -103,11 +103,11 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		}
 
 		if ( $this->aggregate && count( $this->aggregate ) > 0 ) {
-			if ( isset( $this->sql_options['ORDER BY'] ) ) {
+			if ( isset( $this->sqlOptions['ORDER BY'] ) ) {
 				$this->aggregate[] = [ '$sort' => $this->sort ];
 			}
-			if ( isset( $this->sql_options['LIMIT'] ) ) {
-				$this->aggregate[] = [ '$limit' => intval( $this->sql_options['LIMIT'] ) ];
+			if ( isset( $this->sqlOptions['LIMIT'] ) ) {
+				$this->aggregate[] = [ '$limit' => intval( $this->sqlOptions['LIMIT'] ) ];
 			}
 		}
 
@@ -116,34 +116,40 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		if ( ( $wgMainCacheType === CACHE_MEMCACHED || $wgMainCacheType === CACHE_ACCEL )
 			&& $edgMemCachedMongoDBSeconds > 0
 		) {
-			$this->cache_key = ObjectCache::getLocalClusterInstance()->makeKey( 'mongodb', $this->from, md5(
-				json_encode( $this->aggregate ) .
-				json_encode( $this->find ) .
-				json_encode( $this->sort ) .
-				json_encode( $this->columns ) .
-				$this->conditions .
-				json_encode( $this->sql_options ) .
-				$this->connection['db_name'] .
-				$this->connection['host']
+			$this->cacheKey = ObjectCache::getLocalClusterInstance()->makeKey( 'mongodb', $this->from, md5(
+				$this->getQuery() .
+				$this->credentials['db_name'] .
+				$this->credentials['host']
 			) );
 		}
 	}
 
 	/**
-	 * Create a MongoDB connection.
+	 * Form credentials for database from $this->dbId.
 	 *
-	 * @return MongoClient|MongoDB\Client|null
+	 * @param array $params Supplemented parameters.
 	 */
-	abstract protected function connect();
+	protected function setCredentials( array $params ) {
+		parent::setCredentials( $params );
+		$this->credentials['host'] = isset( $params['DBServer'] ) ? $params['DBServer'] : 'localhost:27017';
+
+		// MongoDB login is done using a single string.
+		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
+		// use $edgDBServer[$this->dbId] to pass these values
+		// see http://docs.mongodb.org/manual/reference/connection-string
+		$this->connectString = "mongodb://";
+		if ( $this->credentials['user'] ) {
+			$this->connectString .= $this->credentials['user'] . ':' . $this->credentials['password'] . '@';
+		}
+		$this->connectString .= $this->credentials['host'];
+	}
 
 	/**
 	 * Get the MongoDB collection $name provided the connection is established.
 	 *
-	 * @param string $collection The collection name.
-	 *
 	 * @return MongoCollection|MongoDB\Collection|null MongoDB collection.
 	 */
-	abstract protected function getCollection( $collection );
+	abstract protected function fetch();
 
 	/**
 	 * Run a query against MongoDB $collection.
@@ -183,7 +189,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 			return true;
 		}
 
-		$collection = $this->getCollection( $this->from ); // late binding.
+		$collection = $this->fetch(); // late binding.
 		if ( !$collection ) {
 			return false;
 		}
@@ -197,7 +203,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 				$this->find,
 				$this->columns,
 				$this->sort,
-				$this->sql_options['LIMIT']
+				$this->sqlOptions['LIMIT']
 			); // late binding.
 		}
 
@@ -207,7 +213,7 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 		}
 
 		// Arrange values returned by MongoDB in a column-based array.
-		$this->values = $this->arrange( $results );
+		$this->values = $this->processRows( $results );
 
 		// Cache, if so configured.
 		if ( count( $this->values ) > 0 ) {
@@ -220,13 +226,14 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	/**
 	 * Arrange values returned by MongoDB in a column-based array.
 	 *
-	 * @param array $results Results from MongoDB.
+	 * @param array $rows Results from MongoDB.
+	 * @param array $aliases Stub.
 	 *
 	 * @return array $values Column-based array of values.
 	 */
-	private function arrange( array $results ) {
+	protected function processRows( $rows, array $aliases = [] ): array {
 		$values = [];
-		foreach ( $results as $doc ) {
+		foreach ( $rows as $doc ) {
 			foreach ( $this->columns as $column ) {
 				if ( strstr( $column, "." ) ) {
 					// If the exact path of the value was
@@ -289,23 +296,17 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	}
 
 	/**
-	 * Form connection settings for database from $this->db_id.
+	 * Pseudo-query in text form for diagnostics. Also used to from cache key.
 	 *
-	 * @param array $params Supplemented parameters.
+	 * @return string
 	 */
-	protected function setConnection( array $params ) {
-		parent::setConnection( $params );
-		$this->connection['host'] = isset( $params['DBServer'] ) ? $params['DBServer'] : 'localhost:27017';
-
-		// MongoDB login is done using a single string.
-		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
-		// use $edgDBServer[$this->db_id] to pass these values
-		// see http://docs.mongodb.org/manual/reference/connection-string
-		$this->connect_string = "mongodb://";
-		if ( $this->connection['user'] ) {
-			$this->connect_string .= $this->connection['user'] . ':' . $this->connection['password'] . '@';
-		}
-		$this->connect_string .= $this->connection['host'];
+	protected function getQuery() {
+		return json_encode( $this->aggregate ) .
+			json_encode( $this->find ) .
+			json_encode( $this->sort ) .
+			json_encode( $this->columns ) .
+			$this->conditions .
+			json_encode( $this->sqlOptions );
 	}
 
 	/**
@@ -314,9 +315,9 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	 * @return array|null Stored values or null, if no storage is configured.
 	 */
 	private function cached() {
-		if ( $this->cache_key ) {
+		if ( $this->cacheKey ) {
 			// Check if cache entry exists.
-			return ObjectCache::getLocalClusterInstance()->get( $this->cache_key );
+			return ObjectCache::getLocalClusterInstance()->get( $this->cacheKey );
 		} else {
 			return null;
 		}
@@ -328,9 +329,9 @@ abstract class EDConnectorMongodb extends EDConnectorDb {
 	 * @param array $values Values to store.
 	 */
 	private function cache( array $values ) {
-		if ( $this->cache_key ) {
+		if ( $this->cacheKey ) {
 			global $edgMemCachedMongoDBSeconds;
-			ObjectCache::getLocalClusterInstance()->set( $this->cache_key, $values, $edgMemCachedMongoDBSeconds );
+			ObjectCache::getLocalClusterInstance()->set( $this->cacheKey, $values, $edgMemCachedMongoDBSeconds );
 		}
 	}
 }

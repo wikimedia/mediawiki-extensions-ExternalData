@@ -7,8 +7,10 @@
  * @author Alexander Mashin
  */
 class EDConnectorMongodb5 extends EDConnectorMongodb {
-	/** @var string $regex_class Class that stores MongoDB regular expressions. */
-	protected static $regex_class = 'MongoRegex';
+	/** @var ?MongoClient $mongoClient MongoDB client. */
+	private $mongoClient;
+	/** @var string $regexClass Class that stores MongoDB regular expressions. */
+	protected static $regexClass = 'MongoRegex';
 
 	/**
 	 * Create a MongoDB connection.
@@ -20,9 +22,9 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		// the MongoDB connect string, which may have sensitive
 		// information.
 		try {
-			return new MongoClient( $this->connect_string );
+			return new MongoClient( $this->connectString );
 		} catch ( Exception $e ) {
-			$this->error( 'externaldata-db-could-not-connect' );
+			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			return null;
 		}
 	}
@@ -30,28 +32,32 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	/**
 	 * Get the MongoDB collection $name provided the connection is established.
 	 *
-	 * @param string $collection The collection name.
-	 *
 	 * @return MongoCollection|null MongoDB collection.
 	 */
-	protected function getCollection( $collection ) {
-		$connection = $this->connect();
+	protected function fetch() {
+		$this->mongoClient = $this->connect();
 
-		if ( !$connection ) {
+		if ( !$this->mongoClient ) {
 			return null;
 		}
-		$db = $connection->SelectDb( $this->connection['dbname'] );
+		$db = $this->mongoClient->SelectDb( $this->credentials['dbname'] );
 		if ( !$db ) {
-			$this->error( 'externaldata-db-unknown-database', $this->db_id );
+			$this->error( 'externaldata-db-unknown-database', $this->dbId );
 			return null;
 		}
 		// Check if collection exists.
 		if ( !in_array( $this->from, $db->getCollectionNames(), true ) ) {
-			// Not $this->connection['dbname']!
-			$this->error( 'externaldata-mongodb-unknown-collection', $this->db_id . ':' . $this->from );
+			// Not $this->credentials['dbname']!
+			$this->error( 'externaldata-mongodb-unknown-collection', $this->dbId . ':' . $this->from );
 			return null;
 		}
-		return new MongoCollection( $db, $collection );
+		try {
+			$collection = new MongoCollection( $db, $this->from );
+		} catch ( Exception $e ) {
+			$this->error( 'externaldata-mongodb-unknown-collection', $this->dbId . ':' . $this->from );
+			$collection = false;
+		}
+		return $collection;
 	}
 
 	/**
@@ -66,7 +72,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 * @return array MongoCursor
 	 */
 	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
-		return $collection->find( $filter, $columns )->sort( $sort )->limit( $limit )->toArray();
+		return iterator_to_array( $collection->find( $filter, $columns )->sort( $sort )->limit( $limit ) );
 	}
 
 	/**
@@ -85,5 +91,12 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 			$this->error( 'externaldata-mongodb-aggregation-failed', $aggregateResult['errmsg'] );
 			return null;
 		}
+	}
+
+	/**
+	 * Disconnect from MongoDB.
+	 */
+	protected function disconnect() {
+		$this->mongoClient->close();
 	}
 }

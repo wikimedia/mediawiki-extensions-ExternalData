@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class for text parser based on PERL-compatible regular expressions.
  *
@@ -24,12 +25,7 @@ class EDParserRegex extends EDParserBase {
 		$regex = $params['regex'];
 
 		// Validate regex.
-		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'suppressWarnings' ) ) {
-			// MW >= 1.33
-			\Wikimedia\AtEase\AtEase::suppressWarnings();
-		} else {
-			\MediaWiki\suppressWarnings();
-		}
+		self::suppressWarnings();
 		// Run regular expression against null and compare results with false.
 		// @see https://stackoverflow.com/a/12941133.
 		if ( preg_match( $regex, null ) !== false ) {
@@ -40,12 +36,7 @@ class EDParserRegex extends EDParserBase {
 			throw new EDParserException( 'externaldata-invalid-regex', $regex );
 		}
 		// Restore warnings.
-		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
-			// MW >= 1.33
-			\Wikimedia\AtEase\AtEase::restoreWarnings();
-		} else {
-			\MediaWiki\restoreWarnings();
-		}
+		self::restoreWarnings();
 	}
 
 	/**

@@ -7,8 +7,10 @@
  */
 
 class EDParserJSONwithJSONPath extends EDParserBase {
-	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
-	protected static $preserve_external_variables_case = true;
+	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
+	protected static $keepExternalVarsCase = true;
+	/** @var int Optional length of the ignored prefix. */
+	private $prefixLength;
 
 	/**
 	 * Constructor.
@@ -19,20 +21,20 @@ class EDParserJSONwithJSONPath extends EDParserBase {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 
-		$this->prefix_length = isset( $params['json offset'] ) ? intval( $params['json offset'] ) : 0;
+		$this->prefixLength = isset( $params['json offset'] ) ? (int)$params['json offset'] : 0;
 	}
 
 	/**
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The intial values.
+	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
 	public function __invoke( $text, $defaults = [] ) {
-		$json = new EDJsonObject( $text );
+		$json = new EDJsonObject( substr( $text, $this->prefixLength ) );
 		$values = parent::__invoke( $text, $defaults );
 		foreach ( $this->external as $jsonpath ) {
 			try {

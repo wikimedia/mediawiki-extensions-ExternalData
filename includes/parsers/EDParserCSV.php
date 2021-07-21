@@ -8,7 +8,7 @@
 
 class EDParserCSV extends EDParserBase {
 	/** @var bool The processed text contains a header line. */
-	private $header = false;
+	private $header;
 	/** @var string Column delimiter. */
 	private $delimiter = ',';
 
@@ -33,7 +33,7 @@ class EDParserCSV extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The intial values.
+	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
@@ -51,12 +51,12 @@ class EDParserCSV extends EDParserBase {
 		//} else {
 			$fiveMBs = 5 * 1024 * 1024;
 			$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
-			fputs( $fp, $text );
+			fwrite( $fp, $text );
 			rewind( $fp );
 			$table = [];
 			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
 			while ( $line = fgetcsv( $fp, 0, $this->delimiter ) ) {
-				array_push( $table, $line );
+				$table[] = $line;
 			}
 			fclose( $fp );
 		// }
@@ -107,7 +107,7 @@ class EDParserCSV extends EDParserBase {
 			$header_vals = array_shift( $table );
 			// On the off chance that there are one or more blank
 			// lines at the beginning, cycle through.
-			while ( count( $header_vals ) == 0 ) {
+			while ( count( $header_vals ) === 0 ) {
 				$header_vals = array_shift( $table );
 			}
 		}

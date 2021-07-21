@@ -12,20 +12,20 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	private static $tries = 3;
 
 	// Cache variables.
-	/** @var bool $cache_set_up Is the cache set up? */
-	private static $cache_set_up;
-	/** @var string|null $cache_table Cache table name. */
-	private static $cache_table;
+	/** @var bool $cacheIsUp Is the cache set up? */
+	private static $cacheIsUp;
+	/** @var string|null $cacheTable Cache table name. */
+	private static $cacheTable;
 
 	/** @var int Number of seconds before cache expires. */
-	private $cache_expires;
+	private $cacheExpires;
 	/** @var bool Whether the data can be fetched from stale cache. */
-	private $allow_stale_cache;
+	private $allowStaleCache;
 
 	/** @var int When the cache was cached. */
-	private $cached_time;
+	private $cachedTime;
 	/** @var bool Is the cache fresh. */
-	private $cache_fresh;
+	private $cacheFresh;
 	/** @var int Timestamp of when the result was fetched. */
 	private $time;
 
@@ -39,18 +39,18 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 
 		// Cache.
 		global $edgCacheTable;
-		self::$cache_set_up = (bool)$edgCacheTable;
-		self::$cache_table = $edgCacheTable;
+		self::$cacheIsUp = (bool)$edgCacheTable;
+		self::$cacheTable = $edgCacheTable;
 
 		// Cache expiration.
 		global $edgCacheExpireTime;
-		$this->cache_expires = array_key_exists( 'cache seconds', $args )
+		$this->cacheExpires = array_key_exists( 'cache seconds', $args )
 			? max( $args['cache seconds'], $edgCacheExpireTime )
 			: $edgCacheExpireTime;
 
 		// Allow to use stale cache.
 		global $edgAlwaysAllowStaleCache;
-		$this->allow_stale_cache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
+		$this->allowStaleCache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
 	}
 
 	/**
@@ -62,11 +62,11 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	 */
 	public function run() {
 		$this->cache_time = null;
-		$this->cache_fresh = false;
+		$this->cacheFresh = false;
 
 		$cached = false;
 		// Is the cache set up, present and fresh?
-		if ( self::$cache_set_up && ( $this->cache_expires !== 0 || $this->allow_stale_cache ) ) {
+		if ( self::$cacheIsUp && ( $this->cacheExpires !== 0 || $this->allowStaleCache ) ) {
 			// Cache set up and can be used.
 			$cached = $this->cached();
 		}
@@ -74,16 +74,16 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		// If there is no fresh cache, try to get from the web.
 		$cache_present = (bool)$cached;
 		$tries = 0;
-		if ( !self::$cache_set_up || !$cache_present || !$this->cache_fresh || $this->cache_expires === 0 ) {
+		if ( !self::$cacheIsUp || !$cache_present || !$this->cacheFresh || $this->cacheExpires === 0 ) {
 			// Allow extensions or LocalSettings.php to alter HTTP options.
-			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $this->real_url, $this->options ] );
+			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $this->realUrl, $this->options ] );
 			do {
 				// Actually send a request.
 				$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.
 			} while ( !$contents && ++$tries <= self::$tries );
 			if ( $contents ) {
 				// Fetched successfully.
-				$this->cache_fresh = true;
+				$this->cacheFresh = true;
 				// Encoding needs to be detected from HTTP headers this early and not later,
 				// during text parsing, so that the converted text may be cached.
 				// Try HTTP headers.
@@ -93,31 +93,31 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 				$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
 				$this->time = time();
 				// Update cache, if possible and required.
-				if ( self::$cache_set_up && $this->cache_expires !== 0 ) {
+				if ( self::$cacheIsUp && $this->cacheExpires !== 0 ) {
 					$this->cache( $contents, $cache_present );
 				}
 			} else {
 				// Not fetched.
-				if ( $cache_present && $this->allow_stale_cache ) {
+				if ( $cache_present && $this->allowStaleCache ) {
 					// But can serve stale cache, if any and allowed.
 					$contents = $cached;
-					$this->cache_fresh = false;
-					$this->time = $this->cached_time;
+					$this->cacheFresh = false;
+					$this->time = $this->cachedTime;
 				} else {
 					// Nothing to serve.
-					$this->error( 'externaldata-db-could-not-get-url', $this->original_url, self::$tries );
+					$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, self::$tries );
 					return false;
 				}
 			}
 		} else {
 			// We have a fresh cache; so serve it.
 			$contents = $cached;
-			$this->time = $this->cached_time;
+			$this->time = $this->cachedTime;
 		}
 
 		$this->values = $this->parse( $contents, [
 			'__time' => [ $this->time ],
-			'__stale' => [ !$this->cache_fresh ],
+			'__stale' => [ !$this->cacheFresh ],
 			'__tries' => [ $tries ]
 		] );
 		return !$this->errors();
@@ -133,17 +133,17 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 
 	/**
 	 * Get cached value, if any. It is assumed that the cache is set up.
-	 * Sets $this->cached_time and $this->cache_fresh.
+	 * Sets $this->cachedTime and $this->cacheFresh.
 	 *
 	 * @return string|null The cached value; null if none.
 	 */
 	private function cached() {
 		// Check the cache (only the first 254 chars of the url).
 		$dbr = wfGetDB( DB_REPLICA );
-		$row = $dbr->selectRow( self::$cache_table, '*', [ 'url' => substr( $this->real_url, 0, 254 ) ], __METHOD__ );
+		$row = $dbr->selectRow( self::$cacheTable, '*', [ 'url' => substr( $this->realUrl, 0, 254 ) ], __METHOD__ );
 		if ( $row ) {
-			$this->cached_time = $row->req_time;
-			$this->cache_fresh = $this->cache_expires !== 0 && time() - $this->cached_time <= $this->cache_expires;
+			$this->cachedTime = $row->req_time;
+			$this->cacheFresh = $this->cacheExpires !== 0 && time() - $this->cachedTime <= $this->cacheExpires;
 			return $row->result;
 		} else {
 			return null;
@@ -160,12 +160,12 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		$dbw = wfGetDB( DB_MASTER );
 		// Delete the old entry, if one exists.
 		if ( $old_cache ) {
-			$dbw->delete( self::$cache_table, [ 'url' => substr( $this->real_url, 0, 254 ) ] );
+			$dbw->delete( self::$cacheTable, [ 'url' => substr( $this->realUrl, 0, 254 ) ] );
 		}
 		// Insert contents into the cache table.
 		$dbw->insert(
-			self::$cache_table,
-			[ 'url' => substr( $this->real_url, 0, 254 ), 'result' => $contents, 'req_time' => time() ]
+			self::$cacheTable,
+			[ 'url' => substr( $this->realUrl, 0, 254 ), 'result' => $contents, 'req_time' => time() ]
 		);
 	}
 }

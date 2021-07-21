@@ -7,32 +7,20 @@
  * @author Alexander Mashin
  *
  */
-class EDConnectorSqlite extends EDConnectorRelational {
-	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
-	protected static $preserve_external_variables_case = true;
-
-	/** @var string Database directory. */
-	private $directory;
+class EDConnectorSqlite extends EDConnectorRdbms {
+	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
+	protected static $keepExternalVarsCase = true;
 
 	/**
-	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
-	 *
-	 * @param array $args An array of arguments for parser/Lua function.
-	 */
-	protected function __construct( array $args ) {
-		parent::__construct( $args );
-	}
-
-	/**
-	 * Form connection settings for database from $this->db_id.
+	 * Form credentials settings for database from $this->dbId.
 	 *
 	 * @param array $params Supplemented parameters.
 	 */
-	protected function setConnection( array $params ) {
-		parent::setConnection( $params );
+	protected function setCredentials( array $params ) {
+		parent::setCredentials( $params );
 
 		if ( isset( $params['DBDirectory'] ) ) {
-			$this->connection['dbDirectory'] = $params['DBDirectory'];
+			$this->credentials['dbDirectory'] = $params['DBDirectory'];
 		} else {
 			$this->error( 'externaldata-db-incomplete-information', 'sqlite directory' );
 		}

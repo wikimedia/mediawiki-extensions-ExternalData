@@ -7,9 +7,14 @@
  * @author Alexander Mashin
  *
  */
+
+use Wikimedia\AtEase\AtEase;
+use function MediaWiki\restoreWarnings;
+use function MediaWiki\suppressWarnings;
+
 trait EDParsesParams {
-	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
-	protected static $preserve_external_variables_case = false;
+	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
+	protected static $keepExternalVarsCase = false;
 
 	/**
 	 * This method adds secret parameters to user-supplied ones, extracting them from
@@ -44,14 +49,12 @@ trait EDParsesParams {
 	 * @param array $patterns An array of patterns that $params has to match.
 	 *
 	 * @return string|null ID of matched pattern.
-	 *
-	 * @throws EDParserException
 	 */
 	protected static function getMatch( array $args, array $patterns ) {
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true, false );
 		$supplemented_params = self::supplementParams( $args );
-		foreach ( $patterns as list( $pattern, $match ) ) {
+		foreach ( $patterns as [ $pattern, $match ] ) {
 			if ( self::paramsFit( $supplemented_params, $pattern ) ) {
 				return $match;
 			}
@@ -87,10 +90,11 @@ trait EDParsesParams {
 	 * @param string|array $arg Values to parse.
 	 * @param bool $lowercaseKeys bring keys to lower case.
 	 * @param bool $lowercaseValues bring values to lower case.
+	 * @param bool $numeric Set anonymous parameter's name to a number rather than to itself.
 	 *
 	 * @return array Parsed parameter.
 	 */
-	protected static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false ) {
+	protected static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false, $numeric = false ) {
 		if ( !is_array( $arg ) ) {
 			// Not an array. Splitting needed.
 			$arg = preg_replace( "/\s\s+/", ' ', $arg ); // whitespace
@@ -110,14 +114,17 @@ END;
 			// " - fix for color highlighting in vi :)
 			$keyValuePairs = preg_split( $pattern, $arg );
 			$splitArray = [];
+			$counter = 0;
 			foreach ( $keyValuePairs as $keyValuePair ) {
-				if ( $keyValuePair == '' ) {
+				if ( $keyValuePair === '' ) {
 					// Ignore.
 				} elseif ( strpos( $keyValuePair, '=' ) !== false ) {
-					list( $key, $value ) = explode( '=', $keyValuePair, 2 );
+					[ $key, $value ] = explode( '=', $keyValuePair, 2 );
 					$splitArray[trim( $key )] = trim( $value );
+				} elseif ( $numeric ) {
+					$splitArray[$counter++] = trim( $keyValuePair );
 				} else {
-					$splitArray[trim( $keyValuePair )] = null;
+					$splitArray[trim( $keyValuePair )] = trim( $keyValuePair );
 				}
 			}
 		} else {
@@ -153,7 +160,7 @@ END;
 			if ( count( $param_parts ) < 2 ) {
 				$args[$param_parts[0]] = null;
 			} else {
-				list( $name, $value ) = $param_parts;
+				[ $name, $value ] = $param_parts;
 				$args[$name] = $value;
 			}
 		}
@@ -166,6 +173,47 @@ END;
 	 * @return bool False, is external variables' names are brought to lowercase, true otherwise.
 	 */
 	public static function preservesCase() {
-		return static::$preserve_external_variables_case; // late binding.
+		return static::$keepExternalVarsCase; // late binding.
+	}
+
+	/**
+	 * Suppress warnings absolutely.
+	 */
+	protected static function suppressWarnings() {
+		if ( method_exists( AtEase::class, 'suppressWarnings' ) ) {
+			// MW >= 1.33
+			AtEase::suppressWarnings();
+		} else {
+			suppressWarnings();
+		}
+	}
+
+	/**
+	 *  Restore warnings.
+	 */
+	protected static function restoreWarnings() {
+		if ( method_exists( AtEase::class, 'restoreWarnings' ) ) {
+			// MW >= 1.33
+			AtEase::restoreWarnings();
+		} else {
+			restoreWarnings();
+		}
+	}
+
+	/**
+	 * Instead of producing a warning, throw an exception.
+	 * @throws Exception
+	 */
+	protected static function throwWarnings() {
+		set_error_handler( static function ( $errno, $errstr ) {
+			throw new Exception( $errstr );
+		} );
+	}
+
+	/**
+	 * Resume warnings.
+	 */
+	protected static function stopThrowingWarnings() {
+		restore_error_handler();
 	}
 }

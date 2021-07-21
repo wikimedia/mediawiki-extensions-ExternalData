@@ -23,7 +23,7 @@ class EDConnectorFile extends EDConnectorPath {
 		if ( isset( $args['file'] ) ) {
 			$this->file = $args['file'];
 			if ( isset( $args['FilePath'] ) ) {
-				$this->real_path = $args['FilePath'];
+				$this->realPath = $args['FilePath'];
 			} else {
 				// File not defined.
 				$this->error( 'externaldata-undefined-file', $this->file );

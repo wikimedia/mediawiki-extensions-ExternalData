@@ -53,8 +53,8 @@ class EDConnectorDirectory extends EDConnectorPath {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		$this->real_path = realpath( $this->real_directory . $this->file_name );
-		if ( $this->real_path === false || strpos( $this->real_path, $this->real_directory ) !== 0 ) {
+		$this->realPath = realpath( $this->real_directory . $this->file_name );
+		if ( $this->realPath === false || strpos( $this->realPath, $this->real_directory ) !== 0 ) {
 			// No file found in directory.
 			$this->error( 'externaldata-no-file-in-directory', $this->directory, $this->file_name );
 			return false;

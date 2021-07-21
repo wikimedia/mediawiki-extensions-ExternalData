@@ -7,8 +7,8 @@
  */
 
 class EDParserXML extends EDParserBase {
-	/** @var array $XMLValues Stores XML values between calls. */
-	private static $XMLValues = [];
+	/** @var array $xmlValues Stores XML values between calls. */
+	private static $xmlValues = [];
 	/** @var string $currentXMLTag Stores current XML tag between calls. */
 	private static $currentXMLTag = null;
 	/** @var string $currentValue Stores value of the current XML tag between calls. */
@@ -17,22 +17,10 @@ class EDParserXML extends EDParserBase {
 	private static $ampersandReplacement = 'THIS IS A LONG STRING USED AS A REPLACEMENT FOR AMPERSANDS 55555555';
 
 	/**
-	 * Constructor.
-	 *
-	 * @param array $params A named array of parameters passed from parser or Lua function.
-	 *
-	 * @throws EDParserException.
-	 *
-	 */
-	public function __construct( array $params ) {
-		parent::__construct( $params );
-	}
-
-	/**
 	 * Parse the text as XML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The intial values.
+	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
@@ -40,7 +28,7 @@ class EDParserXML extends EDParserBase {
 	 *
 	 */
 	public function __invoke( $text, $defaults = [] ) {
-		self::$XMLValues = parent::__invoke( $text, $defaults );
+		self::$xmlValues = parent::__invoke( $text, $defaults );
 
 		// Remove comments from XML - for some reason, xml_parse()
 		// can't handle them.
@@ -60,7 +48,7 @@ class EDParserXML extends EDParserBase {
 			);
 		}
 		xml_parser_free( $xml_parser );
-		return self::$XMLValues;
+		return self::$xmlValues;
 	}
 
 	/**
@@ -79,10 +67,10 @@ class EDParserXML extends EDParserBase {
 		foreach ( $attrs as $attr => $value ) {
 			$attr = strtolower( $attr );
 			$value = str_replace( self::$ampersandReplacement, '&amp;', $value );
-			if ( array_key_exists( $attr, self::$XMLValues ) ) {
-				self::$XMLValues[$attr][] = $value;
+			if ( array_key_exists( $attr, self::$xmlValues ) ) {
+				self::$xmlValues[$attr][] = $value;
 			} else {
-				self::$XMLValues[$attr] = [ $value ];
+				self::$xmlValues[$attr] = [ $value ];
 			}
 		}
 	}
@@ -94,10 +82,10 @@ class EDParserXML extends EDParserBase {
 	 *
 	 */
 	private static function endElement( $parser, $name ) {
-		if ( !array_key_exists( self::$currentXMLTag, self::$XMLValues ) ) {
-			self::$XMLValues[self::$currentXMLTag] = [];
+		if ( !array_key_exists( self::$currentXMLTag, self::$xmlValues ) ) {
+			self::$xmlValues[self::$currentXMLTag] = [];
 		}
-		self::$XMLValues[self::$currentXMLTag][] = self::$currentValue;
+		self::$xmlValues[self::$currentXMLTag][] = self::$currentValue;
 		// Clear the value both here and in startElement(), in case this
 		// is an embedded tag.
 		self::$currentValue = '';
@@ -110,7 +98,7 @@ class EDParserXML extends EDParserBase {
 	 * attribute self::$currentValue with the current value and append to it.
 	 *
 	 * @param resource $parser XML parser created by xml_parser_create();
-	 * @param string $content A chunk of XML tag unner content.
+	 * @param string $content A chunk of XML tag inner content.
 	 */
 	private static function getContent( $parser, $content ) {
 		// Replace ampersands, to avoid the XML getting split up

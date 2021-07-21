@@ -7,11 +7,11 @@
  */
 
 class EDParserXMLwithXPath extends EDParserBase {
-	/** @var bool $preserve_external_variables_case Whether external variables' names are case-sensitive for this format. */
-	protected static $preserve_external_variables_case = true;
+	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
+	protected static $keepExternalVarsCase = true;
 
-	/** @var string $default_xmlns_prefix Default prefix for xmlns. */
-	private $default_xmlns_prefix;
+	/** @var string $defaultXmlnsPrefix Default prefix for xmlns. */
+	private $defaultXmlnsPrefix;
 
 	/**
 	 * Constructor.
@@ -24,7 +24,7 @@ class EDParserXMLwithXPath extends EDParserBase {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 		if ( array_key_exists( 'default xmlns prefix', $params ) ) {
-			$this->default_xmlns_prefix = $params['default xmlns prefix'];
+			$this->defaultXmlnsPrefix = $params['default xmlns prefix'];
 		}
 	}
 
@@ -51,9 +51,9 @@ class EDParserXMLwithXPath extends EDParserBase {
 		// Set default prefix for unprefixed xmlns's.
 		$namespaces = $xml->getDocNamespaces( true );
 		foreach ( $namespaces as $prefix => $namespace ) {
-			if ( !$prefix && $this->default_xmlns_prefix ) {
-				$namespaces[$this->default_xmlns_prefix] = $namespace;
-				$xml->registerXPathNamespace( $this->default_xmlns_prefix, $namespace );
+			if ( !$prefix && $this->defaultXmlnsPrefix ) {
+				$namespaces[$this->defaultXmlnsPrefix] = $namespace;
+				$xml->registerXPathNamespace( $this->defaultXmlnsPrefix, $namespace );
 			}
 		}
 

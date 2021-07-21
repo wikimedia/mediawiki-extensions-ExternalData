@@ -28,7 +28,7 @@ abstract class EDParserBase {
 			// We need only external variables.
 			// For some parsers, they may be brought lo lower case.
 			$this->external = array_values(
-				self::paramToArray( $params['data'], false, !static::$preserve_external_variables_case )
+				self::paramToArray( $params['data'], false, !static::$keepExternalVarsCase )
 			);
 		} else {
 			throw new EDParserException( 'externaldata-no-param-specified', 'data' );

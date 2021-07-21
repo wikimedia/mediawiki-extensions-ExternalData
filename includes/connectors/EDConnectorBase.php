@@ -9,15 +9,18 @@ abstract class EDConnectorBase {
 	use EDParsesParams;	// Needs paramToArray().
 
 	/** @var array|null An array of errors. */
-	private $errors = null;
+	private $errors;
 
 	/** @var bool Whether error messages are to be suppressed in wikitext. */
-	private $suppress_error = false;
+	private $suppressError = false;
 
 	/** @var bool True, if the connector needs one of EDParser* objects. */
-	protected static $needs_parser = false;
+	protected static $needsParser = false;
 	/** @var EDParserBase A Parser. */
-	private $parser = null;
+	private $parser;
+
+	/** @var string $encoding */
+	protected $encoding;
 
 	/** @var array An associative array mapping internal variables to external. */
 	protected $mappings = [];
@@ -38,7 +41,7 @@ abstract class EDConnectorBase {
 		$args = self::supplementParams( $args );
 
 		// Text parser, if needed.
-		if ( static::$needs_parser ) {	// late binding.
+		if ( static::$needsParser ) {	// late binding.
 			// Encoding override supplied by wiki user may also be needed.
 			$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
 			try {
@@ -51,7 +54,7 @@ abstract class EDConnectorBase {
 		// Data mappings. May be handled by the parser or by self.
 		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
-			$lower = !( $this->parser ? $this->parser : $this )->preservesCase();	// late binding in both.
+			$lower = !( $this->parser ?: $this )->preservesCase();	// late binding in both.
 			$this->mappings = self::paramToArray( $args['data'], false, $lower );
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'data' );
@@ -64,7 +67,7 @@ abstract class EDConnectorBase {
 
 		// Whether to suppress error messages.
 		if ( array_key_exists( 'suppress error', $args ) ) {
-			$this->suppress_error = true;
+			$this->suppressError = true;
 		}
 	}
 
@@ -94,7 +97,7 @@ abstract class EDConnectorBase {
 	 *
 	 * @return EDConnectorBase An EDConnector* object.
 	 */
-	public static function getConnector( $name, array $args ) {
+	public static function getConnector( $name, array $args ): EDConnectorBase {
 		$args['__pf'] = $name;
 		$args['__mongo'] = class_exists( 'MongoDB\Client' ) ? 'MongoDB\Client'
 					   : ( class_exists( 'MongoClient' ) ? 'MongoClient' : null );
@@ -143,10 +146,8 @@ abstract class EDConnectorBase {
 				if ( is_array( $external_values[$filter_var] ) ) {
 					$column_values = $external_values[$filter_var];
 					foreach ( $column_values as $i => $single_value ) {
-						// if a value doesn't match
-						// the filter value, remove
-						// the value from this row for
-						// all columns
+						// if a value doesn't match the filter value, remove
+						// the value from this row for all columns
 						if ( trim( $single_value ) !== trim( $filter_value ) ) {
 							foreach ( $external_values as $external_var => $external_value ) {
 								unset( $external_values[$external_var][$i] );
@@ -154,10 +155,8 @@ abstract class EDConnectorBase {
 						}
 					}
 				} else {
-					// if we have only one row of values,
-					// and the filter doesn't match, just
-					// keep the results array blank and
-					// return
+					// if we have only one row of values, and the filter doesn't match,
+					// just keep the results array blank and return
 					if ( $external_values[$filter_var] != $filter_value ) {
 						return [];
 					}
@@ -215,6 +214,6 @@ abstract class EDConnectorBase {
 	 * @return bool The message.
 	 */
 	public function suppressError() {
-		return $this->suppress_error;
+		return $this->suppressError;
 	}
 }

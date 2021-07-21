@@ -30,13 +30,13 @@ class EDConnectorPost extends EDConnectorHttp {
 	 */
 	public function run() {
 		// Allow extensions or LocalSettings.php to alter HTTP options.
-		Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $this->real_url, $this->options ] );
-		list( $contents, $this->headers, $errors ) = EDHttpWithHeaders::post( $this->real_url, $this->options );
+		Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $this->realUrl, $this->options ] );
+		[ $contents, $this->headers, $errors ] = EDHttpWithHeaders::post( $this->realUrl, $this->options );
 		if ( !$contents ) {
 			if ( is_array( $errors ) ) {
 				$errors = implode( ',', $errors );
 			}
-			$this->error( 'externaldata-post-failed', $this->original_url, $errors );
+			$this->error( 'externaldata-post-failed', $this->originalUrl, $errors );
 			return false;
 		}
 

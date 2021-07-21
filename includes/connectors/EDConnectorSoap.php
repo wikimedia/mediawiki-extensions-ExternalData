@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class implementing {{#get_soap_data:}} and mw.ext.externalData.getSoapData.
  *
@@ -7,15 +8,15 @@
  *
  */
 class EDConnectorSoap extends EDConnectorGet {
-	/** @var bool $preserve_external_variables_case External variables' case ought to be preserved. */
-	protected static $preserve_external_variables_case = true;
+	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
+	protected static $keepExternalVarsCase = true;
 
 	/** @var string SOAP request name. */
-	private $request_name;
+	private $requestName;
 	/** @var array SOAP request data. */
-	private $request_data;
+	private $requestData;
 	/** @var string SOAP response name. */
-	private $response_name;
+	private $responseName;
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -36,15 +37,15 @@ class EDConnectorSoap extends EDConnectorGet {
 			);
 		}
 		if ( array_key_exists( 'request', $args ) ) {
-			$this->request_name = $args['request'];
+			$this->requestName = $args['request'];
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'request' );
 		}
-		$this->request_data = array_key_exists( 'requestData', $args )
+		$this->requestData = array_key_exists( 'requestData', $args )
 							? self::paramToArray( $args['requestData'] )
 							: [];
 		if ( array_key_exists( 'response', $args ) ) {
-			$this->response_name = $args['response'];
+			$this->responseName = $args['response'];
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'response' );
 		}
@@ -60,14 +61,9 @@ class EDConnectorSoap extends EDConnectorGet {
 		static $log_errors_client = true;
 		static $log_errors_request = true;
 		// Suppress warnings.
-		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'suppressWarnings' ) ) {
-			// MW >= 1.33
-			\Wikimedia\AtEase\AtEase::suppressWarnings();
-		} else {
-			\MediaWiki\suppressWarnings();
-		}
+		self::suppressWarnings();
 		try {
-			$client = new SoapClient( $this->real_url, [ 'trace' => true ] );
+			$client = new SoapClient( $this->realUrl, [ 'trace' => true ] );
 		} catch ( Exception $e ) {
 			if ( $log_errors_client ) {
 				$this->error( 'externaldata-caught-exception-soap', $e->getMessage() );
@@ -76,15 +72,10 @@ class EDConnectorSoap extends EDConnectorGet {
 			return null;
 		}
 		// Restore warnings.
-		if ( method_exists( \Wikimedia\AtEase\AtEase::class, 'restoreWarnings' ) ) {
-			// MW >= 1.33
-			\Wikimedia\AtEase\AtEase::restoreWarnings();
-		} else {
-			\MediaWiki\restoreWarnings();
-		}
-		$request = $this->request_name;
+		self::restoreWarnings();
+		$request = $this->requestName;
 		try {
-			$result = $client->$request( $this->request_data );
+			$result = $client->$request( $this->requestData );
 		} catch ( Exception $e ) {
 			if ( $log_errors_request ) {
 				$this->error( 'externaldata-caught-exception-soap', $e->getMessage() );
@@ -94,7 +85,7 @@ class EDConnectorSoap extends EDConnectorGet {
 		}
 		if ( $result ) {
 			$this->headers = self::headers( $client->__getLastResponseHeaders() );
-			$response = $this->response_name;
+			$response = $this->responseName;
 			return $result->$response;
 		}
 	}

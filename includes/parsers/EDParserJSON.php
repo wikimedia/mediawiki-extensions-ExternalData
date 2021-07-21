@@ -8,7 +8,7 @@
 
 class EDParserJSON extends EDParserBase {
 	/** @var int Optional length of the ignored prefix. */
-	private $prefix_length = 0;
+	private $prefixLength;
 
 	/**
 	 * Constructor.
@@ -18,7 +18,7 @@ class EDParserJSON extends EDParserBase {
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );
-		$this->prefix_length = isset( $params['json offset'] ) ? intval( $params['json offset'] ) : 0;
+		$this->prefixLength = isset( $params['json offset'] ) ? (int)$params['json offset'] : 0;
 	}
 
 	/**
@@ -32,7 +32,7 @@ class EDParserJSON extends EDParserBase {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $defaults = [] ) {
-		$json = substr( $text, $this->prefix_length );
+		$json = substr( $text, $this->prefixLength );
 		// FormatJson class is provided by MediaWiki.
 		$json_tree = FormatJson::decode( $json, true );
 		if ( $json_tree === null ) {
@@ -66,13 +66,13 @@ class EDParserJSON extends EDParserBase {
 				self::parseTree( $val, $retrieved_values );
 			} elseif ( is_array( $val ) && count( $val ) > 1 ) {
 				self::parseTree( $val, $retrieved_values );
-			} elseif ( is_array( $val ) && count( $val ) == 1 && is_array( current( $val ) ) ) {
+			} elseif ( is_array( $val ) && count( $val ) === 1 && is_array( current( $val ) ) ) {
 				self::parseTree( current( $val ), $retrieved_values );
 			} else {
 				// If it's an array with just one element,
 				// treat it like a regular value.
 				// (Why is the null check necessary?)
-				if ( $val != null && is_array( $val ) ) {
+				if ( $val !== null && is_array( $val ) ) {
 					$val = current( $val );
 				}
 				$key = strtolower( $key );

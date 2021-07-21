@@ -8,7 +8,7 @@
 
 class EDParserException extends Exception {
 	/** @var string MW message code. */
-	private $msg_code;
+	private $msgCode;
 	/** @var array Parameters to that message. */
 	private $params;
 
@@ -20,7 +20,7 @@ class EDParserException extends Exception {
 	 */
 	public function __construct( $code, ...$params ) {
 		parent::__construct( wfMessage( $code, $params )->inContentLanguage()->text() );
-		$this->msg_code = $code;
+		$this->msgCode = $code;
 		$this->params = $params;
 	}
 
@@ -30,7 +30,7 @@ class EDParserException extends Exception {
 	 * @return string Message code.
 	 */
 	public function code() {
-		return $this->msg_code;
+		return $this->msgCode;
 	}
 
 	/**
