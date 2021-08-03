@@ -95,6 +95,17 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 	}
 
 	/**
+	 * Extract column name from db.tbl.col identifier.
+	 * @param string $field Full column identifier.
+	 * @return string Extracted column name.
+	 */
+	private static function getColumn( $field ) {
+		if ( preg_match( '/[^.]+$/', $field, $matches ) ) {
+			return $matches[0];
+		}
+	}
+
+	/**
 	 * Run a query in an open database.
 	 * @return string[][]|void
 	 */
@@ -116,7 +127,8 @@ abstract class EDConnectorRelational extends EDConnectorDb {
 				// in the return value (so that "a.b", for instance,
 				// doesn't get chopped off to just "b").
 				foreach ( $this->columns as $column ) {
-					$field = $row->$column;
+					$stripped = self::getColumn( $column );
+					$field = $row->$stripped;
 					// This can happen with MSSQL.
 					if ( $field instanceof DateTime ) {
 						$field = $field->format( 'Y-m-d H:i:s' );
