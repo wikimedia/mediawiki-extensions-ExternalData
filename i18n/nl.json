@@ -17,8 +17,8 @@
 	"externaldata-db-incomplete-information": "Fout: onvolledige informatie voor de database met ID $1 ($2).",
 	"externaldata-db-could-not-get-url": "Na $2 {{PLURAL:$1|poging|pogingen}} gaf de URL $1 geen resultaat.",
 	"externaldata-db-unknown-type": "Fout: Onbekend databasetype $1.",
-	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden.",
+	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden ($1).",
 	"externaldata-db-no-return-values": "Fout: er zijn geen return-waarden ingesteld.",
-	"externaldata-db-invalid-query": "De zoekopdracht $1 is ongeldig.",
+	"externaldata-db-invalid-query": "De zoekopdracht $1 is ongeldig ($2).",
 	"externaldata-mongodb-unknown-collection": "Fout: onbekende MongoDB-verzameling."
 }

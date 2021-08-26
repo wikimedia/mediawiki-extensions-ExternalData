@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"Hydra",
 			"Lakejason0",
 			"Liuxinyu970226",
@@ -21,9 +22,9 @@
 	"externaldata-db-incomplete-information": "错误：此数据库 ID $1（$2）信息不完整。",
 	"externaldata-db-could-not-get-url": "$2次尝试后仍无法获取URL$1。",
 	"externaldata-db-unknown-type": "错误：未知的数据库$1类型。",
-	"externaldata-db-could-not-connect": "错误：无法连接到数据库。",
+	"externaldata-db-could-not-connect": "错误：无法连接到数据库（$1）。",
 	"externaldata-db-no-return-values": "错误：没有返回指定的值。",
-	"externaldata-db-invalid-query": "$1查询无效。",
+	"externaldata-db-invalid-query": "$1查询无效（$2）。",
 	"externaldata-mongodb-unknown-collection": "错误：未知的 MongoDB $1集合。",
 	"externaldata-post-failed": "$1POST请求失败：$2",
 	"externaldata-url-unknown-error": "从URL$1获取数据时出现错误。",
