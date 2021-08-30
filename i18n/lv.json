@@ -4,5 +4,7 @@
 			"Papuass"
 		]
 	},
-	"getdata": "Saņemt datus"
+	"getdata": "Saņemt datus",
+	"externaldata-db-invalid-query": "Vaicājums $1 ir nederīgs ($2).",
+	"externaldata-db-empty-rowset": "Vaicājums $1 atgrieza tukšu kopu."
 }

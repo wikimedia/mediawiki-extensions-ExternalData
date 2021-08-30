@@ -38,7 +38,6 @@
 	"externaldata-db-empty-rowset": "Die Abfrage $1 gab ein leeres Rowset zurück.",
 	"externaldata-db-prepared-not-specified": "Bitte gib an (from=), welche vorbereitete Anweisung für die Datenbank-ID $1 verwendet werden soll.",
 	"externaldata-db-no-such-prepared": "Die vorbereitete Anweisung $2 ist nicht für die Datenbank-ID $1 eingerichtet.",
-	"externaldata-odbc-illegal": "Der Parameter $2 enthält eine unzulässige Sequenz $1. Bitte anhalten.",
 	"externaldata-mongodb-unknown-collection": "Fehler: Unbekannte MongoDB-Sammlung $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB-Aggregation schlug mit Fehler $1 fehl",
 	"externaldata-format-unavailable": "Die Bibliothek $1, die benötigt wird, um das „$2“-Format ohne die „$3“-Option zu verwenden, fehlt.",
@@ -58,6 +57,10 @@
 	"externaldata-empty-file": "Der Inhalt der Datei $1 konnte nicht abgerufen werden.",
 	"externaldata-no-file-in-directory": "Verzeichnis $1 hat keine Datei $2.",
 	"externaldata-no-directory": "Das Verzeichnis $1 ist nicht definiert.",
+	"externaldata-exe-shell-disabled": "Fehler: PHP-Admin hat den Zugriff auf die Shell deaktiviert.",
+	"externaldata-exe-incomplete-information": "Fehler: Unvollständige Informationen für Befehl ID $1 ($2).",
+	"externaldata-exe-illegal-parameter": "Fehler: Der Parameter $2 für das Programm $1 hat den illegalen Wert $3.",
+	"externaldata-exe-error": "Fehler: Das Programm $1 hat den Exit-Code $2 zurückgegeben. Nachricht: $3.",
 	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable „$1“ gesetzt.",
 	"externaldata-no-template": "Fehler: keine Vorlage angegeben."
 }

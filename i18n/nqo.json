@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lancine.kounfantoh.fofana"
+		]
+	},
+	"externaldata-db-invalid-query": "ߡߊ߬ߢߌ߬ߣߌ߲߬ߠߌ߲ $1 ߓߍ߲߬ߣߍ߲߫ ߕߍ߫ $2",
+	"externaldata-db-empty-rowset": "ߡߊ߬ߢߌ߬ߣߌ߲߬ߠߌ߲ $1 ߓߘߊ߫ ߘߊߘߐߡߌߘߊߞߎ߲ߧߊ߫ ߘߐߞߏߟߏ߲ ߠߊߞߐߛߊ߬ߦߌ߫."
+}

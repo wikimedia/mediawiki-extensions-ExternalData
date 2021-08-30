@@ -56,10 +56,10 @@
 	"externaldata-empty-file": "Невозможно получить содержимое файла $1.",
 	"externaldata-no-file-in-directory": "В директории $1 нет файла $2.",
 	"externaldata-no-directory": "Директория $1 не определена.",
-	"externaldata-exe-incomplete-information": "В настройках вики неполная информация для программы с ID $1. Отсутствует $2.",
 	"externaldata-exe-shell-disabled": "Администратор PHP закрыл доступ PHP к оболочке.",
-	"externaldata-exe-error": "Программа $1 завершилась с ошибкой. Код возврата: $2, ошибка: $3.",
+	"externaldata-exe-incomplete-information": "В настройках вики неполная информация для программы с ID $1. Отсутствует $2.",
 	"externaldata-exe-illegal-parameter": "У параметра $2 программы $1 недопустимое значение $3.",
+	"externaldata-exe-error": "Программа $1 завершилась с ошибкой. Код возврата: $2, ошибка: $3.",
 	"externaldata-no-local-variable": "Ошибка: локальная переменная &laquo;$1&raquo; не установлена.",
 	"externaldata-no-template": "Ошибка: не указан шаблон (параметр <code>template</code>)."
 }
