@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Kly",
-			"LNDDYL"
+			"LNDDYL",
+			"列维劳德"
 		]
 	},
 	"getdata": "取得資料",
@@ -49,6 +50,10 @@
 	"externaldata-empty-file": "無法取得檔案 $1 的內容。",
 	"externaldata-no-file-in-directory": "目錄 $1 下沒有檔案 $2。",
 	"externaldata-no-directory": "目錄 $1 未定義。",
+	"externaldata-exe-shell-disabled": "錯誤：PHP 管理員已禁用存取殼層。",
+	"externaldata-exe-incomplete-information": "錯誤：此 $1 命令 ID ($2) 有未完成的資訊",
+	"externaldata-exe-illegal-parameter": "錯誤：$1 程式的 $2 參數擁有 $3 非法值。",
+	"externaldata-exe-error": "錯誤：$1 程式送回退出代碼 $2。消息：$3。",
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",
 	"externaldata-no-template": "錯誤：沒有指定模板。"
 }

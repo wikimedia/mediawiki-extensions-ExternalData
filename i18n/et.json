@@ -5,6 +5,6 @@
 		]
 	},
 	"externaldata-db-unknown-type": "Tõrge: Tundmatu andmebaasi tüüp $1.",
-	"externaldata-db-could-not-connect": "Tõrge: Andmebaasiga ei saa ühendust.",
-	"externaldata-db-invalid-query": "Päring $1 on vigane."
+	"externaldata-db-could-not-connect": "Tõrge: Andmebaasiga ei saa ühendust ($1).",
+	"externaldata-db-invalid-query": "Päring $1 on vigane ($2)."
 }
