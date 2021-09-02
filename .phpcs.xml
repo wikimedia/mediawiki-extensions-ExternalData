@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
+		<exclude name="MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix" />
 		<properties>
 			<property name="allowedPrefixes" type="array">
 				<element value="edg" />
@@ -9,7 +10,6 @@
 		</properties>
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 		<!-- I want to use assignments in while loops. -->
-		<exclude name="MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures" />
 	</rule>
 	<!-- RedundantVarName is currently too sensitive, incompatible with default Doxygen. -->
 	<rule ref="MediaWiki.Commenting.RedundantVarName.Found">
