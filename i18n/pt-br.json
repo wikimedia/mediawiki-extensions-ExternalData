@@ -4,6 +4,7 @@
 			"Eduardo Addad de Oliveira",
 			"Eduardo.mps",
 			"Eduardoaddad",
+			"Fúlvio",
 			"Giro720",
 			"Jaideraf"
 		]
@@ -27,7 +28,7 @@
 	"externaldata-db-incomplete-information": "Erro: informações incompletas para este banco de dados ID $1 ($2).",
 	"externaldata-db-could-not-get-url": "Não foi possível obter o URL $1 após $2 {{PLURAL:$1|tentativa|tentativas}}.",
 	"externaldata-db-unknown-type": "Erro: tipo de banco de dados desconhecido $1.",
-	"externaldata-db-could-not-connect": "Erro: não foi possível conectar-se a base de dados.",
+	"externaldata-db-could-not-connect": "Erro: não foi possível conectar-se à base de dados ($1).",
 	"externaldata-db-unknown-database": "Erro: Não foi possível selecionar o banco de dados especificado com ID $1.",
 	"externaldata-db-no-return-values": "Erro: nenhum valor de retorno especificado.",
 	"externaldata-db-invalid-query": "A consulta $1 é inválida ($2).",
