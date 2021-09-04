@@ -1,4 +1,5 @@
 <?php
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Shell\Shell;
 
 /**
@@ -32,6 +33,9 @@ class EDConnectorExe extends EDConnectorBase {
 	private $preprocessor;
 	/** @var ?callable $postprocessor A postprocessor for program output. */
 	private $postprocessor;
+
+	/** @const int VERSION_TTL Number of seconds that software version is to be cached. */
+	private const VERSION_TTL = 3600; // one hour.
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -199,6 +203,69 @@ class EDConnectorExe extends EDConnectorBase {
 		} else {
 			$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );
 			return false;
+		}
+	}
+
+	/**
+	 * Register used software for Special:Version.
+	 *
+	 * @param array &$software
+	 */
+	public static function addSoftware( array &$software ) {
+		global $edgExeCommand;
+		foreach ( $edgExeCommand as $key => $command ) {
+			preg_match( '/^\\w+/', $command, $matches );
+			$path = $matches[0];
+			global $edgExeName;
+			if ( array_key_exists( $key, $edgExeName ) ) {
+				$name = $edgExeName[$key];
+			} else {
+				preg_match( '~[^/]+$~', $path, $matches );
+				$name = $matches[0];
+			}
+			global $edgExeUrl;
+			if ( array_key_exists( $key, $edgExeUrl ) ) {
+				$name = "[$edgExeUrl[$key] $name]";
+			}
+			$version = null;
+			global $edgExeVersion;
+			if ( array_key_exists( $key, $edgExeVersion ) ) {
+				// Version is hard coded in LocalSettings.php.
+				$version = $edgExeVersion[$key];
+			} else {
+				// Version will be reported by the program itself.
+				global $edgExeVersionCommand;
+				if ( array_key_exists( $key, $edgExeVersionCommand ) ) {
+					// The command key that reports the version is set in LocalSettings.php,
+					$commands_v = [ $edgExeVersionCommand[$key] ];
+				} else {
+					// We will try several most common keys that print out version one by one.
+					$commands_v = [ "$path -V", "$path -v", "$path --version", "$path -version" ];
+				}
+				$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
+				foreach ( $commands_v as $command_v ) {
+					$reported_version = $cache->getWithSetCallback(
+						$cache->makeGlobalKey( __CLASS__, $command_v ),
+						self::VERSION_TTL,
+						static function () use ( $command_v ) {
+							try {
+								$result = Shell::command( explode( ' ', $command_v ) )
+									->includeStderr()
+									->restrict( Shell::RESTRICT_DEFAULT | Shell::NO_NETWORK )
+									->execute();
+							} catch ( Exception $e ) {
+								return null;
+							}
+							return $result->getExitCode() === 0 ? $result->getStdout() : null;
+						}
+					);
+					if ( $reported_version ) {
+						$version = $reported_version;
+						break;
+					}
+				}
+			}
+			$software[$name] = $version ?: '(unknown)';
 		}
 	}
 
