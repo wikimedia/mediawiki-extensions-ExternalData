@@ -15,7 +15,7 @@
 	"externaldata-no-param-specified": "Erro: nenhum parâmetro \"$1\" especificado.",
 	"externaldata-param-type-error": "Erro: o parâmetro $1 deve ser do tipo $2.",
 	"externaldata-php-library-missing": "Erro: a biblioteca PHP $1, necessária para usar $2, está ausente.",
-	"externaldata-web-invalid-format": "Formato inválido: \"$1\"",
+	"externaldata-web-invalid-format": "Formato inválido: \"$1\".",
 	"externaldata-ldap-domain-not-defined": "O domínio LDAP $1 não foi definido.",
 	"externaldata-ldap-unable-to-connect": "Não foi possível conectar-se a $1",
 	"externaldata-ldap-unable-to-bind": "Não é possível vincular ao domínio LDAP $1 com nome de usuário e senha definidos para este domínio.",
