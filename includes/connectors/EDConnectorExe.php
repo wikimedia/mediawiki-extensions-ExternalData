@@ -183,6 +183,7 @@ class EDConnectorExe extends EDConnectorBase {
 				}
 				return $output;
 			} else {
+				$error = $error ?: $output; // Some programs send errors only to stdout.
 				return false;
 			}
 		}, $this->command, $this->input, $this->environment );
