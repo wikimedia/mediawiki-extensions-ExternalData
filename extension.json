@@ -88,14 +88,14 @@
 		"DBServer": [], "DBServerType ": [], "DBName": [], "DBUser": [], "DBPass": [], "DBDirectory": [], "DBFlags": [], "DBTablePrefix": [], "DBPrepared": [], "DBTypes": [],
 		"DirectoryPath": [], "FilePath": [],
 		"LDAPServer": [], "LDAPUser": [], "LDAPPass": [], "LDAPBaseDN": [],
-		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [],
+		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeLimits": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [],
 		"Secrets": {
 			"server": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"db": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"directory": [ "DirectoryPath", "DirectoryDepth" ],
 			"file": [ "FilePath" ],
 			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN" ],
-			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand" ]
+			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeLimits", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand" ]
 		},
 		"Connectors": [
 			[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],

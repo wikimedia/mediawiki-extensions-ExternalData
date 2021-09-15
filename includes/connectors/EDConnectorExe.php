@@ -17,6 +17,8 @@ class EDConnectorExe extends EDConnectorBase {
 	private $program;
 	/** @var array $environment An array of environment variables. */
 	private $environment = [];
+	/** @var array $limits Limits override for shell commands. */
+	private $limits;
 	/** @var string $command The expanded command. */
 	private $command;
 	/** @var array $params Parameters to $command. */
@@ -70,6 +72,9 @@ class EDConnectorExe extends EDConnectorBase {
 			if ( isset( $args['ExeEnvironment'] ) && is_array( $args['ExeEnvironment'] ) ) {
 				$this->environment = $args['ExeEnvironment'];
 			}
+
+			// Limits override.
+			$this->limits = self::limits( $args['program'] );
 
 			// Parameter filters.
 			if ( isset( $args['ExeParamFilters'] ) && is_array( $args['ExeParamFilters'] ) ) {
@@ -160,6 +165,26 @@ class EDConnectorExe extends EDConnectorBase {
 	}
 
 	/**
+	 * Make an array of resource limits for given shell command.
+	 *
+	 * @param string $program The program ID.
+	 *
+	 * @return array An array of limits.
+	 */
+	private static function limits( $program ): array {
+		global $wgMaxShellTime, $wgMaxShellWallClockTime, $wgMaxShellMemory, $wgMaxShellFileSize, $wgExeLimits;
+		$default_limits = [
+			'time'      => $wgMaxShellTime,
+			'walltime'  => $wgMaxShellWallClockTime,
+			'memory'    => $wgMaxShellMemory,
+			'filesize'  => $wgMaxShellFileSize
+		];
+		$explicit_limits = isset( $wgExeLimits[$program] ) && is_array( $wgExeLimits[$program] )
+			? $wgExeLimits[$program] : [];
+		return array_merge( $default_limits, $explicit_limits );
+	}
+
+	/**
 	 * Actually connect to the external data source (run program).
 	 * It is presumed that there are no errors in parameters and wiki settings.
 	 * Set $this->values and $this->errors.
@@ -171,6 +196,7 @@ class EDConnectorExe extends EDConnectorBase {
 			$result = Shell::command( explode( ' ', $command ) ) // Shell class demands an array of words.
 				->input( $input )
 				->environment( $environment )
+				->limits( $this->limits )
 				->execute();
 			$exit_code = $result->getExitCode();
 			$output = $this->tempFile ? file_get_contents( $this->tempFile ) : $result->getStdout();
@@ -244,15 +270,17 @@ class EDConnectorExe extends EDConnectorBase {
 					$commands_v = [ "$path -V", "$path -v", "$path --version", "$path -version" ];
 				}
 				$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
+				$limits = self::limits( $key );
 				foreach ( $commands_v as $command_v ) {
 					$reported_version = $cache->getWithSetCallback(
 						$cache->makeGlobalKey( __CLASS__, $command_v ),
 						self::VERSION_TTL,
-						static function () use ( $command_v ) {
+						static function () use ( $command_v, $limits ) {
 							try {
 								$result = Shell::command( explode( ' ', $command_v ) )
 									->includeStderr()
 									->restrict( Shell::RESTRICT_DEFAULT | Shell::NO_NETWORK )
+									->limits( $limits )
 									->execute();
 							} catch ( Exception $e ) {
 								return null;
