@@ -172,15 +172,15 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @return array An array of limits.
 	 */
 	private static function limits( $program ): array {
-		global $wgMaxShellTime, $wgMaxShellWallClockTime, $wgMaxShellMemory, $wgMaxShellFileSize, $wgExeLimits;
+		global $wgMaxShellTime, $wgMaxShellWallClockTime, $wgMaxShellMemory, $wgMaxShellFileSize, $edgExeLimits;
 		$default_limits = [
 			'time'      => $wgMaxShellTime,
 			'walltime'  => $wgMaxShellWallClockTime,
 			'memory'    => $wgMaxShellMemory,
 			'filesize'  => $wgMaxShellFileSize
 		];
-		$explicit_limits = isset( $wgExeLimits[$program] ) && is_array( $wgExeLimits[$program] )
-			? $wgExeLimits[$program] : [];
+		$explicit_limits = isset( $edgExeLimits[$program] ) && is_array( $edgExeLimits[$program] )
+			? $edgExeLimits[$program] : [];
 		return array_merge( $default_limits, $explicit_limits );
 	}
 
