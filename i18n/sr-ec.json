@@ -19,9 +19,9 @@
 	"externaldata-db-incomplete-information": "Грешка: Непотпуни подаци за ID базе података $1 ($2).",
 	"externaldata-db-could-not-get-url": "Преузимање адресе $1 после $2 {{PLURAL:$2|покушаја}} није успело.",
 	"externaldata-db-unknown-type": "Грешка: Непозната врста базе података $1.",
-	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело.",
+	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело ($1).",
 	"externaldata-db-no-return-values": "Грешка: Повратне вредности нису одређене.",
-	"externaldata-db-invalid-query": "Упит $1 није важећи.",
+	"externaldata-db-invalid-query": "Упит $1 није важећи ($2).",
 	"externaldata-mongodb-unknown-collection": "Грешка: Непозната MongoDB збирка $1.",
 	"externaldata-undefined-file": "Датотека $1 није дефинисана.",
 	"externaldata-no-template": "Грешка: Није наведен шаблон (параметар: <code>template</code>)."
