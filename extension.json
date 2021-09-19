@@ -89,6 +89,7 @@
 		"DirectoryPath": [], "FilePath": [],
 		"LDAPServer": [], "LDAPUser": [], "LDAPPass": [], "LDAPBaseDN": [],
 		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeLimits": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [],
+		"ExeTags": [],
 		"Secrets": {
 			"server": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
 			"db": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],

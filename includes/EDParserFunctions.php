@@ -52,7 +52,7 @@ class EDParserFunctions {
 	 *
 	 * @return string Wrapped error message.
 	 */
-	private static function formatErrorMessages( $messages ) {
+	public static function formatErrorMessages( $messages ) {
 		if ( !is_array( $messages ) ) {
 			$messages = [ $messages ];
 		}

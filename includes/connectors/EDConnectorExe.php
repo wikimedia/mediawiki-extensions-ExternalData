@@ -234,6 +234,38 @@ class EDConnectorExe extends EDConnectorBase {
 	}
 
 	/**
+	 * Register tags for backward compatibility with other extensions.
+	 *
+	 * @param Parser $parser
+	 */
+	public static function registerTags( Parser $parser ) {
+		global $edgExeTags;
+		foreach ( $edgExeTags as $program => $tag ) {
+			$parser->setHook(
+				$tag,
+				function ( $inner, array $args, Parser $parser, PPFrame $frame ) use ( $program ) {
+					global $edgExeInput;
+					$params = self::parseParams( $args );
+					$params[$edgExeInput[$program]] = $inner;
+					$params['program'] = $program;
+					$id = isset( $params['id'] ) ? $params['id'] : 'output';
+					$params['data'] = "$id=__text";
+					$params['format'] = 'text';
+
+					$connector = new self( $params );
+					if ( !$connector->errors() ) {
+						if ( $connector->run() ) {
+							$values = $connector->result();
+							return [ $values[$id][0], 'markerType' => 'nowiki' ];
+						}
+					}
+					return EDParserFunctions::formatErrorMessages( $connector->errors() );
+				}
+			);
+		}
+	}
+
+	/**
 	 * Register used software for Special:Version.
 	 *
 	 * @param array &$software
@@ -309,10 +341,16 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @return string dot with links.
 	 */
 	public static function wikilinks4dot( string $str ) {
-		return preg_replace_callback( '/\\[\\[([^|<>\\]]+)]]\\s*(?:\\[([^][]+)])?/', static function ( array $m ) {
+		// Process URL = "[[wikilink]]" in properties.
+		$dewikified = preg_replace_callback( '/URL\s*=\s*"\[\[([^|<>\]]+)]]"/', static function ( array $m ) {
+			return 'URL = "' . CoreParserFunctions::localurl( null, $m[1] ) . '"';
+		}, $str );
+		// Process [[wikilink]] in nodes.
+		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
 			$props = isset( $m[2] ) ? $m[2] : '';
 			return '"' . $m[1] . '"[URL = "' . CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
-		}, $str );
+		}, $dewikified );
+		return $dewikified;
 	}
 
 	/**

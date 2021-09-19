@@ -27,6 +27,8 @@ class ExternalDataHooks {
 
 		$parser->setHook( 'externalvalue', [ 'EDParserFunctions', 'doExternalValueRaw' ] );
 
+		EDConnectorExe::registerTags( $parser );
+
 		return true; // always return true, in order not to stop MW's hook processing!
 	}
 
