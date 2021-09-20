@@ -35,6 +35,8 @@
 	"externaldata-db-too-many-joins": "O número de condições JOIN (agora $1) não deve exceder o número de tabelas ($2)",
 	"externaldata-db-invalid-join": "Condição JOIN inválida $1: todas as partes devem conter um sinal \"=\".",
 	"externaldata-db-empty-rowset": "A consulta $1 retornou um laço vazio.",
+	"externaldata-db-prepared-not-specified": "Especifique o parâmetro (from=), que preparou a declaração a usar para a base de dados com o identificador $1.",
+	"externaldata-db-no-such-prepared": "A declaração preparada $2 não foi definida para a base de dados com o identificador $1.",
 	"externaldata-mongodb-unknown-collection": "Erro: coleção $1 desconhecida do MongoDB.",
 	"externaldata-mongodb-aggregation-failed": "A agregação do MongoDB falhou com o erro $1",
 	"externaldata-format-unavailable": "A biblioteca $1, necessária para usar o formato '$2' sem a opção '$3', está ausente.",
@@ -54,6 +56,10 @@
 	"externaldata-empty-file": "Não foi possível obter o conteúdo do arquivo $1.",
 	"externaldata-no-file-in-directory": "O diretório $1 não contém o arquivo $2.",
 	"externaldata-no-directory": "O diretório $1 não está definido.",
+	"externaldata-exe-shell-disabled": "Erro: o administrador de PHP desativou o acesso à shell.",
+	"externaldata-exe-incomplete-information": "Erro: informação incompleta para este identificador de comando $1 ($2).",
+	"externaldata-exe-illegal-parameter": "Erro: o parâmetro $2 do programa $1 tem o valor não permitido $3.",
+	"externaldata-exe-error": "Erro: o programa $1 retornou o código de saída $2. Mensagem: $3.",
 	"externaldata-no-local-variable": "Erro: nenhuma variável local \"$1\" foi definida.",
 	"externaldata-no-template": "Erro: nenhuma predefinição especificada."
 }
