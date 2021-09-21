@@ -19,7 +19,7 @@ class EDConnectorExe extends EDConnectorBase {
 	private $environment = [];
 	/** @var array $limits Limits override for shell commands. */
 	private $limits;
-	/** @var string $command The expanded command. */
+	/** @var array $command The expanded command, as an array. */
 	private $command;
 	/** @var array $params Parameters to $command. */
 	private $params;
@@ -142,7 +142,7 @@ class EDConnectorExe extends EDConnectorBase {
 				$command = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $command );
 			}
 
-			$this->command = $command;
+			$this->command = is_array( $command ) ? $command : explode( ' ', $command );
 
 			// Postprocessor:
 			if ( isset( $args['ExePostprocess'] ) ) {
@@ -192,8 +192,12 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @return bool True on success, false if errors were encountered.
 	 */
 	public function run() {
-		$output = $this->callCached( function ( $command, $input, array $environment ) use( &$exit_code, &$error ) {
-			$result = Shell::command( explode( ' ', $command ) ) // Shell class demands an array of words.
+		$output = $this->callCached( function (
+			array $command,
+			$input,
+			array $environment
+		) use( &$exit_code, &$error ) {
+			$result = Shell::command( $command ) // Shell class demands an array of words.
 				->input( $input )
 				->environment( $environment )
 				->limits( $this->limits )
