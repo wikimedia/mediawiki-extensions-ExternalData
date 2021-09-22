@@ -68,13 +68,13 @@ class EDConnectorExe extends EDConnectorBase {
 				$this->error( 'externaldata-exe-incomplete-information', $this->program, 'edgExeCommand' );
 			}
 
+			// Limits override.
+			$this->limits = self::limits( $args['program'] );
+
 			// Environment variables.
 			if ( isset( $args['ExeEnvironment'] ) && is_array( $args['ExeEnvironment'] ) ) {
 				$this->environment = $args['ExeEnvironment'];
 			}
-
-			// Limits override.
-			$this->limits = self::limits( $args['program'] );
 
 			// Parameter filters.
 			if ( isset( $args['ExeParamFilters'] ) && is_array( $args['ExeParamFilters'] ) ) {
@@ -83,29 +83,17 @@ class EDConnectorExe extends EDConnectorBase {
 
 			// Parameters.
 			// The required parameters are stored as a secret in LocalSettings.php.
+			$validated_params = null;
 			if ( isset( $args['ExeParams'] ) && is_array( $args['ExeParams'] ) ) {
-				foreach ( $args['ExeParams'] as $key => $val ) {
-					$param = is_numeric( $key ) ? $val : $key;
-					$default = is_numeric( $key ) ? null : $val;
-					$value = isset( $args[$param] ) ? $args[$param] : $default;
-					if ( $value ) {
-						if (
-							// no filter.
-							!isset( $this->paramFilters[$param] )
-							// filter is a function.
-							|| is_callable( $this->paramFilters[$param] )
-							&& $this->paramFilters[$param]( $value )
-							// filter is a regular expression.
-							|| is_string( $this->paramFilters[$param] )
-							&& preg_match( $this->paramFilters[$param], $value )
-						) {
-							$command = preg_replace( '/\\$' . preg_quote( $param, '/' ) . '\\$/', $value, $command );
-						} else {
-							$this->error( 'externaldata-exe-illegal-parameter', $this->program, $param, $value );
-						}
-					} else {
-						$this->error( 'externaldata-no-param-specified', $param );
-					}
+				$validated_params = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
+			}
+
+			if ( $validated_params ) {
+				// Substitute parameters in the shell command:
+				$command = $this->substitute( $command, $validated_params );
+				// And in the environment variables.
+				foreach ( $this->environment as $var => &$value ) {
+					$value = $this->substitute( $value, $validated_params );
 				}
 			}
 
@@ -162,6 +150,56 @@ class EDConnectorExe extends EDConnectorBase {
 							|| array_key_exists( 'ExeUseStaleCache', $args )
 							|| $edgAlwaysAllowStaleCache;
 		$this->setupCache( $cache_expires, $allow_stale_cache );
+	}
+
+	/**
+	 * Validate parameters. Log an error if a required parameter is not supplied or a parameter has an illegal value.
+	 *
+	 * @param array $parameters User-supplied parameters.
+	 * @param array $defaults An array of parameter defaults. A numeric key means that the value is a required param.
+	 * @param array $filters An array of parameter filters (callables or regexes).
+	 *
+	 * @return array The validated parameters.
+	 */
+	private function validateParams( array $parameters, array $defaults, array $filters ): array {
+		$validated = [];
+		foreach ( $defaults as $key => $val ) {
+			$param = is_numeric( $key ) ? $val : $key;
+			$default = is_numeric( $key ) ? null : $val;
+			$value = isset( $parameters[$param] ) ? $parameters[$param] : $default;
+			if ( $value ) {
+				if (
+					// no filter.
+					!isset( $filters[$param] )
+					// filter is a function.
+					|| is_callable( $filters[$param] ) && $filters[$param]( $value )
+					// filter is a regular expression.
+					|| is_string( $filters[$param] ) && preg_match( $filters[$param], $value )
+				) {
+					$validated[$param] = $value;
+				} else {
+					$this->error( 'externaldata-exe-illegal-parameter', $this->program, $param, $value );
+				}
+			} else {
+				$this->error( 'externaldata-no-param-specified', $param );
+			}
+		}
+		return $validated;
+	}
+
+	/**
+	 * Substitute parameters into a string (command or environment variable).
+	 *
+	 * @param string|array $template The string(s) in which parameters are to be substituted.
+	 * @param array $parameters Validated parameters.
+	 *
+	 * @return string|array The string(s) with substituted parameters.
+	 */
+	private function substitute( $template, array $parameters ) {
+		foreach ( $parameters as $name => $value ) {
+			$template = preg_replace( '/\\$' . preg_quote( $name, '/' ) . '\\$/', $value, $template );
+		}
+		return $template;
 	}
 
 	/**
