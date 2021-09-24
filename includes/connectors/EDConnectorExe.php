@@ -315,7 +315,7 @@ class EDConnectorExe extends EDConnectorBase {
 	public static function addSoftware( array &$software ) {
 		global $edgExeCommand;
 		foreach ( $edgExeCommand as $key => $command ) {
-			preg_match( '/^\\w+/', $command, $matches );
+			preg_match( '~^[\w/-]+~', is_array( $command ) ? $command[0] : $command, $matches );
 			$path = $matches[0];
 			global $edgExeName;
 			if ( array_key_exists( $key, $edgExeName ) ) {
