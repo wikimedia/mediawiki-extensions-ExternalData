@@ -10,6 +10,9 @@
 abstract class EDParserBase {
 	use EDParsesParams;			// Needs paramToArray().
 
+	/** @var bool $addNewlines Add newlines to facilitate cutting out fragments. */
+	protected $addNewlines;
+
 	/** @var array $mappings A a list of external variables, possibly converted to lowercase. */
 	protected $external = [];
 
@@ -33,6 +36,9 @@ abstract class EDParserBase {
 		} else {
 			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
 		}
+
+		// Whether to add newlines to help cutting out fragments.
+		$this->addNewlines = array_key_exists( 'add newlines', $params );
 	}
 
 	/**

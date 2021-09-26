@@ -46,6 +46,9 @@ class EDParserXMLwithXPath extends EDParserXML {
 			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
 		}
 
+		// Save the whole XML tree for Lua.
+		$defaults['__xml'] = [ self::xml2Array( $xml ) ];
+
 		$values = parent::__invoke( $text, $defaults );
 
 		// Set default prefix for unprefixed xmlns's.
@@ -92,6 +95,21 @@ class EDParserXMLwithXPath extends EDParserXML {
 			}
 		}
 		return $values;
+	}
+
+	/**
+	 * Convert SimpleXMLElement to a nested array.
+	 *
+	 * @param SimpleXMLElement $xml XML to convert.
+	 *
+	 * @return array
+	 */
+	private static function xml2Array( SimpleXMLElement $xml ): array {
+		$converted = [];
+		foreach ( (array)$xml as $index => $node ) {
+			$converted[$index] = is_a( $node, 'SimpleXMLElement' ) ? self::xml2Array( $node ) : $node;
+		}
+		return $converted;
 	}
 
 	/**

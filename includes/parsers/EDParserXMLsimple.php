@@ -48,6 +48,9 @@ class EDParserXMLsimple extends EDParserXML {
 			);
 		}
 		xml_parser_free( $xml_parser );
+		// Save the whole XML tree for Lua.
+		self::$xmlValues['__xml'] = [ self::$xmlValues ];
+
 		return self::$xmlValues;
 	}
 

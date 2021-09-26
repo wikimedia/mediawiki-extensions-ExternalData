@@ -26,6 +26,8 @@ class EDParserJSONsimple extends EDParserJSON {
 			// It's probably invalid JSON.
 			throw new EDParserException( 'externaldata-invalid-json' );
 		}
+		// Save the whole JSON tree for Lua.
+		$defaults['__json'] = [ $json_tree ];
 		$values = parent::__invoke( $text, $defaults );
 		if ( is_array( $json_tree ) ) {
 			self::parseTree( $json_tree, $values );

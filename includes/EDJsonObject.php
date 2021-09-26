@@ -117,6 +117,15 @@ class EDJsonObject {
 	}
 
 	/**
+	 * Return the whole JSON tree for Lua as an associative array.
+	 *
+	 * @return array
+	 */
+	public function complete() {
+		return $this->jsonObject;
+	}
+
+	/**
 	 * Returns an array containing references to the
 	 * objects that match the JsonPath. If the result is
 	 * empty returns false.
