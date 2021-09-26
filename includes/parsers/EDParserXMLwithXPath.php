@@ -6,9 +6,9 @@
  * @author Alexander Mashin
  */
 
-class EDParserXMLwithXPath extends EDParserBase {
+class EDParserXMLwithXPath extends EDParserXML {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
-	protected static $keepExternalVarsCase = true;
+	public $keepExternalVarsCase = true;
 
 	/** @var string $defaultXmlnsPrefix Default prefix for xmlns. */
 	private $defaultXmlnsPrefix;
@@ -61,7 +61,7 @@ class EDParserXMLwithXPath extends EDParserBase {
 			// Register any necessary XML namespaces, if not yet, to
 			// avoid "Undefined namespace prefix" errors.
 			// It's just a dirty hack.
-			if ( preg_match_all( '/[\/\@]([a-zA-Z0-9]*):/', $xpath, $matches ) ) {
+			if ( preg_match_all( '/[\/@]([a-zA-Z0-9]*):/', $xpath, $matches ) ) {
 				foreach ( $matches[1] as $prefix ) {
 					if ( !array_key_exists( $prefix, $namespaces ) ) {
 						$namespaces[$prefix] = $prefix;

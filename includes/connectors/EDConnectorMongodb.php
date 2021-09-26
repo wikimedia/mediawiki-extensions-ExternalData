@@ -8,7 +8,7 @@
  */
 abstract class EDConnectorMongodb extends EDConnectorComposed {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
-	protected static $keepExternalVarsCase = true;
+	public $keepExternalVarsCase = true;
 
 	/** @var string MondoDB connection string. */
 	protected $connectString;

@@ -7,7 +7,7 @@
 
 class EDParserText extends EDParserBase {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
-	protected static $keepExternalVarsCase = true;
+	public $keepExternalVarsCase = true;
 
 	/**
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.

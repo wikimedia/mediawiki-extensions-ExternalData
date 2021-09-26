@@ -9,7 +9,7 @@
  */
 class EDConnectorSoap extends EDConnectorGet {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
-	protected static $keepExternalVarsCase = true;
+	public $keepExternalVarsCase = true;
 
 	/** @var string SOAP request name. */
 	private $requestName;

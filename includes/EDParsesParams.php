@@ -14,7 +14,7 @@ use function MediaWiki\suppressWarnings;
 
 trait EDParsesParams {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
-	protected static $keepExternalVarsCase = false;
+	public $keepExternalVarsCase = false;
 
 	/**
 	 * This method adds secret parameters to user-supplied ones, extracting them from
@@ -164,15 +164,6 @@ END;
 			}
 		}
 		return $args;
-	}
-
-	/**
-	 * Whether the parser preserves external variable case.
-	 *
-	 * @return bool False, is external variables' names are brought to lowercase, true otherwise.
-	 */
-	public static function preservesCase() {
-		return static::$keepExternalVarsCase; // late binding.
 	}
 
 	/**

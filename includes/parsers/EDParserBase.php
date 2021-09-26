@@ -28,7 +28,7 @@ abstract class EDParserBase {
 			// We need only external variables.
 			// For some parsers, they may be brought lo lower case.
 			$this->external = array_values(
-				self::paramToArray( $params['data'], false, !static::$keepExternalVarsCase )
+				self::paramToArray( $params['data'], false, !$this->keepExternalVarsCase )
 			);
 		} else {
 			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
@@ -71,5 +71,17 @@ abstract class EDParserBase {
 		}
 		// No fitting parser found.
 		throw new EDParserException( 'externaldata-web-invalid-format', $params['format'] );
+	}
+
+	/**
+	 * Add newlines to facilitate cutting out fragments, if ordered. To be overloaded in JSON and XML parsers.
+	 *
+	 * @param string $text Text to add newlines to.
+	 * @param bool $new_lines Whether to add new lines.
+	 *
+	 * @return string Text with newlines added.
+	 */
+	public function addNewlines( $text, $new_lines ) {
+		return $text;
 	}
 }

@@ -1,24 +1,30 @@
 <?php
+
 /**
  * A trait used by connectors that receive external data as text need to parse it.
+ *
  */
 trait EDConnectorParsable {
 
 	/** @var EDParserBase A Parser. */
 	private $parser;
-	/** @var bool $parserKeepsCase Keep letter case? */
-	protected $parserKeepsCase;
 	/** @var string $encoding */
 	protected $encoding;
-	/** @var string $offsetAbsolute Start from this line (absolute, zero-based). */
-	private $offsetAbsolute;
-	/** @var string $limitAbsolute End with this line (absolute, zero-based). */
-	private $limitAbsolute;
-	/** @var string $offsetPercent Start from this line (percents). */
-	private $offsetPercent;
-	/** @var string $limitPercent End with this line (percents). */
-	private $limitPercent;
-	/** @var array $parseErrors An 2d array of parse errors. */
+
+	/** @var string $startAbsolute Start from this line (absolute, zero-based). */
+	private $startAbsolute;
+	/** @var string $endAbsolute End with this line (absolute, zero-based). */
+	private $endAbsolute;
+	/** @var string $startPercent Start from this line (percents). */
+	private $startPercent;
+	/** @var string $endPercent End with this line (percents). */
+	private $endPercent;
+	/** @var int $headerLines Always include so many lines from the beginning. */
+	private $headerLines;
+	/** @var int $footerLines Always include so many lines at the end. */
+	private $footerLines;
+
+	/** @var array $parseErrors A 2d array of parse errors. */
 	protected $parseErrors = [];
 
 	/**
@@ -30,17 +36,74 @@ trait EDConnectorParsable {
 	protected function prepareParser( array $args ) {
 		// Encoding override supplied by wiki user may also be needed.
 		$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
+
 		try {
 			$this->parser = EDParserBase::getParser( $args );
-			// Whether to keep letter case in variables.
-			$this->parserKeepsCase = $this->parser->preservesCase();
 		} catch ( EDParserException $e ) {
 			$this->parseErrors[] = [ $e->code(), $e->params() ];
 		}
 
-		// Also, set start and end lines.
-		$this->setLine( $args, 'offset', 0 );
-		$this->setLine( $args, 'limit', 1 );
+		// Whether to keep letter case in variables. If either connector or parser demand keeping the case, do it.
+		if ( $this->parser->keepExternalVarsCase ) {
+			$this->keepExternalVarsCase = true;
+		}
+
+		// Set start and end lines.
+		$this->setLine( $args, 'start', 0 );
+		$this->setLine( $args, 'end', 1 );
+
+		// Set header and footer.
+		$this->headerLines = isset( $args['header lines'] ) ? (int)$args['header lines'] : 0;
+		$this->footerLines = isset( $args['footer lines'] ) ? (int)$args['footer lines'] : 0;
+	}
+
+	/**
+	 * Calculate absolute offset and limit.
+	 *
+	 * @param int $total Total number of lines.
+	 *
+	 * @return array [['start' => (effective absolute), 'end' => (effective absolute)] (up to three pairs);
+	 *      also contains 'start' and 'end' fields].
+	 */
+	private function ranges( $total ): array {
+		$start = $this->startAbsolute !== null ? $this->startAbsolute : (int)round( $this->startPercent * $total );
+		$end = $this->endAbsolute !== null ? $this->endAbsolute : (int)round( $this->endPercent * $total );
+		if ( $start < 0 ) {
+			$start = $total + $start;
+		}
+		if ( $end < 0 ) {
+			$end = $total + $end;
+		}
+		$ranges = [	[ 'start line' => $start, 'end line' => $end ] ]; // set the main range
+
+		if ( $this->headerLines ) {
+			if ( $this->headerLines < $start ) {
+				// Need to add a new range.
+				array_unshift( $ranges, [ 'start line' => 0, 'end line' => $this->headerLines ] );
+			} elseif ( $this->headerLines < $end ) {
+				// Header and the range intersect.
+				$ranges[0]['start line'] = 0;
+			} else {
+				// Header overlaps the whole range.
+				$ranges[0]['end line'] = $this->headerLines;
+			}
+		}
+		if ( $this->footerLines ) {
+			if ( $this->footerLines > $total - $start ) {
+				// Footer overlaps the whole range.
+				$ranges[count( $ranges ) - 1]['start line'] = $total - $this->footerLines;
+			} elseif ( $this->footerLines > $total - $end ) {
+				// Footer and range intersect.
+				$ranges[count( $ranges ) - 1]['end line'] = $total - 1;
+			} else {
+				// Need to add a new range.
+				$ranges[] = [ 'start line' => $total - $this->footerLines, 'end line' => $total - 1 ];
+			}
+		}
+		// Set numbers for __start and __lines variables.
+		$ranges['start line'] = $start;
+		$ranges['end line'] = $end;
+		return $ranges;
 	}
 
 	/**
@@ -53,26 +116,31 @@ trait EDConnectorParsable {
 	 */
 	protected function parse( $text, $defaults ): ?array {
 		$parser = $this->parser;
+
+		// Insert newlines where appropriate.
+		$text = $parser->addNewlines( $text, $this->headerLines || $this->footerLines );
 		// Trimming.
 		$split = explode( PHP_EOL, $text );
 		$total = count( $split );
-		$start = $this->offsetAbsolute !== null
-			? $this->offsetAbsolute
-			: (int)round( $this->offsetPercent * $total );
-		$lines = $this->limitAbsolute !== null
-			? $this->limitAbsolute
-			: (int)round( $this->limitPercent * $total );
-		if ( $start < 0 ) {
-			$start = $total + $start - 1;
-		}
-		if ( $lines < 0 ) {
-			$lines = $total + $lines - $start;
-		}
-		$text = implode( PHP_EOL, array_slice( $split, $start, $lines ) );
-		$defaults['__start'] = [ $start ];
-		$defaults['__lines'] = [ $lines ];
-		$defaults['__end'] = [ $start + $lines - 1 ];
 		$defaults['__total'] = [ $total ];
+
+		// Get really needed absolute line ranges.
+		$ranges = $this->ranges( $total );
+
+		// Extract __start, __lines and __end variables.
+		$defaults['__start'] = [ $ranges['start line'] + 1 ]; // zero-based to one-based.
+		$defaults['__end'] = [ $ranges['end line'] + 1 ]; // zero-based to one-based.
+		$defaults['__lines'] = [ $ranges['end line'] - $ranges['start line'] + 1 ];
+		unset( $ranges['start line'] );
+		unset( $ranges['end line'] );
+
+		// Extract text fragment(s).
+		$text = implode( PHP_EOL, array_map( static function ( array $range ) use ( $split ) {
+			return implode(
+				PHP_EOL,
+				array_slice( $split, $range['start line'], $range['end line'] - $range['start line'] + 1 )
+			);
+		}, $ranges ) );
 
 		// Parsing itself.
 		try {
@@ -81,6 +149,7 @@ trait EDConnectorParsable {
 			$parsed = null;
 			$this->parseErrors[] = [ $e->code(), $e->params() ];
 		}
+
 		return $parsed;
 	}
 
@@ -94,13 +163,14 @@ trait EDConnectorParsable {
 	private function setLine( array $args, $name, $default ) {
 		$attr_absolute = "{$name}Absolute";
 		$attr_percent = "{$name}Percent";
-		if ( isset( $args[$name] ) && $args[$name] ) {
-			[ $this->$attr_absolute, $this->$attr_percent ] = self::parseAbsoluteOrPercent( $args[$name] );
+		$index = "$name line";
+		if ( isset( $args[$index] ) && $args[$index] ) {
+			[ $this->$attr_absolute, $this->$attr_percent ] = self::parseAbsoluteOrPercent( $args[$index] );
 			if ( $this->$attr_absolute === null && $this->$attr_percent === null ) {
 				$this->error( 'externaldata-param-type-error', $name, 'integer or percent' );
 			}
 		}
-		if ( !$this->$attr_absolute && !$this->$attr_percent ) {
+		if ( $this->$attr_absolute === null && $this->$attr_percent === null ) {
 			$this->$attr_percent = $default;
 		}
 	}
@@ -114,12 +184,12 @@ trait EDConnectorParsable {
 	private static function parseAbsoluteOrPercent( $arg ) {
 		$absolute = null;
 		$percent = null;
-		if ( is_int( $arg ) ) {
+		if ( is_numeric( $arg ) ) {
 			// An absolute value.
 			$absolute = (int)$arg;
 		} elseif ( preg_match( '/^(?<percent>-?100(\.0+)?|\d{1,2}(\.\d+)?)\s*%$/', $arg, $matches ) ) {
 			$percent = (float)$matches['percent'] / 100;
 		}
-		return [ $absolute, $percent ];
+		return [ $absolute - 1 /* one-based to zero-based */, $percent ];
 	}
 }

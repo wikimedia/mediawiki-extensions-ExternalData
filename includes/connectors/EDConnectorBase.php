@@ -35,8 +35,7 @@ abstract class EDConnectorBase {
 		// Data mappings. May be handled by the parser or by self.
 		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
-			$lower = !( $this->parserKeepsCase ?: $this->preservesCase() );	// late binding.
-			$this->mappings = self::paramToArray( $args['data'], false, $lower );
+			$this->mappings = self::paramToArray( $args['data'], false, !$this->keepExternalVarsCase );
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'data' );
 		}
@@ -50,45 +49,6 @@ abstract class EDConnectorBase {
 		if ( array_key_exists( 'suppress error', $args ) ) {
 			$this->suppressError = true;
 		}
-	}
-
-	/**
-	 * Set start ond end line.
-	 *
-	 * @param array $args An array of parameters.
-	 * @param string $name 'offset' or 'limit'.
-	 * @param float $default The default value.
-	 */
-	private function setLine( array $args, $name, $default ) {
-		$attr_absolute = "{$name}Absolute";
-		$attr_percent = "{$name}Percent";
-		if ( isset( $args[$name] ) && $args[$name] ) {
-			[ $this->$attr_absolute, $this->$attr_percent ] = self::parseAbsoluteOrPercent( $args[$name] );
-			if ( $this->$attr_absolute === null && $this->$attr_percent === null ) {
-				$this->error( 'externaldata-param-type-error', $name, 'integer or percent' );
-			}
-		}
-		if ( !$this->$attr_absolute && !$this->$attr_percent ) {
-			$this->$attr_percent = $default;
-		}
-	}
-
-	/**
-	 * Get integer or percent value from string.
-	 *
-	 * @param string $arg
-	 * @return array [absolute|null, percent|null].
-	 */
-	private static function parseAbsoluteOrPercent( $arg ): array {
-		$absolute = null;
-		$percent = null;
-		if ( is_int( $arg ) ) {
-			// An absolute value.
-			$absolute = (int)$arg;
-		} elseif ( preg_match( '/^(?<percent>-?100(\.0+)?|\d{1,2}(\.\d+)?)\s*%$/', $arg, $matches ) ) {
-			$percent = (float)$matches['percent'] / 100;
-		}
-		return [ $absolute, $percent ];
 	}
 
 	/**

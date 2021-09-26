@@ -9,7 +9,7 @@
  */
 class EDConnectorSqlite extends EDConnectorRdbms {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
-	protected static $keepExternalVarsCase = true;
+	public $keepExternalVarsCase = true;
 
 	/**
 	 * Form credentials settings for database from $this->dbId.
