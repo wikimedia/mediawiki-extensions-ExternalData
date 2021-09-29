@@ -186,10 +186,10 @@ trait EDConnectorParsable {
 		$percent = null;
 		if ( is_numeric( $arg ) ) {
 			// An absolute value.
-			$absolute = (int)$arg;
+			$absolute = (int)$arg - 1; // one-based to zero-based
 		} elseif ( preg_match( '/^(?<percent>-?100(\.0+)?|\d{1,2}(\.\d+)?)\s*%$/', $arg, $matches ) ) {
 			$percent = (float)$matches['percent'] / 100;
 		}
-		return [ $absolute - 1 /* one-based to zero-based */, $percent ];
+		return [ $absolute, $percent ];
 	}
 }
