@@ -100,6 +100,7 @@ abstract class EDConnectorBase {
 		if ( !$external_values ) {
 			return [];
 		}
+
 		foreach ( $this->filters as $filter_var => $filter_value ) {
 			// Find the entry of $external_values that matches
 			// the filter variable; if none exists, just ignore
@@ -125,6 +126,7 @@ abstract class EDConnectorBase {
 				}
 			}
 		}
+
 		// for each external variable name specified in the function
 		// call, get its value or values (if any exist), and attach it
 		// or them to the local variable name
@@ -141,6 +143,21 @@ abstract class EDConnectorBase {
 				}
 			}
 		}
+
+		// Special case: __all in data argument. Need to map all external variables to internal ones.
+		if ( isset( $this->mappings['__all'] ) ) {
+			foreach ( $external_values as $external_var => $external_value ) {
+				if ( is_array( $external_value ) ) {
+					// array_values() restores regular
+					// 1, 2, 3 indexes to array, after unset()
+					// in filtering may have removed some
+					$result[$external_var] = array_values( $external_value );
+				} else {
+					$result[$local_var][] = $external_value;
+				}
+			}
+		}
+
 		return $result;
 	}
 

@@ -11,13 +11,18 @@ full text and terms of the license.
 
 External Data is an extension to MediaWiki that allows for retrieving data
 from various sources: external URLs, local wiki pages and files on the
-server (all in CSV, GFF, JSON, XML or HTML formats), plus database tables
-and LDAP servers.
+server (all in CSV, GFF, JSON, XML, HTML or INI formats), plus database tables,
+LDAP servers and program output.
 
 The extension defines the following parser functions: #get_web_data,
-#get_soap_data, #get_file_data, #get_db_data, #get_ldap_data,
+#get_soap_data, #get_file_data, #get_db_data, #get_ldap_data, #get_program_data,
 #external_value, #for_external_table, #display_external_table,
-#store_external_table and #clear_external_data. They are described below:
+#store_external_table and #clear_external_data; one tag: <externalvalue>;
+and Lua functions mw.ext.externalData.getWebData, mw.ext.externalData.getFileData,
+mw.ext.externalData.getDbData, mw.ext.externalData.getSoapData, mw.ext.externalData.getLdapData
+and mw.ext.externalData.getProgramData.
+
+They are described below:
 
 * #get_web_data retrieves the data from a URL that holds CSV, GFF,
 JSON or XML, and assigns it to local variables or arrays.
@@ -33,8 +38,14 @@ SQL-like syntax, and assigns it to local variables or arrays.
 * #get_ldap_data retrieves data from an LDAP server and assigns it to
 local variables.
 
+* #get_program_data retrieves data returned by a program called server-side,
+parses it and assigns it to local variables.
+
 * #external_value displays the value of any retrieved variable, or the
 first value if it's an array.
+
+* <externalvalue data="internal variable">fallback value</externalvalue>
+displays the value of any retrieved variable without applying wiki parser to it.
 
 * #for_external_table applies processing onto multiple rows retrieved by
 any of the #get_*_data functions
@@ -48,6 +59,10 @@ any of the #get_*_data functions, in order to store the entire array
 of data semantically.
 
 * #clear_external_data erases the current set of retrieved data.
+
+* Lua functions act similarly to corresponding parser functions and return
+2D (more, if the external variables __json or __xml are used) row-based
+tables of values.
 
 In addition, the extension defines a new special page, 'GetData', which
 exports selected rows from a wiki page that holds CSV data, in a format
@@ -78,7 +93,7 @@ LocalSettings.php:
 You should also add a line like the following, to set the expiration time
 of the cache, in seconds; this line will cache data for a week:
 
-     $edgCacheExpireTime = 7 * 24 * 60 * 60; 
+     $edgCacheExpireTime = 7 * 24 * 60 * 60;
 
 You can also set for string replacements to be done on the URLs you call,
 for instance to hide API keys:
