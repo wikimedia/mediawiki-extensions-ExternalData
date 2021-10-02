@@ -33,9 +33,13 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 			if ( !array_key_exists( $jsonpath, $values ) ) {
 				// variable has not been set yet.
 				try {
-					$values[$jsonpath] = $json->get( $jsonpath );
+					$json_values = $json->get( $jsonpath );
 				} catch ( MWException $e ) {
 					throw new EDParserException( 'externaldata-jsonpath-error', $jsonpath );
+				}
+				// EDJsonObject::get() returns false if values are not found, array otherwise.
+				if ( $json_values !== false ) {
+					$values[$jsonpath] = $json_values;
 				}
 			}
 		}
