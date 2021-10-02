@@ -20,10 +20,11 @@ abstract class EDConnectorComposed extends EDConnectorDb {
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
-	 * @param array &$args An array of arguments for parser/Lua function.
+	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
-		parent::__construct( $args );
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
 		// Query parts.
 		if ( isset( $args['from'] ) ) {
 			$this->from = $args['from'];

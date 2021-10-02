@@ -2,12 +2,14 @@
 /**
  * A trait to be used by cached connectors.
  *
+ * Classes using this trait should call $this->setupCache() in their constructors
+ * and can call functions wrapped in $this->callCached().
+ *
  * @author Alexander Mashin
  * @author Yaron Koren
  *
  */
 trait EDConnectorCached {
-
 	// Cache variables.
 	/** @var bool $cacheIsUp Is the cache set up? */
 	private static $cacheIsUp;
@@ -23,6 +25,8 @@ trait EDConnectorCached {
 	private $allowStaleCache;
 	/** @var int When the cache was cached. */
 	private $cachedTime;
+	/** @var bool $cached Whether the result was fetched from the cache. */
+	private $cached;
 	/** @var bool Is the cache fresh. */
 	private $cacheFresh;
 	/** @var int Timestamp of when the result was fetched. */
@@ -31,7 +35,7 @@ trait EDConnectorCached {
 	/**
 	 * Setup cache. Call from the constructor.
 	 * @param int $seconds Cache for so many seconds.
-	 * @param bool $stale Allow to use stale cache.
+	 * @param bool $stale Allow using stale cache.
 	 */
 	private function setupCache( $seconds, $stale ) {
 		global $edgCacheTable;
@@ -66,18 +70,19 @@ trait EDConnectorCached {
 		}
 
 		// If there is no fresh cache, try to get from the web.
-		$cache_present = (bool)$cached;
-		if ( !self::$cacheIsUp || !$cache_present || !$this->cacheFresh || $this->cacheExpires === 0 ) {
+		$this->cached = (bool)$cached;
+		if ( !self::$cacheIsUp || !$this->cached || !$this->cacheFresh || $this->cacheExpires === 0 ) {
 			$result = $func( ...$args ); // actually call the function.
 			if ( $result ) {
 				// Non-falsy result from $func.
 				$this->cacheFresh = true;
 				$this->time = time();
 				// Update cache, if possible and required.
-				$this->cache( $cache_key, $result, $cache_present );
+				$this->cache( $cache_key, $result, $this->cached );
+				$this->cached = false;
 			} else {
 				// No result from $func.
-				if ( $cache_present && $this->allowStaleCache ) {
+				if ( $this->cached && $this->allowStaleCache ) {
 					// But can serve stale cache, if any and allowed.
 					$result = $cached;
 					$this->cacheFresh = false;

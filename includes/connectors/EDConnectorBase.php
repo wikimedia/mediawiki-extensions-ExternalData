@@ -25,8 +25,9 @@ abstract class EDConnectorBase {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
+	protected function __construct( array &$args, Title $title ) {
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true, false );
 		// Add secrets from wiki settings:
@@ -74,10 +75,11 @@ abstract class EDConnectorBase {
 	 *
 	 * @param string $name Parser function name.
 	 * @param array $args Its parameters.
+	 * @param Title $title A title object.
 	 *
 	 * @return EDConnectorBase An EDConnector* object.
 	 */
-	public static function getConnector( $name, array $args ): EDConnectorBase {
+	public static function getConnector( $name, array $args, Title $title ): EDConnectorBase {
 		$args['__pf'] = $name;
 		$args['__mongo'] = class_exists( 'MongoDB\Client' ) ? 'MongoDB\Client'
 					   : ( class_exists( 'MongoClient' ) ? 'MongoClient' : null );
@@ -87,7 +89,7 @@ abstract class EDConnectorBase {
 		global $edgConnectors;
 		$class = self::getMatch( $args, $edgConnectors );
 		// Instantiate the connector. If $class is empty, either this extension or $edgConnectors is broken.
-		return new $class( $args );
+		return new $class( $args, $title );
 	}
 
 	/**

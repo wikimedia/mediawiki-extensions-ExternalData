@@ -17,13 +17,13 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	];
 
 	/**
-	 * A function that registeres the exported functions with Lua.
+	 * A function that registers the exported functions with Lua.
 	 */
 	public function register() {
 		$functions = [];
 		foreach ( self::$funcs as $lua => $parser ) {
 			$functions[$lua] = function ( array $arguments ) use( $parser ) {
-				return self::fetch( $parser, $arguments );
+				return self::fetch( $parser, $arguments, $this->getTitle() );
 			};
 		}
 		$this->getEngine()->registerInterface( __DIR__ . '/mw.ext.externaldata.lua', $functions, [] );
@@ -34,11 +34,12 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	 *
 	 * @param string $func The name of the corresponding parser function.
 	 * @param array $arguments Arguments coming from Lua code.
+	 * @param Title $title A Title object.
 	 *
 	 * @return array Depending on success, [ 'values' => [values]/null, 'errors' => null/[error messages] ].
 	 */
-	private static function fetch( $func, array $arguments ) {
-		$connector = EDConnectorBase::getConnector( $func, $arguments );
+	private static function fetch( $func, array $arguments, Title $title ): array {
+		$connector = EDConnectorBase::getConnector( $func, $arguments, $title );
 
 		$values = null;
 		$errors = $connector->errors();

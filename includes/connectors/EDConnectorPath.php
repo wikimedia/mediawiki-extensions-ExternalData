@@ -16,13 +16,14 @@ abstract class EDConnectorPath extends EDConnectorBase {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
+	protected function __construct( array &$args, Title $title ) {
 		// Parser.
 		$this->prepareParser( $args );
 		$this->error( $this->parseErrors );
 
-		parent::__construct( $args );
+		parent::__construct( $args, $title );
 	}
 
 	/**

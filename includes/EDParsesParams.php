@@ -167,6 +167,40 @@ END;
 	}
 
 	/**
+	 * A helper function used to find most specific settings.
+	 *
+	 * @param mixed $haystack An array to look for values, or a single value.
+	 * @param string|int ...$needles Indices to try, one by one.
+	 *
+	 * @return mixed The found value/
+	 */
+	protected function firstSet( $haystack, ...$needles ) {
+		if ( !is_array( $haystack ) ) {
+			return $haystack;
+		}
+		foreach ( $needles as $needle ) {
+			if ( isset( $haystack[$needle] ) ) {
+				return $haystack[$needle];
+			}
+		}
+	}
+
+	/**
+	 * Substitute parameters into a string (command, environment variable, etc.).
+	 *
+	 * @param string|array $template The string(s) in which parameters are to be substituted.
+	 * @param array $parameters Validated parameters.
+	 *
+	 * @return string|array The string(s) with substituted parameters.
+	 */
+	protected function substitute( $template, array $parameters ) {
+		foreach ( $parameters as $name => $value ) {
+			$template = preg_replace( '/\\$' . preg_quote( $name, '/' ) . '\\$/', $value, $template );
+		}
+		return $template;
+	}
+
+	/**
 	 * Suppress warnings absolutely.
 	 */
 	protected static function suppressWarnings() {

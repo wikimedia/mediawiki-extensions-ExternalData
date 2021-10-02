@@ -33,9 +33,11 @@
 		"EDGetData": "includes/EDGetData.php",
 		"EDJsonObject": "includes/EDJsonObject.php",
 		"EDArraySlice": "includes/EDArraySlice.php",
+		"EDReparseJob": "includes/EDReparseJob.php",
 		"EDParsesParams": "includes/EDParsesParams.php",
 		"EDEncodingConverter": "includes/EDEncodingConverter.php",
 		"EDConnectorCached": "includes/connectors/EDConnectorCached.php",
+		"EDConnectorThrottled": "includes/connectors/EDConnectorThrottled.php",
 		"EDConnectorParsable": "includes/connectors/EDConnectorParsable.php",
 		"EDConnectorBase": "includes/connectors/EDConnectorBase.php",
 		"EDConnectorHttp": "includes/connectors/EDConnectorHttp.php",
@@ -81,17 +83,19 @@
 		"ScribuntoExternalLibraries": "ExternalDataHooks::registerLua",
 		"SoftwareInfo": "ExternalDataHooks::onSoftwareInfo"
 	},
+	"JobClasses": { "edReparse": "EDReparseJob" },
 	"config": {
 		"_prefix": "edg",
 		"StringReplacements": [],
 		"ExternalValueVerbose": true,
 		"CacheTable": null, "AlwaysAllowStaleCache": true, "CacheExpireTime": 604800,
+		"ThrottleKey": { "*": "$2nd_lvl_domain$" }, "ThrottleInterval": { "*": 0 },
 		"TryEncodings": [ "ASCII", "UTF-8", "Windows-1251", "Windows-1252", "Windows-1254", "KOI8-R", "ISO-8859-1" ],
 		"AllowSSL": true, "HTTPOptions": { "timeout": "default" },
 		"DBServer": [], "DBServerType ": [], "DBName": [], "DBUser": [], "DBPass": [], "DBDirectory": [], "DBFlags": [], "DBTablePrefix": [], "DBPrepared": [], "DBTypes": [],
 		"DirectoryPath": [], "FilePath": [],
 		"LDAPServer": [], "LDAPUser": [], "LDAPPass": [], "LDAPBaseDN": [],
-		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeLimits": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [],
+		"ExeCommand": [], "ExeParams": [], "ExeParamFilters": [], "ExeInput": [], "ExeTempFile": [], "ExeLimits": [], "ExeEnvironment": [], "ExeIgnoreWarnings": [], "ExePreprocess": [], "ExePostprocess": [], "ExeCacheSeconds": [], "ExeUseStaleCache": [], "ExeName": [], "ExeUrl": [], "ExeVersion": [], "ExeVersionCommand": [], "ExeThrottleKey": [], "ExeThrottleInterval": [],
 		"ExeTags": [],
 		"Secrets": {
 			"server": [ "DBServer", "DBServerType", "DBName", "DBUser", "DBPass", "DBDirectory", "DBFlags", "DBTablePrefix", "DBPrepared", "DBTypes" ],
@@ -99,7 +103,7 @@
 			"directory": [ "DirectoryPath", "DirectoryDepth" ],
 			"file": [ "FilePath" ],
 			"domain": [ "LDAPServer", "LDAPUser", "LDAPPass", "LDAPBaseDN" ],
-			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeLimits", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand" ]
+			"program": [ "ExeCommand", "ExeParams", "ExeParamFilters", "ExeInput", "ExeTempFile", "ExeEnvironment", "ExeLimits", "ExeIgnoreWarnings", "ExePreprocess", "ExePostprocess", "ExeCacheSeconds", "ExeUseStaleCache", "ExeName", "ExeUrl", "ExeVersion", "ExeVersionCommand", "ExeThrottleKey", "ExeThrottleInterval" ]
 		},
 		"Connectors": [
 			[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],

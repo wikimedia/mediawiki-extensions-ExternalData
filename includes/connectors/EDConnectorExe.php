@@ -12,6 +12,7 @@ use MediaWiki\Shell\Shell;
 class EDConnectorExe extends EDConnectorBase {
 	use EDConnectorCached; // uses cache.
 	use EDConnectorParsable; // needs parser.
+	use EDConnectorThrottled; // throttles calls.
 
 	/** @var string $program Program ID. */
 	private $program;
@@ -43,13 +44,14 @@ class EDConnectorExe extends EDConnectorBase {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
+	protected function __construct( array &$args, Title $title ) {
 		// Parser.
 		$this->prepareParser( $args );
 		$this->error( $this->parseErrors );
 
-		parent::__construct( $args );
+		parent::__construct( $args, $title );
 
 		if ( Shell::isDisabled() ) {
 			$this->error( 'externaldata-exe-shell-disabled' );
@@ -59,86 +61,86 @@ class EDConnectorExe extends EDConnectorBase {
 		$command = null;
 		if ( !isset( $args['program'] ) ) {
 			$this->error( 'externaldata-no-param-specified', 'program' );
+			return; // no need to continue.
+		}
+		$this->program = $args['program'];
+		// The command, stored as a secret in LocalSettings.php.
+		if ( isset( $args['ExeCommand'] ) ) {
+			$command = $args['ExeCommand'];
 		} else {
-			$this->program = $args['program'];
-			// The command, stored as a secret in LocalSettings.php.
-			if ( isset( $args['ExeCommand'] ) ) {
-				$command = $args['ExeCommand'];
-			} else {
-				$this->error( 'externaldata-exe-incomplete-information', $this->program, 'edgExeCommand' );
-			}
+			$this->error( 'externaldata-exe-incomplete-information', $this->program, 'edgExeCommand' );
+		}
 
-			// Limits override.
-			$this->limits = self::limits( $args['program'] );
+		// Limits override.
+		$this->limits = self::limits( $args['program'] );
 
-			// Environment variables.
-			if ( isset( $args['ExeEnvironment'] ) && is_array( $args['ExeEnvironment'] ) ) {
-				$this->environment = $args['ExeEnvironment'];
-			}
+		// Environment variables.
+		if ( isset( $args['ExeEnvironment'] ) && is_array( $args['ExeEnvironment'] ) ) {
+			$this->environment = $args['ExeEnvironment'];
+		}
 
-			// Parameter filters.
-			if ( isset( $args['ExeParamFilters'] ) && is_array( $args['ExeParamFilters'] ) ) {
-				$this->paramFilters = $args['ExeParamFilters'];
-			}
+		// Parameter filters.
+		if ( isset( $args['ExeParamFilters'] ) && is_array( $args['ExeParamFilters'] ) ) {
+			$this->paramFilters = $args['ExeParamFilters'];
+		}
 
-			// Parameters.
-			// The required parameters are stored as a secret in LocalSettings.php.
-			$validated_params = null;
-			if ( isset( $args['ExeParams'] ) && is_array( $args['ExeParams'] ) ) {
-				$validated_params = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
-			}
+		// Parameters.
+		// The required parameters are stored as a secret in LocalSettings.php.
+		$validated_params = null;
+		if ( isset( $args['ExeParams'] ) && is_array( $args['ExeParams'] ) ) {
+			$validated_params = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
+		}
 
-			if ( $validated_params ) {
-				// Substitute parameters in the shell command:
-				$command = $this->substitute( $command, $validated_params );
-				// And in the environment variables.
-				foreach ( $this->environment as $var => &$value ) {
-					$value = $this->substitute( $value, $validated_params );
-				}
-			}
-
-			// Ignore warnings in stderr, if the exit code is 0.
-			if ( isset( $args['ExeIgnoreWarnings'] ) ) {
-				$this->ignoreWarnings = $args['ExeIgnoreWarnings'];
-			}
-
-			// Postprocessor:
-			if ( isset( $args['ExePreprocess'] ) && is_callable( $args['ExePreprocess'] ) ) {
-				$this->preprocessor = $args['ExePreprocess'];
-			}
-
-			// stdin.
-			if ( isset( $args['ExeInput'] ) ) {
-				$input = $args['ExeInput'];
-				if ( isset( $args[$input] ) ) {
-					$this->input = $args[$input];
-					// Preprocess, if required.
-					$preprocessor = $this->preprocessor;
-					if ( $preprocessor ) {
-						$this->input = $preprocessor( $this->input );
-					}
-				} else {
-					$this->error( 'externaldata-no-param-specified', $input );
-				}
-			}
-
-			// Get program's output from a temporary file rather than standard output.
-			if ( isset( $args['ExeTempFile'] ) && is_string( $args['ExeTempFile'] ) ) {
-				$hash = hash( 'fnv1a64', $this->input );
-				global $wgTmpDirectory;
-				$this->tempFile = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $args['ExeTempFile'] );
-				$command = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $command );
-			}
-
-			$this->command = is_array( $command ) ? $command : explode( ' ', $command );
-
-			// Postprocessor:
-			if ( isset( $args['ExePostprocess'] ) ) {
-				$this->postprocessor = $args['ExePostprocess'];
+		if ( $validated_params ) {
+			// Substitute parameters in the shell command:
+			$command = $this->substitute( $command, $validated_params );
+			// And in the environment variables.
+			foreach ( $this->environment as $var => &$value ) {
+				$value = $this->substitute( $value, $validated_params );
 			}
 		}
 
-		// Cache setting may be per PF call, prorgam and the extension. More aggressive have the priority.
+		// Ignore warnings in stderr, if the exit code is 0.
+		if ( isset( $args['ExeIgnoreWarnings'] ) ) {
+			$this->ignoreWarnings = $args['ExeIgnoreWarnings'];
+		}
+
+		// Postprocessor:
+		if ( isset( $args['ExePreprocess'] ) && is_callable( $args['ExePreprocess'] ) ) {
+			$this->preprocessor = $args['ExePreprocess'];
+		}
+
+		// stdin.
+		if ( isset( $args['ExeInput'] ) ) {
+			$input = $args['ExeInput'];
+			if ( isset( $args[$input] ) ) {
+				$this->input = $args[$input];
+				// Preprocess, if required.
+				$preprocessor = $this->preprocessor;
+				if ( $preprocessor ) {
+					$this->input = $preprocessor( $this->input );
+				}
+			} else {
+				$this->error( 'externaldata-no-param-specified', $input );
+			}
+		}
+
+		// Get program's output from a temporary file rather than standard output.
+		if ( isset( $args['ExeTempFile'] ) && is_string( $args['ExeTempFile'] ) ) {
+			$hash = hash( 'fnv1a64', $this->input );
+			global $wgTmpDirectory;
+			$this->tempFile = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $args['ExeTempFile'] );
+			$command = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $command );
+		}
+
+		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
+
+		// Postprocessor.
+		if ( isset( $args['ExePostprocess'] ) ) {
+			$this->postprocessor = $args['ExePostprocess'];
+		}
+
+		// Cache setting may be per PF call, program and the extension. More aggressive have the priority.
 		// Cache expiration.
 		global $edgCacheExpireTime;
 		$cache_expires_local = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : 0;
@@ -150,6 +152,14 @@ class EDConnectorExe extends EDConnectorBase {
 							|| array_key_exists( 'ExeUseStaleCache', $args )
 							|| $edgAlwaysAllowStaleCache;
 		$this->setupCache( $cache_expires, $allow_stale_cache );
+
+		// Throttle.
+		$template = isset( $args['ExeThrottleKey'] ) ? $args['ExeThrottleKey'] : null;
+		$interval = isset( $args['ExeThrottleInterval'] ) ? $args['ExeThrottleInterval'] : null;
+		if ( $template && $interval ) {
+			$key = $this->substitute( $template, $validated_params + $this->environment );
+			$this->setupThrottle( $title, $key, $interval );
+		}
 	}
 
 	/**
@@ -188,21 +198,6 @@ class EDConnectorExe extends EDConnectorBase {
 	}
 
 	/**
-	 * Substitute parameters into a string (command or environment variable).
-	 *
-	 * @param string|array $template The string(s) in which parameters are to be substituted.
-	 * @param array $parameters Validated parameters.
-	 *
-	 * @return string|array The string(s) with substituted parameters.
-	 */
-	private function substitute( $template, array $parameters ) {
-		foreach ( $parameters as $name => $value ) {
-			$template = preg_replace( '/\\$' . preg_quote( $name, '/' ) . '\\$/', $value, $template );
-		}
-		return $template;
-	}
-
-	/**
 	 * Make an array of resource limits for given shell command.
 	 *
 	 * @param string $program The program ID.
@@ -234,26 +229,32 @@ class EDConnectorExe extends EDConnectorBase {
 			array $command,
 			$input,
 			array $environment
-		) use( &$exit_code, &$error ) {
-			$result = Shell::command( $command ) // Shell class demands an array of words.
-				->input( $input )
-				->environment( $environment )
-				->limits( $this->limits )
-				->execute();
-			$exit_code = $result->getExitCode();
-			$output = $this->tempFile ? file_get_contents( $this->tempFile ) : $result->getStdout();
-			$error = $result->getStderr();
+		) use( &$exit_code, &$error )  /* $this is bound. */ {
+			return $this->callThrottled( function (
+				array $command,
+				$input,
+				array $environment
+			) use( &$exit_code, &$error ) /* $this is bound. */ {
+				$result = Shell::command( $command ) // Shell class demands an array of words.
+					->input( $input )
+					->environment( $environment )
+					->limits( $this->limits )
+					->execute();
+				$exit_code = $result->getExitCode();
+				$output = $this->tempFile ? file_get_contents( $this->tempFile ) : $result->getStdout();
+				$error = $result->getStderr();
 
-			if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
-				$postprocessor = $this->postprocessor;
-				if ( $output && is_callable( $postprocessor ) ) {
-					$output = $postprocessor( $output );
+				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
+					$postprocessor = $this->postprocessor;
+					if ( $output && is_callable( $postprocessor ) ) {
+						$output = $postprocessor( $output );
+					}
+					return $output;
+				} else {
+					$error = $error ?: $output; // Some programs send errors only to stdout.
+					return false;
 				}
-				return $output;
-			} else {
-				$error = $error ?: $output; // Some programs send errors only to stdout.
-				return false;
-			}
+			}, $command, $input, $environment );
 		}, $this->command, $this->input, $this->environment );
 
 		if ( $output ) {
@@ -262,6 +263,10 @@ class EDConnectorExe extends EDConnectorBase {
 				'__time' => [ $this->time ],
 				'__stale' => [ !$this->cacheFresh ]
 			];
+			if ( $this->waitTill ) {
+				// Throttled, but there was a cached value.
+				$standard_vars['__throttled_till'] = $this->waitTill;
+			}
 			if ( $error ) {
 				// Let's save the ignored warning.
 				$standard_vars['__warning'] = $error;
@@ -270,7 +275,14 @@ class EDConnectorExe extends EDConnectorBase {
 			$this->error( $this->parseErrors );
 			return true;
 		} else {
-			$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );
+			// Nothing to serve.
+			if ( $this->waitTill ) {
+				// It was throttled, and there was no cached value.
+				$this->error( 'externaldata-throttled', $this->program, (int)ceil( $this->waitTill ) );
+			} else {
+				// It wasn't throttled; just could not get it.
+				$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );
+			}
 			return false;
 		}
 	}

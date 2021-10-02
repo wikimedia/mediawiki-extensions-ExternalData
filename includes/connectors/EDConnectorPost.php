@@ -8,13 +8,16 @@
  *
  */
 class EDConnectorPost extends EDConnectorHttp {
+	use EDConnectorThrottled; // throttles calls.
+
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
-		parent::__construct( $args );
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
 
 		$this->options['postData']
 			= isset( $args['post data'] ) ? $args['post data']
@@ -29,31 +32,41 @@ class EDConnectorPost extends EDConnectorHttp {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		// Allow extensions or LocalSettings.php to alter HTTP options.
-		Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $this->realUrl, $this->options ] );
-		[ $contents, $this->headers, $errors ] = EDHttpWithHeaders::post( $this->realUrl, $this->options );
-		if ( !$contents ) {
-			if ( is_array( $errors ) ) {
-				$errors = implode( ',', $errors );
+		$contents = $this->callThrottled( function ( $url, array $options ) /* $this is bound */ {
+			// Allow extensions or LocalSettings.php to alter HTTP options.
+			Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
+			[ $contents, $this->headers, $errors ] = EDHttpWithHeaders::post( $url, $options );
+			if ( !$contents ) {
+				if ( is_array( $errors ) ) {
+					$errors = implode( ',', $errors );
+				}
+				$this->error( 'externaldata-post-failed', $this->originalUrl, $errors );
+				return false;
 			}
-			$this->error( 'externaldata-post-failed', $this->originalUrl, $errors );
-			return false;
-		}
 
-		// Encoding needs to be detected from HTTP headers this early and not later,
-		// during text parsing, so that the converted text may be cached.
-		// Try HTTP headers.
-		if ( !$this->encoding ) {
-			$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
+			// Encoding needs to be detected from HTTP headers this early and not later,
+			// during text parsing, so that the converted text may be cached.
+			// Try HTTP headers.
+			if ( !$this->encoding ) {
+				$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
+			}
+			return EDEncodingConverter::toUTF8( $contents, $this->encoding );
+		}, $this->realUrl, $this->options );
+		if ( $contents ) {
+			// Parse.
+			$this->values = $this->parse( $contents, [
+				'__time' => [ time() ],
+				'__stale' => [ false ],
+				'__tries' => [ 1 ]
+			] );
+			$this->error( $this->parseErrors );
+		} else {
+			// Nothing to serve.
+			if ( $this->waitTill ) {
+				// It was throttled.
+				$this->error( 'externaldata-throttled', $this->originalUrl, (int)ceil( $this->waitTill ) );
+			}
 		}
-		$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
-		$this->values = $this->parse( $contents, [
-			'__time' => [ time() ],
-			'__stale' => [ false ],
-			'__tries' => [ 1 ]
-		] );
-		// Parser.
-		$this->error( $this->parseErrors );
 
 		return !$this->errors();
 	}

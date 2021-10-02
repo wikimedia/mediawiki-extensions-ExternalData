@@ -71,11 +71,14 @@ class EDParserFunctions {
 	 * @return string|null Return null on success, an error message otherwise.
 	 */
 	private static function fetch( Parser $parser, $name, array $args ) {
+		$title = $parser->getTitle();
 		// Unset self::$values if the current page changed during this script run.
 		// Looks like it is relevant for maintenance scripts.
-		self::clearValuesIfNecessary( $parser->getTitle()->getText() );
+		if ( $title ) {
+			self::clearValuesIfNecessary( $title->getText() );
+		}
 
-		$connector = EDConnectorBase::getConnector( $name, self::parseParams( $args ) );
+		$connector = EDConnectorBase::getConnector( $name, self::parseParams( $args ), $title );
 
 		if ( !$connector->errors() ) {
 			// The parameters seem to be right; try to actually get the external data.
@@ -211,7 +214,7 @@ class EDParserFunctions {
 	 * @param Parser $parser
 	 * @param string|null $variable Local variable name
 	 * @param string|null $default Default/fallback value of the variable
-	 * @return string|null
+	 * @return string
 	 */
 	public static function doExternalValue( Parser $parser, $variable, $default = null ) {
 		return self::reallyExternalValue( $parser, $variable, $default );

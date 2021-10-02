@@ -21,9 +21,10 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
-		parent::__construct( $args );
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
 
 		// Cache.
 		// Cache expiration.
@@ -44,36 +45,49 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	 * @return bool True on success, false if errors were encountered.
 	 */
 	public function run() {
-		$contents = $this->callCached( function ( $url ) /* $this is bound. */ {
-			// Allow extensions or LocalSettings.php to alter HTTP options.
-			Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $this->options ] );
-			do {
-				// Actually send a request.
-				$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.
-			} while ( !$contents && ++$this->tries <= self::$maxTries );
-			if ( $contents ) {
-				// Encoding needs to be detected from HTTP headers this early and not later,
-				// during text parsing, so that the converted text may be cached.
-				// Try HTTP headers.
-				if ( !$this->encoding ) {
-					$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
+		$contents = $this->callCached( function ( $url, array $options ) /* $this is bound. */ {
+			return $this->callThrottled( function ( $url, array $options ) /* $this is bound again */ {
+				// Allow extensions or LocalSettings.php to alter HTTP options.
+				Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
+				do {
+					// Actually send a request.
+					$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.
+				} while ( !$contents && ++$this->tries <= self::$maxTries );
+				if ( $contents ) {
+					// Encoding needs to be detected from HTTP headers this early and not later,
+					// during text parsing, so that the converted text may be cached.
+					// Try HTTP headers.
+					if ( !$this->encoding ) {
+						$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
+					}
+					$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
 				}
-				$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
-			}
-			return $contents;
-		}, $this->realUrl );
+				return $contents;
+			}, $url, $options );
+		}, $this->realUrl, $this->options );
 
 		if ( $contents ) {
 			$this->values = $this->parse( $contents, [
 				'__time' => [ $this->time ],
+				'__cached' => [ $this->cached ],
 				'__stale' => [ !$this->cacheFresh ],
 				'__tries' => [ $this->tries ]
 			] );
+			if ( $this->waitTill ) {
+				// Throttled, but there was a cached value.
+				$this->values['__throttled_till'] = $this->waitTill;
+			}
 			$this->error( $this->parseErrors );
 			return !$this->errors();
 		} else {
 			// Nothing to serve.
-			$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, self::$maxTries );
+			if ( $this->waitTill ) {
+				// It was throttled, and there was no cached value.
+				$this->error( 'externaldata-throttled', $this->originalUrl, (int)ceil( $this->waitTill ) );
+			} else {
+				// It wasn't throttled; just could not get it.
+				$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, self::$maxTries );
+			}
 			return false;
 		}
 	}

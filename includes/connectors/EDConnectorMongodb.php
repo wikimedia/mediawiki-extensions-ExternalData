@@ -25,9 +25,10 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
-		parent::__construct( $args );
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
 
 		// Was an aggregation pipeline command issued?
 		if ( isset( $args['aggregate'] ) ) {

@@ -19,9 +19,10 @@ class EDConnectorDirectory extends EDConnectorPath {
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
 	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
 	 */
-	protected function __construct( array &$args ) {
-		parent::__construct( $args );
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
 
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
 		if ( isset( $args['directory'] ) ) {
