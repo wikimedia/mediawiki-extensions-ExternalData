@@ -471,9 +471,16 @@ class EDParserFunctions {
 	 * Render the #clear_external_data parser function.
 	 *
 	 * @param Parser $parser
+	 * @param string ...$variables Variables to clear; if [''], clear all.
 	 */
-	public static function doClearExternalData( Parser $parser ) {
-		self::$values = [];
+	public static function doClearExternalData( Parser $parser, ...$variables ) {
+		if ( implode( '', $variables ) ) {
+			foreach ( $variables as $variable ) {
+				unset( self::$values[$variable] );
+			}
+		} else {
+			self::$values = [];
+		}
 	}
 
 	/**
