@@ -17,6 +17,7 @@
 	"externaldata-param-type-error": "Fehler: Parameter $1 muss vom Typ $2 sein.",
 	"externaldata-php-library-missing": "Fehler: Die PHP-Bibliothek $1, die für die Verwendung von $2 benötigt wird, fehlt.",
 	"externaldata-web-invalid-format": "Ungültiges Format: „$1“",
+	"externaldata-throttled": "Aufrufe von $1 werden bis {{#time:c|@$2}} gedrosselt.",
 	"externaldata-ldap-domain-not-defined": "LDAP-Domain $1 ist nicht definiert.",
 	"externaldata-ldap-unable-to-connect": "Es konnte keine Verbindung zu $1 hergestellt werden",
 	"externaldata-ldap-unable-to-bind": "Die Bindung an die LDAP-Domain $1 ist nicht möglich, wenn Benutzername und Kennwort für diese Domain festgelegt sind.",
