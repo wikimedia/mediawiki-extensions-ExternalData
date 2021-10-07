@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Antonla",
 			"Saederup92",
 			"Tjernobyl"
 		]
 	},
+	"externaldata-throttled": "Opkald til $1 er neddroslet indtil {{#time:c|@$2}}.",
 	"externaldata-invalid-json": "Fejl: Ugyldigt JSON.",
 	"externaldata-db-invalid-query": "Forespørgslen $1 er ugyldig ($2).",
 	"externaldata-missing-file": "Filen $1 mangler."
