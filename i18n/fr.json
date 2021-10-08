@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Crochet.david",
+			"DreZhsh",
 			"Florian COLLIN",
 			"Golmore",
 			"Gomoko",
@@ -22,6 +23,7 @@
 	"externaldata-param-type-error": "Erreur : Le paramètre $1 doit être de type $2.",
 	"externaldata-php-library-missing": "Erreur : La bibliothèque PHP $1, nécessaire pour utiliser $2, est absente.",
 	"externaldata-web-invalid-format": "Format invalide: \"$1\"",
+	"externaldata-throttled": "Les appels à $1 sont limités jusqu'à {{#time:c|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "Le domaine LDAP $1 n’est pas défini.",
 	"externaldata-ldap-unable-to-connect": "Impossible de se connecter à $1",
 	"externaldata-ldap-unable-to-bind": "Impossible de lier le domaine LDAP $1 avec le nom d’utilisateur et le mot de passe définis pour ce domaine.",

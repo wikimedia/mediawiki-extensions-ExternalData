@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joao Xavier"
+		]
+	},
+	"externaldata-throttled": "Acesi a $1 limitesos til {{#time:c|@$2}}."
+}
