@@ -1,4 +1,7 @@
 <?php
+use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MediaWikiServices;
+
 /**
  * Base abstract class for external data connectors that work over HTTP/HTTPS.
  *
@@ -57,7 +60,15 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		// HTTP options.
 		global $edgHTTPOptions;
 		// TODO: handle HTTP options per site.
-		$this->options = $edgHTTPOptions;
+		$this->options = $edgHTTPOptions ?: [];
+		global $wgHTTPTimeout;
+		$this->options['HTTPTimeout'] = isset( $this->options['HTTPTimeout'] )
+			? $this->options['HTTPTimeout']
+			: $wgHTTPTimeout;
+		global $wgHTTPConnectTimeout;
+		$this->options['HTTPConnectTimeout'] = isset( $this->options['HTTPConnectTimeout'] )
+			? $this->options['HTTPConnectTimeout']
+			: $wgHTTPConnectTimeout;
 		global $edgAllowSSL;
 		if ( $edgAllowSSL ) {
 			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] )
@@ -127,6 +138,57 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			return false;
 		} else {
 			return strpos( $url, $data_from ) === 0;
+		}
+	}
+
+	/**
+	 * @see Http::request() /
+	 * Only difference - $options variable and also have value 'headers', and would append to request before sending.
+	 *
+	 * @param string $method HTTP request method: 'GET' or 'POST'.
+	 * @param string $url URL to fetch.
+	 * @param array $options HTTP options.
+	 * @param string $caller Calling function.
+	 *
+	 * @return array [ Fetched text, HTTP response headers, [ Errors ] ].
+	 *
+	 * @todo Also return error report.
+	 */
+	protected static function request( $method, $url, array $options, $caller = __METHOD__ ): array {
+		wfDebug( "HTTP: $method: $url\n" );
+
+		$options['method'] = strtoupper( $method );
+
+		// Create an HTTP request objects using different factories in different versions of MediaWiki.
+		if ( class_exists( '\MediaWiki\Http\HttpRequestFactory' ) ) {
+			$factory = MediaWikiServices::getInstance()->getHttpRequestFactory();
+			$req = $factory->create( $url, $options, $caller );
+		} elseif ( class_exists( 'MWHttpRequest' ) ) {
+			$req = MWHttpRequest::factory( $url, $options, $caller );
+		}
+
+		if ( isset( $options['headers'] ) ) {
+			foreach ( $options['headers'] as $name => $value ) {
+				$req->setHeader( $name, $value );
+			}
+		}
+		try {
+			$status = $req->execute();
+		} catch ( Exception $e ) {
+			$logger = LoggerFactory::getInstance( 'http' );
+			$logger->warning( 'Exception from ' . $caller . ' (' . $e->getMessage() . ')',
+				[ 'error' => $e->getMessage(), 'caller' => $caller, 'content' => $req->getContent() ] );
+			return [ null, null, [ 'Exception: ' . $e->getMessage() ] ];
+		}
+
+		if ( $status->isOK() ) {
+			return [ $req->getContent(), $req->getResponseHeaders(), null ];
+		} else {
+			$errors = $status->getErrorsByType( 'error' );
+			$logger = LoggerFactory::getInstance( 'http' );
+			$logger->warning( Status::wrap( $status )->getWikiText( false, false, 'en' ),
+				[ 'error' => $errors, 'caller' => $caller, 'content' => $req->getContent() ] );
+			return [ null, null, $errors ];
 		}
 	}
 }

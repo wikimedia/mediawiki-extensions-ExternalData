@@ -8,8 +8,6 @@
  *
  */
 class EDConnectorPost extends EDConnectorHttp {
-	use EDConnectorThrottled; // throttles calls.
-
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
@@ -34,8 +32,14 @@ class EDConnectorPost extends EDConnectorHttp {
 	public function run() {
 		$contents = $this->callThrottled( function ( $url, array $options ) /* $this is bound */ {
 			// Allow extensions or LocalSettings.php to alter HTTP options.
-			Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
-			[ $contents, $this->headers, $errors ] = EDHttpWithHeaders::post( $url, $options );
+			if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
+				$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
+				$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
+			} else {
+				Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
+			}
+			[ $contents, $this->headers, $errors ] =
+				self::request( 'POST', $url, $options, 'closure in EDConnectorPost::run()' );
 			if ( !$contents ) {
 				if ( is_array( $errors ) ) {
 					$errors = implode( ',', $errors );

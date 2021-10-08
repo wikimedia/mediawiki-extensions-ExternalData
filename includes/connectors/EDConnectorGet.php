@@ -1,4 +1,6 @@
 <?php
+use MediaWiki\MediaWikiServices;
+
 /**
  * Base abstract class for connectors that send a GET request:
  * EDConnectorWeb and EDConnectorSoap. Both are cached.
@@ -48,7 +50,12 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		$contents = $this->callCached( function ( $url, array $options ) /* $this is bound. */ {
 			return $this->callThrottled( function ( $url, array $options ) /* $this is bound again */ {
 				// Allow extensions or LocalSettings.php to alter HTTP options.
-				Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
+				if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
+					$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
+					$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
+				} else {
+					Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
+				}
 				do {
 					// Actually send a request.
 					$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.

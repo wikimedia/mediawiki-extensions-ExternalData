@@ -28,7 +28,6 @@
 	},
 	"AutoloadClasses": {
 		"ExternalDataHooks": "includes/ExternalDataHooks.php",
-		"EDHttpWithHeaders": "includes/EDHttpWithHeaders.php",
 		"EDParserFunctions": "includes/EDParserFunctions.php",
 		"EDGetData": "includes/EDGetData.php",
 		"EDJsonObject": "includes/EDJsonObject.php",
