@@ -60,21 +60,16 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 					// Actually send a request.
 					$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.
 				} while ( !$contents && ++$this->tries <= self::$maxTries );
-				if ( $contents ) {
-					// Encoding needs to be detected from HTTP headers this early and not later,
-					// during text parsing, so that the converted text may be cached.
-					// Try HTTP headers.
-					if ( !$this->encoding ) {
-						$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
-					}
-					$contents = EDEncodingConverter::toUTF8( $contents, $this->encoding );
-				}
-				return $contents;
+				// Encoding needs to be detected from HTTP headers this early and not later,
+				// during text parsing, so that the converted text may be cached.
+				// HTTP headers are not cached, therefore, they are not available,
+				// if the text is fetched from the cache.
+				return self::convert2Utf8( $contents );
 			}, $url, $options );
 		}, $this->realUrl, $this->options );
 
 		if ( $contents ) {
-			$this->values = $this->parse( $contents, [
+			$this->values = $this->parse( $contents, $this->encoding, [
 				'__time' => [ $this->time ],
 				'__cached' => [ $this->cached ],
 				'__stale' => [ !$this->cacheFresh ],

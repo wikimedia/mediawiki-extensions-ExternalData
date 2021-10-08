@@ -34,7 +34,6 @@
 		"EDArraySlice": "includes/EDArraySlice.php",
 		"EDReparseJob": "includes/EDReparseJob.php",
 		"EDParsesParams": "includes/EDParsesParams.php",
-		"EDEncodingConverter": "includes/EDEncodingConverter.php",
 		"EDConnectorCached": "includes/connectors/EDConnectorCached.php",
 		"EDConnectorThrottled": "includes/connectors/EDConnectorThrottled.php",
 		"EDConnectorParsable": "includes/connectors/EDConnectorParsable.php",

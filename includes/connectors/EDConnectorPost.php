@@ -47,18 +47,15 @@ class EDConnectorPost extends EDConnectorHttp {
 				$this->error( 'externaldata-post-failed', $this->originalUrl, $errors );
 				return false;
 			}
-
 			// Encoding needs to be detected from HTTP headers this early and not later,
 			// during text parsing, so that the converted text may be cached.
-			// Try HTTP headers.
-			if ( !$this->encoding ) {
-				$this->encoding = EDEncodingConverter::fromHeaders( $this->headers );
-			}
-			return EDEncodingConverter::toUTF8( $contents, $this->encoding );
+			// HTTP headers are not cached, therefore, they are not available,
+			// if the text is fetched from the cache.
+			return self::convert2Utf8( $contents );
 		}, $this->realUrl, $this->options );
 		if ( $contents ) {
 			// Parse.
-			$this->values = $this->parse( $contents, [
+			$this->values = $this->parse( $contents, $this->encoding, [
 				'__time' => [ time() ],
 				'__stale' => [ false ],
 				'__tries' => [ 1 ]

@@ -110,11 +110,12 @@ trait EDConnectorParsable {
 	 * Parse text, if any parser is set.
 	 *
 	 * @param string $text Text to parse.
+	 * @param string $encoding Text encoding
 	 * @param array $defaults Default values.
 	 *
 	 * @return ?array Parsed values.
 	 */
-	protected function parse( $text, $defaults ): ?array {
+	protected function parse( $text, $encoding, array $defaults ): ?array {
 		$parser = $this->parser;
 
 		// Insert newlines where appropriate.
@@ -141,6 +142,9 @@ trait EDConnectorParsable {
 				array_slice( $split, $range['start line'], $range['end line'] - $range['start line'] + 1 )
 			);
 		}, $ranges ) );
+
+		// Convert to UTF-8, if not yet.
+		$text = self::toUTF8( $text, $encoding );
 
 		// Parsing itself.
 		try {
@@ -191,5 +195,48 @@ trait EDConnectorParsable {
 			$percent = (float)$matches['percent'] / 100;
 		}
 		return [ $absolute, $percent ];
+	}
+
+	/**
+	 * Detect encoding based on tags in the $text,
+	 *
+	 * @param string $text Text to analyse and convert.
+	 * @param string|null $encoding_override Encoding from context.
+	 *
+	 * @return string The converted text.
+	 */
+	private static function toUTF8( $text, $encoding_override = null ) {
+		$encoding = $encoding_override ? $encoding_override : null;
+
+		// Try to find encoding in the XML/HTML.
+		$encoding_regexes = [
+			// charset must be in the capture #3.
+			'/<\?xml([^>]+)encoding\s*=\s*(["\']?)([^"\'>]+)\2[^>]*\?>/i' => '<?xml$1encoding="UTF-8"?>',
+			'%<meta([^>]+)(charset)\s*=\s*([^"\'>]+)([^>]*)/?>%i' => '<meta$1charset=UTF-8$4>',
+			'%<meta(\s+)charset\s*=\s*(["\']?)([^"\'>]+)\2([^>]*)/?>%i'
+			=> '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
+		];
+		foreach ( $encoding_regexes as $pattern => $replacement ) {
+			if ( preg_match( $pattern, $text, $matches ) ) {
+				// Pretend it's already UTF-8.
+				$text = preg_replace( $pattern, $replacement, $text, 1 );
+				if ( !$encoding ) {
+					$encoding = $matches[3];
+				}
+				break;
+			}
+		}
+
+		// Try mb_detect_encoding.
+		if ( !$encoding ) {
+			global $edgTryEncodings;
+			$encoding = mb_detect_encoding( $text, $edgTryEncodings, true ); // -- strict.
+		}
+
+		// Convert $text:
+		// Is it UTF-8 or ISO-8859-1?
+		return $encoding && strtoupper( $encoding ) !== 'UTF-8'
+			? mb_convert_encoding( $text, 'UTF-8', $encoding )
+			: $text;
 	}
 }

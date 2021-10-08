@@ -47,7 +47,7 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			return null;
 		}
 		$file_contents = EDEncodingConverter::toUTF8( $file_contents, $this->encoding );
-		$values = $this->parse( $file_contents, [
+		$values = $this->parse( $file_contents, $this->encoding, [
 			'__file' => [ $alias ],
 			'__time' => [ time() ]
 		] );

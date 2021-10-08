@@ -55,6 +55,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		} else {
 			// URL not provided.
 			$this->error( 'externaldata-no-param-specified', 'url' );
+			return; // no need to continue.
 		}
 
 		// HTTP options.
@@ -190,5 +191,44 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 				[ 'error' => $errors, 'caller' => $caller, 'content' => $req->getContent() ] );
 			return [ null, null, $errors ];
 		}
+	}
+
+	/**
+	 * Return content type, subtype and encoding based on HTTP headers.
+	 *
+	 * @param array $headers HTTP headers.
+	 *
+	 * @return array [ content type, encoding ].
+	 */
+	private static function fromHeaders( array $headers ): array {
+		if ( $headers && isset( $headers['content-type'] ) ) {
+			$header = strtolower( is_array( $headers['content-type'] )
+				? implode( ',', $headers['content-type'] )
+				: $headers['content-type'] );
+			$regex = '~^(?<type>[^\s/]+)(?:/(?<subtype>[^\s;]+))?(?:;\s*charset\s*=\s*(?<charset>[^;\s]+))?~';
+
+			if ( preg_match( $regex, $header, $match, PREG_UNMATCHED_AS_NULL ) ) {
+				return [ $match['type'], $match['subtype'], $match['charset'] ];
+			}
+		}
+		return [ null, null, null ];
+	}
+
+	/**
+	 * Convert encoding to HTTP, using charset info from the HTTP header 'Content-type', but only if this is a text.
+	 *
+	 * @param string $text Test to convert.
+	 *
+	 * @return string Converted text.
+	 */
+	protected function convert2Utf8( $text ) {
+		$type = 'text';
+		// Try HTTP headers.
+		if ( $text && !$this->encoding && $this->headers ) {
+			[ $type, $subtype, $this->encoding ] = self::fromHeaders( $this->headers );
+		}
+		return $text && $type === 'text' && $this->encoding
+			? self::toUTF8( $text, $this->encoding )
+			: $text;
 	}
 }
