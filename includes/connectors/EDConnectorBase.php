@@ -64,10 +64,40 @@ abstract class EDConnectorBase {
 	/**
 	 * Return external data, already filtered and mapped.
 	 *
-	 * @return array External data.
+	 * @return array [ array External data, array 'Safe to embed raw' flags ].
 	 */
 	public function result() {
 		return $this->filteredAndMappedValues();
+	}
+
+	/**
+	 * Add new values.
+	 *
+	 * @param array|null $values A new set of columns.
+	 */
+	protected function add( $values ) {
+		if ( !$values ) {
+			return;
+		}
+		// Find maximum height of columns to be built on.
+		$maximum_height = 0;
+		foreach ( $values as $variable => $_ ) {
+			// Create new columns if necessary.
+			if ( !array_key_exists( $variable, $this->values ) ) {
+				$this->values[$variable] = [];
+			}
+			$maximum_height = count( $this->values[$variable] ) > $maximum_height
+				? count( $this->values[$variable] )
+				: $maximum_height;
+		}
+		foreach ( $values as $variable => $column ) {
+			// Stretch out columns if they are to be built on.
+			for ( $counter = count( $this->values[$variable] ); $counter < $maximum_height; $counter++ ) {
+				$this->values[$variable][$counter] = null;
+			}
+			// Superimpose column from $values on column from $this->>values.
+			$this->values[$variable] = array_merge( $this->values[$variable], $column );
+		}
 	}
 
 	/**
@@ -135,32 +165,38 @@ abstract class EDConnectorBase {
 		$result = [];
 		foreach ( $this->mappings as $local_var => $external_var ) {
 			if ( array_key_exists( $external_var, $external_values ) ) {
-				if ( is_array( $external_values[$external_var] ) ) {
-					// array_values() restores regular
-					// 1, 2, 3 indexes to array, after unset()
-					// in filtering may have removed some
-					$result[$local_var] = array_values( $external_values[$external_var] );
-				} else {
-					$result[$local_var][] = $external_values[$external_var];
-				}
+				self::setInternal(
+					$result,
+					$local_var,
+					$external_values[$external_var]
+				);
 			}
 		}
 
 		// Special case: __all in data argument. Need to map all external variables to internal ones.
 		if ( isset( $this->mappings['__all'] ) ) {
 			foreach ( $external_values as $external_var => $external_value ) {
-				if ( is_array( $external_value ) ) {
-					// array_values() restores regular
-					// 1, 2, 3 indexes to array, after unset()
-					// in filtering may have removed some
-					$result[$external_var] = array_values( $external_value );
-				} else {
-					$result[$local_var][] = $external_value;
-				}
+				self::setInternal( $result, $external_var, $external_value );
 			}
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Set internal variable.
+	 *
+	 * @param array &$values Array to set value in.
+	 * @param string $name Variable name.
+	 * @param mixed $value Variable value(s).
+	 */
+	private static function setInternal( array &$values, $name, $value ) {
+		if ( is_array( $value ) ) {
+			$values[$name] = array_values( $value );
+		} else {
+			// @todo Check, if this code is ever reached.
+			$values[$name][] = $value;
+		}
 	}
 
 	/**

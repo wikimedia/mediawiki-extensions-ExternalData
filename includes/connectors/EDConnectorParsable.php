@@ -111,11 +111,10 @@ trait EDConnectorParsable {
 	 *
 	 * @param string $text Text to parse.
 	 * @param string $encoding Text encoding
-	 * @param array $defaults Default values.
 	 *
 	 * @return ?array Parsed values.
 	 */
-	protected function parse( $text, $encoding, array $defaults ): ?array {
+	protected function parse( $text, $encoding ): ?array {
 		$parser = $this->parser;
 
 		// Insert newlines where appropriate.
@@ -148,7 +147,7 @@ trait EDConnectorParsable {
 
 		// Parsing itself.
 		try {
-			$parsed = $parser( $text, $defaults );
+			$parsed = $parser( $text );
 		} catch ( EDParserException $e ) {
 			$parsed = null;
 			$this->parseErrors[] = [ $e->code(), $e->params() ];

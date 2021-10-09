@@ -24,6 +24,8 @@ class EDConnectorExe extends EDConnectorBase {
 	private $command;
 	/** @var array $params Parameters to $command. */
 	private $params;
+	/** @var array $validatedParams Parameter values after filtering and applying defaults. */
+	private $validatedParams = [];
 	/** @var array $paramFilters An associative array of regular expression filters for parameters. */
 	private $paramFilters;
 	/** @var string $input This will be fed to program's standard input. */
@@ -86,17 +88,17 @@ class EDConnectorExe extends EDConnectorBase {
 
 		// Parameters.
 		// The required parameters are stored as a secret in LocalSettings.php.
-		$validated_params = null;
+		$this->validatedParams = null;
 		if ( isset( $args['ExeParams'] ) && is_array( $args['ExeParams'] ) ) {
-			$validated_params = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
+			$this->validatedParams = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
 		}
 
-		if ( $validated_params ) {
+		if ( $this->validatedParams ) {
 			// Substitute parameters in the shell command:
-			$command = $this->substitute( $command, $validated_params );
+			$command = $this->substitute( $command, $this->validatedParams );
 			// And in the environment variables.
-			foreach ( $this->environment as $var => &$value ) {
-				$value = $this->substitute( $value, $validated_params );
+			foreach ( $this->environment as $_ => &$value ) {
+				$value = $this->substitute( $value, $this->validatedParams );
 			}
 		}
 
@@ -157,7 +159,7 @@ class EDConnectorExe extends EDConnectorBase {
 		$template = isset( $args['ExeThrottleKey'] ) ? $args['ExeThrottleKey'] : null;
 		$interval = isset( $args['ExeThrottleInterval'] ) ? $args['ExeThrottleInterval'] : null;
 		if ( $template && $interval ) {
-			$key = $this->substitute( $template, $validated_params + $this->environment );
+			$key = $this->substitute( $template, $this->validatedParams + $this->environment );
 			$this->setupThrottle( $title, $key, $interval );
 		}
 	}
@@ -177,7 +179,7 @@ class EDConnectorExe extends EDConnectorBase {
 			$param = is_numeric( $key ) ? $val : $key;
 			$default = is_numeric( $key ) ? null : $val;
 			$value = isset( $parameters[$param] ) ? $parameters[$param] : $default;
-			if ( $value ) {
+			if ( $value !== null ) {
 				if (
 					// no filter.
 					!isset( $filters[$param] )
@@ -247,7 +249,7 @@ class EDConnectorExe extends EDConnectorBase {
 				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
 					$postprocessor = $this->postprocessor;
 					if ( $output && is_callable( $postprocessor ) ) {
-						$output = $postprocessor( $output );
+						$output = $postprocessor( $output, $this->validatedParams );
 					}
 					return $output;
 				} else {
@@ -259,19 +261,19 @@ class EDConnectorExe extends EDConnectorBase {
 
 		if ( $output ) {
 			// Fill standard external variables.
-			$standard_vars = [
+			$this->add( [
 				'__time' => [ $this->time ],
 				'__stale' => [ !$this->cacheFresh ]
-			];
+			] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$standard_vars['__throttled_till'] = $this->waitTill;
+				$this->add( [ '__throttled_till' => $this->waitTill ], true );
 			}
 			if ( $error ) {
 				// Let's save the ignored warning.
-				$standard_vars['__warning'] = $error;
+				$this->add( [ '__warning' => $error ] );
 			}
-			$this->values = $this->parse( $output, $this->encoding, $standard_vars );
+			$this->add( $this->parse( $output, $this->encoding ) );
 			$this->error( $this->parseErrors );
 			return true;
 		} else {
@@ -306,9 +308,12 @@ class EDConnectorExe extends EDConnectorBase {
 					$params['data'] = "$id=__text";
 					$params['format'] = 'text';
 
-					$connector = new self( $params );
+					$connector = new self( $params, $parser->getTitle() );
 					if ( !$connector->errors() ) {
 						if ( $connector->run() ) {
+							// The 'safe to embed raw' flags are ignored here,
+							// as setting $edgExeTags[$program] in LocalSettings.php implies that
+							// the webmaster considers program output safe.
 							$values = $connector->result();
 							return [ $values[$id][0], 'markerType' => 'nowiki' ];
 						}

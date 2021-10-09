@@ -104,7 +104,7 @@ class EDConnectorLdap extends EDConnectorBase {
 				}
 			}
 		}
-		$this->values = $result;
+		$this->add( $result );
 		return true;
 	}
 

@@ -20,15 +20,14 @@ class EDParserXMLsimple extends EDParserXML {
 	 * Parse the text as XML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 * @throws EDParserException
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
-		self::$xmlValues = parent::__invoke( $text, $defaults );
+	public function __invoke( $text ) {
+		self::$xmlValues = parent::__invoke( $text );
 
 		// Remove comments from XML - for some reason, xml_parse()
 		// can't handle them.

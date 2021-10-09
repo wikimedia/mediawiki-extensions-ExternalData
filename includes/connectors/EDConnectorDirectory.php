@@ -62,7 +62,8 @@ class EDConnectorDirectory extends EDConnectorPath {
 			$this->error( 'externaldata-no-file-in-directory', $this->directory, $this->file_name );
 			return false;
 		}
-		$this->values = $this->getDataFromPath( $this->realPath, $this->directory . ':' . $this->file_name );
-		return $this->values !== null;
+		$values = $this->getDataFromPath( $this->realPath, $this->directory . ':' . $this->file_name );
+		$this->add( $values );
+		return $values !== null;
 	}
 }

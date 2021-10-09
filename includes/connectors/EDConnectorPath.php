@@ -46,7 +46,7 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			$this->error( 'externaldata-empty-file', $alias );
 			return null;
 		}
-		$file_contents = EDEncodingConverter::toUTF8( $file_contents, $this->encoding );
+		$file_contents = self::toUTF8( $file_contents, $this->encoding );
 		$values = $this->parse( $file_contents, $this->encoding, [
 			'__file' => [ $alias ],
 			'__time' => [ time() ]

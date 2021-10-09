@@ -25,8 +25,6 @@ class ExternalDataHooks {
 		$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
 		$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
 
-		$parser->setHook( 'externalvalue', [ 'EDParserFunctions', 'doExternalValueRaw' ] );
-
 		EDConnectorExe::registerTags( $parser );
 
 		return true; // always return true, in order not to stop MW's hook processing!

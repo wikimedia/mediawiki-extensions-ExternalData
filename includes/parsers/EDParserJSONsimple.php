@@ -11,13 +11,12 @@ class EDParserJSONsimple extends EDParserJSON {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 * @throws EDParserException
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		$json = substr( $text, $this->prefixLength );
 		$json = $this->removeTrailingComma( $json );
 		// FormatJson class is provided by MediaWiki.
@@ -28,7 +27,7 @@ class EDParserJSONsimple extends EDParserJSON {
 		}
 		// Save the whole JSON tree for Lua.
 		$defaults['__json'] = [ $json_tree ];
-		$values = parent::__invoke( $text, $defaults );
+		$values = parent::__invoke( $text );
 		if ( is_array( $json_tree ) ) {
 			self::parseTree( $json_tree, $values );
 		}

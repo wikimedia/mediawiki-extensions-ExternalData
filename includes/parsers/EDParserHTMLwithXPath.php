@@ -10,14 +10,13 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 	 * Parse the text as HTML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 * @throws EDParserException
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		$doc = new DOMDocument( '1.0', 'UTF-8' );
 		// Remove whitespaces.
 		$doc->preserveWhiteSpace = false;
@@ -45,7 +44,7 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-caught-exception-parsing-html', $e->getMessage() );
 		}
-		$values = EDParserBase::__invoke( $text, $defaults );
+		$values = EDParserBase::__invoke( $text );
 		$domxpath = new DOMXPath( $doc );
 		$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 		foreach ( $this->external as $xpath ) {

@@ -31,34 +31,6 @@ class EDConnectorDirectoryWalker extends EDConnectorDirectory {
 	}
 
 	/**
-	 * Merge $values to $this->values.
-	 * The columns in $this->values are levelled to maximum height, but only if new $values will be built on them.
-	 *
-	 * @param array $values Values to merge.
-	 */
-	private function mergeValues( array $values ) {
-		// Find maximum height of columns to be built on.
-		$maximum_height = 0;
-		foreach ( $values as $variable => $_ ) {
-			// Create new columns if necessary.
-			if ( !array_key_exists( $variable, $this->values ) ) {
-				$this->values[$variable] = [];
-			}
-			$maximum_height = count( $this->values[$variable] ) > $maximum_height
-							? count( $this->values[$variable] )
-							: $maximum_height;
-		}
-		foreach ( $values as $variable => $column ) {
-			// Stretch out columns if they are to be built on.
-			for ( $counter = count( $this->values[$variable] ); $counter < $maximum_height; $counter++ ) {
-				$this->values[$variable][$counter] = null;
-			}
-			// Superimpose column from $values on column from $this->>values.
-			$this->values[$variable] = array_merge( $this->values[$variable], $column );
-		}
-	}
-
-	/**
 	 * Actually connect to the external data source.
 	 * It is presumed that there are no errors in parameters and wiki settings.
 	 * Set $this->values and $this->errors.
@@ -79,7 +51,7 @@ class EDConnectorDirectoryWalker extends EDConnectorDirectory {
 			if ( !$file_info->isDir() && fnmatch( $this->pattern, $local_path ) ) {
 				$values = $this->getDataFromPath( $path, $local_path );
 				if ( $values ) {
-					$this->mergeValues( $values );
+					$this->add( $values );
 				}
 			}
 		}

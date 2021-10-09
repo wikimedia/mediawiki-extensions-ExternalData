@@ -42,7 +42,10 @@ class EDConnectorFile extends EDConnectorPath {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		$this->values = $this->getDataFromPath( $this->realPath, $this->file );
-		return $this->values !== null;
+		$values = $this->getDataFromPath( $this->realPath, $this->file );
+		if ( $values ) {
+			$this->add( $values );
+		}
+		return $values !== null;
 	}
 }

@@ -69,7 +69,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		}, $this->realUrl, $this->options );
 
 		if ( $contents ) {
-			$this->values = $this->parse( $contents, $this->encoding, [
+			$this->add( [
 				'__time' => [ $this->time ],
 				'__cached' => [ $this->cached ],
 				'__stale' => [ !$this->cacheFresh ],
@@ -77,8 +77,9 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 			] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->values['__throttled_till'] = $this->waitTill;
+				$this->add( [ '__throttled_till' => $this->waitTill ] );
 			}
+			$this->add( $this->parse( $contents, $this->encoding ) );
 			$this->error( $this->parseErrors );
 			return !$this->errors();
 		} else {

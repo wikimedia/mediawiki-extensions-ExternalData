@@ -81,7 +81,8 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		if ( !$rows ) {
 			return false;
 		}
-		$this->values = $this->processRows( $rows ); // late binding.
+		$this->add( $this->processRows( $rows ) );
+		// $this->values = $this->processRows( $rows ); // late binding.
 		$this->disconnect(); // late binding.
 		return true;
 	}

@@ -43,15 +43,14 @@ class EDParserRegex extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults Default values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		$matches = [];
 		// The regular expression has been validated in the constructor.
 		preg_match_all( $this->regex, $text, $matches, PREG_PATTERN_ORDER );
-		return array_merge( $defaults, $matches );
+		return $matches;
 	}
 }

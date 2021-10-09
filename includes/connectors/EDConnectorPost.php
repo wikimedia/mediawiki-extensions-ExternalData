@@ -55,7 +55,8 @@ class EDConnectorPost extends EDConnectorHttp {
 		}, $this->realUrl, $this->options );
 		if ( $contents ) {
 			// Parse.
-			$this->values = $this->parse( $contents, $this->encoding, [
+			$this->add( $this->parse( $contents, $this->encoding ) );
+			$this->add( [
 				'__time' => [ time() ],
 				'__stale' => [ false ],
 				'__tries' => [ 1 ]

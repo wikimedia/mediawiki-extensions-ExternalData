@@ -62,15 +62,14 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	 * Parse the text as HTML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 * @throws EDParserException
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
-		$xpath_values = parent::__invoke( $text, $defaults );
+	public function __invoke( $text ) {
+		$xpath_values = parent::__invoke( $text );
 		foreach ( $this->cssToXpath as $css => $xpath ) {
 			$xpath_values[$css] = $xpath_values[$xpath];
 		}

@@ -49,6 +49,7 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 			if ( $connector->run() ) {
 				// The external data have been fetched without run-time errors.
 				// Results are valid and can be returned (flipped to row-based).
+				// 'safe to embed raw' flags are ignored as there is no raw embedding from Lua.
 				$values = self::convertArrayToLuaTable( self::flip( $connector->result() ) );
 			} else {
 				// Run-time errors:

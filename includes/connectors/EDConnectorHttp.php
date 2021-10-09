@@ -95,6 +95,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}
 		global $edgThrottleKey;
 		$template = $this->firstSet( $edgThrottleKey,
+			$this->realUrl,
 			$components['host'],
 			$components['2nd_lvl_domain'],
 			'*',
@@ -103,6 +104,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		// Throttle interval.
 		global $edgThrottleInterval;
 		$interval = $this->firstSet( $edgThrottleInterval,
+			$this->realUrl,
 			$components['host'],
 			$components['2nd_lvl_domain'],
 			'*',

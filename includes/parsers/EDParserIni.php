@@ -29,12 +29,11 @@ class EDParserIni extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		$delimiter = '(?<!\\\\)' . preg_quote( $this->delimiter, '/' ); // delimiter, but not escaped.
 		// Comment delimiter, but not escaped.
 		$comment = $this->commentDelimiter ? '(?<!\\\\)' . preg_quote( $this->commentDelimiter, '/' ) : '$NeverMatches';

@@ -217,24 +217,22 @@ class EDParserFunctions {
 	 * @return string
 	 */
 	public static function doExternalValue( Parser $parser, $variable, $default = null ) {
-		return self::reallyExternalValue( $parser, $variable, $default );
-	}
-
-	/**
-	 * Render the <external data="(internal variable)">(default value)</external> or <external data="(var)" /> tag.
-	 * @param string $default What is between <external></external>: the default value.
-	 * @param array $args Arguments (only one: the variable name).
-	 * @param Parser $parser
-	 * @param PFrame $frame
-	 * @return array
-	 */
-	public static function doExternalValueRaw( $default, array $args, Parser $parser, PPFrame $frame ): array {
-		if ( isset( $args['data'] ) ) {
-			return [ self::reallyExternalValue( $parser, $args['data'], $default ), 'markerType' => 'nowiki' ];
+		global $edgExternalValueVerbose;
+		if ( !array_key_exists( $variable, self::$values ) ) {
+			if ( $default !== null ) {
+				return $default;
+			} else {
+				return $edgExternalValueVerbose
+					? self::formatErrorMessages(
+						wfMessage( 'externaldata-no-local-variable', $variable )->inContentLanguage()->text()
+					)
+					: '';
+			}
+		} elseif ( is_array( self::$values[$variable] ) ) {
+			return isset( self::$values[$variable][0] ) ? self::$values[$variable][0] : null;
 		} else {
-			return [ self::formatErrorMessages(
-				wfMessage( 'externaldata-no-param-specified', 'data' )->inContentLanguage()->text()
-			) ];
+			// @todo: is this code ever reached?
+			return self::$values[$variable];
 		}
 	}
 

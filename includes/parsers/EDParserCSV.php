@@ -30,15 +30,18 @@ class EDParserCSV extends EDParserBase {
 	}
 
 	/**
-	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
+	 * Parse the comma-separated text. Called as $parser( $text, $defaults ) as syntactic sugar.
+	 *
+	 * Reload the method in descendant classes, calling parent::__invoke() in the beginning.
+	 * Apply mapAndFilter() in the end.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
+		$values = parent::__invoke( $text );
 		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
 		// str_getcsv() is a function that was only added in PHP 5.3.0,
 		// so use the much older fgetcsv() if it's not there
@@ -129,7 +132,6 @@ class EDParserCSV extends EDParserBase {
 
 		// Now "flip" the data, turning it into a column-by-column
 		// array, instead of row-by-row.
-		$values = parent::__invoke( $text, $defaults );
 		foreach ( $table as $line ) {
 			for ( $i = 0; $i < $num_columns; $i++ ) {
 				// This check is needed in case it's an

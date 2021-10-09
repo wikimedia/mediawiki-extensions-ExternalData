@@ -70,7 +70,7 @@ abstract class EDConnectorRelational extends EDConnectorComposed {
 		if ( !$rows ) {
 			return false;
 		}
-		$this->values = $this->processRows( $rows, $this->aliases ); // late binding.
+		$this->add( $this->processRows( $rows, $this->aliases ) ); // late binding.
 		$this->disconnect(); // late binding.
 		return true;
 	}

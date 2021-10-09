@@ -24,12 +24,11 @@ class EDParserGFF extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		// use an fgetcsv() call, similar to the one in getCSVData()
 		// (fgetcsv() can handle delimiters other than commas, in this
 		// case a tab)
@@ -59,7 +58,7 @@ class EDParserGFF extends EDParserBase {
 		}
 		fclose( $fp );
 
-		$values = parent::__invoke( $text, $defaults );
+		$values = parent::__invoke( $text );
 		foreach ( $table as $line ) {
 			foreach ( $line as $i => $row_val ) {
 				// each of the columns in GFF have a

@@ -73,7 +73,7 @@ abstract class EDConnectorRdbms extends EDConnectorRelational {
 				$this->getQuery(),
 				$e->getMessage()
 			);
-			return false;
+			return null;
 		}
 		if ( $rows ) {
 			return $rows;
@@ -84,7 +84,7 @@ abstract class EDConnectorRdbms extends EDConnectorRelational {
 				$this->getQuery(),
 				$this->database->lastError()
 			);
-			return false;
+			return null;
 		}
 	}
 

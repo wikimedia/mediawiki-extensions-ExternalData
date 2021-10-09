@@ -45,16 +45,14 @@ abstract class EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * Reload the method in descendant classes, calling parent::__invoke() in the beginning.
-	 * Apply mapAndFilter() in the end.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param array $defaults The intial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
-		return $defaults;
+	public function __invoke( $text ) {
+		return [];
 	}
 
 	/**

@@ -32,14 +32,13 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 * Parse the text as XML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 * @param ?array $defaults The initial values.
 	 *
 	 * @return array A two-dimensional column-based array of the parsed values.
 	 *
 	 * @throws EDParserException
 	 *
 	 */
-	public function __invoke( $text, $defaults = [] ) {
+	public function __invoke( $text ) {
 		try {
 			$xml = new SimpleXMLElement( $text );
 		} catch ( Exception $e ) {
@@ -49,7 +48,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 		// Save the whole XML tree for Lua.
 		$defaults['__xml'] = [ self::xml2Array( $xml ) ];
 
-		$values = parent::__invoke( $text, $defaults );
+		$values = parent::__invoke( $text );
 
 		// Set default prefix for unprefixed xmlns's.
 		$namespaces = $xml->getDocNamespaces( true );
