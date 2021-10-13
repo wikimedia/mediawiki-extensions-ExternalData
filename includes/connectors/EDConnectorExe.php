@@ -299,9 +299,9 @@ class EDConnectorExe extends EDConnectorBase {
 		foreach ( $edgExeTags as $program => $tag ) {
 			$parser->setHook(
 				$tag,
-				function ( $inner, array $args, Parser $parser, PPFrame $frame ) use ( $program ) {
+				static function ( $inner, array $attributes, Parser $parser, PPFrame $frame ) use ( $program ) {
 					global $edgExeInput;
-					$params = self::parseParams( $args );
+					$params = $attributes;
 					$params[$edgExeInput[$program]] = $inner;
 					$params['program'] = $program;
 					$id = isset( $params['id'] ) ? $params['id'] : 'output';
