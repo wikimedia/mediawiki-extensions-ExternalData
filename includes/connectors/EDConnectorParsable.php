@@ -8,7 +8,7 @@ trait EDConnectorParsable {
 
 	/** @var EDParserBase A Parser. */
 	private $parser;
-	/** @var string $encoding */
+	/** @var string $encoding Current encoding. */
 	protected $encoding;
 
 	/** @var string $startAbsolute Start from this line (absolute, zero-based). */
@@ -143,7 +143,7 @@ trait EDConnectorParsable {
 		}, $ranges ) );
 
 		// Convert to UTF-8, if not yet.
-		$text = self::toUTF8( $text, $encoding );
+		$text = $this->toUTF8( $text, $encoding );
 
 		// Parsing itself.
 		try {
@@ -204,8 +204,8 @@ trait EDConnectorParsable {
 	 *
 	 * @return string The converted text.
 	 */
-	private static function toUTF8( $text, $encoding_override = null ) {
-		$encoding = $encoding_override ? $encoding_override : null;
+	private function toUTF8( $text, $encoding_override = null ) {
+		$encoding = $encoding_override ?: null;
 
 		// Try to find encoding in the XML/HTML.
 		$encoding_regexes = [
@@ -234,8 +234,11 @@ trait EDConnectorParsable {
 
 		// Convert $text:
 		// Is it UTF-8 or ISO-8859-1?
-		return $encoding && strtoupper( $encoding ) !== 'UTF-8'
-			? mb_convert_encoding( $text, 'UTF-8', $encoding )
-			: $text;
+		if ( $encoding && strtoupper( $encoding ) !== 'UTF-8' ) {
+			$this->encoding = 'UTF-8'; // do not convert twice.
+			return mb_convert_encoding( $text, 'UTF-8', $encoding );
+		} else {
+			return $text;
+		}
 	}
 }

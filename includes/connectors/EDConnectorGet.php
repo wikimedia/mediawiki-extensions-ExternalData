@@ -64,7 +64,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 				// during text parsing, so that the converted text may be cached.
 				// HTTP headers are not cached, therefore, they are not available,
 				// if the text is fetched from the cache.
-				return self::convert2Utf8( $contents );
+				return $this->convert2Utf8( $contents );
 			}, $url, $options );
 		}, $this->realUrl, $this->options );
 

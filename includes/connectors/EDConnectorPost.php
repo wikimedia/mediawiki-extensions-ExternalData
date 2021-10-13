@@ -1,4 +1,6 @@
 <?php
+use MediaWiki\MediaWikiServices;
+
 /**
  * Class implementing {{#get_web_data:}} and mw.ext.externalData.getWebData
  * sending POST web request.
@@ -51,16 +53,16 @@ class EDConnectorPost extends EDConnectorHttp {
 			// during text parsing, so that the converted text may be cached.
 			// HTTP headers are not cached, therefore, they are not available,
 			// if the text is fetched from the cache.
-			return self::convert2Utf8( $contents );
+			return $this->convert2Utf8( $contents );
 		}, $this->realUrl, $this->options );
 		if ( $contents ) {
-			// Parse.
-			$this->add( $this->parse( $contents, $this->encoding ) );
 			$this->add( [
 				'__time' => [ time() ],
 				'__stale' => [ false ],
 				'__tries' => [ 1 ]
 			] );
+			// Parse.
+			$this->add( $this->parse( $contents, $this->encoding ) );
 			$this->error( $this->parseErrors );
 		} else {
 			// Nothing to serve.

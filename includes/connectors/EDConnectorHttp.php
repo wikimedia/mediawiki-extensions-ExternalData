@@ -7,6 +7,7 @@ use MediaWiki\MediaWikiServices;
  *
  * @author Alexander Mashin
  * @author Yaron Koren
+ * @author Zoran Dori (kizule)
  *
  */
 abstract class EDConnectorHttp extends EDConnectorBase {
@@ -230,7 +231,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			[ $type, $subtype, $this->encoding ] = self::fromHeaders( $this->headers );
 		}
 		return $text && $type === 'text' && $this->encoding
-			? self::toUTF8( $text, $this->encoding )
+			? $this->toUTF8( $text, $this->encoding )
 			: $text;
 	}
 }
