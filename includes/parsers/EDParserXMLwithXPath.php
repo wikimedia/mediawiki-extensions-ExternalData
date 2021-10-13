@@ -45,10 +45,9 @@ class EDParserXMLwithXPath extends EDParserXML {
 			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
 		}
 
-		// Save the whole XML tree for Lua.
-		$defaults['__xml'] = [ self::xml2Array( $xml ) ];
-
 		$values = parent::__invoke( $text );
+		// Save the whole XML tree for Lua.
+		$values['__xml'] = [ self::xml2Array( $xml ) ];
 
 		// Set default prefix for unprefixed xmlns's.
 		$namespaces = $xml->getDocNamespaces( true );
@@ -60,6 +59,10 @@ class EDParserXMLwithXPath extends EDParserXML {
 		}
 
 		foreach ( $this->external as $xpath ) {
+			if ( substr( $xpath, 0, 2 ) === '__' ) {
+				// Special variables are not XPaths.
+				continue;
+			}
 			// Register any necessary XML namespaces, if not yet, to
 			// avoid "Undefined namespace prefix" errors.
 			// It's just a dirty hack.
@@ -73,9 +76,14 @@ class EDParserXMLwithXPath extends EDParserXML {
 			}
 
 			// Now, get all the matching values, and remove any empty results.
-			$nodes = self::filterEmptyNodes( $xml->xpath( $xpath ) );
-			if ( !$nodes ) {
-				continue;
+			$nodes = $xml->xpath( $xpath );
+			if ( $nodes ) {
+				$nodes = self::filterEmptyNodes( $nodes );
+				if ( !$nodes ) {
+					continue;
+				}
+			} else {
+				throw new EDParserException( 'externaldata-xpath-invalid', $xpath );
 			}
 
 			// Convert from SimpleXMLElement to string.

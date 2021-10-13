@@ -20,10 +20,10 @@ class EDConnectorSql extends EDConnectorRdbms {
 		parent::setCredentials( $params );
 
 		// Database credentials.
-		if ( isset( $params['DBServer'] ) ) {
-			$this->credentials['host'] = $params['DBServer'];
+		if ( isset( $params['server'] ) ) {
+			$this->credentials['host'] = $params['server'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBServer' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'server' );
 		}
 	}
 }

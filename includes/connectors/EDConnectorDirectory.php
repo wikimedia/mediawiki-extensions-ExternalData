@@ -27,10 +27,15 @@ class EDConnectorDirectory extends EDConnectorPath {
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
 		if ( isset( $args['directory'] ) ) {
 			$this->directory = $args['directory'];
-			if ( isset( $args['DirectoryPath'] ) ) {
-				$this->real_directory = $args['DirectoryPath'];
+			if ( isset( $args['path'] ) ) {
+				if ( is_dir( $args['path'] ) ) {
+					$this->real_directory = $args['path'];
+				} else {
+					// Not a directory.
+					$this->error( 'externaldata-not-a-directory', $this->directory );
+				}
 			} else {
-				// No directory defined in $edgDirectoryPath.
+				// No directory defined in 'path'.
 				$this->error( 'externaldata-no-directory', $this->directory );
 			}
 		} else {

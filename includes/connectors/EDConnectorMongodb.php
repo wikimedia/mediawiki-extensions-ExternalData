@@ -19,7 +19,9 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	/** @var array MongoDB sort. */
 	private $sort = [];
 	/** @var string|null A key for Memcached/APC. */
-	private $cacheKey = null;
+	private $cacheKey;
+	/** @var float $cacheSeconds Cache for so many seconds. */
+	private $cacheSeconds = 0;
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -113,15 +115,16 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 		}
 
 		// Make a key for Memcached/APC.
-		global $wgMainCacheType, $edgMemCachedMongoDBSeconds;
+		global $wgMainCacheType;
 		if ( ( $wgMainCacheType === CACHE_MEMCACHED || $wgMainCacheType === CACHE_ACCEL )
-			&& $edgMemCachedMongoDBSeconds > 0
+			&& isset( $args['cache seconds'] ) && $args['cache seconds'] > 0
 		) {
 			$this->cacheKey = ObjectCache::getLocalClusterInstance()->makeKey( 'mongodb', $this->from, md5(
 				$this->getQuery() .
-				$this->credentials['db_name'] .
+				$this->credentials['dbname'] .
 				$this->credentials['host']
 			) );
+			$this->cacheSeconds = $args['cache seconds'];
 		}
 	}
 
@@ -132,11 +135,11 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 */
 	protected function setCredentials( array $params ) {
 		parent::setCredentials( $params );
-		$this->credentials['host'] = isset( $params['DBServer'] ) ? $params['DBServer'] : 'localhost:27017';
+		$this->credentials['host'] = isset( $params['server'] ) ? $params['server'] : 'localhost:27017';
 
 		// MongoDB login is done using a single string.
 		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
-		// use $edgDBServer[$this->dbId] to pass these values
+		// use $wgExternalDataSources[$this->dbId] to pass these values
 		// see http://docs.mongodb.org/manual/reference/connection-string
 		$this->connectString = "mongodb://";
 		if ( $this->credentials['user'] ) {
@@ -332,8 +335,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 */
 	private function cache( array $values ) {
 		if ( $this->cacheKey ) {
-			global $edgMemCachedMongoDBSeconds;
-			ObjectCache::getLocalClusterInstance()->set( $this->cacheKey, $values, $edgMemCachedMongoDBSeconds );
+			ObjectCache::getLocalClusterInstance()->set( $this->cacheKey, $values, $this->cacheSeconds );
 		}
 	}
 }

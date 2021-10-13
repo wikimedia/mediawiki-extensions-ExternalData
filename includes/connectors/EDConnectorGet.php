@@ -30,12 +30,12 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 
 		// Cache.
 		// Cache expiration.
-		global $edgCacheExpireTime;
 		$cache_expires_local = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : 0;
-		$cache_expires = max( $cache_expires_local, $edgCacheExpireTime );
-		// Allow to use stale cache.
-		global $edgAlwaysAllowStaleCache;
-		$allow_stale_cache = array_key_exists( 'use stale cache', $args ) || $edgAlwaysAllowStaleCache;
+		$cache_expires_global = array_key_exists( 'min cache seconds', $args ) ? $args['min cache seconds'] : 0;
+		$cache_expires = max( $cache_expires_local, $cache_expires_global );
+		// Allow using stale cache.
+		$allow_stale_cache = array_key_exists( 'use stale cache', $args )
+			|| array_key_exists( 'always use stale cache', $args );
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 	}
 
@@ -77,7 +77,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 			] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->add( [ '__throttled_till' => $this->waitTill ] );
+				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
 			}
 			$this->add( $this->parse( $contents, $this->encoding ) );
 			$this->error( $this->parseErrors );

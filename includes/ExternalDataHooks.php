@@ -19,6 +19,8 @@ class ExternalDataHooks {
 		$parser->setFunctionHook( 'get_ldap_data', [ 'EDParserFunctions', 'getLDAPData' ] );
 		$parser->setFunctionHook( 'get_db_data', [ 'EDParserFunctions', 'getDBData' ] );
 		$parser->setFunctionHook( 'get_program_data', [ 'EDParserFunctions', 'getProgramData' ] );
+		$parser->setFunctionHook( 'get_external_data', [ 'EDParserFunctions', 'getExternalData' ] );
+
 		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
 		$parser->setFunctionHook( 'for_external_table', [ 'EDParserFunctions', 'doForExternalTable' ] );
 		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );
@@ -51,5 +53,13 @@ class ExternalDataHooks {
 	 */
 	public static function onSoftwareInfo( array &$software ) {
 		EDConnectorExe::addSoftware( $software );
+	}
+
+	/**
+	 * Form extension configuration from different sources.
+	 */
+	public static function onRegistration() {
+		// Load configuration settings.
+		EDConnectorBase::loadConfig();
 	}
 }

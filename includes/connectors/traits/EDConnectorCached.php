@@ -10,6 +10,8 @@
  *
  */
 trait EDConnectorCached {
+	use EDParsesParams;
+
 	// Cache variables.
 	/** @var bool $cacheIsUp Is the cache set up? */
 	private static $cacheIsUp;
@@ -38,9 +40,9 @@ trait EDConnectorCached {
 	 * @param bool $stale Allow using stale cache.
 	 */
 	private function setupCache( $seconds, $stale ) {
-		global $edgCacheTable;
-		self::$cacheIsUp = (bool)$edgCacheTable;
-		self::$cacheTable = $edgCacheTable;
+		$cache_table = self::setting( 'CacheTable' );
+		self::$cacheIsUp = (bool)$cache_table;
+		self::$cacheTable = $cache_table;
 		$this->cacheExpires = $seconds;
 		$this->allowStaleCache = $stale;
 		if ( self::$cacheIsUp ) {
@@ -58,7 +60,7 @@ trait EDConnectorCached {
 	 */
 	private function callCached( callable $func, ...$args ) {
 		$cache_key = implode( ':', array_map( static function ( $val ) {
-			return var_export( $val, true );
+			return is_scalar( $val ) ? (string)$val : var_export( $val, true );
 		}, $args ) );
 		$this->cacheFresh = false;
 		$cached = false;

@@ -48,14 +48,14 @@ class EDParserFunctions {
 	 * display, and so that it can be handled correctly by #iferror and
 	 * possibly others.
 	 *
-	 * @param array|string $messages An array of error messages.
+	 * @param array $errors An array of error messages.
 	 *
 	 * @return string Wrapped error message.
 	 */
-	public static function formatErrorMessages( $messages ) {
-		if ( !is_array( $messages ) ) {
-			$messages = [ $messages ];
-		}
+	public static function formatErrorMessages( array $errors ) {
+		$messages = array_map( static function ( array $error ) {
+			return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+		}, $errors );
 		return '<span class="error">' . implode( "<br />", $messages ) . '</span>';
 	}
 
@@ -94,6 +94,10 @@ class EDParserFunctions {
 		// There have been errors.
 		return $connector->suppressError() ? null : self::formatErrorMessages( $connector->errors() );
 	}
+
+	/*
+	 * Parser functions that load data.
+	 */
 
 	/**
 	 * Implementation of the {{#get_web_data:}} parser function.
@@ -168,6 +172,18 @@ class EDParserFunctions {
 	}
 
 	/**
+	 * Implementation of the {{#get_external_data:}} parser function.
+	 *
+	 * @param Parser $parser Parser object.
+	 * @param string $params,... Parameters to parser function.
+	 *
+	 * @return string|null An error message or null on success.
+	 */
+	public static function getExternalData( Parser $parser, ...$params ) {
+		return self::fetch( $parser, 'get_external_data', $params );
+	}
+
+	/**
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by one of the #get... parser functions.
 	 * @param string $var
@@ -183,33 +199,6 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Really really render the #external_value parser function or <external> tag.
-	 *
-	 * @param Parser $parser
-	 * @param string|null $variable Local variable name
-	 * @param string|null $default Default/fallback value of the variable
-	 * @return string|null
-	 */
-	private static function reallyExternalValue( Parser $parser, $variable, $default ) {
-		global $edgExternalValueVerbose;
-		if ( !array_key_exists( $variable, self::$values ) ) {
-			if ( $default !== null ) {
-				return $default;
-			} else {
-				return $edgExternalValueVerbose
-					? self::formatErrorMessages(
-						wfMessage( 'externaldata-no-local-variable', $variable )->inContentLanguage()->text()
-					)
-					: '';
-			}
-		} elseif ( is_array( self::$values[$variable] ) ) {
-			return isset( self::$values[$variable][0] ) ? self::$values[$variable][0] : null;
-		} else {
-			return self::$values[$variable];
-		}
-	}
-
-	/**
 	 * Render the #external_value parser function.
 	 * @param Parser $parser
 	 * @param string|null $variable Local variable name
@@ -217,14 +206,13 @@ class EDParserFunctions {
 	 * @return string
 	 */
 	public static function doExternalValue( Parser $parser, $variable, $default = null ) {
-		global $edgExternalValueVerbose;
 		if ( !array_key_exists( $variable, self::$values ) ) {
 			if ( $default !== null ) {
 				return $default;
 			} else {
-				return $edgExternalValueVerbose
+				return self::setting( 'Verbose' )
 					? self::formatErrorMessages(
-						wfMessage( 'externaldata-no-local-variable', $variable )->inContentLanguage()->text()
+						[ [ 'code' => 'externaldata-no-local-variable', 'params' => [ $variable ] ] ]
 					)
 					: '';
 			}

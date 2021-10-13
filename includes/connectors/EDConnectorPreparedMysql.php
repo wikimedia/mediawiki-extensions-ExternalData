@@ -28,6 +28,7 @@ class EDConnectorPreparedMysql extends EDConnectorPrepared {
 			);
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
+			self::stopThrowingWarnings();
 			return false;
 		}
 		self::stopThrowingWarnings();

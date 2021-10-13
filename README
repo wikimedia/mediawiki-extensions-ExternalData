@@ -1,7 +1,7 @@
 External Data extension
 
-        Version 2.4.1
-        Yaron Koren, Alex Mashin and (many) others
+        Version 3.0-alpha
+        Yaron Koren, Alexander Mashin and (many) others
 
 This is free software licensed under the GNU General Public License. Please
 see http://www.gnu.org/copyleft/gpl.html for further details, including the
@@ -14,59 +14,48 @@ from various sources: external URLs, local wiki pages and files on the
 server (all in CSV, GFF, JSON, XML, HTML or INI formats), plus database tables,
 LDAP servers and program output.
 
-The extension defines the following parser functions: #get_web_data,
-#get_soap_data, #get_file_data, #get_db_data, #get_ldap_data, #get_program_data,
-#external_value, #for_external_table, #display_external_table,
-#store_external_table and #clear_external_data; one tag: <externalvalue>;
-and Lua functions mw.ext.externalData.getWebData, mw.ext.externalData.getFileData,
-mw.ext.externalData.getDbData, mw.ext.externalData.getSoapData, mw.ext.externalData.getLdapData
-and mw.ext.externalData.getProgramData.
+The extension defines the following parser functions:
+* `#get_web_data` - retrieves the data from a URL that holds CSV, GFF, JSON or
+  XML, and assigns it to local variables or arrays
+* `#get_soap_data` - retrieves data from a URL via SOAP
+* `#get_file_data:` - retrieves data from local file(s), which can be in any of
+  the same formats that `#get_web_data` handles
+* `#get_db_data` - retrieves data from a database, using (in most cases)
+  SQL-like syntax, and assigns it to local variables or arrays
+* `#get_ldap_data` - retrieves data from an LDAP server and assigns it to local
+  variables
+* `#get_program_data` - retrieves data returned by a program called server-side,
+  parses it and assigns it to local variables
+* `#get_external_data` - can do all of the above
+* `#external_value` - displays the value of any retrieved variable, or the first
+  value if it's an array
+* `#for_external_table` - applies processing onto multiple rows retrieved by any
+  of the `#get_*_data` functions
+* `#display_external_table` - like `#for_external_table`, but passes the values
+  of each row to a template, which handles the formatting
+* `#store_external_table` - mimics a call to the *Semantic MediaWiki* extension's
+  `#subobject` parser function onto each row retrieved by any of the `#get_*_data`
+  functions, in order to store the entire array of data semantically
+* `#clear_external_data` - erases some or all of the current set of retrieved data
 
-They are described below:
+External Data also defines the following Lua functions, each of which act
+similarly to the corresponding parser functions, and return 2D (or deeper, if the
+external variables `__json` or `__xml` are used) row-based tables of values:
+* `mw.ext.externalData.getWebData`
+* `mw.ext.externalData.getFileData`
+* `mw.ext.externalData.getDbData`
+* `mw.ext.externalData.getSoapData`
+* `mw.ext.externalData.getLdapData`
+* `mw.ext.externalData.getProgramData`
+* `mw.ext.externalData.getExternalData`
 
-* #get_web_data retrieves the data from a URL that holds CSV, GFF,
-JSON or XML, and assigns it to local variables or arrays.
+Additionally, the extension allows wiki admins to define their own tags for
+programs set up to run in tag  emulation mode, which handle both the
+retrieval and display of data.
 
-* #get_soap_data retrieves data from a URL via SOAP.
-
-* #get_file_data retrieves data from a local file, which can be in any of
-the same formats that #get_web_data handles.
-
-* #get_db_data retrieves data from a database, using (in most cases)
-SQL-like syntax, and assigns it to local variables or arrays.
-
-* #get_ldap_data retrieves data from an LDAP server and assigns it to
-local variables.
-
-* #get_program_data retrieves data returned by a program called server-side,
-parses it and assigns it to local variables.
-
-* #external_value displays the value of any retrieved variable, or the
-first value if it's an array.
-
-* <externalvalue data="internal variable">fallback value</externalvalue>
-displays the value of any retrieved variable without applying wiki parser to it.
-
-* #for_external_table applies processing onto multiple rows retrieved by
-any of the #get_*_data functions
-
-* #display_external_table is like #for_external_table, but passes the
-values of each row to a template, which handles the formatting.
-
-* #store_external_table mimics a call to the Semantic MediaWiki
-extension's #subobject parser function onto each row retrieved by
-any of the #get_*_data functions, in order to store the entire array
-of data semantically.
-
-* #clear_external_data erases the current set of retrieved data.
-
-* Lua functions act similarly to corresponding parser functions and return
-2D (more, if the external variables __json or __xml are used) row-based
-tables of values.
-
-In addition, the extension defines a new special page, 'GetData', which
-exports selected rows from a wiki page that holds CSV data, in a format
-that is readable by #get_web_data.
+The extension defines a new special page, 'GetData', which exports selected
+rows from a wiki page that holds CSV data, in a format that is readable by
+#get_web_data.
 
 For more information, see the extension homepage at:
 https://www.mediawiki.org/wiki/Extension:External_Data
@@ -81,35 +70,46 @@ higher.
 To install the extension, place the entire 'ExternalData' directory
 within your MediaWiki 'extensions' directory, then add the following
 line to your 'LocalSettings.php' file:
-
-     wfLoadExtension( 'ExternalData' );
+```
+wfLoadExtension( 'ExternalData' );
+```
 
 To cache the data from the URLs being accessed, you can call the contents
 of ExternalData.sql in your database, then add the following to
 LocalSettings.php:
-
-     $edgCacheTable = 'ed_url_cache';
+```
+$wgExternalDataCacheTable = 'ed_url_cache';
+```
 
 You should also add a line like the following, to set the expiration time
 of the cache, in seconds; this line will cache data for a week:
+```
+$wgExternalDataSources['*']['min cache seconds'] = 7 * 24 * 60 * 60;
+```
 
-     $edgCacheExpireTime = 7 * 24 * 60 * 60;
+This setting can be overridden for specific URLs, hosts, second level domains or programs.
 
 You can also set for string replacements to be done on the URLs you call,
-for instance to hide API keys:
+for instance to hide API keys. This should be set up per URL, host or second level domain
+but not universally (`'*`). Either of the following would work:
+```
+$wgExternalDataSources['https://example.com/restricted_api.php?key=MY_API_KEY']['replacements']['MY_API_KEY'] = 'abcd1324';
+$wgExternalDataSources['example.com']['replacements']['MY_API_KEY'] = 'abcd1324';
+```
 
-     $edgStringReplacements['MY_API_KEY'] = 'abcd1324';
+This setting can be overridden for specific URLs, hosts, second level domains or programs.
 
 You can create a "whitelist" to allow retrieval of data only from trusted
-sites, in the manner of MediaWiki's $wgAllowExternalImagesFrom - if you
-are hiding API keys, it is very much recommended to create such a
-whitelist, to prevent users from being able to discover their values:
+sites, in the manner of MediaWiki's `$wgAllowExternalImagesFrom`:
+```
+$wgExternalDataSources['*']['allowed urls'] = [ 'http://example.com/api' ];
+```
 
-     $edgAllowExternalDataFrom = array('http://example.com/api');
+These settings can be overridden for specific URLs, hosts, second level domains or programs.
 
-Finally, to use the database or LDAP retrieval capabilities, you need to
-set connection settings as well - see the online documentation for more
-information.
+Finally, to use the database or LDAP retrieval capabilities or run server-side programs,
+you need to set connection settings as well in `$wgExternalDataSources` --
+see the online documentation for more information.
 
 == Contact ==
 

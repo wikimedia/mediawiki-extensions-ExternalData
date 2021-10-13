@@ -51,8 +51,8 @@ abstract class EDConnectorRelational extends EDConnectorComposed {
 	 */
 	protected function setCredentials( array $params ) {
 		parent::setCredentials( $params );
-		$this->credentials['flags'] = isset( $params['DBFlags'] ) ? $params['DBFlags'] : DBO_DEFAULT;
-		$this->credentials['tablePrefix'] = isset( $params['DBTablePrefix'] ) ? $params['DBTablePrefix'] : '';
+		$this->credentials['flags'] = isset( $params['flags'] ) ? $params['flags'] : DBO_DEFAULT;
+		$this->credentials['prefix'] = isset( $params['prefix'] ) ? $params['prefix'] : '';
 	}
 
 	/**

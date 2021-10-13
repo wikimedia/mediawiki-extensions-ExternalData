@@ -39,10 +39,10 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		if ( !$this->dbId ) {
 			$this->error( 'externaldata-no-param-specified', 'db' );
 		}
-		if ( isset( $args['DBServerType'] ) ) {
-			$this->type = $args['DBServerType'];
+		if ( isset( $args['type'] ) ) {
+			$this->type = $args['type'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBServerType' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'type' );
 		}
 		// Database credentials.
 		$this->setCredentials( $args );	// late binding.
@@ -57,12 +57,12 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	 * @param array $params Supplemented parameters.
 	 */
 	protected function setCredentials( array $params ) {
-		$this->credentials['user'] = isset( $params['DBUser' ] ) ? $params['DBUser' ] : null;
-		$this->credentials['password'] = isset( $params['DBPass' ] ) ? $params['DBPass' ] : null;
-		if ( isset( $params[ 'DBName' ] ) ) {
-			$this->credentials['dbname'] = $params['DBName'];
+		$this->credentials['user'] = isset( $params['user' ] ) ? $params['user' ] : null;
+		$this->credentials['password'] = isset( $params['password' ] ) ? $params['password' ] : null;
+		if ( isset( $params[ 'name' ] ) ) {
+			$this->credentials['dbname'] = $params['name'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBName' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'name' );
 		}
 	}
 

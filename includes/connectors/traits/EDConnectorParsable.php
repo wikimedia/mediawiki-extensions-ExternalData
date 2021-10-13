@@ -10,6 +10,8 @@ trait EDConnectorParsable {
 	private $parser;
 	/** @var string $encoding Current encoding. */
 	protected $encoding;
+	/** @var string[] $encodings Try these encodings. */
+	private $encodings = [];
 
 	/** @var string $startAbsolute Start from this line (absolute, zero-based). */
 	private $startAbsolute;
@@ -36,11 +38,13 @@ trait EDConnectorParsable {
 	protected function prepareParser( array $args ) {
 		// Encoding override supplied by wiki user may also be needed.
 		$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
+		// Try these encodings.
+		$this->encodings = isset( $args['encodings'] ) && $args['encodings'] ? $args['encodings'] : [];
 
 		try {
 			$this->parser = EDParserBase::getParser( $args );
 		} catch ( EDParserException $e ) {
-			$this->parseErrors[] = [ $e->code(), $e->params() ];
+			$this->parseErrors[] = [ 'code' => $e->code(), 'params' => $e->params() ];
 		}
 
 		// Whether to keep letter case in variables. If either connector or parser demand keeping the case, do it.
@@ -122,15 +126,15 @@ trait EDConnectorParsable {
 		// Trimming.
 		$split = explode( PHP_EOL, $text );
 		$total = count( $split );
-		$defaults['__total'] = [ $total ];
+		$this->add( [ '__total' => [ $total ] ] );
 
 		// Get really needed absolute line ranges.
 		$ranges = $this->ranges( $total );
 
 		// Extract __start, __lines and __end variables.
-		$defaults['__start'] = [ $ranges['start line'] + 1 ]; // zero-based to one-based.
-		$defaults['__end'] = [ $ranges['end line'] + 1 ]; // zero-based to one-based.
-		$defaults['__lines'] = [ $ranges['end line'] - $ranges['start line'] + 1 ];
+		$this->add( [ '__start' => [ $ranges['start line'] + 1 ] ] ); // zero-based to one-based.
+		$this->add( [ '__end' => [ $ranges['end line'] + 1 ] ] ); // zero-based to one-based.
+		$this->add( [ '__lines' => [ $ranges['end line'] - $ranges['start line'] + 1 ] ] );
 		unset( $ranges['start line'] );
 		unset( $ranges['end line'] );
 
@@ -150,7 +154,7 @@ trait EDConnectorParsable {
 			$parsed = $parser( $text );
 		} catch ( EDParserException $e ) {
 			$parsed = null;
-			$this->parseErrors[] = [ $e->code(), $e->params() ];
+			$this->parseErrors[] = [ 'code' => $e->code(), 'params' => $e->params() ];
 		}
 
 		return $parsed;
@@ -228,8 +232,7 @@ trait EDConnectorParsable {
 
 		// Try mb_detect_encoding.
 		if ( !$encoding ) {
-			global $edgTryEncodings;
-			$encoding = mb_detect_encoding( $text, $edgTryEncodings, true ); // -- strict.
+			$encoding = mb_detect_encoding( $text, $this->encodings, true /* strict */ );
 		}
 
 		// Convert $text:

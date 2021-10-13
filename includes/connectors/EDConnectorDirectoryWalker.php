@@ -22,11 +22,11 @@ class EDConnectorDirectoryWalker extends EDConnectorDirectory {
 		parent::__construct( $args, $title );
 
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
-		if ( isset( $args['DirectoryDepth'] ) ) {
-			$this->depth = $args['DirectoryDepth'];
+		if ( isset( $args['depth'] ) ) {
+			$this->depth = $args['depth'];
 		}
-		if ( isset( $args['file pattern'] ) ) {
-			$this->pattern = $args['file pattern'];
+		if ( isset( $args['file name'] ) ) {
+			$this->pattern = $args['file name'];
 		}
 	}
 

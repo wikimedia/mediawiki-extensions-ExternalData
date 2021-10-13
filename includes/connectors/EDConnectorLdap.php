@@ -11,7 +11,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	private $filter;
 	/** @var bool Get all LDAP data. */
 	private $all;
-	/** @var string LDAP domain (key to $edgLDAPServer, etc.). */
+	/** @var string LDAP domain (key to $wgExternalDataSources, etc.). */
 	private $domain;
 	/** @var string Base DN for the directory. */
 	private $baseDn;
@@ -52,15 +52,15 @@ class EDConnectorLdap extends EDConnectorBase {
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'domain' );
 		}
-		if ( isset( $args['LDAPServer'] ) ) {
-			$this->server = $args['LDAPServer'];
+		if ( isset( $args['server'] ) ) {
+			$this->server = $args['server'];
 		} else {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}
-		$this->user = isset( $args['LDAPUser'] ) ? $args['LDAPUser'] : null;
-		$this->password = isset( $args['LDAPPass'] ) ? $args['LDAPPass'] : null;
-		if ( isset( $args['LDAPBaseDN'] ) ) {
-			$this->baseDn = $args['LDAPBaseDN'];
+		$this->user = isset( $args['user'] ) ? $args['user'] : null;
+		$this->password = isset( $args['password'] ) ? $args['password'] : null;
+		if ( isset( $args['base dn'] ) ) {
+			$this->baseDn = $args['base dn'];
 		} else {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}

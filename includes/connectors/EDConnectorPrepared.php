@@ -25,11 +25,11 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 
 		// Specific parameters.
 		// SQL statement to prepare.
-		if ( is_array( $args['DBPrepared'] ) ) {
+		if ( is_array( $args['prepared'] ) ) {
 			// Several statements for this database connection.
 			if ( isset( $args['query'] ) && is_string( $args['query'] ) ) {
-				if ( isset( $args['DBPrepared'][$args['query']] ) ) {
-					$this->query = $args['DBPrepared'][$args['query']];
+				if ( isset( $args['prepared'][$args['query']] ) ) {
+					$this->query = $args['prepared'][$args['query']];
 				} else {
 					$this->error( 'externaldata-db-no-such-prepared', $this->dbId, $args['query'] );
 				}
@@ -38,12 +38,12 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 			}
 		} else {
 			// Only one statement for this database connection.
-			$this->query = $args['DBPrepared'];
+			$this->query = $args['prepared'];
 		}
 		if ( isset( $args['parameters'] ) ) {
 			$this->parameters = self::paramToArray( $args['parameters'], false, false, true );
 		}
-		$this->types = isset( $args['DBTypes'] ) ? $args['DBTypes'] : str_repeat( 's', count( $this->parameters ) );
+		$this->types = isset( $args['types'] ) ? $args['types'] : str_repeat( 's', count( $this->parameters ) );
 	}
 
 	/**
@@ -56,10 +56,10 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 		parent::setCredentials( $params );
 
 		// Database credentials.
-		if ( isset( $params['DBServer'] ) ) {
-			$this->credentials['host'] = $params['DBServer'];
+		if ( isset( $params['server'] ) ) {
+			$this->credentials['host'] = $params['server'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'edgDBServer' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'server' );
 		}
 	}
 

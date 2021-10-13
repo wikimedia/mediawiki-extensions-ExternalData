@@ -67,30 +67,33 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 		$this->program = $args['program'];
 		// The command, stored as a secret in LocalSettings.php.
-		if ( isset( $args['ExeCommand'] ) ) {
-			$command = $args['ExeCommand'];
+		if ( isset( $args['command'] ) ) {
+			$command = $args['command'];
 		} else {
-			$this->error( 'externaldata-exe-incomplete-information', $this->program, 'edgExeCommand' );
+			$this->error( 'externaldata-exe-incomplete-information', $this->program, 'command' );
 		}
 
-		// Limits override.
-		$this->limits = self::limits( $args['program'] );
-
 		// Environment variables.
-		if ( isset( $args['ExeEnvironment'] ) && is_array( $args['ExeEnvironment'] ) ) {
-			$this->environment = $args['ExeEnvironment'];
+		if ( isset( $args['env'] ) && is_array( $args['env'] ) ) {
+			$this->environment = $args['env'];
+		}
+
+		// Resource limits.
+		$this->limits = self::defaultLimits();
+		if ( isset( $args['limits'] ) && is_array( $args['limits'] ) ) {
+			$this->limits += $args['limits'];
 		}
 
 		// Parameter filters.
-		if ( isset( $args['ExeParamFilters'] ) && is_array( $args['ExeParamFilters'] ) ) {
-			$this->paramFilters = $args['ExeParamFilters'];
+		if ( isset( $args['filters'] ) && is_array( $args['filters'] ) ) {
+			$this->paramFilters = $args['filters'];
 		}
 
 		// Parameters.
 		// The required parameters are stored as a secret in LocalSettings.php.
 		$this->validatedParams = null;
-		if ( isset( $args['ExeParams'] ) && is_array( $args['ExeParams'] ) ) {
-			$this->validatedParams = $this->validateParams( $args, $args['ExeParams'], $this->paramFilters );
+		if ( isset( $args['params'] ) && is_array( $args['params'] ) ) {
+			$this->validatedParams = $this->validateParams( $args, $args['params'], $this->paramFilters );
 		}
 
 		if ( $this->validatedParams ) {
@@ -103,18 +106,18 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 
 		// Ignore warnings in stderr, if the exit code is 0.
-		if ( isset( $args['ExeIgnoreWarnings'] ) ) {
-			$this->ignoreWarnings = $args['ExeIgnoreWarnings'];
+		if ( isset( $args['ignore warnings'] ) ) {
+			$this->ignoreWarnings = $args['ignore warnings'];
 		}
 
 		// Postprocessor:
-		if ( isset( $args['ExePreprocess'] ) && is_callable( $args['ExePreprocess'] ) ) {
-			$this->preprocessor = $args['ExePreprocess'];
+		if ( isset( $args['preprocess'] ) && is_callable( $args['preprocess'] ) ) {
+			$this->preprocessor = $args['preprocess'];
 		}
 
 		// stdin.
-		if ( isset( $args['ExeInput'] ) ) {
-			$input = $args['ExeInput'];
+		if ( isset( $args['input'] ) ) {
+			$input = $args['input'];
 			if ( isset( $args[$input] ) ) {
 				$this->input = $args[$input];
 				// Preprocess, if required.
@@ -128,40 +131,52 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 
 		// Get program's output from a temporary file rather than standard output.
-		if ( isset( $args['ExeTempFile'] ) && is_string( $args['ExeTempFile'] ) ) {
+		if ( isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
 			$hash = hash( 'fnv1a64', $this->input );
 			global $wgTmpDirectory;
-			$this->tempFile = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $args['ExeTempFile'] );
+			$this->tempFile = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $args['temp'] );
 			$command = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $command );
 		}
 
 		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
 
 		// Postprocessor.
-		if ( isset( $args['ExePostprocess'] ) ) {
-			$this->postprocessor = $args['ExePostprocess'];
+		if ( isset( $args['postprocess'] ) ) {
+			$this->postprocessor = $args['postprocess'];
 		}
 
 		// Cache setting may be per PF call, program and the extension. More aggressive have the priority.
 		// Cache expiration.
-		global $edgCacheExpireTime;
 		$cache_expires_local = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : 0;
-		$cache_expires_per_program = array_key_exists( 'ExeCacheSeconds', $args ) ? $args['ExeCacheSeconds'] : 0;
-		$cache_expires = max( $cache_expires_local, $cache_expires_per_program, $edgCacheExpireTime );
+		$cache_expires_per_program = array_key_exists( 'min cache seconds', $args ) ? $args['min cache seconds'] : 0;
+		$cache_expires = max( $cache_expires_local, $cache_expires_per_program );
 		// Allow to use stale cache.
-		global $edgAlwaysAllowStaleCache;
 		$allow_stale_cache = array_key_exists( 'use stale cache', $args )
-							|| array_key_exists( 'ExeUseStaleCache', $args )
-							|| $edgAlwaysAllowStaleCache;
+							|| array_key_exists( 'always use stale cache', $args );
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 
 		// Throttle.
-		$template = isset( $args['ExeThrottleKey'] ) ? $args['ExeThrottleKey'] : null;
-		$interval = isset( $args['ExeThrottleInterval'] ) ? $args['ExeThrottleInterval'] : null;
+		$template = isset( $args['throttle key'] ) ? $args['throttle key'] : null;
+		$interval = isset( $args['throttle interval'] ) ? $args['throttle interval'] : null;
 		if ( $template && $interval ) {
 			$key = $this->substitute( $template, $this->validatedParams + $this->environment );
 			$this->setupThrottle( $title, $key, $interval );
 		}
+	}
+
+	/**
+	 * Get default limits from MediaWiki settings.
+	 *
+	 * @return array
+	 */
+	private static function defaultLimits(): array {
+		global $wgMaxShellTime, $wgMaxShellWallClockTime, $wgMaxShellMemory, $wgMaxShellFileSize;
+		return [
+			'time' => $wgMaxShellTime,
+			'walltime' => $wgMaxShellWallClockTime,
+			'memory' => $wgMaxShellMemory,
+			'filesize' => $wgMaxShellFileSize
+		];
 	}
 
 	/**
@@ -200,26 +215,6 @@ class EDConnectorExe extends EDConnectorBase {
 	}
 
 	/**
-	 * Make an array of resource limits for given shell command.
-	 *
-	 * @param string $program The program ID.
-	 *
-	 * @return array An array of limits.
-	 */
-	private static function limits( $program ): array {
-		global $wgMaxShellTime, $wgMaxShellWallClockTime, $wgMaxShellMemory, $wgMaxShellFileSize, $edgExeLimits;
-		$default_limits = [
-			'time'      => $wgMaxShellTime,
-			'walltime'  => $wgMaxShellWallClockTime,
-			'memory'    => $wgMaxShellMemory,
-			'filesize'  => $wgMaxShellFileSize
-		];
-		$explicit_limits = isset( $edgExeLimits[$program] ) && is_array( $edgExeLimits[$program] )
-			? $edgExeLimits[$program] : [];
-		return array_merge( $default_limits, $explicit_limits );
-	}
-
-	/**
 	 * Actually connect to the external data source (run program).
 	 * It is presumed that there are no errors in parameters and wiki settings.
 	 * Set $this->values and $this->errors.
@@ -237,11 +232,16 @@ class EDConnectorExe extends EDConnectorBase {
 				$input,
 				array $environment
 			) use( &$exit_code, &$error ) /* $this is bound. */ {
-				$result = Shell::command( $command ) // Shell class demands an array of words.
+				$prepared = Shell::command( $command ) // Shell class demands an array of words.
 					->input( $input )
 					->environment( $environment )
-					->limits( $this->limits )
-					->execute();
+					->limits( $this->limits );
+				try {
+					$result = $prepared->execute();
+				} catch ( Exception $e ) {
+					$this->error( 'externaldata-exe-exception', $e->getMessage() );
+					return false;
+				}
 				$exit_code = $result->getExitCode();
 				$output = $this->tempFile ? file_get_contents( $this->tempFile ) : $result->getStdout();
 				$error = $result->getStderr();
@@ -267,11 +267,11 @@ class EDConnectorExe extends EDConnectorBase {
 			] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->add( [ '__throttled_till' => $this->waitTill ], true );
+				$this->add( [ '__throttled_till' => [ $this->waitTill ] ], true );
 			}
 			if ( $error ) {
 				// Let's save the ignored warning.
-				$this->add( [ '__warning' => $error ] );
+				$this->add( [ '__warning' => [ $error ] ] );
 			}
 			$this->add( $this->parse( $output, $this->encoding ) );
 			$this->error( $this->parseErrors );
@@ -295,25 +295,23 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param Parser $parser
 	 */
 	public static function registerTags( Parser $parser ) {
-		global $edgExeTags;
-		foreach ( $edgExeTags as $program => $tag ) {
+		foreach ( self::$sources as $program => $config ) {
+			if ( !isset( $config['command'] ) || !isset( $config['tag'] ) ) {
+				continue; // not a program or no tag emulation mode for it.
+			}
 			$parser->setHook(
-				$tag,
-				static function ( $inner, array $attributes, Parser $parser, PPFrame $frame ) use ( $program ) {
-					global $edgExeInput;
+				$config['tag'],
+				static function ( $inner, array $attributes, Parser $parser, PPFrame $_ ) use ( $program, $config ) {
 					$params = $attributes;
-					$params[$edgExeInput[$program]] = $inner;
+					$params[$config['input']] = $inner;
 					$params['program'] = $program;
 					$id = isset( $params['id'] ) ? $params['id'] : 'output';
 					$params['data'] = "$id=__text";
 					$params['format'] = 'text';
-
+					$params = self::supplementParams( $params );
 					$connector = new self( $params, $parser->getTitle() );
 					if ( !$connector->errors() ) {
 						if ( $connector->run() ) {
-							// The 'safe to embed raw' flags are ignored here,
-							// as setting $edgExeTags[$program] in LocalSettings.php implies that
-							// the webmaster considers program output safe.
 							$values = $connector->result();
 							return [ $values[$id][0], 'markerType' => 'nowiki' ];
 						}
@@ -330,49 +328,61 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param array &$software
 	 */
 	public static function addSoftware( array &$software ) {
-		global $edgExeCommand;
-		foreach ( $edgExeCommand as $key => $command ) {
-			preg_match( '~^[\w/-]+~', is_array( $command ) ? $command[0] : $command, $matches );
+		foreach ( self::$sources as $key => $config ) {
+			if ( !isset( $config['command'] ) ) {
+				continue; // not a program.
+			}
+			// Get path to the command.
+			preg_match(
+				'~^[\w/-]+~',
+				is_array( $config['command'] ) ? $config['command'][0] : $config['command'],
+				$matches
+			);
 			$path = $matches[0];
-			global $edgExeName;
-			if ( array_key_exists( $key, $edgExeName ) ) {
-				$name = $edgExeName[$key];
+
+			// Get program name.
+			if ( isset( $config['name'] ) ) {
+				$name = $config['name'];
 			} else {
 				preg_match( '~[^/]+$~', $path, $matches );
 				$name = $matches[0];
 			}
-			global $edgExeUrl;
-			if ( array_key_exists( $key, $edgExeUrl ) ) {
-				$name = "[$edgExeUrl[$key] $name]";
+
+			// Program site.
+			if ( isset( $config['url'] ) ) {
+				$name = "[{$config['url']} $name]";
 			}
+
+			// Program version.
 			$version = null;
-			global $edgExeVersion;
-			if ( array_key_exists( $key, $edgExeVersion ) ) {
+			if ( isset( $config['version'] ) ) {
 				// Version is hard coded in LocalSettings.php.
-				$version = $edgExeVersion[$key];
+				$version = $config['version'];
 			} else {
 				// Version will be reported by the program itself.
-				global $edgExeVersionCommand;
-				if ( array_key_exists( $key, $edgExeVersionCommand ) ) {
+				if ( isset( $config['version command'] ) ) {
 					// The command key that reports the version is set in LocalSettings.php,
-					$commands_v = [ $edgExeVersionCommand[$key] ];
+					$commands_v = [ $config['version command'] ];
 				} else {
 					// We will try several most common keys that print out version one by one.
 					$commands_v = [ "$path -V", "$path -v", "$path --version", "$path -version" ];
 				}
 				$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
-				$limits = self::limits( $key );
+				$limits = self::defaultLimits();
+				if ( isset( $config['limits'] ) ) {
+					$limits += $config['limits'];
+				}
 				foreach ( $commands_v as $command_v ) {
 					$reported_version = $cache->getWithSetCallback(
 						$cache->makeGlobalKey( __CLASS__, $command_v ),
 						self::VERSION_TTL,
 						static function () use ( $command_v, $limits ) {
+							$prepared = Shell::command( explode( ' ', $command_v ) )
+								->includeStderr()
+								->restrict( Shell::RESTRICT_DEFAULT | Shell::NO_NETWORK )
+								->limits( $limits );
 							try {
-								$result = Shell::command( explode( ' ', $command_v ) )
-									->includeStderr()
-									->restrict( Shell::RESTRICT_DEFAULT | Shell::NO_NETWORK )
-									->limits( $limits )
-									->execute();
+								$result = $prepared->execute();
 							} catch ( Exception $e ) {
 								return null;
 							}
@@ -410,6 +420,20 @@ class EDConnectorExe extends EDConnectorBase {
 			return '"' . $m[1] . '"[URL = "' . CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
 		}, $dewikified );
 		return $dewikified;
+	}
+
+	/**
+	 * Convert [[wikilinks]] to UML links.
+	 *
+	 * @param string $str Text to add wikilinks in UML format.
+	 * @return string dot with links.
+	 */
+	public static function wikilinks4uml( string $str ) {
+		// Process [[wikilink]] in nodes.
+		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^\]]*))?]]/', static function ( array $m ) {
+			$alias = isset( $m[2] ) ? $m[2] : $m[1];
+			return '[[' . CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
+		}, $str );
 	}
 
 	/**

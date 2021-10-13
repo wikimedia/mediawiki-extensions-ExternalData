@@ -42,11 +42,13 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			$url = str_replace( ' ', '%20', $url ); // -- do some minor URL-encoding.
 			$this->originalUrl = $url;
 			// If the URL isn't allowed (based on a whitelist), exit.
-			if ( self::isURLAllowed( $url ) ) {
+			$allowed_urls = isset( $args['allowed urls'] ) ? $args['allowed urls'] : null;
+			if ( self::isURLAllowed( $url, $allowed_urls ) ) {
 				// Do any special variable replacements in the URLs, for secret API keys and the like.
-				global $edgStringReplacements;
-				foreach ( $edgStringReplacements as $key => $value ) {
-					$url = str_replace( $key, $value, $url );
+				if ( isset( $args['replacements'] ) ) {
+					foreach ( $args['replacements'] as $key => $value ) {
+						$url = str_replace( $key, $value, $url );
+					}
 				}
 				$this->realUrl = $url;
 			} else {
@@ -60,9 +62,8 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}
 
 		// HTTP options.
-		global $edgHTTPOptions;
-		// TODO: handle HTTP options per site.
-		$this->options = $edgHTTPOptions ?: [];
+		$this->options = isset( $args['options'] ) ? $args['options'] : [];
+		// @TODO inject into data sources.
 		global $wgHTTPTimeout;
 		$this->options['HTTPTimeout'] = isset( $this->options['HTTPTimeout'] )
 			? $this->options['HTTPTimeout']
@@ -71,8 +72,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$this->options['HTTPConnectTimeout'] = isset( $this->options['HTTPConnectTimeout'] )
 			? $this->options['HTTPConnectTimeout']
 			: $wgHTTPConnectTimeout;
-		global $edgAllowSSL;
-		if ( $edgAllowSSL ) {
+		if ( isset( $args['allow ssl'] ) ) {
 			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] )
 											? $this->options['sslVerifyCert']
 											: false;
@@ -82,66 +82,38 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}
 
 		// Throttling.
-		// Throttle key.
-		$components = parse_url( $this->realUrl );
-		// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
-		if ( preg_match( '/(?<=^|\.)\w+\.\w+$/', $components['host'], $matches ) ) {
-			$components['2nd_lvl_domain'] = $matches[0];
-		} else {
-			$components['2nd_lvl_domain'] = $components['host'];
-		}
-		$components += $this->options;
-		if ( $this->headers ) {
-			$components += $this->headers;
-		}
-		global $edgThrottleKey;
-		$template = $this->firstSet( $edgThrottleKey,
-			$this->realUrl,
-			$components['host'],
-			$components['2nd_lvl_domain'],
-			'*',
-			0
-		);
-		// Throttle interval.
-		global $edgThrottleInterval;
-		$interval = $this->firstSet( $edgThrottleInterval,
-			$this->realUrl,
-			$components['host'],
-			$components['2nd_lvl_domain'],
-			'*',
-			0
-		);
+		$template = $args['throttle key'];
+		$interval = $args['throttle interval'];
 		if ( $template && $interval ) {
-			$key = $this->substitute( $template, $components );
+			$key = $this->substitute( $template, $args['components'] );
 			$this->setupThrottle( $title, $key, $interval );
 		}
 	}
 
 	/**
-	 * Checks whether this URL is allowed, based on the
-	 * $edgAllowExternalDataFrom whitelist
+	 * Checks whether this URL is allowed, based on the 'allowed urls' whitelist
 	 *
 	 * @param string $url URL to check.
+	 * @param string[]|string $allowed An array of allowed URLs.
 	 *
 	 * @return bool True, if allowed; false otherwise.
 	 *
+	 * @todo Rethink.
 	 */
-	private static function isURLAllowed( $url ) {
+	private static function isURLAllowed( $url, $allowed ) {
 		// this code is based on Parser::maybeMakeExternalImage().
-		global $edgAllowExternalDataFrom;
-		$data_from = $edgAllowExternalDataFrom;
-		if ( empty( $data_from ) ) {
+		if ( empty( $allowed ) ) {
 			return true;
 		}
-		if ( is_array( $data_from ) ) {
-			foreach ( $data_from as $match ) {
+		if ( is_array( $allowed ) ) {
+			foreach ( $allowed as $match ) {
 				if ( strpos( $url, $match ) === 0 ) {
 					return true;
 				}
 			}
 			return false;
 		} else {
-			return strpos( $url, $data_from ) === 0;
+			return strpos( $url, $allowed ) === 0;
 		}
 	}
 

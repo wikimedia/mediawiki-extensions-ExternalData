@@ -13,49 +13,48 @@ use function MediaWiki\restoreWarnings;
 use function MediaWiki\suppressWarnings;
 
 trait EDParsesParams {
+	/** @var string PREFIX Prefix for the new configuration. */
+	public static $prefix = 'wgExternalData';
+	/** @var string OLD_PREFIX Prefix for old style configuration. */
+	public static $oldPrefix = 'edg';
+
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = false;
 
 	/**
-	 * This method adds secret parameters to user-supplied ones, extracting them from
-	 * global configuration variables.
+	 * Get a configuration setting.
 	 *
-	 * @param array $params User-supplied parameters.
+	 * @param string $setting Setting's name.
 	 *
-	 * @return array Supplemented parameters.
+	 * @return mixed Setting's value.
 	 */
-	protected static function supplementParams( array $params ) {
-		global $edgSecrets;
-		$prefix = 'edg';
-		$supplemented = $params;
-		foreach ( $edgSecrets as $key => $globals ) {
-			if ( isset( $params[$key] ) ) {
-				foreach ( $globals as $global ) {
-					$prefixed_global = $prefix . $global;
-					global $$prefixed_global; // phpcs:ignore MediaWiki.NamingConventions.ValidGlobalName.allowedPrefix
-					if ( isset( $$prefixed_global[$params[$key]] ) ) {
-						$supplemented[$global] = $$prefixed_global[$params[$key]];
-					}
-				}
-			}
+	protected static function setting( $setting ) {
+		if ( isset( $GLOBALS[self::$prefix . $setting ] ) ) {
+			return $GLOBALS[self::$prefix . $setting ];
 		}
-		return $supplemented;
+		if ( isset( $GLOBALS[self::$oldPrefix . $setting ] ) ) {
+			return $GLOBALS[self::$oldPrefix . $setting ];
+		}
+		// Special case.
+		if ( $setting === 'Verbose' ) {
+			global $edgExternalValueVerbose;
+			return $edgExternalValueVerbose;
+		}
 	}
 
 	/**
 	 * Make choice of needed data based on an array of parameters and array of patterns to match.
 	 *
-	 * @param array $args A named array of parameters passed from parser or Lua function.
+	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 * @param array $patterns An array of patterns that $params has to match.
 	 *
 	 * @return string|null ID of matched pattern.
 	 */
-	protected static function getMatch( array $args, array $patterns ) {
-		// Bring keys to lowercase:
-		$args = self::paramToArray( $args, true, false );
-		$supplemented_params = self::supplementParams( $args );
+	protected static function getMatch( array $params, array $patterns ) {
+		// Bring keys to lowercase, turn comma-separated string to arrays.
+		$parsed = self::paramToArray( $params, true, false );
 		foreach ( $patterns as [ $pattern, $match ] ) {
-			if ( self::paramsFit( $supplemented_params, $pattern ) ) {
+			if ( self::paramsFit( $parsed, $pattern ) ) {
 				return $match;
 			}
 		}
@@ -67,19 +66,49 @@ trait EDParsesParams {
 	 * Check, if the passed parameters fit a 'pattern':
 	 *
 	 * @param array $params Parameters to be checked.
-	 * @param array $pattern Parametes 'pattern'.
+	 * @param array $pattern Parameters 'pattern'.
 	 *
 	 * @return bool
 	 */
 	private static function paramsFit( array $params, array $pattern ) {
 		foreach ( $pattern as $key => $value ) {
+			if ( $key === '__exists' ) {
+				if ( class_exists( $value ) ) {
+					// A necessary class is provided by a library.
+					continue;
+				} else {
+					return false;
+				}
+			}
 			if ( !array_key_exists( $key, $params ) // | use xpath, etc.
-			  || $value !== true && strtolower( $params[$key] ) !== strtolower( $value ) // format = (format), etc.
+			  || !(
+					$value === true // argument should be present.
+				 || strtolower( $params[$key] ) === strtolower( $value ) // argument should have a certain value.
+				 || self::isRegex( $value ) && preg_match( $value, $params[$key] ) // argument should match a regex.
+				) // format = (format), etc.
 			) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Returns true, if the passed string is a regular expression.
+	 *
+	 * @param string $str
+	 *
+	 * @return bool
+	 */
+	private static function isRegex( $str ) {
+		self::suppressWarnings(); // for preg_match() on regular strings.
+		try {
+			$is_regex = preg_match( $str, '' ) !== false;
+		} catch ( Exception $e ) {
+			return false;
+		}
+		self::restoreWarnings();
+		return $is_regex;
 	}
 
 	/**
@@ -164,25 +193,6 @@ END;
 			}
 		}
 		return $args;
-	}
-
-	/**
-	 * A helper function used to find most specific settings.
-	 *
-	 * @param mixed $haystack An array to look for values, or a single value.
-	 * @param string|int ...$needles Indices to try, one by one.
-	 *
-	 * @return mixed The found value/
-	 */
-	protected function firstSet( $haystack, ...$needles ) {
-		if ( !is_array( $haystack ) ) {
-			return $haystack;
-		}
-		foreach ( $needles as $needle ) {
-			if ( isset( $haystack[$needle] ) ) {
-				return $haystack[$needle];
-			}
-		}
 	}
 
 	/**

@@ -13,7 +13,8 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 		'getSoapData'	    => 'get_soap_data',
 		'getLdapData'	    => 'get_ldap_data',
 		'getDbData'		    => 'get_db_data',
-		'getProgramData'    => 'get_program_data'
+		'getProgramData'    => 'get_program_data',
+		'getExternalData'   => 'get_external_data'
 	];
 
 	/**
@@ -56,7 +57,10 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 				$errors = $connector->errors();
 			}
 		}
-		return [ [ 'values' => $values, 'errors' => self::convertArrayToLuaTable( $errors ) ] ];
+		$messages = array_map( static function ( array $error ) {
+			return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+		}, $errors );
+		return [ [ 'values' => $values, 'errors' => self::convertArrayToLuaTable( $messages ) ] ];
 	}
 
 	/**
