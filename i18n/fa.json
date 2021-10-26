@@ -18,6 +18,6 @@
 	"externaldata-db-unknown-type": "خطا: نوع ناشناختهٔ $1 برای پایگاه داده.",
 	"externaldata-db-could-not-connect": "خطا: ناتوان در اتصال به پایگاه داده ($1).",
 	"externaldata-db-no-return-values": "خطا: بدون بازگشت ارزش‌های تعیین شده.",
-	"externaldata-db-invalid-query": "پرسمان $1 نامعتبر است ($1).",
+	"externaldata-db-invalid-query": "پرسمان $1 نامعتبر است ($2).",
 	"externaldata-mongodb-unknown-collection": "خطا: مجموعهٔ مونگودی‌بی ناشناخته."
 }
