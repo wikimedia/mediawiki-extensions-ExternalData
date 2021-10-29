@@ -39,6 +39,7 @@
 	"externaldata-db-empty-rowset": "Запрос $1 не возвратил ни одной строки.",
 	"externaldata-db-prepared-not-specified": "Укажите (query=), который из заданных для БД с ID $1 подготавливаемых запросов использовать.",
 	"externaldata-db-no-such-prepared": "Подготовленный запрос $2 не задан для БД с ID $1.",
+	"externaldata-db-odbc-illegal": "В параметре $2 обнаружена недопустимая последовательность $1. Перестаньте.",
 	"externaldata-mongodb-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB $1.",
 	"externaldata-mongodb-aggregation-failed": "Ошибка при агрегации MongoDB: $1",
 	"externaldata-format-unavailable": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",

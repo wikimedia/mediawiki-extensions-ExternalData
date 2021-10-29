@@ -18,6 +18,8 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	// SQL query components.
 	/** @var array Columns to query. */
 	protected $columns;
+	/** @var array $aliases Column aliases. */
+	protected $aliases = [];
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -48,6 +50,17 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		$this->setCredentials( $args );	// late binding.
 		// Query parts.
 		$this->columns = array_values( $this->mappings );
+		// Column aliases: the correspondence $external_variable => $column_name_in_query_result.
+		foreach ( $this->columns as $column ) {
+			// Deal with AS in external names.
+			$chunks = preg_split( '/\bas\s+/i', $column, 2 );
+			$alias = isset( $chunks[1] ) ? trim( $chunks[1] ) : $column;
+			// Deal with table prefixes in column names (internal_var=tbl1.col1).
+			if ( preg_match( '/[^.]+$/', $alias, $matches ) ) {
+				$alias = $matches[0];
+			}
+			$this->aliases[$column] = $alias;
+		}
 	}
 
 	/**
@@ -81,7 +94,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		if ( !$rows ) {
 			return false;
 		}
-		$this->add( $this->processRows( $rows ) );
+		$this->add( $this->processRows( $rows, $this->aliases ) );
 		// $this->values = $this->processRows( $rows ); // late binding.
 		$this->disconnect(); // late binding.
 		return true;
@@ -119,7 +132,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 					$result[$column] = [];
 				}
 				// Can be both array and object.
-				$result[$column][] = self::processField( is_array( $row ) ? $row[$alias] : $row->$alias );
+				$result[$column][] = self::processField( ( (array)$row )[$alias] );
 			}
 		}
 		return $result;

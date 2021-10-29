@@ -12,6 +12,10 @@ abstract class EDConnectorComposed extends EDConnectorDb {
 	// SQL query components.
 	/** @var string FROM clause as a string. */
 	protected $from;
+	/** @var array Tables to query. */
+	protected $tables = [];
+	/** @var array JOIN conditions. */
+	protected $joins = [];
 	/** @var string Select conditions. */
 	protected $conditions;
 	/** @var array LIMIT, ORDER BY and GROUP BY clauses. */
@@ -32,6 +36,10 @@ abstract class EDConnectorComposed extends EDConnectorDb {
 			$this->error( 'externaldata-no-param-specified', 'from' );
 		}
 		// @todo Allow Lua tables rather than comma-separated strings for the below parametres.
+		// The format of $from can be just "TableName", or the more
+		// complex "Table1=Alias1,Table2=Alias2,...".
+		$this->tables = array_flip( self::paramToArray( $this->from ) );
+		$this->joins = isset( $args['join on'] ) ? self::paramToArray( $args['join on'] ) : null;
 		$this->conditions = array_key_exists( 'where', $args ) ? $args['where'] : null;
 		$this->sqlOptions = [
 			'ORDER BY' => array_key_exists( 'order by', $args ) ? $args['order by'] : null,

@@ -166,7 +166,7 @@ trait EDConnectorParsable {
 	 *
 	 * @param array $args An array of parameters.
 	 * @param string $name 'start' or 'end'.
-	 * @param numeric $default The default value.
+	 * @param float $default The default value.
 	 */
 	private function setLine( array $args, $name, $default ) {
 		$attr_absolute = "{$name}Absolute";

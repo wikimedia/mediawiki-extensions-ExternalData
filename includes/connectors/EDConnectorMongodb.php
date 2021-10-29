@@ -217,7 +217,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 		}
 
 		// Arrange values returned by MongoDB in a column-based array.
-		$values = $this->processRows( $results );
+		$values = $this->processRows( $results, $this->aliases );
 		$this->add( $values );
 
 		// Cache, if so configured.

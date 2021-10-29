@@ -12,8 +12,6 @@ abstract class EDConnectorRelational extends EDConnectorComposed {
 	protected $tables = [];
 	/** @var array JOIN conditions. */
 	protected $joins = [];
-	/** @var array $aliases Column aliases. */
-	private $aliases = [];
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.

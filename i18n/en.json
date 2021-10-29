@@ -33,6 +33,7 @@
 	"externaldata-db-empty-rowset": "The query $1 returned an empty rowset.",
 	"externaldata-db-prepared-not-specified": "Please specify (from=), which prepared statement to use for the database ID $1.",
 	"externaldata-db-no-such-prepared": "The prepared statement $2 is not set up for the database ID $1.",
+	"externaldata-db-odbc-illegal": "The parameter $2 contains an illegal sequence $1. Please stop.",
 	"externaldata-mongodb-unknown-collection": "Error: Unknown MongoDB collection $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB aggregation failed with error $1",
 	"externaldata-format-unavailable": "The library $1, required to use the '$2' format without the '$3' option, is missing.",

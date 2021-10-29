@@ -330,8 +330,18 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_soap_data:}}' => [ 'get_soap_data', [], 'EDConnectorSoap' ],
 			'{{#get_ldap_data:}}' => [ 'get_ldap_data', [], 'EDConnectorLdap' ],
 			'{{#get_db_data:}}, mySQL, prepared' =>
-				[ 'get_db_data', [ 'type' => 'mysql', 'prepared' => true ], 'EDConnectorPreparedMysql' ],
+				[ 'get_db_data', [ 'type' => 'mysql', 'prepared' => 'statement 1' ], 'EDConnectorPreparedMysql' ],
 			'{{#get_db_data:}}, sqlite' => [ 'get_db_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
+			'{{#get_db_data:}}, ODBC prepared' => [
+				'get_db_data',
+				[ 'type' => 'odbc', 'prepared' => 'statement 1' ],
+				'EDConnectorPreparedOdbc'
+			],
+			'{{#get_db_data:}}, MS SQL' => [
+				'get_db_data',
+				[ 'type' => 'odbc', 'driver' => 'ODBC Driver 17 for SQL Server' ],
+				'EDConnectorOdbcMssql'
+			],
 			'{{#get_db_data:}}, MongoDB' =>	[ 'get_db_data', [ 'type' => 'mongodb' ], $mongo ],
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
 			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
@@ -341,11 +351,10 @@ class EDConnectorBaseTest extends EDTestBase {
 				[ 'get_external_data', [ 'post data' => 'postdata' ], 'EDConnectorPost' ],
 			'{{#get_external_data:}}, URL' =>
 				[ 'get_external_data', [ 'url' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
-			'{{#get_external_data:}}, file mask' =>
-				[
-					'get_external_data',
-					[ 'directory' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
-				],
+			'{{#get_external_data:}}, file mask' =>	[
+				'get_external_data',
+				[ 'directory' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
+			],
 			'{{#get_external_data:}}, directory' =>
 				[ 'get_external_data', [ 'directory' => '/etc' ], 'EDConnectorDirectory' ],
 			'{{#get_external_data:}}, file' => [ 'get_external_data', [ 'file' => 'file example' ], 'EDConnectorFile' ],
@@ -356,6 +365,16 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_external_data:}}, mySQL, prepared' =>
 				[ 'get_external_data', [ 'type' => 'mysql', 'prepared' => true ], 'EDConnectorPreparedMysql' ],
 			'{{#get_external_data:}}, sqlite' => [ 'get_external_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
+			'{{#get_external_data:}}, ODBC prepared' => [
+				'get_external_data',
+				[ 'type' => 'odbc', 'prepared' => 'statement 1' ],
+				'EDConnectorPreparedOdbc'
+			],
+			'{{#get_external_data:}}, MS SQL' => [
+				'get_external_data',
+				[ 'type' => 'odbc', 'driver' => 'ODBC Driver 17 for SQL Server' ],
+				'EDConnectorOdbcMssql'
+			],
 			'{{#get_external_data:}}, MongoDB' =>
 				[ 'get_external_data', [ 'from' => 'MongoDB dataset', 'type' => 'mongodb' ], $mongo ],
 			'{{#get_external_data:}}, mySQL, etc.' =>
