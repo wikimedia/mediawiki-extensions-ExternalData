@@ -349,8 +349,8 @@ class EDConnectorExe extends EDConnectorBase {
 			}
 
 			// Program site.
-			if ( isset( $config['url'] ) ) {
-				$name = "[{$config['url']} $name]";
+			if ( isset( $config['program url'] ) ) {
+				$name = "[{$config['program url']} $name]";
 			}
 
 			// Program version.
@@ -411,9 +411,13 @@ class EDConnectorExe extends EDConnectorBase {
 	 */
 	public static function wikilinks4dot( string $str ) {
 		// Process URL = "[[wikilink]]" in properties.
-		$dewikified = preg_replace_callback( '/URL\s*=\s*"\[\[([^|<>\]]+)]]"/', static function ( array $m ) {
-			return 'URL = "' . CoreParserFunctions::localurl( null, $m[1] ) . '"';
-		}, $str );
+		$dewikified = preg_replace_callback(
+			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
+			static function ( array $m ) {
+				return $m['attr'] . ' = "' . CoreParserFunctions::localurl( null, $m['url'] ) . '"';
+			},
+			$str
+		);
 		// Process [[wikilink]] in nodes.
 		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
 			$props = isset( $m[2] ) ? $m[2] : '';

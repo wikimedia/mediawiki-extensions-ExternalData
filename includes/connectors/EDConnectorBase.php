@@ -29,7 +29,7 @@ abstract class EDConnectorBase {
 		'ExeTempFile' => 'temp', 'ExeLimits' => 'limits', 'ExeEnvironment' => 'env',
 		'ExeIgnoreWarnings' => 'ignore warnings', 'ExePreprocess' => 'preprocess', 'ExePostprocess' => 'postprocess',
 		'ExeCacheSeconds' => 'min cache seconds', 'ExeUseStaleCache' => 'always use stale cache',
-		'ExeName' => 'program name', 'ExeUrl' => 'program url',
+		'ExeName' => 'name', 'ExeUrl' => 'program url',
 		'ExeVersion' => 'version', 'ExeVersionCommand' => 'version command',
 		'ExeThrottleKey' => 'throttle key', 'ExeThrottleInterval' => 'throttle interval', 'ExeTags' => 'tag',
 		'AlwaysAllowStaleCache' => 'always use stale cache', 'CacheExpireTime' => 'min cache seconds',
