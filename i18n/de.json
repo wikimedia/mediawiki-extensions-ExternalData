@@ -58,9 +58,11 @@
 	"externaldata-empty-file": "Der Inhalt der Datei $1 konnte nicht abgerufen werden.",
 	"externaldata-no-file-in-directory": "Verzeichnis $1 hat keine Datei $2.",
 	"externaldata-no-directory": "Das Verzeichnis $1 ist nicht definiert.",
+	"externaldata-not-a-directory": "$1 ist kein Verzeichnis oder es fehlt.",
 	"externaldata-exe-shell-disabled": "Fehler: PHP-Admin hat den Zugriff auf die Shell deaktiviert.",
 	"externaldata-exe-incomplete-information": "Fehler: Unvollständige Informationen für Befehl ID $1 ($2).",
 	"externaldata-exe-illegal-parameter": "Fehler: Der Parameter $2 für das Programm $1 hat den illegalen Wert $3.",
+	"externaldata-exe-exception": "Fehler: Ausnahme beim Versuch, Programm $1 auszuführen. Meldung: $2.",
 	"externaldata-exe-error": "Fehler: Das Programm $1 hat den Exit-Code $2 zurückgegeben. Nachricht: $3.",
 	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable „$1“ gesetzt.",
 	"externaldata-no-template": "Fehler: keine Vorlage angegeben."

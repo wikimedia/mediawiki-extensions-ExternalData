@@ -46,9 +46,11 @@
 	"externaldata-empty-file": "$1 파일의 내용을 가져올 수 없습니다.",
 	"externaldata-no-file-in-directory": "$1 디렉터리에 $2 파일이 없습니다.",
 	"externaldata-no-directory": "$1 디렉터리가 정의되어 있지 않습니다.",
+	"externaldata-not-a-directory": "$1 항목은 디렉터리가 아니거나 존재하지 않습니다.",
 	"externaldata-exe-shell-disabled": "오류: PHP 관리자가 셸 접근을 비활성화했습니다.",
 	"externaldata-exe-incomplete-information": "오류: 이 명령 ID $1($2)의 정보가 완전하지 않습니다.",
 	"externaldata-exe-illegal-parameter": "오류: $1 프로그램의 $2 변수에 잘못된 $3 값이 있습니다.",
+	"externaldata-exe-exception": "오류: $1 프로그램 실행을 시도하는 중 예외가 발생했습니다. 메시지: $2.",
 	"externaldata-exe-error": "오류: $1 프로그램이 $2 종료 코드를 반환했습니다. 메시지: $3.",
 	"externaldata-no-local-variable": "오류: \"$1\" 지역 변수가 설정되어 있지 않습니다.",
 	"externaldata-no-template": "오류: 지정된 틀이 없습니다."
