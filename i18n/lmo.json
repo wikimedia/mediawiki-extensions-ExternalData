@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Salvemm el lombard"
+		]
+	},
+	"externaldata-not-a-directory": "$1 a l'è minga on diretori opur el cala.",
+	"externaldata-exe-exception": "Error: ecezzion in del tentà de eseguì el programa $1. Messagg: $2."
+}

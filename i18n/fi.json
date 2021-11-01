@@ -3,6 +3,7 @@
 		"authors": [
 			"Centerlink",
 			"Crt",
+			"MITO",
 			"Nedergard",
 			"Nwme",
 			"Pyscowicz",
@@ -23,5 +24,7 @@
 	"externaldata-db-no-return-values": "Virhe: Paluuarvoja ei ole annettu.",
 	"externaldata-db-invalid-query": "Kysely $1 on virheellinen ($2).",
 	"externaldata-mongodb-unknown-collection": "Virhe: Tuntematon MongoDB-kokoelma $1.",
-	"externaldata-missing-file": "Tiedosto $1 puuttuu."
+	"externaldata-missing-file": "Tiedosto $1 puuttuu.",
+	"externaldata-not-a-directory": "$1 ei ole hakemisto tai se puuttuu.",
+	"externaldata-exe-exception": "Virhe: Poikkeus yrittäessä suorittaa ohjelmaa $1. Viesti: $2."
 }

@@ -52,9 +52,11 @@
 	"externaldata-empty-file": "Не можам да ја најдам содржината на податотеката $1.",
 	"externaldata-no-file-in-directory": "Во папката $1 нема податотека $2.",
 	"externaldata-no-directory": "Папката $1 не е зададена.",
+	"externaldata-not-a-directory": "$1 не е папка или недостасува.",
 	"externaldata-exe-shell-disabled": "Грешка: PHP-администраторот го оневозможи пристапот до обвивката.",
 	"externaldata-exe-incomplete-information": "Грешка: Нецелосни информации за оваа наредба со назнака $1 ($2).",
 	"externaldata-exe-illegal-parameter": "Грешка: Параметарот $2 за програмот $1 ја има недозволената вредност $3.",
+	"externaldata-exe-exception": "Грешка: Исклучок при пуштањето на програмата $1. Порака: $2.",
 	"externaldata-exe-error": "Грешка: Прогрмаот $1 даде повратен код $2. Порака: $3.",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
 	"externaldata-no-template": "Грешка: нема укажано параметар."

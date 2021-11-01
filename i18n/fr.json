@@ -64,9 +64,11 @@
 	"externaldata-empty-file": "Impossible d’obtenir le contenu du fichier $1.",
 	"externaldata-no-file-in-directory": "Le répertoire $1 ne contient pas de fichier $2.",
 	"externaldata-no-directory": "Le répertoire $1 n’est pas défini.",
+	"externaldata-not-a-directory": "$1 n'est pas un répertoire ou est manquant.",
 	"externaldata-exe-shell-disabled": "Erreur : L’administrateur PHP a désactivé l’accès au shell.",
 	"externaldata-exe-incomplete-information": "Erreur : Information incomplète pour cet ID de commande $1 ($2).",
 	"externaldata-exe-illegal-parameter": "Erreur : Le paramètre $2 pour le programme $1 a une valeur $3 illégale.",
+	"externaldata-exe-exception": "Erreur : Exception lors de la tentative d'exécution du programme $1. Message : $2.",
 	"externaldata-exe-error": "Erreur : Le programme $1 a renvoyé le code de sortie $2. Message : $3.",
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié."
