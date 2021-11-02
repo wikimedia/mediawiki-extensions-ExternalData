@@ -48,6 +48,9 @@ trait EDConnectorCached {
 		if ( self::$cacheIsUp ) {
 			self::$primaryDB = wfGetDB( defined( 'DB_PRIMARY' ) ? DB_PRIMARY : DB_MASTER );
 			self::$replicaDB = wfGetDB( DB_REPLICA );
+			if ( !self::$replicaDB->tableExists( self::$cacheTable ) ) {
+				self::$cacheIsUp = false;
+			}
 		}
 	}
 

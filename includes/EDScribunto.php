@@ -43,24 +43,24 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 		$connector = EDConnectorBase::getConnector( $func, $arguments, $title );
 
 		$values = null;
-		$errors = $connector->errors();
-
-		if ( !$errors ) {
+		if ( !$connector->errors() ) {
 			// The parameters seem to be right; try to actually get the external data.
 			if ( $connector->run() ) {
 				// The external data have been fetched without run-time errors.
 				// Results are valid and can be returned (flipped to row-based).
-				// 'safe to embed raw' flags are ignored as there is no raw embedding from Lua.
 				$values = self::convertArrayToLuaTable( self::flip( $connector->result() ) );
-			} else {
-				// Run-time errors:
-				$errors = $connector->errors();
 			}
 		}
-		$messages = array_map( static function ( array $error ) {
-			return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
-		}, $errors );
-		return [ [ 'values' => $values, 'errors' => self::convertArrayToLuaTable( $messages ) ] ];
+
+		$messages = null;
+		if ( $connector->errors() ) {
+			// There have been errors. They have to be converted to human-readable messages.
+			$messages = self::convertArrayToLuaTable( array_map( static function ( array $error ) {
+				return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+			}, $connector->errors() ) );
+		}
+
+		return [ [ 'values' => $values, 'errors' => $messages ] ];
 	}
 
 	/**
