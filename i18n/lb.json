@@ -16,7 +16,7 @@
 	"externaldata-db-unknown-type": "Feeler: Onbekannten Datebank-Typ $1.",
 	"externaldata-db-could-not-connect": "Feeler: D'Verbindung mat der Datebank konnt net opgebaut ginn.",
 	"externaldata-db-no-return-values": "Feeler: Kee Retour-Wäert festgeluecht.",
-	"externaldata-db-invalid-query": "D'Ufro $1 ass net valabel.",
+	"externaldata-db-invalid-query": "D'Ufro $1 ass net valabel ($2).",
 	"externaldata-mongodb-unknown-collection": "Feeler:Onbekannte MongoDB Sammlung $1.",
 	"externaldata-undefined-file": "De Fichier $1 ass net definéiert.",
 	"externaldata-missing-file": "De Fichier $1 feelt.",
