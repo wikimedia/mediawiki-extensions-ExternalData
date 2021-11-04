@@ -117,7 +117,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		$globals["{$old_prefix}ExeParams"] = [ 'man' => [ 'topic' ] ];
 		$globals["{$old_prefix}ExeParamFilters"] = [ 'man' => [ 'topic' => '/^\w+$/' ] ];
 		$sources['man'] = [
-			'command' => 'man $topic$', 'params' => [ 'topic' ], 'filters' => [ 'topic' => '/^\w+$/' ]
+			'command' => 'man $topic$', 'params' => [ 'topic' ], 'param filters' => [ 'topic' => '/^\w+$/' ]
 		];
 		$cases['Old style data source'] = [ $globals, $sources ];
 

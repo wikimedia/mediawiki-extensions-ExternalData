@@ -25,7 +25,7 @@ abstract class EDConnectorBase {
 		'DBPrepared' => 'prepared', 'DBTypes' => 'types', 'MemCachedMongoDBSeconds' => 'cache seconds',
 		'DirectoryPath' => 'path', 'DirectoryDepth' => 'depth', 'FilePath' => 'path',
 		'LDAPServer' => 'server', 'LDAPUser' => 'user', 'LDAPPass' => 'password', 'LDAPBaseDN' => 'base dn',
-		'ExeCommand' => 'command', 'ExeParams' => 'params', 'ExeParamFilters' => 'filters', 'ExeInput' => 'input',
+		'ExeCommand' => 'command', 'ExeParams' => 'params', 'ExeParamFilters' => 'param filters', 'ExeInput' => 'input',
 		'ExeTempFile' => 'temp', 'ExeLimits' => 'limits', 'ExeEnvironment' => 'env',
 		'ExeIgnoreWarnings' => 'ignore warnings', 'ExePreprocess' => 'preprocess', 'ExePostprocess' => 'postprocess',
 		'ExeCacheSeconds' => 'min cache seconds', 'ExeUseStaleCache' => 'always use stale cache',

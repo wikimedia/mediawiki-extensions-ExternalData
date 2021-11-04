@@ -85,8 +85,8 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 
 		// Parameter filters.
-		if ( isset( $args['filters'] ) && is_array( $args['filters'] ) ) {
-			$this->paramFilters = $args['filters'];
+		if ( isset( $args['param filters'] ) && is_array( $args['param filters'] ) ) {
+			$this->paramFilters = $args['param filters'];
 		}
 
 		// Parameters.
