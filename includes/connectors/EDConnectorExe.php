@@ -81,7 +81,7 @@ class EDConnectorExe extends EDConnectorBase {
 		// Resource limits.
 		$this->limits = self::defaultLimits();
 		if ( isset( $args['limits'] ) && is_array( $args['limits'] ) ) {
-			$this->limits += $args['limits'];
+			$this->limits = array_merge( $this->limits, $args['limits'] );
 		}
 
 		// Parameter filters.
