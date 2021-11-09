@@ -37,8 +37,8 @@ trait EDParsesParams {
 		}
 		// Special case.
 		if ( $setting === 'Verbose' ) {
-			global $edgExternalValueVerbose;
-			return $edgExternalValueVerbose;
+			global $wgExternalValueVerbose;
+			return $wgExternalValueVerbose;
 		}
 	}
 

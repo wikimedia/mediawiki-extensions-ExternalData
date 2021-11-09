@@ -83,71 +83,90 @@
 	},
 	"JobClasses": { "edReparse": "EDReparseJob" },
 	"callback": "ExternalDataHooks::onRegistration",
+	"config_prefix": "wgExternalData",
 	"config": {
-		"_prefix": "wgExternalData",
 		"Sources": {
-			"*": {
-				"min cache seconds": 3600,
-				"always use stale cache": false,
-				"throttle key": "$2nd_lvl_domain$",
-				"throttle interval": 0,
-				"replacements": [],
-				"allowed urls": [],
-				"options": { "timeout": "default" },
-				"encodings": [ "ASCII", "UTF-8", "Windows-1251", "Windows-1252", "Windows-1254", "KOI8-R", "ISO-8859-1" ]
-			}
+			"description": "An array of settings for data sources. Index '*' contains global fallbacks",
+			"value": {
+				"*": {
+					"min cache seconds": 3600,
+					"always use stale cache": false,
+					"throttle key": "$2nd_lvl_domain$",
+					"throttle interval": 0,
+					"replacements": [],
+					"allowed urls": [],
+					"options": { "timeout": "default" },
+					"encodings": [ "ASCII", "UTF-8", "Windows-1251", "Windows-1252", "Windows-1254", "KOI8-R", "ISO-8859-1" ],
+					"params": [],
+					"param filters": [],
+					"verbose": true
+				}
+			},
+			"merge_strategy": "array_plus_2d"
 		},
-		"Verbose": true,
-		"CacheTable": "ed_url_cache",
-		"Connectors": [
-			[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],
-			[ { "__pf": "get_web_data" }, "EDConnectorWeb" ],
-			[ { "__pf": "get_file_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
-			[ { "__pf": "get_file_data", "directory": true }, "EDConnectorDirectory" ],
-			[ { "__pf": "get_file_data" }, "EDConnectorFile" ],
-			[ { "__pf": "get_soap_data" }, "EDConnectorSoap" ],
-			[ { "__pf": "get_ldap_data" }, "EDConnectorLdap" ],
-			[ { "__pf": "get_db_data", "type": "mysql", "prepared": true }, "EDConnectorPreparedMysql" ],
-			[ { "__pf": "get_db_data", "type": "sqlite" }, "EDConnectorSqlite" ],
-			[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
-			[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
-			[ { "__pf": "get_db_data" }, "EDConnectorSql" ],
-			[ { "__pf": "get_program_data" }, "EDConnectorExe" ],
-			[ { "__pf": "get_external_data", "post data": true }, "EDConnectorPost" ],
-			[ { "__pf": "get_external_data", "url": true }, "EDConnectorWeb" ],
-			[ { "__pf": "get_external_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
-			[ { "__pf": "get_external_data", "directory": true }, "EDConnectorDirectory" ],
-			[ { "__pf": "get_external_data", "file": true }, "EDConnectorFile" ],
-			[ { "__pf": "get_external_data", "request": true }, "EDConnectorSoap" ],
-			[ { "__pf": "get_external_data", "domain": true }, "EDConnectorLdap" ],
-			[ { "__pf": "get_external_data", "type": "mysql", "prepared": true }, "EDConnectorPreparedMysql" ],
-			[ { "__pf": "get_external_data", "type": "sqlite" }, "EDConnectorSqlite" ],
-			[ { "__pf": "get_external_data", "type": "mongodb", "__exists": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
-			[ { "__pf": "get_external_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
-			[ { "__pf": "get_external_data", "from": true }, "EDConnectorSql" ],
-			[ { "__pf": "get_external_data", "prepared": true }, "EDConnectorPreparedMysql" ],
-			[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ]
-		],
-		"Parsers": [
-			[ { "format": "text", "regex": true }, "EDParserRegex" ],
-			[ { "format": "text with regex" }, "EDParserRegex" ],
-			[ { "format": "text" }, "EDParserText" ],
-			[ { "format": "ini" }, "EDParserIni" ],
-			[ { "format": "html", "use xpath": true }, "EDParserHTMLwithXPath" ],
-			[ { "format": "html with xpath" }, "EDParserHTMLwithXPath" ],
-			[ { "format": "html with css" }, "EDParserHTMLwithCSS" ],
-			[ { "format": "html", "use css": true }, "EDParserHTMLwithCSS" ],
-			[ { "format": "html" }, "EDParserHTMLwithCSS" ],
-			[ { "format": "xml", "use xpath": true }, "EDParserXMLwithXPath" ],
-			[ { "format": "xml with xpath" }, "EDParserXMLwithXPath" ],
-			[ { "format": "xml" }, "EDParserXMLsimple" ],
-			[ { "format": "json", "use jsonpath": true }, "EDParserJSONwithJSONPath" ],
-			[ { "format": "json with jsonpath" }, "EDParserJSONwithJSONPath" ],
-			[ { "format": "json" }, "EDParserJSONsimple" ],
-			[ { "format": "csv" }, "EDParserCSV" ],
-			[ { "format": "csv with header" }, "EDParserCSV" ],
-			[ { "format": "gff" }, "EDParserGFF" ]
-		]
+		"Verbose": {
+			"description": "Show an error message if there is no external value",
+			"value": true
+		},
+		"CacheTable": {
+			"value": "ed_url_cache",
+			"description": "The name of the cache table. Please don't change"
+		},
+		"Connectors": {
+			"description": "Rules for choosing EDConnector* class",
+			"value": [
+				[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],
+				[ { "__pf": "get_web_data" }, "EDConnectorWeb" ],
+				[ { "__pf": "get_file_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
+				[ { "__pf": "get_file_data", "directory": true }, "EDConnectorDirectory" ],
+				[ { "__pf": "get_file_data" }, "EDConnectorFile" ],
+				[ { "__pf": "get_soap_data" }, "EDConnectorSoap" ],
+				[ { "__pf": "get_ldap_data" }, "EDConnectorLdap" ],
+				[ { "__pf": "get_db_data", "type": "mysql", "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": "get_db_data", "type": "sqlite" }, "EDConnectorSqlite" ],
+				[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
+				[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
+				[ { "__pf": "get_db_data" }, "EDConnectorSql" ],
+				[ { "__pf": "get_program_data" }, "EDConnectorExe" ],
+				[ { "__pf": "get_external_data", "post data": true }, "EDConnectorPost" ],
+				[ { "__pf": "get_external_data", "url": true }, "EDConnectorWeb" ],
+				[ { "__pf": "get_external_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
+				[ { "__pf": "get_external_data", "directory": true }, "EDConnectorDirectory" ],
+				[ { "__pf": "get_external_data", "file": true }, "EDConnectorFile" ],
+				[ { "__pf": "get_external_data", "request": true }, "EDConnectorSoap" ],
+				[ { "__pf": "get_external_data", "domain": true }, "EDConnectorLdap" ],
+				[ { "__pf": "get_external_data", "type": "mysql", "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": "get_external_data", "type": "sqlite" }, "EDConnectorSqlite" ],
+				[ { "__pf": "get_external_data", "type": "mongodb", "__exists": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
+				[ { "__pf": "get_external_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
+				[ { "__pf": "get_external_data", "from": true }, "EDConnectorSql" ],
+				[ { "__pf": "get_external_data", "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ]
+			]
+		},
+		"Parsers": {
+			"description": "Rules for choosing EDParser* class",
+			"value": [
+				[ { "format": "text", "regex": true }, "EDParserRegex" ],
+				[ { "format": "text with regex" }, "EDParserRegex" ],
+				[ { "format": "text" }, "EDParserText" ],
+				[ { "format": "ini" }, "EDParserIni" ],
+				[ { "format": "html", "use xpath": true }, "EDParserHTMLwithXPath" ],
+				[ { "format": "html with xpath" }, "EDParserHTMLwithXPath" ],
+				[ { "format": "html with css" }, "EDParserHTMLwithCSS" ],
+				[ { "format": "html", "use css": true }, "EDParserHTMLwithCSS" ],
+				[ { "format": "html" }, "EDParserHTMLwithCSS" ],
+				[ { "format": "xml", "use xpath": true }, "EDParserXMLwithXPath" ],
+				[ { "format": "xml with xpath" }, "EDParserXMLwithXPath" ],
+				[ { "format": "xml" }, "EDParserXMLsimple" ],
+				[ { "format": "json", "use jsonpath": true }, "EDParserJSONwithJSONPath" ],
+				[ { "format": "json with jsonpath" }, "EDParserJSONwithJSONPath" ],
+				[ { "format": "json" }, "EDParserJSONsimple" ],
+				[ { "format": "csv" }, "EDParserCSV" ],
+				[ { "format": "csv with header" }, "EDParserCSV" ],
+				[ { "format": "gff" }, "EDParserGFF" ]
+			]
+		}
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }

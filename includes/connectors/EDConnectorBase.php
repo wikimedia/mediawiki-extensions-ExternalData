@@ -35,11 +35,6 @@ abstract class EDConnectorBase {
 		'AlwaysAllowStaleCache' => 'always use stale cache', 'CacheExpireTime' => 'min cache seconds',
 		'ThrottleKey' => 'throttle key', 'ThrottleInterval' => 'throttle interval'
 	];
-	/**
-	 * @const string[] SOURCES_ALIASES Suffixes of names of global variables that can be used as subsets
-	 * of $wgExternalDataSources.
-	 */
-	private const SOURCES_ALIASES = [ 'Databases', 'LDAPs', 'Sites', 'Files', 'Directories', 'Programs' ];
 
 	/** @var array $sources All configured data sources. */
 	protected static $sources = [];
@@ -168,18 +163,6 @@ abstract class EDConnectorBase {
 	 */
 	public static function loadConfig() {
 		$sources = self::setting( 'Sources' );
-
-		// Read alternative settings.
-		$prefix = self::$prefix;
-		foreach ( self::SOURCES_ALIASES as $alias ) {
-			if ( isset( $GLOBALS["$prefix$alias"] ) ) {
-				foreach ( $GLOBALS["$prefix$alias"] as $source => $value ) {
-					if ( !isset( $sources[$source] ) ) {
-						$sources[$source] = $value;
-					}
-				}
-			}
-		}
 
 		// Read old style settings.
 		$deprecated = [];

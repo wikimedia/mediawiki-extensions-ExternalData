@@ -49,12 +49,11 @@ class EDTestBase extends MediaWikiUnitTestCase {
 	 */
 	protected static function config(): array {
 		// Load the default configuration.
-		$json = json_decode( file_get_contents( __DIR__ . '/../../../extension.json' ), true )['config'];
-		$prefix = $json['_prefix'];
-		unset( $json['_prefix'] );
+		$json = json_decode( file_get_contents( __DIR__ . '/../../../extension.json' ), true );
+		$prefix = $json['config_prefix'];
 		$globals = [];
-		foreach ( $json as $var => $value ) {
-			$globals[$prefix . $var] = $value;
+		foreach ( $json['config'] as $var => $setting ) {
+			$globals[$prefix . $var] = $setting['value'];
 		}
 
 		return $globals;
