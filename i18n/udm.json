@@ -7,7 +7,7 @@
 	"externaldata-ldap-domain-not-defined": "$1 LDAP домен верамтэ.",
 	"externaldata-db-incomplete-information": "Янгыш: $1 ID-ем тодэт база сярысь ярантэм ивортодэт ($2).",
 	"externaldata-db-unknown-type": "Янгыш: Тодэт базалэн тодмотэм $1 типез.",
-	"externaldata-db-invalid-query": "$1 курон шонертэм.",
+	"externaldata-db-invalid-query": "$1 курон шонертэм ($2).",
 	"externaldata-db-too-many-joins": "JOIN куронъёслэн лыдзы (али $1) таблицаослэн лыдзылэсь ($2) ятыр медаз луы",
 	"externaldata-db-invalid-join": "Шонертэм $1 JOIN курон: котькудӥз люкет пушказ «=» пус луыны кулэ.",
 	"externaldata-mongodb-unknown-collection": "Янгыш: Тодмотэм $1 MongoDB бичет.",
