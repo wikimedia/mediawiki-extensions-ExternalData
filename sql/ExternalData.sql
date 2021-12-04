@@ -1,5 +1,5 @@
-CREATE TABLE /*_*/ `ed_url_cache` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+CREATE TABLE /*_*/ed_url_cache (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
   `post_vars` text,
   `req_time` int(11) NOT NULL,

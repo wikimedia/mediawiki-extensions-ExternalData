@@ -40,7 +40,8 @@ trait EDConnectorCached {
 	 * @param bool $stale Allow using stale cache.
 	 */
 	private function setupCache( $seconds, $stale ) {
-		$cache_table = self::setting( 'CacheTable' );
+		// Take into account the obsolete setting $edgCacheTable.
+		$cache_table = self::setting( 'CacheTable' ) ?: 'ed_url_cache';
 		self::$cacheIsUp = (bool)$cache_table;
 		self::$cacheTable = $cache_table;
 		$this->cacheExpires = $seconds;

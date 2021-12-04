@@ -62,4 +62,15 @@ class ExternalDataHooks {
 		// Load configuration settings.
 		EDConnectorBase::loadConfig();
 	}
+
+	/**
+	 * For update.php. See also includes/connectors/traits/EDConnectorCached.php.
+	 *
+	 * @param DatabaseUpdater $updater
+	 * @return void
+	 */
+	public static function onLoadExtensionSchemaUpdates( DatabaseUpdater $updater ) {
+		// Create ed_url_cache table. The obsolete setting $edgCacheTable is ignored.
+		$updater->addExtensionTable( 'ed_url_cache', __DIR__ . '/../sql/ExternalData.sql' );
+	}
 }
