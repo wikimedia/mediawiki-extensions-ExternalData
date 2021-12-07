@@ -19,5 +19,6 @@
 	"externaldata-db-could-not-connect": "Errore: Non ge me pozze collegà a 'u database.",
 	"externaldata-db-no-return-values": "Errore: Nisciune valore de retorne specificate.",
 	"externaldata-db-invalid-query": "Inderrogazione $1 invalide.",
-	"externaldata-mongodb-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1."
+	"externaldata-mongodb-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1.",
+	"externaldata-no-template": "Errore: nisicune template specificate."
 }

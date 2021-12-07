@@ -45,7 +45,7 @@
 	"externaldata-undefined-file": "Податотеката $1 не е зададена.",
 	"externaldata-missing-file": "Податотеката $1 недостасува.",
 	"externaldata-empty-file": "Не можам да ја најдам содржината на податотеката $1.",
-	"externaldata-no-file-in-directory": "Во папката $1 нема податотека $1.",
+	"externaldata-no-file-in-directory": "Во папката $1 нема податотека $2.",
 	"externaldata-no-directory": "Папката $1 не е зададена.",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
 	"externaldata-no-template": "Грешка: нема укажано параметар."

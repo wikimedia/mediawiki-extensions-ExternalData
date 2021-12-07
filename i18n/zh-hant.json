@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Kly",
-			"LNDDYL"
+			"LNDDYL",
+			"列维劳德"
 		]
 	},
 	"getdata": "取得資料",
@@ -46,7 +47,7 @@
 	"externaldata-undefined-file": "檔案 $1 未定義。",
 	"externaldata-missing-file": "缺少檔案 $1。",
 	"externaldata-empty-file": "無法取得檔案 $1 的內容。",
-	"externaldata-no-file-in-directory": "目錄 $1 下沒有檔案 $1。",
+	"externaldata-no-file-in-directory": "目錄 $1 下沒有檔案 $2。",
 	"externaldata-no-directory": "目錄 $1 未定義。",
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",
 	"externaldata-no-template": "錯誤：沒有指定模板。"

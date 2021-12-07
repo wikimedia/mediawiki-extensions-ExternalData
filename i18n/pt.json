@@ -49,7 +49,7 @@
 	"externaldata-undefined-file": "O ficheiro $1 não está definido.",
 	"externaldata-missing-file": "O ficheiro $1 está em falta.",
 	"externaldata-empty-file": "Não foi possível obter o conteúdo do ficheiro $1.",
-	"externaldata-no-file-in-directory": "O diretório $1 não contém o ficheiro $1.",
+	"externaldata-no-file-in-directory": "O diretório $1 não contém o ficheiro $2.",
 	"externaldata-no-directory": "O diretório $1 não está definido.",
 	"externaldata-no-local-variable": "Erro: não foi definida nenhuma variável local \"$1\".",
 	"externaldata-no-template": "Erro: não foi especificada nenhuma predefinição."

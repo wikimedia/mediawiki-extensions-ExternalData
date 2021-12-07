@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Armin1392",
-			"Mjbmr"
+			"Mjbmr",
+			"Jeeputer"
 		]
 	},
 	"getdata": "دریافت اطلاعات",
@@ -12,9 +13,9 @@
 	"externaldata-ldap-unable-to-connect": "قادر نبودن اتصال به $1",
 	"externaldata-xml-error": "خطای ایکس‌ام‌ال: $1 در خط $2",
 	"externaldata-invalid-json": "خطا: جی‌سون نامعتبر.",
-	"externaldata-db-incomplete-information": "خطا: اطلاعات ناقص برای شناسهٔ این پایگاه اطلاعاتی.",
-	"externaldata-db-could-not-get-url": "پس از $1 {{PLURAL:$1|try|tries}}، یوآرال نتوانست دریافت شود.",
-	"externaldata-db-unknown-type": "خطا: نوع پایگاه اطلاعاتی ناشناخته.",
+	"externaldata-db-incomplete-information": "خطا: اطلاعات ناقص برای شناسهٔ پایگاه دادهٔ $1 ($2).",
+	"externaldata-db-could-not-get-url": "ناتوان در دریافت نشانی $1 پس از $2 {{PLURAL:$2|تلاش}}",
+	"externaldata-db-unknown-type": "خطا: نوع ناشناختهٔ $1 برای پایگاه داده.",
 	"externaldata-db-could-not-connect": "خطا: نتوانست به پایگاه اطلاعاتی متصل شود.",
 	"externaldata-db-no-return-values": "خطا: بدون بازگشت ارزش‌های تعیین شده.",
 	"externaldata-db-invalid-query": "سوال نامعتبر.",
