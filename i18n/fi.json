@@ -6,7 +6,10 @@
 			"Nedergard",
 			"Silvonen",
 			"Str4nd",
-			"Valtlait"
+			"Valtlait",
+			"MITO",
+			"Nwme",
+			"Pyscowicz"
 		]
 	},
 	"getdata": "Hae data",
@@ -15,7 +18,7 @@
 	"externaldata-ldap-unable-to-connect": "Ei voitu yhdistää palvelimelle $1",
 	"externaldata-xml-error": "XML-virhe: $1 rivillä $2",
 	"externaldata-db-incomplete-information": "Virhe: Vaillinaiset tiedot tälle palvelintunnukselle.",
-	"externaldata-db-could-not-get-url": "Ei voitu hakea verkko-osoitetta $1 {{PLURAL:$1|yrityksen|yrityksen}} jälkeen.",
+	"externaldata-db-could-not-get-url": "Ei voitu hakea verkko-osoitetta $1 $2 {{PLURAL:$2|yrityksen|yrityksen}} jälkeen.",
 	"externaldata-db-unknown-type": "Virhe: Tuntematon tietokantatyyppi.",
 	"externaldata-db-could-not-connect": "Virhe: Ei yhteyttä tietokantaan.",
 	"externaldata-db-unknown-collection": "Virhe: Tuntematon MongoDB-kokoelma.",

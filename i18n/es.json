@@ -8,7 +8,12 @@
 			"Indiralena",
 			"Manuelt15",
 			"Sanbec",
-			"Translationista"
+			"Translationista",
+			"Avengium",
+			"Ciencia Al Poder",
+			"DDPAT",
+			"Jakeukalane",
+			"Juan t2905"
 		]
 	},
 	"getdata": "Obtener datos",
@@ -19,7 +24,7 @@
 	"externaldata-xml-error": "Error XML: $1 en línea $2",
 	"externaldata-invalid-json": "Error: JSON no válido",
 	"externaldata-db-incomplete-information": "Error: Información incompleta para este ID de servidor.",
-	"externaldata-db-could-not-get-url": "No se pudo obtener la URL después de $1 {{PLURAL:$1|intento|intentos}}.",
+	"externaldata-db-could-not-get-url": "No se pudo obtener la URL $1 después de $2 {{PLURAL:$2|intento|intentos}}.",
 	"externaldata-db-unknown-type": "Error: Tipo de base de datos desconocido.",
 	"externaldata-db-could-not-connect": "Error: No se pudo lograr conexión con la base de datos.",
 	"externaldata-db-unknown-collection": "Error: colección de MongoDB desconocida.",

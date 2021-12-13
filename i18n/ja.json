@@ -4,7 +4,10 @@
 			"Fryed-peach",
 			"Schu",
 			"Shirayuki",
-			"青子守歌"
+			"青子守歌",
+			"RYOUMA1117",
+			"Siglite3",
+			"つぶあん派"
 		]
 	},
 	"getdata": "データ取得",
@@ -15,7 +18,7 @@
 	"externaldata-xml-error": "XML エラー: 行 $2 で $1",
 	"externaldata-invalid-json": "エラー: 無効な JSON です。",
 	"externaldata-db-incomplete-information": "エラー: このデータベース ID に対する情報が不十分です。",
-	"externaldata-db-could-not-get-url": "$1 回試行しましたが URL を取得できませんでした。",
+	"externaldata-db-could-not-get-url": "$2 {{PLURAL:$2|回}}試行しましたが URL $1 を取得できませんでした。",
 	"externaldata-db-unknown-type": "エラー: データベースの種類が不明です。",
 	"externaldata-db-could-not-connect": "エラー: データベースに接続できませんでした。",
 	"externaldata-db-unknown-collection": "エラー: 不明な MongoDB コレクションです。",

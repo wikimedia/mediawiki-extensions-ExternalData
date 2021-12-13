@@ -4,7 +4,9 @@
 			"Andriykopanytsia",
 			"Base",
 			"Ата",
-			"Тест"
+			"Тест",
+			"DDPAT",
+			"Renamerr"
 		]
 	},
 	"getdata": "Отримати дані",
@@ -16,11 +18,15 @@
 	"externaldata-invalid-json": "Помилка: Неправильний JSON",
 	"externaldata-jsonpath-error": "Помилка: Недійсний запис JSONPath.",
 	"externaldata-db-incomplete-information": "Помилка: Неповна інформація для цього ID сервера.",
-	"externaldata-db-could-not-get-url": "Не вдалося отримати URL після $1 {{PLURAL:$1|1=спроби|спроб}}.",
+	"externaldata-db-could-not-get-url": "Не вдалося отримати URL $1 після $2 {{PLURAL:$2|спроби|спроб}}.",
 	"externaldata-db-unknown-type": "Помилка: Невідомий тип бази даних.",
 	"externaldata-db-could-not-connect": "Помилка: не вдалося підключитися до бази даних.",
 	"externaldata-db-unknown-collection": "Помилка: Невідома колекція MongoDB.",
 	"externaldata-db-no-return-values": "Помилка: Не вказано зворотних значень.",
 	"externaldata-db-invalid-query": "Неприпустимий запит.",
-	"externaldata-no-css-selector": "Відсутня бібліотека $1, необхідна для використання формату «$2» без опції «$3»."
+	"externaldata-no-css-selector": "Відсутня бібліотека $1, необхідна для використання формату «$2» без опції «$3».",
+	"externaldata-url-unknown-error": "Невідома помилка під час отримання даних з URL $1.",
+	"externaldata-parsing-html-failed": "Не вдалось розібрати HTML.",
+	"externaldata-caught-exception-parsing-html": "Отримано виняток розбору HTML. Повідомлення помилки — «$1».",
+	"externaldata-xpath-invalid": "Пошук за XPath ($1) не вдався: $2"
 }

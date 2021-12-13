@@ -4,7 +4,8 @@
 			"EugeneZelenko",
 			"Jim-by",
 			"Red Winged Duck",
-			"Wizardist"
+			"Wizardist",
+			"Renessaince"
 		]
 	},
 	"getdata": "Атрымаць зьвесткі",
@@ -15,7 +16,7 @@
 	"externaldata-xml-error": "Памылка XML: $1 у радку $2",
 	"externaldata-invalid-json": "Памылка: няправільны JSON.",
 	"externaldata-db-incomplete-information": "Памылка: Няпоўная інфармацыя для гэтага ідэнтыфікатара сэрвэра.",
-	"externaldata-db-could-not-get-url": "Немагчыма атрымаць URL-адрас пасьля $1 {{PLURAL:$1|спробы|спробаў|спробаў}}.",
+	"externaldata-db-could-not-get-url": "Немагчыма атрымаць URL-адрас $1 пасьля $2 {{PLURAL:$2|спробы|спробаў}}.",
 	"externaldata-db-unknown-type": "Памылка: Невядомы тып базы зьвестак.",
 	"externaldata-db-could-not-connect": "Памылка: Немагчыма далучыцца да базы зьвестак.",
 	"externaldata-db-unknown-collection": "Памылка: невядомая калецыя MongoDB.",

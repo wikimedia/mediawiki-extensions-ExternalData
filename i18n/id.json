@@ -5,7 +5,9 @@
 			"Farras",
 			"IvanLanin",
 			"Iwan Novirion",
-			"Kenrick95"
+			"Kenrick95",
+			"AJBot2",
+			"Akmaie Ajam"
 		]
 	},
 	"getdata": "Ambil data",
@@ -15,7 +17,7 @@
 	"externaldata-xml-error": "Galat XML: $1 pada baris $2",
 	"externaldata-jsonpath-error": "Kesalahan: Notasi JSONPath tidak valid.",
 	"externaldata-db-incomplete-information": "Galat: Informasi tak lengkap untuk ID server ini.",
-	"externaldata-db-could-not-get-url": "Tidak dapat mengambil URL setelah dicoba {{PLURAL:$1||}}$1 kali.",
+	"externaldata-db-could-not-get-url": "Tidak bisa mendapatkan URL $1 setelah $2 {{PLURAL:$2|try|tries}}.",
 	"externaldata-db-unknown-type": "Galat: Jenis basis data tidak diketahui.",
 	"externaldata-db-could-not-connect": "Galat: Tidak dapat terhubung ke basis data.",
 	"externaldata-db-no-return-values": "Galat: Nilai pengembalian tidak dispesifikasi.",

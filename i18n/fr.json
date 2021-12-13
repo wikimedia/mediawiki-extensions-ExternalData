@@ -10,7 +10,10 @@
 			"PieRRoMaN",
 			"Shirayuki",
 			"Thibaut120094",
-			"Wladek92"
+			"Wladek92",
+			"DreZhsh",
+			"Florian COLLIN",
+			"Verdy p"
 		]
 	},
 	"getdata": "Obtenir des données",
@@ -32,7 +35,7 @@
 	"externaldata-post-failed": "La requête POST vers $1 a échoué.",
 	"externaldata-url-unknown-error": "Erreur inconnue pendant la récupération des données de l'URL $1 .",
 	"externaldata-parsing-html-failed": "Échec de l'analyse du HTML.",
-	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
+	"externaldata-caught-exception-parsing-html": "Exception d’analyse du HTML interceptée. Le message d’erreur est « $1 ».",
 	"externaldata-error-converting-css-to-xpath": "Exception de conversion d’un sélecteur CSS en XPath interceptée :\n$1",
 	"externaldata-xpath-invalid": "La recherche XPath ($1) a échoué: $2"
 }

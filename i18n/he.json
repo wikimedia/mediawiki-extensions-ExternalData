@@ -16,7 +16,7 @@
 	"externaldata-xml-error": "שגיאת XML: $1 בשורה $2",
 	"externaldata-invalid-json": "שגיאה: JSON בלתי־תקין",
 	"externaldata-db-incomplete-information": "שגיאה: יש רק מידע חלקי על מספר השרת הזה.",
-	"externaldata-db-could-not-get-url": "לא ניתן לקבל את כתובת ה־URL לאחר {{PLURAL:$1|נסיון אחד|$1 נסיונות}}.",
+	"externaldata-db-could-not-get-url": "לא ניתן לקבל את כתובת ה־URL‏ $1 לאחר {{PLURAL:$2|ניסיון אחד|$2 ניסיונות}}.",
 	"externaldata-db-unknown-type": "שגיאה: סוג מסד הנתונים אינו מוכר.",
 	"externaldata-db-could-not-connect": "שגיאה: לא ניתן להתחבר אל מסד הנתונים.",
 	"externaldata-db-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",

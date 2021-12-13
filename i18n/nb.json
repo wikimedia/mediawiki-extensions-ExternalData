@@ -16,10 +16,14 @@
 	"externaldata-xml-error": "XML-feil: $1 på linje $2",
 	"externaldata-invalid-json": "Feil: Ugyldig JSON.",
 	"externaldata-db-incomplete-information": "Feil: Ufullstendig informasjon for denne tjener-IDen.",
-	"externaldata-db-could-not-get-url": "Klarte ikke hente URL etter {{PLURAL:$1|ett forsøk|$1 forsøk}}.",
+	"externaldata-db-could-not-get-url": "Klarte ikke hente URL-en $1 etter {{PLURAL:$2|ett|$2}} forsøk.",
 	"externaldata-db-unknown-type": "Feil: Ukjent databasetype.",
 	"externaldata-db-could-not-connect": "Feil: Kunne ikke koble til database.",
 	"externaldata-db-unknown-collection": "Feil: Ukjent MongoDB-samling.",
 	"externaldata-db-no-return-values": "Feil: Ingen returverdi spesifisert.",
-	"externaldata-db-invalid-query": "Ugyldig spørring."
+	"externaldata-db-invalid-query": "Ugyldig spørring.",
+	"externaldata-url-unknown-error": "Ukjent feil under henting av data fra URL-en $1.",
+	"externaldata-parsing-html-failed": "Kunne ikke tolke HTML.",
+	"externaldata-caught-exception-parsing-html": "Fant feil under tolking av HTML. Feilbeskjeden er «$1».",
+	"externaldata-xpath-invalid": "XPath-søk ($1) feilet: $2"
 }

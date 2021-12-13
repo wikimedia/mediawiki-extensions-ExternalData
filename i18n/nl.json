@@ -3,7 +3,8 @@
 		"authors": [
 			"Effeietsanders",
 			"SPQRobin",
-			"Siebrand"
+			"Siebrand",
+			"McDutchie"
 		]
 	},
 	"getdata": "Gegevens ophalen",
@@ -14,7 +15,7 @@
 	"externaldata-xml-error": "XML-fout: $1 op regel $2",
 	"externaldata-invalid-json": "Fout: ongeldige JSON",
 	"externaldata-db-incomplete-information": "Fout: onvolledige informatie voor dit servernummer.",
-	"externaldata-db-could-not-get-url": "Na $1 {{PLURAL:$1|poging|pogingen}} gaf de URL geen resultaat.",
+	"externaldata-db-could-not-get-url": "Na $2 {{PLURAL:$1|poging|pogingen}} gaf de URL $1 geen resultaat.",
 	"externaldata-db-unknown-type": "Fout: onbekend databasetype.",
 	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden.",
 	"externaldata-db-unknown-collection": "Fout: onbekende MongoDB-verzameling.",

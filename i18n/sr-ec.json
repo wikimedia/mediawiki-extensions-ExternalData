@@ -5,7 +5,8 @@
 			"Charmed94",
 			"Milicevic01",
 			"Zoranzoki21",
-			"Михајло Анђелковић"
+			"Михајло Анђелковић",
+			"Kizule"
 		]
 	},
 	"getdata": "Преузми податке",
@@ -16,7 +17,7 @@
 	"externaldata-xml-error": "XML грешка: $1 по линији $2",
 	"externaldata-invalid-json": "Грешка: Неважећи JSON.",
 	"externaldata-db-incomplete-information": "Грешка: Непотпуни подаци за овај ID сервера.",
-	"externaldata-db-could-not-get-url": "Преузимање адресе после $1 {{PLURAL:$1|покушаја}} није успело.",
+	"externaldata-db-could-not-get-url": "Преузимање адресе $1 после $2 {{PLURAL:$2|покушаја}} није успело.",
 	"externaldata-db-unknown-type": "Грешка: Непозната врста базе података.",
 	"externaldata-db-could-not-connect": "Грешка: Повезивање с базом података није успело.",
 	"externaldata-db-unknown-collection": "Грешка: Непозната MongoDB колекција.",

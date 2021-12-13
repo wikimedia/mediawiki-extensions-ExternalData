@@ -12,10 +12,14 @@
 	"externaldata-xml-error": "Error de XML: $1 al linea $2",
 	"externaldata-invalid-json": "Error: JSON invalide.",
 	"externaldata-db-incomplete-information": "Error: Information incomplete pro iste ID de servitor.",
-	"externaldata-db-could-not-get-url": "Non poteva obtener le URL post $1 {{PLURAL:$1|tentativa|tentativas}}.",
+	"externaldata-db-could-not-get-url": "Non poteva obtener le URL $1 post $2 {{PLURAL:$1|tentativa|tentativas}}.",
 	"externaldata-db-unknown-type": "Error: Typo de base de datos incognite.",
 	"externaldata-db-could-not-connect": "Error: Impossibile connecter se al base de datos.",
 	"externaldata-db-unknown-collection": "Error: Collection MongoDB incognite.",
 	"externaldata-db-no-return-values": "Error: Nulle valor de retorno specificate.",
-	"externaldata-db-invalid-query": "Consulta invalide."
+	"externaldata-db-invalid-query": "Consulta invalide.",
+	"externaldata-url-unknown-error": "Error incognite durante le obtention de datos ab URL $1.",
+	"externaldata-parsing-html-failed": "Non poteva analysar le syntaxe del HTML.",
+	"externaldata-caught-exception-parsing-html": "Exception interceptate durante le analyse del syntaxe del HTML. Le message de error es &quot;$1&quot;.",
+	"externaldata-xpath-invalid": "Le recerca XPath ($1) ha fallite: $2"
 }

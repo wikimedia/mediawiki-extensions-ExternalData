@@ -4,13 +4,15 @@
 			"Eduardo Addad de Oliveira",
 			"Eduardo.mps",
 			"Giro720",
-			"Jaideraf"
+			"Jaideraf",
+			"Eduardoaddad",
+			"Fúlvio"
 		]
 	},
 	"getdata": "Obter dados",
 	"externaldata-desc": "Permite a obtenção de dados em CSV, JSON e XML a partir de URLs externos, banco de dados e outras fontes",
 	"externaldata-no-param-specified": "Erro: nenhum parâmetro \"$1\" especificado.",
-	"externaldata-web-invalid-format": "Formato inválido: \"$1\"",
+	"externaldata-web-invalid-format": "Formato inválido: \"$1\".",
 	"externaldata-ldap-unable-to-connect": "Não foi possível conectar-se a $1",
 	"externaldata-xml-error": "Erro no XML: $1 na linha $2",
 	"externaldata-invalid-json": "Erro: JSON inválido.",
@@ -26,6 +28,7 @@
 	"externaldata-post-failed": "A solicitação POST para $1 falhou.",
 	"externaldata-url-unknown-error": "Erro desconhecido ao buscar dados do URL $1.",
 	"externaldata-parsing-html-failed": "Não foi possível analisar o HTML.",
+	"externaldata-caught-exception-parsing-html": "Captura de exceção ao analisar HTML. A mensagem de erro é &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS para XPath:\n$1",
 	"externaldata-xpath-invalid": "Falha na pesquisa XPath ($1): $2"
 }
