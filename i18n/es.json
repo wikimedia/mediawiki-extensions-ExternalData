@@ -12,7 +12,8 @@
 			"Juan t2905",
 			"Manuelt15",
 			"Sanbec",
-			"Translationista"
+			"Translationista",
+			"DDPAT"
 		]
 	},
 	"getdata": "Obtener datos",
@@ -26,7 +27,7 @@
 	"externaldata-db-incomplete-information": "Error: Información incompleta para este ID de base de datos $1 ($2).",
 	"externaldata-db-could-not-get-url": "No se pudo obtener la URL $1 después de $2 {{PLURAL:$2|intento|intentos}}.",
 	"externaldata-db-unknown-type": "Error: Tipo de base de datos $1 desconocido.",
-	"externaldata-db-could-not-connect": "Error: No se pudo lograr conexión con la base de datos.",
+	"externaldata-db-could-not-connect": "Error: No se pudo lograr conexión con la base de datos ($1).",
 	"externaldata-db-no-return-values": "Error: No se ha especificado valores de retorno.",
 	"externaldata-db-invalid-query": "La consulta $1 no es válida ($2).",
 	"externaldata-mongodb-unknown-collection": "Error: colección de MongoDB desconocida $1.",
