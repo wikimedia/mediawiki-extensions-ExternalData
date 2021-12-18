@@ -8,7 +8,7 @@
  */
 class EDConnectorPreparedMysql extends EDConnectorPrepared {
 	/** @var mysqli $mysqli Connection to mySQL server. */
-	protected $mysqli;
+	private $mysqli;
 	/** @var mysqli_stmt $prepared The prepared query. */
 	protected $prepared;
 

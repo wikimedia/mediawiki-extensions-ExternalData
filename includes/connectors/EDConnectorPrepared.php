@@ -7,6 +7,8 @@
  *
  */
 abstract class EDConnectorPrepared extends EDConnectorDb {
+	/** @var string $name Name of the prepared statement. */
+	protected $name;
 	/** @var string $query The parametrised SQL query. */
 	protected $query;
 	/** @var array $parameters Parameters to the SQL query. */
@@ -29,7 +31,8 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 			// Several statements for this database connection.
 			if ( isset( $args['query'] ) && is_string( $args['query'] ) ) {
 				if ( isset( $args['prepared'][$args['query']] ) ) {
-					$this->query = $args['prepared'][$args['query']];
+					$this->name = $args['query'];
+					$this->query = $args['prepared'][$this->name];
 				} else {
 					$this->error( 'externaldata-db-no-such-prepared', $this->dbId, $args['query'] );
 				}
@@ -38,6 +41,7 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 			}
 		} else {
 			// Only one statement for this database connection.
+			$this->name = $this->dbId;
 			$this->query = $args['prepared'];
 		}
 		if ( isset( $args['parameters'] ) ) {
