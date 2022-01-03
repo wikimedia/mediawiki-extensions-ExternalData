@@ -7,14 +7,17 @@
 			"Iwan Novirion",
 			"Kenrick95",
 			"AJBot2",
-			"Akmaie Ajam"
+			"Akmaie Ajam",
+			"Daud I.F. Argana"
 		]
 	},
 	"getdata": "Ambil data",
 	"externaldata-desc": "Memungkinkan untuk mengambil data terstruktur dari URL eksternal, database dan sumber lainnya",
+	"externaldata-no-param-specified": "Galat: Parameter \"$1\" tidak diberikan.",
 	"externaldata-web-invalid-format": "Format salah: \"$1\"",
 	"externaldata-ldap-unable-to-connect": "Tidak dapat terhubung ke $1",
 	"externaldata-xml-error": "Galat XML: $1 pada baris $2",
+	"externaldata-invalid-json": "Galat: JSON tidak sah.",
 	"externaldata-jsonpath-error": "Kesalahan: Notasi JSONPath tidak valid.",
 	"externaldata-db-incomplete-information": "Galat: Informasi tak lengkap untuk ID server ini.",
 	"externaldata-db-could-not-get-url": "Tidak bisa mendapatkan URL $1 setelah $2 {{PLURAL:$2|try|tries}}.",
