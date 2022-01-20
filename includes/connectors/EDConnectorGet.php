@@ -51,6 +51,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 			return $this->callThrottled( function ( $url, array $options ) /* $this is bound again */ {
 				// Allow extensions or LocalSettings.php to alter HTTP options.
 				if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
+					// MW 1.35+
 					$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
 					$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
 				} else {
