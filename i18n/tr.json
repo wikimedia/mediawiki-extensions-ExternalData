@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"BaRaN6161 TURK",
+			"Can",
 			"Joseph",
 			"Karduelis",
 			"MuratTheTurkish",
+			"SaldırganSincap",
 			"Vito Genovese"
 		]
 	},
@@ -27,10 +29,10 @@
 	"externaldata-db-incomplete-information": "Hata: Bu veritabanı kimliği için eksik bilgi $1 ($2).",
 	"externaldata-db-could-not-get-url": "$2 denemeden sonra URL $1 alınamadı.",
 	"externaldata-db-unknown-type": "Hata: Bilinmeyen veritabanı türü $1.",
-	"externaldata-db-could-not-connect": "Hata: Veritabanına bağlanılamıyor.",
+	"externaldata-db-could-not-connect": "Hata: Veritabanına bağlanılamıyor ($1).",
 	"externaldata-db-unknown-database": "Hata: $1 kimlik ile belirtilen veritabanı seçilemedi.",
 	"externaldata-db-no-return-values": "Hata: Dönüş değeri belirtilmedi.",
-	"externaldata-db-invalid-query": "$1 sorgusu geçersiz.",
+	"externaldata-db-invalid-query": "$1 sorgusu geçersiz ($2).",
 	"externaldata-db-too-many-joins": "JOIN koşullarının sayısı (şimdi $1), tablo sayısını ($2) aşmamalıdır",
 	"externaldata-db-invalid-join": "Geçersiz JOIN koşulu $1: her bölüm bir \"=\" işareti içermelidir.",
 	"externaldata-mongodb-unknown-collection": "Hata: Bilinmeyen MongoDB koleksiyonu $1.",
@@ -52,6 +54,8 @@
 	"externaldata-empty-file": "$1 dosyasının içeriği alınamıyor.",
 	"externaldata-no-file-in-directory": "$1 dizininde $2 dosyası yok.",
 	"externaldata-no-directory": "$1 dizini tanımlanmadı.",
+	"externaldata-not-a-directory": "$1, bir dizin değil veya eksik.",
+	"externaldata-exe-shell-disabled": "Hata: PHP yöneticisi, kabuk erişimini devre dışı bıraktı.",
 	"externaldata-no-local-variable": "Hata: yerel değişken \"$1\" ayarlanmadı.",
 	"externaldata-no-template": "Hata: şablon belirtilmedi."
 }
