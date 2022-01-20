@@ -21,13 +21,14 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	 * A function that registers the exported functions with Lua.
 	 */
 	public function register() {
+		// Data retrieval functions:
 		$functions = [];
 		foreach ( self::$funcs as $lua => $parser ) {
 			$functions[$lua] = function ( array $arguments ) use( $parser ) {
 				return self::fetch( $parser, $arguments, $this->getTitle() );
 			};
 		}
-		$this->getEngine()->registerInterface( __DIR__ . '/mw.ext.externaldata.lua', $functions, [] );
+		$this->getEngine()->registerInterface( __DIR__ . '/mw.ext.externalData.lua', $functions, [] );
 	}
 
 	/**

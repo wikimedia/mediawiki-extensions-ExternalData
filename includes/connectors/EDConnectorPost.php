@@ -44,9 +44,11 @@ class EDConnectorPost extends EDConnectorHttp {
 				self::request( 'POST', $url, $options, 'closure in EDConnectorPost::run()' );
 			if ( !$contents ) {
 				if ( is_array( $errors ) ) {
-					$errors = implode( ',', $errors );
+					$this->error( 'externaldata-post-failed', $this->originalUrl, 'see below' );
+					foreach ( $errors as $error ) {
+						$this->error( $error['message'], $error['params'] );
+					}
 				}
-				$this->error( 'externaldata-post-failed', $this->originalUrl, $errors );
 				return false;
 			}
 			// Encoding needs to be detected from HTTP headers this early and not later,

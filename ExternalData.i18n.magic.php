@@ -17,6 +17,7 @@ $magicWords['en'] = [
 	'external_value' => [ 0, 'external_value' ],
 	'for_external_table' => [ 0, 'for_external_table' ],
 	'display_external_table' => [ 0, 'display_external_table' ],
+	'format_external_table' => [ 0, 'format_external_table' ],
 	'store_external_table' => [ 0, 'store_external_table' ],
 	'clear_external_data' => [ 0, 'clear_external_data' ],
 ];
@@ -178,6 +179,7 @@ $magicWords['ru'] = [
 	'get_program_data' => [ 0, 'получить_данные_программы' ],
 	'get_eternal_data' => [ 0, 'получить_внешние_данные' ],
 	'display_external_table' => [ 0, 'показать внешнюю_таблицу' ],
+	'format_external_table' => [ 0, 'форматировать_внешнюю_таблицу' ],
 	'clear_external_data' => [ 0, 'очистить_внешнюю_таблицу' ],
 	'external_value' => [ 0, 'внешнее_значение' ],
 	'for_external_table' => [ 0, 'для_внешней_таблицы' ],

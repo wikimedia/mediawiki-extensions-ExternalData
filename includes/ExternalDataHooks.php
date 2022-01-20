@@ -9,10 +9,10 @@
 class ExternalDataHooks {
 
 	/**
-	 * @param Parser &$parser
+	 * @param Parser $parser
 	 * @return bool
 	 */
-	public static function registerParser( Parser &$parser ) {
+	public static function registerParser( Parser $parser ) {
 		$parser->setFunctionHook( 'get_web_data', [ 'EDParserFunctions', 'getWebData' ] );
 		$parser->setFunctionHook( 'get_file_data', [ 'EDParserFunctions', 'getFileData' ] );
 		$parser->setFunctionHook( 'get_soap_data', [ 'EDParserFunctions', 'getSOAPData' ] );
@@ -24,6 +24,9 @@ class ExternalDataHooks {
 		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
 		$parser->setFunctionHook( 'for_external_table', [ 'EDParserFunctions', 'doForExternalTable' ] );
 		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );
+		if ( class_exists( 'CargoDisplayFormat' ) ) {
+			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );
+		}
 		$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
 		$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
 
@@ -42,7 +45,7 @@ class ExternalDataHooks {
 		// Autoload class here and not in extension.json, so that it is not loaded if Scribunto is not enabled.
 		global $wgAutoloadClasses;
 		$wgAutoloadClasses[$class] = __DIR__ . '/' . $class . '.php';
-		$extraLibraries['mw.ext.externaldata'] = $class;
+		$extraLibraries['mw.ext.externalData'] = $class;
 		return true; // always return true, in order not to stop MW's hook processing!
 	}
 

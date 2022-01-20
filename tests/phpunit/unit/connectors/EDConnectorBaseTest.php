@@ -79,7 +79,6 @@ class EDConnectorBaseTest extends EDTestBase {
 	 */
 	public function provideLoadConfig(): array {
 		// Load the default configuration.
-		//
 		$globals = self::config();
 		$prefix = EDParsesParams::$prefix;
 		$old_prefix = EDParsesParams::$oldPrefix;

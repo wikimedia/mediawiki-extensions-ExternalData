@@ -45,6 +45,7 @@ trait EDConnectorParsable {
 			$this->parser = EDParserBase::getParser( $args );
 		} catch ( EDParserException $e ) {
 			$this->parseErrors[] = [ 'code' => $e->code(), 'params' => $e->params() ];
+			return;
 		}
 
 		// Whether to keep letter case in variables. If either connector or parser demand keeping the case, do it.
