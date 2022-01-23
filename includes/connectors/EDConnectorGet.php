@@ -55,7 +55,7 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 					$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
 					$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
 				} else {
-					Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
+					Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
 				}
 				do {
 					// Actually send a request.

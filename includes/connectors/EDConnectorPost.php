@@ -36,7 +36,7 @@ class EDConnectorPost extends EDConnectorHttp {
 			// Allow extensions or LocalSettings.php to alter HTTP options.
 			if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
 				$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
-				$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
+				$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ], [] );
 			} else {
 				Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
 			}
