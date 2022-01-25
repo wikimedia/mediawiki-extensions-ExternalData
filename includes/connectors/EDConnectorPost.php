@@ -34,11 +34,17 @@ class EDConnectorPost extends EDConnectorHttp {
 	public function run() {
 		$contents = $this->callThrottled( function ( $url, array $options ) /* $this is bound */ {
 			// Allow extensions or LocalSettings.php to alter HTTP options.
+			$hook_name = 'ExternalDataBeforeWebCall';
+			$errors = [];
 			if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
-				$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
-				$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ], [] );
+				$hook_container = MediaWikiServices::getInstance()->getHookContainer();
+				$hook_result = $hook_container->run( $hook_name, [ 'post', &$url, &$options, &$errors ], [] );
 			} else {
-				Hooks::run( 'ExternalDataBeforeWebCall', [ 'post', $url, $options ] );
+				$hook_result = Hooks::run( $hook_name, [ 'post', &$url, &$options, &$errors ] );
+			}
+			if ( $hook_result === false ) {
+				$this->error( 'externaldata-url-hooks-aborted', $hook_name, implode( ', ', $errors ) );
+				return false;
 			}
 			[ $contents, $this->headers, $errors ] =
 				self::request( 'POST', $url, $options, 'closure in EDConnectorPost::run()' );

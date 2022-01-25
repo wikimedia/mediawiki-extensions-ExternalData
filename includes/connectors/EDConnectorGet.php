@@ -50,12 +50,18 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 		$contents = $this->callCached( function ( $url, array $options ) /* $this is bound. */ {
 			return $this->callThrottled( function ( $url, array $options ) /* $this is bound again */ {
 				// Allow extensions or LocalSettings.php to alter HTTP options.
+				$hook_name = 'ExternalDataBeforeWebCall';
+				$errors = [];
 				if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
 					// MW 1.35+
-					$hookContainer = MediaWikiServices::getInstance()->getHookContainer();
-					$hookContainer->run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ], [] );
+					$hook_container = MediaWikiServices::getInstance()->getHookContainer();
+					$hook_result = $hook_container->run( $hook_name, [ 'get', &$url, &$options, &$errors ], [] );
 				} else {
-					Hooks::run( 'ExternalDataBeforeWebCall', [ 'get', $url, $options ] );
+					$hook_result = Hooks::run( $hook_name, [ 'get', &$url, &$options, &$errors ] );
+				}
+				if ( $hook_result === false ) {
+					$this->error( 'externaldata-url-hooks-aborted', $hook_name, implode( ', ', $errors ) );
+					return false;
 				}
 				do {
 					// Actually send a request.
