@@ -65,7 +65,8 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 				}
 				do {
 					// Actually send a request.
-					$contents = $this->fetcher(); // Late binding; fetcher() is pure virtual. Also sets $this->headers.
+					// Late binding; fetcher() is pure virtual. Also sets $this->headers.
+					$contents = $this->fetcher( $url, $options );
 				} while ( !$contents && ++$this->tries <= self::$maxTries );
 				// Encoding needs to be detected from HTTP headers this early and not later,
 				// during text parsing, so that the converted text may be cached.
@@ -106,7 +107,9 @@ abstract class EDConnectorGet extends EDConnectorHttp {
 	 * This method must be reloaded in EDConnectorWeb and EDConnectorSoap.
 	 * It should return $this->text and set $this->headers.
 	 *
+	 * @param string $url URL to fetch.
+	 * @param array $options HTTP options.
 	 * @return string Fetched text.
 	 */
-	abstract protected function fetcher();
+	abstract protected function fetcher( $url, array $options );
 }

@@ -10,12 +10,14 @@ class EDConnectorWeb extends EDConnectorGet {
 	/**
 	 * Fetch the web data. Sets HTTP headers.
 	 *
+	 * @param string $url URL to fetch.
+	 * @param array $options HTTP options.
 	 * @return string|null Fetched text.
 	 */
-	protected function fetcher() {
+	protected function fetcher( $url, array $options ) {
 		// We do not want to repeat error messages self::$tries times.
 		static $log_errors = true;
-		[ $result, $this->headers, $errors ] = self::request( 'GET', $this->realUrl, $this->options, __METHOD__ );
+		[ $result, $this->headers, $errors ] = self::request( 'GET', $url, $options, __METHOD__ );
 		if ( $errors && $log_errors ) {
 			$this->error( 'externaldata-url-not-fetched', $this->originalUrl );
 			foreach ( $errors as $error ) {

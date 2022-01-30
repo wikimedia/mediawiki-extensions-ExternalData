@@ -54,16 +54,18 @@ class EDConnectorSoap extends EDConnectorGet {
 	/**
 	 * Fetch the SOAP data.
 	 *
+	 * @param string $url URL to fetch.
+	 * @param array $options HTTP options (unused).
 	 * @return string|null Text content fetched.
 	 */
-	protected function fetcher() {
+	protected function fetcher( $url, array $options ) {
 		// We do not want to repeat error messages self::$tries times.
 		static $log_errors_client = true;
 		static $log_errors_request = true;
 		// Suppress warnings.
 		self::suppressWarnings();
 		try {
-			$client = new SoapClient( $this->realUrl, [ 'trace' => true ] );
+			$client = new SoapClient( $url, [ 'trace' => true ] );
 		} catch ( Exception $e ) {
 			if ( $log_errors_client ) {
 				$this->error( 'externaldata-caught-exception-soap', $e->getMessage() );
