@@ -5,7 +5,8 @@
 			"Rotemliss",
 			"Steeve815",
 			"YaronSh",
-			"Yona b"
+			"Yona b",
+			"מקף"
 		]
 	},
 	"getdata": "קבלת נתונים",
@@ -23,5 +24,6 @@
 	"externaldata-db-invalid-query": "השאילתה $1 אינה תקינה ($2).",
 	"externaldata-mongodb-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע.",
 	"externaldata-post-failed": "בקשת POST אל $1 נכשלה: $2.",
+	"externaldata-url-hooks-aborted": "חיבור ה$1 שהופסק מחזיר שגיאות: $2",
 	"externaldata-parsing-html-failed": "לא ניתן לפענח HTML."
 }

@@ -39,6 +39,7 @@
 	"externaldata-db-empty-rowset": "Die Abfrage $1 gab ein leeres Rowset zurück.",
 	"externaldata-db-prepared-not-specified": "Bitte gib an (from=), welche vorbereitete Anweisung für die Datenbank-ID $1 verwendet werden soll.",
 	"externaldata-db-no-such-prepared": "Die vorbereitete Anweisung $2 ist nicht für die Datenbank-ID $1 eingerichtet.",
+	"externaldata-db-odbc-illegal": "Der Parameter $2 enthält eine unzulässige Sequenz $1. Bitte anhalten.",
 	"externaldata-mongodb-unknown-collection": "Fehler: Unbekannte MongoDB-Sammlung $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB-Aggregation schlug mit Fehler $1 fehl",
 	"externaldata-format-unavailable": "Die Bibliothek $1, die benötigt wird, um das „$2“-Format ohne die „$3“-Option zu verwenden, fehlt.",

@@ -8,7 +8,8 @@
 			"Farras",
 			"IvanLanin",
 			"Iwan Novirion",
-			"Kenrick95"
+			"Kenrick95",
+			"Syman51"
 		]
 	},
 	"getdata": "Ambil data",
@@ -30,6 +31,7 @@
 	"externaldata-db-unknown-database": "Galat: Tidak dapat memilih basis data yang ditentukan dengan ID $1.",
 	"externaldata-db-no-return-values": "Galat: Nilai pengembalian tidak dispesifikasi.",
 	"externaldata-db-invalid-query": "Kueri $1 tidak sah ($2).",
+	"externaldata-url-hooks-aborted": "Hook '$1' berhenti, kembali error: $2",
 	"externaldata-url-not-fetched": "Terjadi kesalahan saat mengambil data dari URL $1:$2.",
 	"externaldata-caught-exception-soap": "Kesalahan $1 ketika membuat klien SOAP.",
 	"externaldata-undefined-file": "Berkas $1 tidak diketahui.",
