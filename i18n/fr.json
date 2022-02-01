@@ -45,6 +45,7 @@
 	"externaldata-db-empty-rowset": "La requête $1 a renvoyé un résultat vide.",
 	"externaldata-db-prepared-not-specified": "Veuillez spécifier (from=) quelle requête préparée utiliser pour la base de données d’ID $1.",
 	"externaldata-db-no-such-prepared": "La requête préparée $2 n’est pas définie pour la base de données d’ID $1.",
+	"externaldata-db-odbc-illegal": "Le paramètre $2 contient une séquence $1 illégale. Veuillez arrêter.",
 	"externaldata-mongodb-unknown-collection": "Erreur : Collection MongoDB $1 inconnue.",
 	"externaldata-mongodb-aggregation-failed": "L’agrégation de MongoDB a échoué avec l’erreur $1",
 	"externaldata-format-unavailable": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
