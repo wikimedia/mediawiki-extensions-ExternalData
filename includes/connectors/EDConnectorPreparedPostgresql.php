@@ -22,6 +22,17 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 	 */
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
+
+		// Whether the pgsql extension is installed and enabled.
+		if ( !function_exists( 'pg_connect' ) ) {
+			$this->error(
+				'externaldata-missing-library',
+				'pgsql',
+				'{{#get_db_data:}} (type = postgres)',
+				'mw.ext.getExternalData.getDbData (type = postgres)'
+			);
+		}
+
 		// Make connection string.
 		$str = '';
 		foreach ( $this->credentials as $name => $value ) {

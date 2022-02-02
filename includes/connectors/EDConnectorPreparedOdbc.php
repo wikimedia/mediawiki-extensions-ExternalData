@@ -13,6 +13,26 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 	public $keepExternalVarsCase = true;
 
 	/**
+	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
+	 *
+	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
+	 */
+	protected function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
+
+		// Whether the necessary library is enabled.
+		if ( !function_exists( 'odbc_pconnect' ) ) {
+			$this->error(
+				'externaldata-missing-library',
+				'odbc',
+				'{{#get_db_data:}} (type = odbc)',
+				'mw.ext.getExternalData.getDbData (type = odbc)'
+			);
+		}
+	}
+
+	/**
 	 * Set credentials settings for database from $this->dbId.
 	 * Called by the constructor.
 	 *

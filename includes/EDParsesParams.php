@@ -73,7 +73,7 @@ trait EDParsesParams {
 	private static function paramsFit( array $params, array $pattern ) {
 		foreach ( $pattern as $key => $value ) {
 			if ( $key === '__exists' ) {
-				if ( class_exists( $value ) ) {
+				if ( class_exists( $value ) || function_exists( $value ) ) {
 					// A necessary class is provided by a library.
 					continue;
 				} else {

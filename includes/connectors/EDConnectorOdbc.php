@@ -30,7 +30,12 @@ class EDConnectorOdbc extends EDConnectorComposed {
 
 		// Whether the odbc extension is installed and enabled.
 		if ( !function_exists( 'odbc_pconnect' ) ) {
-			$this->error( 'externaldata-missing-library' . 'odbc', '#get_db_data', 'mw.ext.externalData.getDbData' );
+			$this->error(
+				'externaldata-missing-library',
+				'odbc',
+				'{{#get_db_data:}} (type = odbc)',
+				'mw.ext.getExternalData.getDbData (type = odbc)'
+			);
 		}
 
 		// Check for possible SQL injections.
