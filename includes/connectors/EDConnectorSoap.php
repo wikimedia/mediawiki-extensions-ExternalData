@@ -32,7 +32,7 @@ class EDConnectorSoap extends EDConnectorGet {
 			$this->error(
 				'externaldata-missing-library',
 				'SOAP',
-				'{{#get_soap_data:}}',
+				'#get_soap_data',
 				'mw.ext.getExternalData.getSoapData'
 			);
 		}

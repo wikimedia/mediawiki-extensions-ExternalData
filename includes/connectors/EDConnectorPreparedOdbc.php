@@ -26,7 +26,7 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 			$this->error(
 				'externaldata-missing-library',
 				'odbc',
-				'{{#get_db_data:}} (type = odbc)',
+				'#get_db_data (type = odbc)',
 				'mw.ext.getExternalData.getDbData (type = odbc)'
 			);
 		}

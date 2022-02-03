@@ -28,7 +28,7 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 			$this->error(
 				'externaldata-missing-library',
 				'pgsql',
-				'{{#get_db_data:}} (type = postgres)',
+				'#get_db_data (type = postgres)',
 				'mw.ext.getExternalData.getDbData (type = postgres)'
 			);
 		}

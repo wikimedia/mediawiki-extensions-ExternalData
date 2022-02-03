@@ -54,7 +54,7 @@
 	"externaldata-error-converting-css-to-xpath": "При преобразовании селектора CSS $1 в XPath выброшено исключение:\n$2",
 	"externaldata-xpath-invalid": "Поиск по XPath $1 закончился ошибкой: $2",
 	"externaldata-css-invalid": "Селектор CSS $1 недействителен",
-	"externaldata-missing-library": "Отсутствует библиотека $1, необходимая для использования функции парсера $2 или функции Lua $3.",
+	"externaldata-missing-library": "Отсутствует библиотека $1, необходимая для использования функции парсера '$2' или функции Lua <code>$3</code>.",
 	"externaldata-undefined-file": "Файл $1 не определён.",
 	"externaldata-missing-file": "Файл $1 отсутствует.",
 	"externaldata-empty-file": "Невозможно получить содержимое файла $1.",

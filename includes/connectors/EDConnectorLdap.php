@@ -38,7 +38,7 @@ class EDConnectorLdap extends EDConnectorBase {
 			$this->error(
 				'externaldata-missing-library',
 				'php-ldap',
-				'{{#get_ldap_data:}}',
+				'#get_ldap_data',
 				'mw.ext.externalData.getLdapData'
 			);
 		}
