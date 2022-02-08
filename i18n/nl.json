@@ -4,7 +4,8 @@
 			"Effeietsanders",
 			"SPQRobin",
 			"Siebrand",
-			"McDutchie"
+			"McDutchie",
+			"Romaine"
 		]
 	},
 	"getdata": "Gegevens ophalen",
@@ -20,5 +21,6 @@
 	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden.",
 	"externaldata-db-no-return-values": "Fout: er zijn geen return-waarden ingesteld.",
 	"externaldata-db-invalid-query": "Ongeldige zoekopdracht.",
-	"externaldata-mongodb-unknown-collection": "Fout: onbekende MongoDB-verzameling."
+	"externaldata-mongodb-unknown-collection": "Fout: onbekende MongoDB-verzameling.",
+	"externaldata-caught-exception-soap": "Uitzondering $1 aangetroffen tijdens het aanmaken van SOAP-client."
 }
