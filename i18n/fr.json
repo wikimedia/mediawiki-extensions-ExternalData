@@ -50,7 +50,7 @@
 	"externaldata-mongodb-aggregation-failed": "L’agrégation de MongoDB a échoué avec l’erreur $1",
 	"externaldata-format-unavailable": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
 	"externaldata-post-failed": "La requête POST vers $1 a échoué : $2.",
-	"externaldata-url-hooks-aborted": "L’accroche '$1' a été annulée, renvoyant les erreurs : $2",
+	"externaldata-url-hooks-aborted": "Le crochet « $1 » a été annulé en renvoyant des erreurs : $2",
 	"externaldata-url-not-fetched": "Erreur en récupérant les données de l’URL $1 : $2.",
 	"externaldata-url-unknown-error": "Erreur inconnue pendant la récupération des données de l'URL $1 .",
 	"externaldata-url-not-allowed": "L’URL $1 n’est pas autorisée sur ce wiki.",
