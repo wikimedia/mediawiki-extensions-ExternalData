@@ -46,7 +46,7 @@
 	"externaldata-error-converting-css-to-xpath": "Exception interceptate durante le conversion del selector CSS $1 a XPath:\n$2",
 	"externaldata-xpath-invalid": "Le recerca XPath ($1) ha fallite: $2",
 	"externaldata-css-invalid": "Le selector CSS $1 non es valide",
-	"externaldata-missing-library": "Le bibliotheca $1, necessari pro usar le function del analysator syntactic '$2' o le function Lua '$3', manca.",
+	"externaldata-missing-library": "Le bibliotheca $1, necessari pro usar le function del analysator syntactic '$2' o le function Lua <code>$3</code>, manca.",
 	"externaldata-undefined-file": "Le file $1 non es definite.",
 	"externaldata-missing-file": "Le file $1 manca.",
 	"externaldata-empty-file": "Impossibile obtener le contento del file $1.",
