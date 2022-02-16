@@ -134,8 +134,8 @@ class EDConnectorExe extends EDConnectorBase {
 		if ( isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
 			$hash = hash( 'fnv1a64', $this->input );
 			global $wgTmpDirectory;
-			$this->tempFile = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $args['temp'] );
-			$command = preg_replace( '/\\$tmp\\$/', "$wgTmpDirectory/$hash", $command );
+			$this->tempFile = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $args['temp'] );
+			$command = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $command );
 		}
 
 		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
@@ -243,7 +243,15 @@ class EDConnectorExe extends EDConnectorBase {
 					return false;
 				}
 				$exit_code = $result->getExitCode();
-				$output = $this->tempFile ? file_get_contents( $this->tempFile ) : $result->getStdout();
+				if ( $this->tempFile ) {
+					if ( !file_exists( $this->tempFile ) ) {
+						$error = "No temporary file {$this->tempFile}";
+						return false;
+					}
+					$output = file_get_contents( $this->tempFile );
+				} else {
+					$output = $result->getStdout();
+				}
 				$error = $result->getStderr();
 
 				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {

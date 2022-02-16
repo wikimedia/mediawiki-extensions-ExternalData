@@ -103,7 +103,8 @@ trait EDParsesParams {
 	private static function isRegex( $str ) {
 		self::suppressWarnings(); // for preg_match() on regular strings.
 		try {
-			$is_regex = preg_match( $str, '' ) !== false;
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			$is_regex = @preg_match( $str, '' ) !== false;
 		} catch ( Exception $e ) {
 			return false;
 		}
