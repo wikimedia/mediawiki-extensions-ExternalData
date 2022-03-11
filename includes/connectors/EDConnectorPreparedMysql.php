@@ -52,7 +52,9 @@ class EDConnectorPreparedMysql extends EDConnectorPrepared {
 		}
 
 		// Bind parameters.
-		$this->prepared->bind_param( $this->types, ...$this->parameters );
+		if ( count( $this->parameters ) > 0 ) {
+			$this->prepared->bind_param( $this->types, ...$this->parameters );
+		}
 
 		// Execute query.
 		$this->prepared->execute();
