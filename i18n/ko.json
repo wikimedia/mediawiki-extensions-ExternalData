@@ -5,7 +5,8 @@
 			"Priviet",
 			"Yjs5497",
 			"Ykhwong",
-			"아라"
+			"아라",
+			"MemphisA5"
 		]
 	},
 	"getdata": "데이터 가져오기",
@@ -17,7 +18,7 @@
 	"externaldata-ldap-unable-to-connect": "$1에 연결할 수 없습니다.",
 	"externaldata-xml-error": "XML 오류: $2 줄에서 $1 오류 발생.",
 	"externaldata-invalid-json": "오류: 잘못된 JSON입니다.",
-	"externaldata-jsonpath-error": "오류: 유효하지 않은 JSONPath 표기입니다.",
+	"externaldata-jsonpath-error": "오류: 유효하지 않은 JSONPath 표기 $1입니다.",
 	"externaldata-invalid-regex": "오류: $1 값은 유효한 펄 호환 정규 표현식이 아닙니다.",
 	"externaldata-db-incomplete-information": "오류: 데이터베이스 ID $1($2)의 정보가 완전하지 않습니다.",
 	"externaldata-db-could-not-get-url": "$2번의 {{PLURAL:$2|시도}}에도 $1 URL을 가져오지 못했습니다.",
