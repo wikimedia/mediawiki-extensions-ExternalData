@@ -33,6 +33,5 @@
 	"externaldata-db-no-return-values": "Error: No se ha especificado valores de retorno.",
 	"externaldata-db-invalid-query": "La consulta $1 no es válida ($2).",
 	"externaldata-mongodb-unknown-collection": "Error: colección de MongoDB desconocida $1.",
-	"externaldata-url-hooks-aborted": "El '$1' el gancho abortó, regresando errores: $2",
 	"externaldata-exe-shell-disabled": "Error: el administrador de PHP ha deshabilitado el acceso al shell."
 }
