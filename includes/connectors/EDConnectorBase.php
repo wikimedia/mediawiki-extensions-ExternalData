@@ -211,9 +211,11 @@ abstract class EDConnectorBase {
 		if ( isset( $supplemented['url'] ) ) {
 			// Get URL components.
 			$supplemented['components'] = parse_url( $supplemented['url'] );
-			$supplemented['host'] = $supplemented['components']['host'];
+			if ( isset( $supplemented['components']['host'] ) ) {
+				$supplemented['host'] = $supplemented['components']['host'];
+			}
 			// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
-			if ( preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
+			if ( $supplemented['host'] && preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
 				$supplemented['2nd_lvl_domain'] = $matches[0];
 			} else {
 				$supplemented['2nd_lvl_domain'] = $supplemented['host'];

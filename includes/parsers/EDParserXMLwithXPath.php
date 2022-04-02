@@ -39,11 +39,13 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 *
 	 */
 	public function __invoke( $text ) {
+		self::suppressWarnings();
 		try {
 			$xml = new SimpleXMLElement( $text );
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
 		}
+		self::restoreWarnings();
 
 		$values = parent::__invoke( $text );
 		// Save the whole XML tree for Lua.
