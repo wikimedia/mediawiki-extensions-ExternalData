@@ -6,7 +6,8 @@
 			"Eduardoaddad",
 			"Fúlvio",
 			"Giro720",
-			"Jaideraf"
+			"Jaideraf",
+			"YuriNikolai"
 		]
 	},
 	"getdata": "Obter dados",
@@ -50,12 +51,13 @@
 	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS $1 em XPath:\n$2",
 	"externaldata-xpath-invalid": "Falha na pesquisa XPath ($1): $2",
 	"externaldata-css-invalid": "O seletor CSS $1 é inválido",
-	"externaldata-missing-library": "A biblioteca $1, necessária para usar a função analisadora '$2' ou a função Lua '$3', está ausente.",
+	"externaldata-missing-library": "A biblioteca $1, necessária para usar a função analisadora '$2' ou a função Lua <code>$3</code>, está ausente.",
 	"externaldata-undefined-file": "O arquivo $1 não está definido.",
 	"externaldata-missing-file": "Arquivo $1 ausente.",
 	"externaldata-empty-file": "Não foi possível obter o conteúdo do arquivo $1.",
 	"externaldata-no-file-in-directory": "O diretório $1 não contém o arquivo $2.",
 	"externaldata-no-directory": "O diretório $1 não está definido.",
+	"externaldata-not-a-directory": "$1 não é um diretório ou está ausente.",
 	"externaldata-exe-shell-disabled": "Erro: o administrador de PHP desativou o acesso à shell.",
 	"externaldata-exe-incomplete-information": "Erro: informação incompleta para este identificador de comando $1 ($2).",
 	"externaldata-exe-illegal-parameter": "Erro: o parâmetro $2 do programa $1 tem o valor não permitido $3.",
