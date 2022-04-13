@@ -1,5 +1,6 @@
 {
 	"name": "mediawiki/external-data",
+	"type": "mediawiki-extension",
 	"description": "Allows retrieving structured data from external URLs, databases and other sources into MediaWiki-powered wikis",
 	"license": "GPL-2.0-or-later",
 	"require": {
