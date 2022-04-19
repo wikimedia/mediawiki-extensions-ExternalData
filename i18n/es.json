@@ -9,7 +9,14 @@
 			"Indiralena",
 			"Manuelt15",
 			"Sanbec",
-			"Translationista"
+			"Translationista",
+			"Adam N.",
+			"Avengium",
+			"DDPAT",
+			"DiegoAmbrocio",
+			"Ice bulldog",
+			"Jakeukalane",
+			"Juan t2905"
 		]
 	},
 	"getdata": "Obtener datos",
@@ -25,5 +32,11 @@
 	"externaldata-db-could-not-connect": "Error: No se pudo lograr conexión con la base de datos.",
 	"externaldata-db-no-return-values": "Error: No se ha especificado valores de retorno.",
 	"externaldata-db-invalid-query": "La consulta $1 no es válida.",
-	"externaldata-mongodb-unknown-collection": "Error: colección de MongoDB desconocida $1."
+	"externaldata-mongodb-unknown-collection": "Error: colección de MongoDB desconocida $1.",
+	"externaldata-undefined-file": "El archivo $1 no está definido.",
+	"externaldata-missing-file": "Falta el archivo $1.",
+	"externaldata-empty-file": "No se puede obtener el contenido del archivo $1.",
+	"externaldata-no-file-in-directory": "El directorio $1 no tiene el archivo $2.",
+	"externaldata-no-directory": "El directorio $1 no está definido.",
+	"externaldata-no-template": "Error: no se ha especificado ninguna plantilla."
 }
