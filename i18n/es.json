@@ -15,7 +15,8 @@
 			"Juan t2905",
 			"Manuelt15",
 			"Sanbec",
-			"Translationista"
+			"Translationista",
+			"DiegoAmbrocio"
 		]
 	},
 	"getdata": "Obtener datos",
@@ -34,5 +35,12 @@
 	"externaldata-db-invalid-query": "La consulta $1 no es válida ($2).",
 	"externaldata-mongodb-unknown-collection": "Error: colección de MongoDB desconocida $1.",
 	"externaldata-url-hooks-aborted": "El '$1' el gancho abortó, regresando errores: $2",
-	"externaldata-exe-shell-disabled": "Error: el administrador de PHP ha deshabilitado el acceso al shell."
+	"externaldata-undefined-file": "El archivo $1 no está definido.",
+	"externaldata-missing-file": "Falta el archivo $1.",
+	"externaldata-empty-file": "No se puede obtener el contenido del archivo $1.",
+	"externaldata-no-file-in-directory": "El directorio $1 no tiene el archivo $2.",
+	"externaldata-no-directory": "El directorio $1 no está definido.",
+	"externaldata-not-a-directory": "$1 no es un directorio o falta.",
+	"externaldata-exe-shell-disabled": "Error: el administrador de PHP ha deshabilitado el acceso al shell.",
+	"externaldata-no-template": "Error: no se ha especificado ninguna plantilla."
 }
