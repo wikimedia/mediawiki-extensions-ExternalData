@@ -343,7 +343,9 @@ abstract class EDConnectorBase {
 				// Overwrapped $params.
 				$params = $params[0];
 			}
-			$this->errors[] = [ 'code' => $code, 'params' => $params ];
+			// Guarantee that errors do not repeat:
+			$key = hash( 'md5', $code . ':' . var_export( $params, true ) );
+			$this->errors[$key] = [ 'code' => $code, 'params' => $params ];
 		}
 	}
 
