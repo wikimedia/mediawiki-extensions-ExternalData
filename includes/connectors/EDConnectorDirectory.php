@@ -30,6 +30,8 @@ class EDConnectorDirectory extends EDConnectorPath {
 			if ( isset( $args['path'] ) ) {
 				if ( is_dir( $args['path'] ) ) {
 					$this->real_directory = $args['path'];
+					// Add trailing slash:
+					$this->real_directory .= substr( $this->real_directory, -1 ) === '/' ? '' : '/';
 				} else {
 					// Not a directory.
 					$this->error( 'externaldata-not-a-directory', $this->directory );
