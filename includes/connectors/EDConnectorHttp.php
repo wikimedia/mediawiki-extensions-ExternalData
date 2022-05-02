@@ -136,13 +136,8 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$options['method'] = strtoupper( $method );
 
 		// Create an HTTP request object.
-		if ( class_exists( '\MediaWiki\Http\HttpRequestFactory' ) ) {
-			// MW 1.31+
-			$factory = MediaWikiServices::getInstance()->getHttpRequestFactory();
-			$req = $factory->create( $url, $options, $caller );
-		} elseif ( class_exists( 'MWHttpRequest' ) ) {
-			$req = MWHttpRequest::factory( $url, $options, $caller );
-		}
+		$factory = MediaWikiServices::getInstance()->getHttpRequestFactory();
+		$req = $factory->create( $url, $options, $caller );
 
 		if ( isset( $options['headers'] ) ) {
 			foreach ( $options['headers'] as $name => $value ) {

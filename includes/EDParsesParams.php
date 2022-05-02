@@ -9,8 +9,6 @@
  */
 
 use Wikimedia\AtEase\AtEase;
-use function MediaWiki\restoreWarnings;
-use function MediaWiki\suppressWarnings;
 
 trait EDParsesParams {
 	/** @var string PREFIX Prefix for the new configuration. */
@@ -215,24 +213,14 @@ END;
 	 * Suppress warnings absolutely.
 	 */
 	protected static function suppressWarnings() {
-		if ( method_exists( AtEase::class, 'suppressWarnings' ) ) {
-			// MW >= 1.33
-			AtEase::suppressWarnings();
-		} else {
-			suppressWarnings();
-		}
+		AtEase::suppressWarnings();
 	}
 
 	/**
 	 *  Restore warnings.
 	 */
 	protected static function restoreWarnings() {
-		if ( method_exists( AtEase::class, 'restoreWarnings' ) ) {
-			// MW >= 1.33
-			AtEase::restoreWarnings();
-		} else {
-			restoreWarnings();
-		}
+		AtEase::restoreWarnings();
 	}
 
 	/**
