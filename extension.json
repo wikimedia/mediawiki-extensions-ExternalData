@@ -50,7 +50,6 @@
 		"EDConnectorDirectoryWalker": "includes/connectors/EDConnectorDirectoryWalker.php",
 		"EDConnectorDb": "includes/connectors/EDConnectorDb.php",
 		"EDConnectorComposed": "includes/connectors/EDConnectorComposed.php",
-		"EDConnectorRelational": "includes/connectors/EDConnectorRelational.php",
 		"EDConnectorRdbms": "includes/connectors/EDConnectorRdbms.php",
 		"EDConnectorSql": "includes/connectors/EDConnectorSql.php",
 		"EDConnectorSqlite": "includes/connectors/EDConnectorSqlite.php",

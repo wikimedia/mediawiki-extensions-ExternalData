@@ -9,9 +9,21 @@
  */
 use Wikimedia\Rdbms\Database;
 
-abstract class EDConnectorRdbms extends EDConnectorRelational {
+abstract class EDConnectorRdbms extends EDConnectorComposed {
 	/** @var Database The database object. */
 	private $database;
+
+	/**
+	 * Set credentials settings for database from $this->dbId.
+	 * Called by the constructor.
+	 *
+	 * @param array $params Supplemented parameters.
+	 */
+	protected function setCredentials( array $params ) {
+		parent::setCredentials( $params );
+		$this->credentials['flags'] = isset( $params['flags'] ) ? $params['flags'] : DBO_DEFAULT;
+		$this->credentials['prefix'] = isset( $params['prefix'] ) ? $params['prefix'] : '';
+	}
 
 	/**
 	 * Establish connection the database server.

@@ -1,7 +1,7 @@
 <?php
 /**
  * Class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
- * for relational databases except SQLite and MS SQL Server.
+ * for databases managed by RDBMS except SQLite.
  *
  * @author Alexander Mashin
  *
