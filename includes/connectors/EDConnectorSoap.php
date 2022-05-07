@@ -7,7 +7,7 @@
  * @author Alexander Mashin
  *
  */
-class EDConnectorSoap extends EDConnectorGet {
+class EDConnectorSoap extends EDConnectorHttp {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
 	public $keepExternalVarsCase = true;
 

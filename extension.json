@@ -39,8 +39,6 @@
 		"EDConnectorParsable": "includes/connectors/traits/EDConnectorParsable.php",
 		"EDConnectorBase": "includes/connectors/EDConnectorBase.php",
 		"EDConnectorHttp": "includes/connectors/EDConnectorHttp.php",
-		"EDConnectorPost": "includes/connectors/EDConnectorPost.php",
-		"EDConnectorGet": "includes/connectors/EDConnectorGet.php",
 		"EDConnectorWeb": "includes/connectors/EDConnectorWeb.php",
 		"EDConnectorSoap": "includes/connectors/EDConnectorSoap.php",
 		"EDConnectorLdap": "includes/connectors/EDConnectorLdap.php",
@@ -115,7 +113,6 @@
 		"Connectors": {
 			"description": "Rules for choosing EDConnector* class",
 			"value": [
-				[ { "__pf": "get_web_data", "post data": true }, "EDConnectorPost" ],
 				[ { "__pf": "get_web_data" }, "EDConnectorWeb" ],
 				[ { "__pf": "get_file_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
 				[ { "__pf": "get_file_data", "directory": true }, "EDConnectorDirectory" ],
@@ -131,8 +128,8 @@
 				[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
 				[ { "__pf": "get_db_data" }, "EDConnectorSql" ],
 				[ { "__pf": "get_program_data" }, "EDConnectorExe" ],
-				[ { "__pf": "get_external_data", "post data": true }, "EDConnectorPost" ],
 				[ { "__pf": "get_external_data", "url": true }, "EDConnectorWeb" ],
+				[ { "__pf": "get_external_data", "post data": true }, "EDConnectorWeb" ],
 				[ { "__pf": "get_external_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
 				[ { "__pf": "get_external_data", "directory": true }, "EDConnectorDirectory" ],
 				[ { "__pf": "get_external_data", "file": true }, "EDConnectorFile" ],

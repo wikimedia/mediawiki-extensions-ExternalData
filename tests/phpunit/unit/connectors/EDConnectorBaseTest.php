@@ -321,7 +321,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		}
 		return [
 			// Specific functions.
-			'{{#get_web_data:}}, POST' => [ 'get_web_data', [ 'post data' => 'postdata' ], 'EDConnectorPost' ],
+			'{{#get_web_data:}}, POST' => [ 'get_web_data', [ 'post data' => 'postdata' ], 'EDConnectorWeb' ],
 			'{{#get_web_data:}}' => [ 'get_web_data', [ 'url' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
 			'{{#get_file_data:}}, file mask' =>
 				[ 'get_file_data', [ 'directory' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker' ],
@@ -348,7 +348,7 @@ class EDConnectorBaseTest extends EDTestBase {
 
 			// Universal function.
 			'{{#get_external_data:}}, POST' =>
-				[ 'get_external_data', [ 'post data' => 'postdata' ], 'EDConnectorPost' ],
+				[ 'get_external_data', [ 'post data' => 'postdata' ], 'EDConnectorWeb' ],
 			'{{#get_external_data:}}, URL' =>
 				[ 'get_external_data', [ 'url' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
 			'{{#get_external_data:}}, file mask' =>	[

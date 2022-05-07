@@ -6,7 +6,23 @@
  * @author Yaron Koren
  *
  */
-class EDConnectorWeb extends EDConnectorGet {
+class EDConnectorWeb extends EDConnectorHttp {
+	/**
+	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
+	 *
+	 * @param array &$args Arguments to parser or Lua function; processed by this constructor.
+	 * @param Title $title A Title object.
+	 */
+	public function __construct( array &$args, Title $title ) {
+		parent::__construct( $args, $title );
+
+		$this->options['postData']
+			= isset( $args['post data'] ) ? $args['post data']
+			: ( isset( $this->options['postData'] ) ? $this->options['postData'] : null );
+
+		self::$method = $this->options['postData'] ? 'POST' : 'GET';
+	}
+
 	/**
 	 * Fetch the web data. Sets HTTP headers.
 	 *
@@ -17,7 +33,7 @@ class EDConnectorWeb extends EDConnectorGet {
 	protected function fetcher( $url, array $options ) {
 		// We do not want to repeat error messages self::$tries times.
 		static $log_errors = true;
-		[ $result, $this->headers, $errors ] = self::request( 'GET', $url, $options, __METHOD__ );
+		[ $result, $this->headers, $errors ] = self::request( static::$method, $url, $options, __METHOD__ );
 		if ( $errors && $log_errors ) {
 			$this->error( 'externaldata-url-not-fetched', $this->originalUrl );
 			foreach ( $errors as $error ) {

@@ -147,9 +147,6 @@ trait EDConnectorParsable {
 			);
 		}, $ranges ) );
 
-		// Convert to UTF-8, if not yet.
-		$text = $this->toUTF8( $text, $encoding );
-
 		// Parsing itself.
 		try {
 			$parsed = $parser( $text );
