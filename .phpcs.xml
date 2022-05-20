@@ -2,7 +2,6 @@
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
 		<!-- Until PHPCS sorts itself out -->
-		<exclude name="MediaWiki.Commenting.FunctionComment.ParamPassByReference" />
 		<properties>
 			<property name="allowedPrefixes" type="array">
 				<element value="edg" />
