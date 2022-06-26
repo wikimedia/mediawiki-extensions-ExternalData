@@ -34,7 +34,12 @@ class EDGetData extends SpecialPage {
 			return true;
 		}
 
-		$wikiPage = WikiPage::factory( $title );
+		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+			// MW 1.36+
+			$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
+		} else {
+			$wikiPage = WikiPage::factory( $title );
+		}
 		$page_text = ContentHandler::getContentText( $wikiPage->getContent() );
 		// Remove <noinclude> sections and <includeonly> tags from text
 		$page_text = StringUtils::delimiterReplace( '<noinclude>', '</noinclude>', '', $page_text );

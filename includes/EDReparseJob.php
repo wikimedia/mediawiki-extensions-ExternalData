@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * A job that reparses a wiki page, if time is come.
  *
@@ -24,7 +27,13 @@ class EDReparseJob extends Job {
 		$ready = $this->getReleaseTimestamp() ?: $this->params['when'];
 		$now = (int)ceil( microtime( true ) );
 		if ( $ready <= $now ) {
-			$success = WikiPage::factory( $this->getTitle() )->doPurge();
+			if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
+				// MW 1.36+
+				$success = MediaWikiServices::getInstance()->getWikiPageFactory()
+					->newFromTitle( $this->getTitle() )->doPurge();
+			} else {
+				$success = WikiPage::factory( $this->getTitle() )->doPurge();
+			}
 		} else {
 			// This should only be executed, if the job queue does not support delayed jobs.
 			// All we can do in this situation is to purge caches.
