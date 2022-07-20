@@ -52,7 +52,7 @@
 	"externaldata-error-converting-css-to-xpath": "Отримано виняток перетворення CSS-селектора $1 на XPath:\n$2",
 	"externaldata-xpath-invalid": "Пошук за XPath ($1) не вдався: $2",
 	"externaldata-css-invalid": "Селектор CSS $1 недійсний",
-	"externaldata-missing-library": "Бібліотека $1, необхідна для використання функції синтаксичного аналізатора $2 або функції Lua $3, відсутня.",
+	"externaldata-missing-library": "Бібліотека $1, необхідна для використання функції синтаксичного аналізатора $2 або функції Lua <code>$3</code>, відсутня.",
 	"externaldata-undefined-file": "Файл $1 не визначено.",
 	"externaldata-missing-file": "Файл $1 відсутній.",
 	"externaldata-empty-file": "Не вдається отримати вміст файлу $1.",
