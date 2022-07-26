@@ -20,7 +20,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	/** @var string URL to fetch data from after substitutions. */
 	protected $realUrl;
 	/** @var string HTTP method. */
-	protected static $method;
+	protected static $method = 'GET';
 	/** @var array HTTP options. */
 	protected $options;
 	/** @var array HTTP headers. */
