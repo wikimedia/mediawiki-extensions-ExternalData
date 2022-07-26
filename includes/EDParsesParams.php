@@ -99,14 +99,24 @@ trait EDParsesParams {
 	 * @return bool
 	 */
 	private static function isRegex( $str ) {
+		if ( !preg_match( '/^(?:
+			# Same delimiter character at the start and the end
+			([^\s\w\\\\]).+\\1
+			|
+			# Pairs of brackets can also be used as delimiters
+			\(.+\) | \{.+} | \[.+] | <.+>
+		)[imsxADSUXJu]*$/x', $str ) ) {
+			return false;
+		}
 		self::suppressWarnings(); // for preg_match() on regular strings.
 		try {
 			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 			$is_regex = @preg_match( $str, '' ) !== false;
 		} catch ( Exception $e ) {
 			return false;
+		} finally {
+			self::restoreWarnings();
 		}
-		self::restoreWarnings();
 		return $is_regex;
 	}
 
