@@ -1,12 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Naudefj"
+			"Naudefj",
+			"Rooiratel"
 		]
 	},
 	"getdata": "Kry data",
 	"externaldata-xml-error": "XML-fout: $1 op reël $2",
 	"externaldata-db-unknown-type": "Fout: onbekende databasistipe.",
 	"externaldata-db-could-not-connect": "Fout: kon nie 'n verbinding met databasis bewerkstellig nie.",
-	"externaldata-db-invalid-query": "Ongeldige navraag."
+	"externaldata-db-invalid-query": "Ongeldige navraag.",
+	"externaldata-empty-file": "Kan nie die inhoud van lêer $1 kry nie."
 }
