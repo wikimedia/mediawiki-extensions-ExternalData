@@ -19,6 +19,7 @@
 	"externaldata-invalid-xml": "Exception parsing XML: $1.",
 	"externaldata-xml-error": "XML error: $1 at line $2.",
 	"externaldata-invalid-json": "Error: Invalid JSON.",
+	"externaldata-invalid-yaml": "Error: Invalid YAML.",
 	"externaldata-jsonpath-error": "Error: Invalid JSONPath notation $1.",
 	"externaldata-invalid-regex": "Error: $1 is not a valid Perl Compatible Regular Expression.",
 	"externaldata-db-incomplete-information": "Error: Incomplete information for this database ID $1 ($2).",

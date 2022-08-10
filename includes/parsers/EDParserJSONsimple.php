@@ -42,7 +42,7 @@ class EDParserJSONsimple extends EDParserJSON {
 	 * @param array &$retrieved_values An array with retrieved values.
 	 *
 	 */
-	private static function parseTree( array $tree, array &$retrieved_values ) {
+	protected static function parseTree( array $tree, array &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {
 			// TODO - this logic could probably be a little nicer.
 			if ( is_array( $val ) && self::holdsSimpleList( $val ) ) {

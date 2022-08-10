@@ -25,9 +25,20 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-json' );
 		}
-		$values = parent::__invoke( $text );
+		$values = $this->extractJsonPaths( $json );
 		// Save the whole JSON tree for Lua.
 		$values['__json'] = [ $json->complete() ];
+		return $values;
+	}
+
+	/**
+	 * Extract only the required JSONpaths.
+	 * @param EDJsonObject $json
+	 * @return array
+	 * @throws EDParserException
+	 */
+	protected function extractJsonPaths( EDJsonObject $json ): array {
+		$values = [];
 		foreach ( $this->external as $jsonpath ) {
 			if ( substr( $jsonpath, 0, 2 ) !== '__' && !array_key_exists( $jsonpath, $values ) ) {
 				// variable has not been set yet.

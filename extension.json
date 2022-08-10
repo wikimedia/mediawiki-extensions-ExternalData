@@ -73,6 +73,8 @@
 		"EDParserJSON": "includes/parsers/EDParserJSON.php",
 		"EDParserJSONsimple": "includes/parsers/EDParserJSONsimple.php",
 		"EDParserJSONwithJSONPath": "includes/parsers/EDParserJSONwithJSONPath.php",
+		"EDParserYAMLsimple": "includes/parsers/EDParserYAMLsimple.php",
+		"EDParserYAMLwithJSONPath": "includes/parsers/EDParserYAMLwithJSONPath.php",
 		"EDParserCSV": "includes/parsers/EDParserCSV.php",
 		"EDParserGFF": "includes/parsers/EDParserGFF.php",
 		"EDParserException": "includes/parsers/EDParserException.php"
@@ -165,6 +167,9 @@
 				[ { "format": "json", "use jsonpath": true }, "EDParserJSONwithJSONPath" ],
 				[ { "format": "json with jsonpath" }, "EDParserJSONwithJSONPath" ],
 				[ { "format": "json" }, "EDParserJSONsimple" ],
+				[ { "format": "yaml", "use jsonpath": true }, "EDParserYAMLwithJSONPath" ],
+				[ { "format": "yaml with jsonpath" }, "EDParserYAMLwithJSONPath" ],
+				[ { "format": "yaml" }, "EDParserYAMLsimple" ],
 				[ { "format": "csv" }, "EDParserCSV" ],
 				[ { "format": "csv with header" }, "EDParserCSV" ],
 				[ { "format": "gff" }, "EDParserGFF" ]
