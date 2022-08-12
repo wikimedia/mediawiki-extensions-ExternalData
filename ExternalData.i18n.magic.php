@@ -13,6 +13,7 @@ $magicWords['en'] = [
 	'get_ldap_data' => [ 0, 'get_ldap_data' ],
 	'get_db_data' => [ 0, 'get_db_data' ],
 	'get_program_data' => [ 0, 'get_program_data' ],
+	'get_inline_data' => [ 0, 'get_inline_data' ],
 	'get_external_data' => [ 0, 'get_external_data' ],
 	'external_value' => [ 0, 'external_value' ],
 	'for_external_table' => [ 0, 'for_external_table' ],

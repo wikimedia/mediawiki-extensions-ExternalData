@@ -61,6 +61,7 @@
 		"EDConnectorPreparedPostgresql": "includes/connectors/EDConnectorPreparedPostgresql.php",
 		"EDConnectorPreparedOdbc": "includes/connectors/EDConnectorPreparedOdbc.php",
 		"EDConnectorExe": "includes/connectors/EDConnectorExe.php",
+		"EDConnectorInline": "includes/connectors/EDConnectorInline.php",
 		"EDParserBase": "includes/parsers/EDParserBase.php",
 		"EDParserText": "includes/parsers/EDParserText.php",
 		"EDParserRegex": "includes/parsers/EDParserRegex.php",
@@ -130,6 +131,7 @@
 				[ { "__pf": "get_db_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
 				[ { "__pf": "get_db_data" }, "EDConnectorSql" ],
 				[ { "__pf": "get_program_data" }, "EDConnectorExe" ],
+				[ { "__pf": "get_inline_data" }, "EDConnectorInline" ],
 				[ { "__pf": "get_external_data", "url": true }, "EDConnectorWeb" ],
 				[ { "__pf": "get_external_data", "post data": true }, "EDConnectorWeb" ],
 				[ { "__pf": "get_external_data", "directory": true, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
@@ -146,7 +148,8 @@
 				[ { "__pf": "get_external_data", "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
 				[ { "__pf": "get_external_data", "from": true }, "EDConnectorSql" ],
 				[ { "__pf": "get_external_data", "prepared": true }, "EDConnectorPreparedMysql" ],
-				[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ]
+				[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ],
+				[ { "__pf": "get_external_data", "text": true }, "EDConnectorInline" ]
 			]
 		},
 		"Parsers": {
