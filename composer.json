@@ -28,6 +28,9 @@
 	},
 	"config": {
 		"optimize-autoloader": true,
-		"prepend-autoloader": false
+		"prepend-autoloader": false,
+		"allow-plugins": {
+			"composer/installers": true
+		}
 	}
 }
