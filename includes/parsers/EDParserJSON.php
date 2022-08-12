@@ -20,6 +20,11 @@ abstract class EDParserJSON extends EDParserBase {
 	protected function __construct( array $params ) {
 		parent::__construct( $params );
 
+		if ( !function_exists( 'json_decode' ) ) {
+			// PECL json extension is required.
+			throw new EDParserException( 'externaldata-format-unavailable-absolute', 'PECL JSON', 'json or yaml' );
+		}
+
 		$this->prefixLength = isset( $params['json offset'] ) ? (int)$params['json offset'] : 0;
 		$this->allowTrailingComma = array_key_exists( 'allow trailing commas', $params );
 	}

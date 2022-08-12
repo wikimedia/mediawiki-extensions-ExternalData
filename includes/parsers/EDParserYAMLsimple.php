@@ -2,8 +2,25 @@
 /**
  * Class for YAML parser with simple access.
  *
+ * @author Alexander Mashin
  */
 class EDParserYAMLsimple extends EDParserJSONsimple {
+	/**
+	 * Constructor.
+	 *
+	 * @param array $params A named array of parameters passed from parser or Lua function.
+	 *
+	 * @throws EDParserException.
+	 *
+	 */
+	public function __construct( array $params ) {
+		parent::__construct( $params );
+		if ( !function_exists( 'yaml_parse' ) ) {
+			// PECL yaml extension is required.
+			throw new EDParserException( 'externaldata-format-unavailable-absolute', 'PECL YAML', 'yaml' );
+		}
+	}
+
 	/**
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *

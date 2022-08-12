@@ -47,6 +47,7 @@
 	"externaldata-mongodb-unknown-collection": "The error message if #get_db_data can't find the specified \"collection\" when connecting to MongoDB. $1 is the collection name",
 	"externaldata-mongodb-aggregation-failed": "An error message produced when an aggregation query against a MongoDB collection fails. $1 is the error message.",
 	"externaldata-format-unavailable": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it\n* $3 - a parameter for a MediaWiki parser function",
+	"externaldata-format-unavailable-absolute": "An error message for a missing PHP library.\n\nParameters:\n* $1 - the name of the missing PHP library\n* $2 - the format that requires it",
 	"externaldata-post-failed": "Used as error message if #get_web_data sent a POST request that returned an error or was not executed. Parameters:\n* $1 is the URL,\n* $2 is the error message",
 	"externaldata-url-hooks-aborted": "Used as an error message when a hook returns false. Parameters:\n* $1 is the hook name,\n$2 is the concatenated &$errors[]",
 	"externaldata-url-not-fetched": "Used as an error message if the URL could not be fetched. Parameters:\n* $1 is the URL,\n* $2 is the error message.",

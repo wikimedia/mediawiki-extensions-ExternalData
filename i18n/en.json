@@ -38,6 +38,7 @@
 	"externaldata-mongodb-unknown-collection": "Error: Unknown MongoDB collection $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB aggregation failed with error $1",
 	"externaldata-format-unavailable": "The library $1, required to use the '$2' format without the '$3' option, is missing.",
+	"externaldata-format-unavailable-absolute": "The library $1, required to use the '$2' format, is missing.",
 	"externaldata-post-failed": "POST request to $1 failed: $2.",
 	"externaldata-url-hooks-aborted": "The '$1' hook aborted, returning errors: $2",
 	"externaldata-url-not-fetched": "Error while fetching data from URL $1: $2.",

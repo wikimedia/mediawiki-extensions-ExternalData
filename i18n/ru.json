@@ -45,6 +45,7 @@
 	"externaldata-mongodb-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB $1.",
 	"externaldata-mongodb-aggregation-failed": "Ошибка при агрегации MongoDB: $1",
 	"externaldata-format-unavailable": "Отсутствует библиотека $1, необходимая для использования формата $2 без опции '$3'.",
+	"externaldata-format-unavailable-absolute": "Отсутствует библиотека $1, необходимая для использования формата $2.",
 	"externaldata-post-failed": "Запрос POST к $1 не удался или возвратил ошибку ($2).",
 	"externaldata-url-hooks-aborted": "Перехватчик '$1' прервал получение данных, указав ошибки: $2",
 	"externaldata-url-not-fetched": "Ошибка при получении данных по URL $1: $2.",
