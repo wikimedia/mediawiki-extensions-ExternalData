@@ -13,14 +13,17 @@ class ExternalDataHooks {
 	 * @return bool
 	 */
 	public static function registerParser( Parser $parser ) {
-		$parser->setFunctionHook( 'get_web_data', [ 'EDParserFunctions', 'getWebData' ] );
-		$parser->setFunctionHook( 'get_file_data', [ 'EDParserFunctions', 'getFileData' ] );
-		$parser->setFunctionHook( 'get_soap_data', [ 'EDParserFunctions', 'getSOAPData' ] );
-		$parser->setFunctionHook( 'get_ldap_data', [ 'EDParserFunctions', 'getLDAPData' ] );
-		$parser->setFunctionHook( 'get_db_data', [ 'EDParserFunctions', 'getDBData' ] );
-		$parser->setFunctionHook( 'get_program_data', [ 'EDParserFunctions', 'getProgramData' ] );
-		$parser->setFunctionHook( 'get_external_data', [ 'EDParserFunctions', 'getExternalData' ] );
+		// Add data retrieval parser functions as defined by $wgExternalDataConnectors.
+		foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
+			$parser->setFunctionHook(
+				$parser_function,
+				static function ( Parser $parser, ...$params ) use ( $parser_function ) {
+					return EDParserFunctions::fetch( $parser, $parser_function, $params );
+				}
+			);
+		}
 
+		// Data display functions.
 		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
 		$parser->setFunctionHook( 'for_external_table', [ 'EDParserFunctions', 'doForExternalTable' ] );
 		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );

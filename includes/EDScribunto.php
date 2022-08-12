@@ -6,26 +6,15 @@
  * @author Alexander Mashin.
  */
 class EDScribunto extends Scribunto_LuaLibraryBase {
-	/** @var array $funcs A list of exported Lua functions mapping the ID ised by ExternalDataHooks::connector(). */
-	private static $funcs = [
-		'getWebData'	    => 'get_web_data',
-		'getFileData'	    => 'get_file_data',
-		'getSoapData'	    => 'get_soap_data',
-		'getLdapData'	    => 'get_ldap_data',
-		'getDbData'		    => 'get_db_data',
-		'getProgramData'    => 'get_program_data',
-		'getExternalData'   => 'get_external_data'
-	];
-
 	/**
 	 * A function that registers the exported functions with Lua.
 	 */
 	public function register() {
 		// Data retrieval functions:
 		$functions = [];
-		foreach ( self::$funcs as $lua => $parser ) {
-			$functions[$lua] = function ( array $arguments ) use( $parser ) {
-				return self::fetch( $parser, $arguments, $this->getTitle() );
+		foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
+			$functions[$lua_function] = function ( array $arguments ) use( $parser_function ) {
+				return self::fetch( $parser_function, $arguments, $this->getTitle() );
 			};
 		}
 		$this->getEngine()->registerInterface( __DIR__ . '/mw.ext.externalData.lua', $functions, [] );

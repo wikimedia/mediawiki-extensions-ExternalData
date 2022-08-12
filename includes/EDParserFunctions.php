@@ -112,7 +112,7 @@ class EDParserFunctions {
 	 *
 	 * @return string|null Return null on success, an error message otherwise.
 	 */
-	private static function fetch( Parser $parser, $name, array $args ) {
+	public static function fetch( Parser $parser, $name, array $args ) {
 		$result = self::get( $parser, $name, $args );
 		if ( is_array( $result ) ) {
 			// An array of values, not an error message.
@@ -122,90 +122,6 @@ class EDParserFunctions {
 		}
 		// There have been errors.
 		return $result;
-	}
-
-	/**
-	 * Implementation of the {{#get_web_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getWebData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_web_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_file_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getFileData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_file_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_soap_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getSoapData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_soap_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_ldap_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getLdapData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_ldap_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_db_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getDBData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_db_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_program_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getProgramData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_program_data', $params );
-	}
-
-	/**
-	 * Implementation of the {{#get_external_data:}} parser function.
-	 *
-	 * @param Parser $parser Parser object.
-	 * @param string $params,... Parameters to parser function.
-	 *
-	 * @return string|null An error message or null on success.
-	 */
-	public static function getExternalData( Parser $parser, ...$params ) {
-		return self::fetch( $parser, 'get_external_data', $params );
 	}
 
 	/**

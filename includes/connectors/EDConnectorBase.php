@@ -131,6 +131,25 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * Returns a list of connectors configured in $wgExternalDataConnectors.
+	 *
+	 * @return array An associative array of the form [ 'get_some_data' => 'getSomeData' ].
+	 */
+	public static function getConnectors(): array {
+		$connectors = [];
+		foreach ( self::setting( 'Connectors' ) as $connector ) {
+			$parser_function = $connector[0]['__pf'];
+			if ( !isset( $connectors[$parser_function] ) ) {
+				// 'get_some_data' => 'getSomeData'.
+				$connectors[$parser_function] = preg_replace_callback( '/_(\w)/', static function ( array $captures ) {
+					return strtoupper( $captures[1] );
+				}, $parser_function );
+			}
+		}
+		return $connectors;
+	}
+
+	/**
 	 * Chooses the proper EDConnector* class.
 	 *
 	 * @param string $name Parser function name.
