@@ -25,6 +25,7 @@
 	"externaldata-invalid-xml": "Ausnahme beim Parsen von XML: $1.",
 	"externaldata-xml-error": "XML-Fehler: $1 in Zeile $2",
 	"externaldata-invalid-json": "Fehler: Ungültiges JSON",
+	"externaldata-invalid-yaml": "Fehler: YAML ist ungültig.",
 	"externaldata-jsonpath-error": "Fehler: Ungültige JSONPath-Notation $1.",
 	"externaldata-invalid-regex": "Fehler: $1 ist kein gültiger Perl-kompatibler regulärer Ausdruck.",
 	"externaldata-db-incomplete-information": "Fehler: Unvollständige Informationen für diese Datenbank-ID $1 ($2).",
