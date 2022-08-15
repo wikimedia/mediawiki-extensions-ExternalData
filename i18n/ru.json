@@ -7,6 +7,7 @@
 			"Kareyac",
 			"Megakott",
 			"Okras",
+			"Pacha Tchernof",
 			"Александр Сигачёв"
 		]
 	},
@@ -25,7 +26,7 @@
 	"externaldata-invalid-xml": "Ошибка при разборе XML: $1.",
 	"externaldata-xml-error": "Ошибка XML. $1 в строке $2",
 	"externaldata-invalid-json": "Недопустимый JSON",
-	"externaldata-invalid-yaml": "Недопустимый YAML",
+	"externaldata-invalid-yaml": "Ошибка: недопустимый YAML",
 	"externaldata-jsonpath-error": "Неверный запрос JSONPath $1.",
 	"externaldata-invalid-regex": "$1 не является действительным Perl-совместимым регулярным выражением.",
 	"externaldata-db-incomplete-information": "В настройках вики неполная информация для БД с ID $1. Отсутствует $2.",

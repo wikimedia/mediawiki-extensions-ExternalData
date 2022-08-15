@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Sibabrata Banerjee"
+			"Sibabrata Banerjee",
+			"আজিজ"
 		]
 	},
+	"externaldata-invalid-yaml": "ত্রুটি: অবৈধ YAML।",
 	"externaldata-url-unknown-error": "ইউআর‌এল $1 থেকে তথ্য আনার সময় অজানা ত্রুটি ধরা পড়েছে।"
 }
