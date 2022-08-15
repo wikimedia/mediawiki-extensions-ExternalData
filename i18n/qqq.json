@@ -5,7 +5,12 @@
 			"Fryed-peach",
 			"Raymond",
 			"Shirayuki",
-			"Umherirrender"
+			"Umherirrender",
+			"DDPAT",
+			"Hamilton Abreu",
+			"Ice bulldog",
+			"Matěj Suchánek",
+			"Rail"
 		]
 	},
 	"getdata": "{{doc-special|GetData}}",
@@ -14,7 +19,7 @@
 	"externaldata-web-invalid-format": "The error message if #get_web_data is called with an invalid format value.\n\nParameters:\n* $1 - invalid file format. Valid formats are: \"xml\", \"xml with xpath\", \"csv\", \"csv with header\", \"json\", and \"gff\"",
 	"externaldata-ldap-unable-to-connect": "The error message if #get_ldap_data can't connect to the LDAP server.\n\nParameters:\n* $1 - the LDAP server name",
 	"externaldata-xml-error": "The error message if #get_web_data can't parse an XML file. Parameters:\n* $1 - error message which are returned by PHP's <code>xml_error_string()</code>\n* $2 - line number",
-	"externaldata-invalid-json": "The error message if the URL being accessed does not contain valid JSON",
+	"externaldata-invalid-json": "The error message if the URL or file being accessed does not contain valid JSON",
 	"externaldata-jsonpath-error": "The error message if the variables do not contain valid JSONPath notation",
 	"externaldata-db-incomplete-information": "Used as error message.\n\nDatabase server, database type, database directory, database username and/or database password are not specified.",
 	"externaldata-db-could-not-get-url": "Parameters:\n* $1 - the URL,\n* $2 - number of HTTP tries",
