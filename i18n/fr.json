@@ -50,6 +50,7 @@
 	"externaldata-mongodb-unknown-collection": "Erreur : Collection MongoDB $1 inconnue.",
 	"externaldata-mongodb-aggregation-failed": "L’agrégation de MongoDB a échoué avec l’erreur $1",
 	"externaldata-format-unavailable": "La bibliothèque $1, nécessaire pour utiliser le format '$2' sans l’option '$3', est absente.",
+	"externaldata-format-unavailable-absolute": "La bibliothèque $1, requise pour utiliser le format « $2 », est manquante.",
 	"externaldata-post-failed": "La requête POST vers $1 a échoué : $2.",
 	"externaldata-url-hooks-aborted": "Le crochet « $1 » a été annulé en renvoyant des erreurs : $2",
 	"externaldata-url-not-fetched": "Erreur en récupérant les données de l’URL $1 : $2.",
