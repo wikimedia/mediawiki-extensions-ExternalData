@@ -11,6 +11,21 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 	public $keepExternalVarsCase = true;
 
 	/**
+	 * Constructor.
+	 *
+	 * @param array $params A named array of parameters passed from parser or Lua function.
+	 *
+	 */
+	protected function __construct( array $params ) {
+		parent::__construct( $params );
+
+		// This connector needs an explicit set of fields.
+		if ( !array_key_exists( 'data', $params ) ) {
+			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
+		}
+	}
+
+	/**
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.

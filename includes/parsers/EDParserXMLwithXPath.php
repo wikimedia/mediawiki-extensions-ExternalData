@@ -23,6 +23,12 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );
+
+		// This connector needs an explicit set of fields.
+		if ( !array_key_exists( 'data', $params ) ) {
+			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
+		}
+
 		if ( array_key_exists( 'default xmlns prefix', $params ) ) {
 			$this->defaultXmlnsPrefix = $params['default xmlns prefix'];
 		}

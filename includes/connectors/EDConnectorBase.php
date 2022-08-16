@@ -67,8 +67,6 @@ abstract class EDConnectorBase {
 		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
 			$this->mappings = self::paramToArray( $args['data'], false, !$this->keepExternalVarsCase );
-		} else {
-			$this->error( 'externaldata-no-param-specified', 'data' );
 		}
 
 		// Filters.
@@ -222,7 +220,7 @@ abstract class EDConnectorBase {
 	 *
 	 * @return array Supplemented parameters.
 	 */
-	protected static function supplementParams( array $params ) {
+	protected static function supplementParams( array $params ): array {
 		$supplemented = $params;
 
 		// A list of fields containing names data sources to read.
@@ -303,7 +301,14 @@ abstract class EDConnectorBase {
 			}
 		}
 
-		// for each external variable name specified in the function
+		// Special case: __all in data argument or no data at all. Need to map all external variables to internal ones.
+		if ( count( $this->mappings ) === 0 || isset( $this->mappings['__all'] ) ) {
+			foreach ( $external_values as $external_var => $_ ) {
+				$this->mappings[$external_var] = $external_var;
+			}
+		}
+
+		// For each external variable name specified in the function
 		// call, get its value or values (if any exist), and attach it
 		// or them to the local variable name
 		$result = [];
@@ -314,13 +319,6 @@ abstract class EDConnectorBase {
 					$local_var,
 					$external_values[$external_var]
 				);
-			}
-		}
-
-		// Special case: __all in data argument. Need to map all external variables to internal ones.
-		if ( isset( $this->mappings['__all'] ) ) {
-			foreach ( $external_values as $external_var => $external_value ) {
-				self::setInternal( $result, $external_var, $external_value );
 			}
 		}
 

@@ -33,8 +33,6 @@ abstract class EDParserBase {
 			$this->external = array_values(
 				self::paramToArray( $params['data'], false, !$this->keepExternalVarsCase )
 			);
-		} else {
-			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
 		}
 
 		// Whether to add newlines to help cutting out fragments.

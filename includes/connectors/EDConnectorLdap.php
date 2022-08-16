@@ -33,6 +33,11 @@ class EDConnectorLdap extends EDConnectorBase {
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
+		// This connector needs an explicit set of fields.
+		if ( !array_key_exists( 'data', $args ) ) {
+			$this->error( 'externaldata-no-param-specified', 'data' );
+		}
+
 		// Parameters specific for {{#get_ldap_data:}} and mw.ext.externalData.getLdapData.
 		if ( !function_exists( 'ldap_connect' ) ) {
 			$this->error(

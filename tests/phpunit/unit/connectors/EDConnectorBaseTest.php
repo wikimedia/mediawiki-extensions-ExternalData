@@ -190,17 +190,6 @@ class EDConnectorBaseTest extends EDTestBase {
 			true
 		];
 
-		$cases['No data'] = [
-			[ 'filters' => 'name=Alexander Mashin' ],
-			[
-				'mappings' => [],
-				'filters' => [ 'name' => 'Alexander Mashin' ],
-				'suppress' => false,
-				'errors' => [ [ 'code' => 'externaldata-no-param-specified', 'params' => [ 'data' ] ] ]
-			],
-			true
-		];
-
 		return $cases;
 	}
 
