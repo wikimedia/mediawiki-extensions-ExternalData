@@ -38,6 +38,7 @@
 	"externaldata-mongodb-unknown-collection": "Грешка: Непозната збирка $1 од MongoDB.",
 	"externaldata-mongodb-aggregation-failed": "Грешка при насобирањето со MongoDB, давајќи ја грешката $1",
 	"externaldata-format-unavailable": "Недостасува библиотеката $1, потребна за употреба на форматот „$2“ без можноста „$3“.",
+	"externaldata-format-unavailable-absolute": "Недостасува иблиотеката $1, потребна за употребата на форматот „$2“.",
 	"externaldata-post-failed": "POST-барањето од $1 не успеа: $2.",
 	"externaldata-url-hooks-aborted": "Спојницата „$1“ е запрена, давајќи ги грешките: $2",
 	"externaldata-url-not-fetched": "Грешка при добивањето на податоците од URL-то $1: $2.",
