@@ -48,7 +48,7 @@
 	"externaldata-error-converting-css-to-xpath": "Добив грешка при претворањето на CSS-изборникот $1 во XPath:\n$2",
 	"externaldata-xpath-invalid": "Пребарувањето на XPath ($1) не успеа: $2",
 	"externaldata-css-invalid": "CSS-изборникот $1 е неважечки",
-	"externaldata-missing-library": "Недостасува библиотеката $1, потребна за употреба на расчленувачката функција „$2“ или Lua-функцијата „$3“.",
+	"externaldata-missing-library": "Недостасува библиотеката $1, потребна за употреба на расчленувачката функција „$2“ или Lua-функцијата <code>$3</code>.",
 	"externaldata-undefined-file": "Податотеката $1 не е зададена.",
 	"externaldata-missing-file": "Податотеката $1 недостасува.",
 	"externaldata-empty-file": "Не можам да ја најдам содржината на податотеката $1.",
