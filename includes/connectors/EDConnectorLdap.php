@@ -90,7 +90,7 @@ class EDConnectorLdap extends EDConnectorBase {
 			if ( !is_array( $row ) ) {
 				continue;
 			}
-			foreach ( $this->mappings as $external_var ) {
+			foreach ( $this->mappings() as $external_var ) {
 				if ( !array_key_exists( $external_var, $result ) ) {
 					$result[$external_var] = [];
 				}
@@ -153,7 +153,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	 * @return array Search results.
 	 */
 	private function searchLDAP() {
-		$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings ) );
+		$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings() ) );
 		$results = ldap_get_entries( $this->connection, $sr );
 		return $results;
 	}

@@ -7,6 +7,11 @@
  */
 
 class EDParserGFF extends EDParserBase {
+	/** @const string|array|null EXT The usual file extension of this format. */
+	protected const EXT = 'gff';
+	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
+	public const GENERICITY = 10;
+
 	/** @var array $columns Pre-defined names of GFF columns. */
 	private static $columns = [ 'seqid', 'source', 'type', 'start', 'end', 'score', 'strand', 'phase', 'attributes' ];
 
@@ -14,11 +19,11 @@ class EDParserGFF extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
+	 * @throws EDParserException
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		// use an fgetcsv() call, similar to the one in getCSVData()
 		// (fgetcsv() can handle delimiters other than commas, in this
 		// case a tab)

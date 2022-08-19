@@ -38,13 +38,11 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 * Parse the text as XML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
 	 * @throws EDParserException
-	 *
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		self::suppressWarnings();
 		try {
 			$xml = new SimpleXMLElement( $text );
@@ -54,8 +52,6 @@ class EDParserXMLwithXPath extends EDParserXML {
 		self::restoreWarnings();
 
 		$values = parent::__invoke( $text );
-		// Save the whole XML tree for Lua.
-		$values['__xml'] = [ self::xml2Array( $xml ) ];
 
 		// Set default prefix for unprefixed xmlns's.
 		$namespaces = $xml->getDocNamespaces( true );
@@ -85,13 +81,12 @@ class EDParserXMLwithXPath extends EDParserXML {
 
 			// Now, get all the matching values, and remove any empty results.
 			$nodes = $xml->xpath( $xpath );
-			if ( $nodes ) {
-				$nodes = self::filterEmptyNodes( $nodes );
-				if ( !$nodes ) {
-					continue;
-				}
-			} else {
+			if ( $nodes === false ) {
 				throw new EDParserException( 'externaldata-xpath-invalid', $xpath );
+			}
+			$nodes = self::filterEmptyNodes( $nodes );
+			if ( !$nodes ) {
+				continue;
 			}
 
 			// Convert from SimpleXMLElement to string.
@@ -109,6 +104,8 @@ class EDParserXMLwithXPath extends EDParserXML {
 				$values[$xpath] = $nodesArray;
 			}
 		}
+		// Save the whole XML tree for Lua.
+		$values['__xml'] = [ self::xml2Array( $xml ) ];
 		return $values;
 	}
 

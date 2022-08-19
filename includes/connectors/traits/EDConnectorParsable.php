@@ -32,24 +32,22 @@ trait EDConnectorParsable {
 	 * Call in EDConnector*::__construct() before parent::__construct().
 	 *
 	 * @param array $args Arguments to the parser function.
+	 * @param string|null $parser The optional name ot the EDParser class.
 	 */
-	protected function prepareParser( array $args ) {
+	protected function prepareParser( array $args, $parser = null ) {
 		// Encoding override supplied by wiki user may also be needed.
 		$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
 		// Try these encodings.
 		$this->encodings = isset( $args['encodings'] ) && $args['encodings'] ? $args['encodings'] : [];
 
 		try {
-			$this->parser = EDParserBase::getParser( $args );
+			$this->parser = $parser ? new $parser( $args ) : EDParserBase::getParser( $args );
 		} catch ( EDParserException $e ) {
 			$this->parseErrors[] = [ 'code' => $e->code(), 'params' => $e->params() ];
 			return;
 		}
 
-		// Whether to keep letter case in variables. If either connector or parser demand keeping the case, do it.
-		if ( $this->parser->keepExternalVarsCase ) {
-			$this->keepExternalVarsCase = true;
-		}
+		$this->keepExternalVarsCase = $this->parser->keepExternalVarsCase || $this->keepExternalVarsCase;
 
 		// Set start and end lines.
 		$this->setLine( $args, 'start', 0 );
@@ -113,27 +111,29 @@ trait EDConnectorParsable {
 	 * Parse text, if any parser is set.
 	 *
 	 * @param string $text Text to parse.
-	 * @param string $encoding Text encoding
+	 * @param string|null $path Optional file or URL path that may be relevant to the parser
 	 *
-	 * @return ?array Parsed values.
+	 * @return array|null Parsed values.
 	 */
-	protected function parse( $text, $encoding ): ?array {
+	protected function parse( $text, $path = null ) {
 		$parser = $this->parser;
+
+		$special_variables = [];
 
 		// Insert newlines where appropriate.
 		$text = $parser->addNewlines( $text, $this->headerLines || $this->footerLines );
 		// Trimming.
 		$split = explode( PHP_EOL, $text );
 		$total = count( $split );
-		$this->add( [ '__total' => [ $total ] ] );
+		$special_variables['__total'] = [ $total ];
 
 		// Get really needed absolute line ranges.
 		$ranges = $this->ranges( $total );
 
 		// Extract __start, __lines and __end variables.
-		$this->add( [ '__start' => [ $ranges['start line'] + 1 ] ] ); // zero-based to one-based.
-		$this->add( [ '__end' => [ $ranges['end line'] + 1 ] ] ); // zero-based to one-based.
-		$this->add( [ '__lines' => [ $ranges['end line'] - $ranges['start line'] + 1 ] ] );
+		$special_variables['__start'] = [ $ranges['start line'] + 1 ]; // zero-based to one-based.
+		$special_variables['__end'] = [ $ranges['end line'] + 1 ]; // zero-based to one-based.
+		$special_variables['__lines'] = [ $ranges['end line'] - $ranges['start line'] + 1 ];
 		unset( $ranges['start line'] );
 		unset( $ranges['end line'] );
 
@@ -147,7 +147,8 @@ trait EDConnectorParsable {
 
 		// Parsing itself.
 		try {
-			$parsed = $parser( $text );
+			$parsed = array_merge( $parser( $text, $path ), $special_variables );
+			$this->keepExternalVarsCase = $parser->keepExternalVarsCase; // can be altered by 'auto' format.
 		} catch ( EDParserException $e ) {
 			$parsed = null;
 			$this->parseErrors[] = [ 'code' => $e->code(), 'params' => $e->params() ];

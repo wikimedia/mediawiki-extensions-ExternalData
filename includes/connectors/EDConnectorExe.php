@@ -281,7 +281,7 @@ class EDConnectorExe extends EDConnectorBase {
 				// Let's save the ignored warning.
 				$this->add( [ '__warning' => [ $error ] ] );
 			}
-			$this->add( $this->parse( $output, $this->encoding ) );
+			$this->add( $this->parse( $output ) );
 			$this->error( $this->parseErrors );
 			return true;
 		} else {

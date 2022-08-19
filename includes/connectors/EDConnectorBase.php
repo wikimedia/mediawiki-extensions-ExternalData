@@ -47,7 +47,7 @@ abstract class EDConnectorBase {
 	private $suppressError = false;
 
 	/** @var array An associative array mapping internal variables to external. */
-	protected $mappings = [];
+	private $mappings = [];
 	/** @var array Data filters. */
 	protected $filters = [];
 	/** @var array Fetched data before filtering and mapping. */
@@ -63,10 +63,10 @@ abstract class EDConnectorBase {
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true, false );
 
-		// Data mappings. May be handled by the parser or by self.
+		// Data mappings. May be handled by the parser or by self. Delay settings, if format auto-detection is set.
 		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
-			$this->mappings = self::paramToArray( $args['data'], false, !$this->keepExternalVarsCase );
+			$this->mappings = self::paramToArray( $args['data'], false, false );
 		}
 
 		// Filters.
@@ -265,6 +265,14 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * Mappings from internal => external.
+	 * @return array
+	 */
+	protected function mappings(): array {
+		return $this->keepExternalVarsCase ? $this->mappings : array_map( 'mb_strtolower', $this->mappings );
+	}
+
+	/**
 	 * A helper function that filters external values and maps them to internal ones.
 	 *
 	 * @return array Filtered and mapped values.
@@ -302,9 +310,10 @@ abstract class EDConnectorBase {
 		}
 
 		// Special case: __all in data argument or no data at all. Need to map all external variables to internal ones.
-		if ( count( $this->mappings ) === 0 || isset( $this->mappings['__all'] ) ) {
+		$mappings = $this->mappings();
+		if ( count( $mappings ) === 0 || isset( $mappings['__all'] ) ) {
 			foreach ( $external_values as $external_var => $_ ) {
-				$this->mappings[$external_var] = $external_var;
+				$mappings[$external_var] = $external_var;
 			}
 		}
 
@@ -312,7 +321,7 @@ abstract class EDConnectorBase {
 		// call, get its value or values (if any exist), and attach it
 		// or them to the local variable name
 		$result = [];
-		foreach ( $this->mappings as $local_var => $external_var ) {
+		foreach ( $mappings as $local_var => $external_var ) {
 			if ( array_key_exists( $external_var, $external_values ) ) {
 				self::setInternal(
 					$result,

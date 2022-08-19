@@ -16,7 +16,7 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
 	 */
-	protected function __construct( array $params ) {
+	public function __construct( array $params ) {
 		parent::__construct( $params );
 
 		// This connector needs an explicit set of fields.
@@ -29,11 +29,11 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
+	 * @throws EDParserException
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		$text = $this->removeTrailingComma( substr( $text, $this->prefixLength ) );
 		try {
 			$json = new EDJsonObject( $text );

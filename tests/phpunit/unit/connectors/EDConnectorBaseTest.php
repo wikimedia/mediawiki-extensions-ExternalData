@@ -51,7 +51,7 @@ class EDConnectorBaseTest extends EDTestBase {
 
 			public function attributes(): array {
 				return [
-					'mappings' => $this->mappings,
+					'mappings' => $this->mappings(),
 					'filters' => $this->filters,
 					'suppress' => $this->suppressError(),
 					'errors' => $this->errors()

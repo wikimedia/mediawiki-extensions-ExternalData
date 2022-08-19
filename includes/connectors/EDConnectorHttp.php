@@ -162,7 +162,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 				// Throttled, but there was a cached value.
 				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
 			}
-			$this->add( $this->parse( $contents, $this->encoding ) );
+			$this->add( $this->parse( $contents, parse_url( $this->realUrl, PHP_URL_PATH ) ) );
 			$this->error( $this->parseErrors );
 			return !$this->errors();
 		} else {

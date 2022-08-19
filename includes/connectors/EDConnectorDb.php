@@ -49,10 +49,11 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		// Database credentials.
 		$this->setCredentials( $args );	// late binding.
 		// Query parts.
-		if ( count( $this->mappings ) === 0 || isset( $this->mappings['__all'] ) ) {
+		$mappings = $this->mappings();
+		if ( count( $mappings ) === 0 || isset( $mappings['__all'] ) ) {
 			$this->columns = [ '*' ];
 		} else {
-			$this->columns = array_values( $this->mappings );
+			$this->columns = array_values( $mappings );
 		}
 		// Column aliases: the correspondence $external_variable => $column_name_in_query_result.
 		foreach ( $this->columns as $column ) {

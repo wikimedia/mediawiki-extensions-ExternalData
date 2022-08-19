@@ -51,7 +51,7 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			'__time' => [ time() ]
 		] );
 		$file_contents = $this->toUTF8( $file_contents, $this->encoding );
-		$values = $this->parse( $file_contents, $this->encoding );
+		$values = $this->parse( $file_contents, $path );
 		$this->error( $this->parseErrors );
 		return $values;
 	}

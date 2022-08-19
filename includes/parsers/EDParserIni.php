@@ -5,6 +5,12 @@
  * @author Alexander Mashin
  */
 class EDParserIni extends EDParserBase {
+	/** @const string|array|null EXT The usual file extension of this format. */
+	protected const EXT = 'ini';
+
+	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
+	public const GENERICITY = 15;
+
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
 	/** @var string $delimiter Assignment mark, separating key and value. */
@@ -29,11 +35,11 @@ class EDParserIni extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
+	 * @throws EDParserException
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		$delimiter = '(?<!\\\\)' . preg_quote( $this->delimiter, '/' ); // delimiter, but not escaped.
 		// Comment delimiter, but not escaped.
 		$comment = $this->commentDelimiter ? '(?<!\\\\)' . preg_quote( $this->commentDelimiter, '/' ) : '$NeverMatches';
@@ -71,7 +77,7 @@ REGEX;
 				$values[$key][] = $value;
 			}
 		}
-
+		$values['__text'] = [ $text ]; // INI succeeds too often; this helps plain text format.
 		return $values;
 	}
 }

@@ -21,8 +21,11 @@ class EDParserRegex extends EDParserBase {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 
-		// self::claim() has made sure that this parameter is set.
-		$regex = $params['regex'];
+		if ( isset( $params['regex'] ) ) {
+			$regex = $params['regex'];
+		} else {
+			throw new EDParserException( 'externaldata-no-param-specified', 'regex' );
+		}
 
 		// Validate regex.
 		self::suppressWarnings();
@@ -43,11 +46,11 @@ class EDParserRegex extends EDParserBase {
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
+	 * @throws EDParserException
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		$matches = [];
 		// The regular expression has been validated in the constructor.
 		preg_match_all( $this->regex, $text, $matches, PREG_PATTERN_ORDER );

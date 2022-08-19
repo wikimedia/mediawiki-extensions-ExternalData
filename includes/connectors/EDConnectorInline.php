@@ -40,7 +40,7 @@ class EDConnectorInline extends EDConnectorBase {
 	 * @return bool True on success, false if error were encountered.
 	 */
 	public function run() {
-		$values = $this->parse( $this->text, $this->encoding );
+		$values = $this->parse( $this->text );
 		$this->error( $this->parseErrors );
 		if ( $values ) {
 			$this->add( $values );

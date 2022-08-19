@@ -7,6 +7,9 @@
  */
 
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
+	/** @const string|array|null EXT The usual file extension of this format. */
+	protected const EXT = [ 'htm', 'html' ];
+
 	/** @var array Mappings of CSS selectors to XPaths. */
 	private $cssToXpath = [];
 
@@ -29,6 +32,11 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 				'HTML',
 				'use xpath'
 			);
+		}
+
+		// This is important for the right choice of format, if it is "auto".
+		if ( array_key_exists( 'use xpath', $params ) ) {
+				throw new EDParserException( 'dummy message' );
 		}
 
 		// Convert CSS selectors to XPaths and record them in $mappings.
@@ -62,13 +70,11 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	 * Parse the text as HTML. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
 	 * @throws EDParserException
-	 *
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		$xpath_values = parent::__invoke( $text );
 		foreach ( $this->cssToXpath as $css => $xpath ) {
 			$xpath_values[$css] = $xpath_values[$xpath];

@@ -6,6 +6,9 @@
  */
 
 abstract class EDParserJSON extends EDParserBase {
+	/** @const string|array|null EXT The usual file extension of this format. */
+	protected const EXT = 'json';
+
 	/** @var int Optional length of the ignored prefix. */
 	protected $prefixLength;
 	/** @var bool $allowTrailingComma Allow non-standard trailing comma in JSON. */

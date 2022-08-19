@@ -78,6 +78,7 @@
 		"EDParserYAMLwithJSONPath": "includes/parsers/EDParserYAMLwithJSONPath.php",
 		"EDParserCSV": "includes/parsers/EDParserCSV.php",
 		"EDParserGFF": "includes/parsers/EDParserGFF.php",
+		"EDParserAuto": "includes/parsers/EDParserAuto.php",
 		"EDParserException": "includes/parsers/EDParserException.php"
 	},
 	"Hooks": {
@@ -175,7 +176,8 @@
 				[ { "format": "yaml" }, "EDParserYAMLsimple" ],
 				[ { "format": "csv" }, "EDParserCSV" ],
 				[ { "format": "csv with header" }, "EDParserCSV" ],
-				[ { "format": "gff" }, "EDParserGFF" ]
+				[ { "format": "gff" }, "EDParserGFF" ],
+				[ { "format": "auto" }, "EDParserAuto" ]
 			]
 		}
 	},

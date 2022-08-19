@@ -7,6 +7,11 @@
  */
 
 class EDParserCSV extends EDParserBase {
+	/** @const string|array|null EXT The usual file extension of this format. */
+	protected const EXT = 'csv';
+	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
+	public const GENERICITY = 10;
+
 	/** @var bool The processed text contains a header line. */
 	private $header;
 	/** @var string Column delimiter. */
@@ -23,6 +28,14 @@ class EDParserCSV extends EDParserBase {
 
 		$this->header = strtolower( $params['format'] ) === 'csv with header'
 					 || strtolower( $params['format'] ) === 'csv' && array_key_exists( 'with header', $params );
+		// Also, analyse the 'data' parameter: whether it is numeric or not.
+		foreach ( $this->external as $column ) {
+			if ( !is_numeric( $column ) && substr( $column, 0, 2 ) !== '__' ) {
+				$this->header = true;
+				break;
+			}
+		}
+
 		if ( array_key_exists( 'delimiter', $params ) ) {
 			// Allow for tab delimiters, using \t.
 			$this->delimiter = str_replace( '\t', "\t", $params['delimiter'] );
@@ -36,34 +49,17 @@ class EDParserCSV extends EDParserBase {
 	 * Apply mapAndFilter() in the end.
 	 *
 	 * @param string $text The text to be parsed.
-	 *
+	 * @param string|null $path URL or filesystem path that may be relevant to the parser.
 	 * @return array A two-dimensional column-based array of the parsed values.
-	 *
+	 * @throws EDParserException
 	 */
-	public function __invoke( $text ) {
+	public function __invoke( $text, $path = null ): array {
 		$values = parent::__invoke( $text );
-		// from http://us.php.net/manual/en/function.str-getcsv.php#88311
-		// str_getcsv() is a function that was only added in PHP 5.3.0,
-		// so use the much older fgetcsv() if it's not there
 
-		// actually, for now, always use fgetcsv(), since this call to
-		// str_getcsv() doesn't work, and I can't test/debug it at the
-		// moment
-		//if ( function_exists( 'str_getcsv' ) ) {
-		//	$table = str_getcsv( $csv );
-		//} else {
-			$fiveMBs = 5 * 1024 * 1024;
-			$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
-			fwrite( $fp, $text );
-			rewind( $fp );
-			$table = [];
-			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
-			while ( $line = fgetcsv( $fp, 0, $this->delimiter ) ) {
-				$table[] = $line;
-			}
-			fclose( $fp );
-		// }
-
+		$table = [];
+		foreach ( preg_split( "/\r\n|\n|\r/", $text ) as $line ) {
+			$table[] = str_getcsv( $line, $this->delimiter );
+		}
 		// Get rid of blank characters - these sometimes show up
 		// for certain encodings.
 		foreach ( $table as $i => $row ) {
@@ -153,6 +149,7 @@ class EDParserCSV extends EDParserBase {
 				$values[$column][] = $row_val;
 			}
 		}
+		$values['__text'] = [ $text ]; // CSV succeeds too often; this helps plain text format.
 		return $values;
 	}
 }
