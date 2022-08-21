@@ -6,6 +6,8 @@
  */
 
 class EDParserText extends EDParserBase {
+	/** @const string NAME The name of this format. */
+	public const NAME = 'TEXT';
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 20;
 

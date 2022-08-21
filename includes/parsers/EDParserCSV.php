@@ -7,15 +7,24 @@
  */
 
 class EDParserCSV extends EDParserBase {
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = 'csv';
+	/** @const string NAME The name of this format. */
+	public const NAME = 'CSV';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [ 'csv' ];
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
-	public const GENERICITY = 10;
+	public const GENERICITY = 15;
 
-	/** @var bool The processed text contains a header line. */
+	/** @var @const int NO_HEADER There is no header line. */
+	private const NO_HEADER = 0;
+	/** @var @const int HEADER There is a header line. */
+	private const HEADER = 1;
+	/** @var @const int DETECT_HEADER Detect, whether there is a header line. */
+	private const DETECT_HEADER = 2;
+	/** @var int $header Whether the header is present, not, or has to be autodetected. */
 	private $header;
-	/** @var string Column delimiter. */
-	private $delimiter = ',';
+
+	/** @var string $delimiters Possible column delimiters. */
+	private $delimiters = [ ';', ',', "\t", '|' ];
 
 	/**
 	 * Constructor.
@@ -26,19 +35,38 @@ class EDParserCSV extends EDParserBase {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 
-		$this->header = strtolower( $params['format'] ) === 'csv with header'
-					 || strtolower( $params['format'] ) === 'csv' && array_key_exists( 'with header', $params );
+		// Is there a header line?
+		if (
+			strtolower( $params['format'] ) === 'csv with header' ||
+			array_key_exists( 'with header', $params ) ||
+			array_key_exists( 'header', $params ) && $params['header'] === 'yes'
+		) {
+			$this->header = self::HEADER;
+		} elseif ( array_key_exists( 'header', $params ) && (
+			$params['header'] === 'auto' || $params['header'] === 'detect' || $params['header'] === 'autodetect'
+		) ) {
+			$this->header = self::DETECT_HEADER;
+		} else {
+			$this->header = self::NO_HEADER;
+		}
+
 		// Also, analyse the 'data' parameter: whether it is numeric or not.
-		foreach ( $this->external as $column ) {
-			if ( !is_numeric( $column ) && substr( $column, 0, 2 ) !== '__' ) {
-				$this->header = true;
-				break;
+		if ( $this->header !== self::HEADER ) {
+			foreach ( $this->external as $column ) {
+				if ( !is_numeric( $column ) && substr( $column, 0, 2 ) !== '__' ) {
+					$this->header = self::HEADER;
+					break;
+				}
 			}
 		}
 
-		if ( array_key_exists( 'delimiter', $params ) ) {
+		if ( array_key_exists( 'delimiter', $params ) && $params['delimiter'] !== 'auto' ) {
+			// Wrap single param in an array.
+			$params['delimiter'] = is_array( $params['delimiter'] ) ? $params['delimiter'] : [ $params['delimiter'] ];
 			// Allow for tab delimiters, using \t.
-			$this->delimiter = str_replace( '\t', "\t", $params['delimiter'] );
+			$this->delimiters = array_map( static function ( $str ) {
+				return str_replace( '\t', "\t", $str );
+			}, $params['delimiter'] );
 		}
 	}
 
@@ -54,19 +82,9 @@ class EDParserCSV extends EDParserBase {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $path = null ): array {
-		$values = parent::__invoke( $text );
+		$table = $this->parseCSV( $text, $this->delimiters );
 
-		$table = [];
-		foreach ( preg_split( "/\r\n|\n|\r/", $text ) as $line ) {
-			$table[] = str_getcsv( $line, $this->delimiter );
-		}
-		// Get rid of blank characters - these sometimes show up
-		// for certain encodings.
-		foreach ( $table as $i => $row ) {
-			foreach ( $row as $j => $cell ) {
-				$table[$i][$j] = str_replace( chr( 0 ), '', $cell );
-			}
-		}
+		// Since $text is already converted to UTF-8, is it necessary to keep the code below?
 
 		// Get rid of the "byte order mark", if it's there - it could
 		// be one of a variety of options, depending on the encoding.
@@ -85,7 +103,8 @@ class EDParserCSV extends EDParserBase {
 			"\x00\x00\xFE\xFF",
 			"\xDD\x73\x66\x73",
 		];
-		$decodedFirstCell = utf8_decode( $table[0][0] );
+		// $decodedFirstCell = utf8_decode( $table[0][0] );
+		$decodedFirstCell = mb_convert_encoding( $table[0][0], 'ISO-8859-1', 'UTF-8' );
 		foreach ( $sets as $set ) {
 			if ( strncmp( $decodedFirstCell, $set, strlen( $set ) ) === 0 ) {
 				$table[0][0] = substr( $decodedFirstCell, strlen( $set ) + 1 );
@@ -102,7 +121,10 @@ class EDParserCSV extends EDParserBase {
 		}
 
 		// Get header values, if this is 'csv with header'
-		if ( $this->header ) {
+		$header = $this->header === self::HEADER ||
+				$this->header === self::DETECT_HEADER &&
+				self::headerDetected( $table[0], isset( $table[1] ) ? $table[1] : null );
+		if ( $header ) {
 			$header_vals = array_shift( $table );
 			// On the off chance that there are one or more blank
 			// lines at the beginning, cycle through.
@@ -117,7 +139,7 @@ class EDParserCSV extends EDParserBase {
 		// To get around this, we first figure out the correct number
 		// of columns in this table - which depends on whether the
 		// CSV has a header or not.
-		if ( $this->header ) {
+		if ( $header ) {
 			$num_columns = count( $header_vals );
 		} else {
 			$num_columns = 0;
@@ -125,6 +147,8 @@ class EDParserCSV extends EDParserBase {
 				$num_columns = max( $num_columns, count( $line ) );
 			}
 		}
+
+		$values = parent::__invoke( $text );
 
 		// Now "flip" the data, turning it into a column-by-column
 		// array, instead of row-by-row.
@@ -137,7 +161,7 @@ class EDParserCSV extends EDParserBase {
 				} else {
 					$row_val = '';
 				}
-				if ( $this->header ) {
+				if ( $header ) {
 					$column = strtolower( trim( $header_vals[$i] ) );
 				} else {
 					// start with an index of 1 instead of 0
@@ -149,7 +173,73 @@ class EDParserCSV extends EDParserBase {
 				$values[$column][] = $row_val;
 			}
 		}
+
 		$values['__text'] = [ $text ]; // CSV succeeds too often; this helps plain text format.
+
 		return $values;
+	}
+
+	/**
+	 * Detect header line in the table.
+	 * @param array $first The first line that may be a header line.
+	 * @param ?array $second The second line -- a specimen of data.
+	 * @return bool True, if the first line is likely to be a header line.
+	 */
+	private static function headerDetected( array $first, ?array $second ) {
+		// A column header is not likely to be a float number.
+		foreach ( $first as $cell ) {
+			if ( preg_match( '/^\s*[+-]?\d*[.,]\d+/', $cell ) ) {
+				return false;
+			}
+		}
+		// Compare data types in the first and the second lines.
+		if ( $second ) {
+			foreach ( $first as $column => $cell ) {
+				if ( is_numeric( $cell ) !== is_numeric( $second[$column] ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Parse $text to CSV, trying $delimiters one by one.
+	 * @param string $text Text to parse to CSV.
+	 * @param array $delimiters An array of possible delimiters.
+	 * @return string[][] 2D line-based array of values.
+	 */
+	private function parseCSV( $text, array $delimiters ): array {
+		// Filter out empty lines after splitting the text by various newlines.
+		$lines = array_filter( preg_split( "/\r\n|\n|\r/", $text ), static function ( $line ) {
+			return trim( $line ) !== '';
+		} );
+		$any_columns = 0;
+		$any_csv = null;
+		$good_columns = 0;
+		$good_csv = null;
+		foreach ( $delimiters as $delimiter ) {
+			$table = array_map( static function ( $line ) use ( $delimiter ) {
+				return array_map( static function ( $cell ) {
+					// Get rid of \0's sometimes showing up for certain encodings, presumably, after splitting.
+					return str_replace( chr( 0 ), '', $cell );
+				}, str_getcsv( $line, $delimiter ) );
+			}, $lines );
+			// Rate the success of this delimiter.
+			$lengths = array_map( 'count', $table ); // number of fields in each line.
+			$max_lengths = max( $lengths );
+			if ( $max_lengths > 1 && $max_lengths > $good_columns && min( $lengths ) === $max_lengths ) {
+				// The current delimiter makes the widest well-formed CSV so far.
+				$good_columns = $max_lengths;
+				$good_csv = $table;
+			}
+			if ( $max_lengths > $any_columns ) {
+				// The current delimiter has managed to split at least one line into a greater number of fields.
+				// But this CSV can be badly formed, i.e. uneven.
+				$any_csv = $table;
+				$any_columns = $max_lengths;
+			}
+		}
+		return $good_csv ?: $any_csv; // return the widest well-formed CSV; if none, then the widest CSV.
 	}
 }

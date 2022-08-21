@@ -35,7 +35,7 @@ class EDParserJSONsimple extends EDParserJSON {
 		$json_tree = FormatJson::decode( $json, true );
 		if ( $json_tree === null ) {
 			// It's probably invalid JSON.
-			throw new EDParserException( 'externaldata-invalid-json' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
 		}
 		// Save the whole JSON tree for Lua.
 		$values = parent::__invoke( $text );

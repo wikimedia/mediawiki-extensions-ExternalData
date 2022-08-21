@@ -9,9 +9,10 @@
 abstract class EDParserBase {
 	use EDParsesParams;			// Needs paramToArray().
 
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = null;
-
+	/** @const string NAME The name of this format. */
+	public const NAME = '';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [];
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 0;
 
@@ -92,10 +93,10 @@ abstract class EDParserBase {
 	}
 
 	/**
-	 * Return the file extension or extensions associated with this format.
-	 * @return string|array|null
+	 * Return the file extensions associated with this format.
+	 * @return array
 	 */
-	public static function extension() {
+	public static function extensions(): array {
 		return static::EXT;
 	}
 }

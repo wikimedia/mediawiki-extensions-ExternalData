@@ -5,18 +5,22 @@
  * @author Alexander Mashin
  */
 class EDParserIni extends EDParserBase {
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = 'ini';
+	/** @const string NAME The name of this format. */
+	public const NAME = 'INI';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [ 'ini' ];
 
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
-	public const GENERICITY = 15;
+	public const GENERICITY = 10;
 
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
-	/** @var string $delimiter Assignment mark, separating key and value. */
-	private $delimiter;
-	/** @var string $commentDelimiter Delimiter that starts line comments. */
-	private $commentDelimiter;
+	/** @var array $delimiters Assignment mark, separating key and value. */
+	private $delimiters = [ '=', ':' ];
+	/** @var array $commentDelimiters Possible delimiters that start line comments. */
+	private $commentDelimiters = [ '#', ';' ];
+	/** @var bool $treatInvalidAsComments Treat lines that are neither settings nor comments as comments. */
+	private $treatInvalidAsComments = false;
 
 	/**
 	 * Constructor.
@@ -27,8 +31,15 @@ class EDParserIni extends EDParserBase {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 
-		$this->delimiter = isset( $params['delimiter'] ) ? $params['delimiter'] : '=';
-		$this->commentDelimiter = array_key_exists( 'comment delimiter', $params ) ? $params['comment delimiter'] : '#';
+		if ( isset( $params['delimiter'] ) && $params['delimiter'] !== 'auto' ) {
+			$this->delimiters = [ $params['delimiter'] ];
+		}
+		if ( isset( $params['comment delimiter'] ) && $params['comment delimiter'] !== 'auto' ) {
+			$this->commentDelimiters = [ $params['comment delimiter'] ];
+		}
+		if ( array_key_exists( 'invalid as comments', $params ) ) {
+			$this->treatInvalidAsComments = true;
+		}
 	}
 
 	/**
@@ -40,42 +51,74 @@ class EDParserIni extends EDParserBase {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $path = null ): array {
-		$delimiter = '(?<!\\\\)' . preg_quote( $this->delimiter, '/' ); // delimiter, but not escaped.
+		// Filter out empty lines after splitting the text by various newlines.
+		$lines = array_filter( preg_split( "/\r\n|\n|\r/", $text ), static function ( $line ) {
+			return trim( $line ) !== '';
+		} );
+
 		// Comment delimiter, but not escaped.
-		$comment = $this->commentDelimiter ? '(?<!\\\\)' . preg_quote( $this->commentDelimiter, '/' ) : '$NeverMatches';
+		$comment_start = $this->commentDelimiters
+			? '(?<!\\\\)(?:' . implode( '|', array_map( static function ( $delim ) {
+				return preg_quote( $delim, '/' );
+			}, $this->commentDelimiters ) ) . ')'
+			: '$NeverMatches';
 
-		$regex = <<<REGEX
-			/(	# The point of this regex is to make key=value lines and comments of both kinds
-				# (whole non-key=value lines and # line comments) separate matches.
-
-				# First alternative: key=value followed by a comment or newline
-				^(?<key>((?!$delimiter|$comment).)+?) # key, which cannot contain unescaped [comment] delimiter
-				$delimiter # unescaped delimiter
-				(?<value>(?!$comment).*?) # value, which cannot contain unescaped comment delimiter
-				(?=$|$comment) # value continues until unescaped comment delimiter or line end is met
-			|
-				# Second alternative: comment following unescaped comment delimiter or newline; and not key=value
-				(?<comment>(?<=^|$comment).+)$ # continues until line end
-			)/mx
+		$max_assignments = 0;
+		// Try possible delimiters one by one.
+		foreach ( $this->delimiters as $delimiter ) {
+			$delimiter = '(?<!\\\\)' . preg_quote( $delimiter, '/' ); // delimiter, but not escaped.
+			$regex = <<<REGEX
+				/^
+				# key = value:
+				( (?<key>((?!$delimiter|$comment_start).)+?) # key, which cannot contain unescaped [comment] delimiter
+					$delimiter # unescaped delimiter
+					(?<value>(?!$comment_start).*?) # value, which cannot contain unescaped comment delimiter
+				)?
+				# comment:
+				\s* ( $comment_start (?<comment>.+) )?
+				$/x
 REGEX;
-		// PHP 7.2 doesn't allow indented HEREDOC closing identifier, and MW still tests under PHP 7.2.
+			// PHP 7.2 doesn't allow indented HEREDOC closing identifier, and MW still tests under PHP 7.2.
 
-		$values = [];
-		preg_match_all( $regex, $text, $matches, PREG_SET_ORDER );
-		foreach ( $matches as $match ) {
-			if ( $match['key'] ) {
-				$key = trim( $match['key'] );
-				$value = trim( $match['value'] );
-			} elseif ( $match['comment'] ) {
-				$key = '__comments';
-				$value = trim( $match['comment'] );
-			}
-			if ( $key ) {
-				if ( !isset( $values[$key] ) ) {
-					$values[$key] = [];
+			$assignments_found = 0;
+			$assignments = [];
+			foreach ( $lines as $line ) {
+				if ( preg_match( $regex, $line, $match, PREG_UNMATCHED_AS_NULL ) ) {
+					if ( isset( $match['key'] ) ) {
+						$key = trim( $match['key'] );
+						$value = trim( $match['value'] );
+						if ( !isset( $assignments[$key] ) ) {
+							$assignments[$key] = [];
+						}
+						$assignments[$key][] = $value;
+						$assignments_found++;
+					}
+					if ( isset( $match['comment'] ) ) {
+						$comment = trim( $match['comment'] );
+					}
+				} elseif ( $this->treatInvalidAsComments ) {
+						$comment = $line;
+				} else {
+						// This delimiter is no good.
+						$assignments_found = 0;
+						break;
 				}
-				$values[$key][] = $value;
+				if ( $comment ) {
+					if ( !isset( $assignments['__comments'] ) ) {
+						$assignments['__comments'] = [];
+					}
+					$assignments['__comments'][] = $comment;
+				}
 			}
+			// Rate the success of this delimiter.
+			if ( $assignments_found > $max_assignments ) {
+				$values = $assignments;
+				$max_assignments = $assignments_found;
+			}
+		}
+		if ( $max_assignments === 0 ) {
+			// A meaningful INI file cannot consist of comments only.
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
 		}
 		$values['__text'] = [ $text ]; // INI succeeds too often; this helps plain text format.
 		return $values;

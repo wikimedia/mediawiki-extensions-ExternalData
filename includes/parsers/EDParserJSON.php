@@ -6,8 +6,10 @@
  */
 
 abstract class EDParserJSON extends EDParserBase {
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = 'json';
+	/** @const string NAME The name of this format. */
+	public const NAME = 'JSON';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [ 'json' ];
 
 	/** @var int Optional length of the ignored prefix. */
 	protected $prefixLength;

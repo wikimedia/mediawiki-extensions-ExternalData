@@ -105,14 +105,14 @@ class EDJsonObject {
 		} elseif ( is_string( $json ) ) {
 			$this->jsonObject = json_decode( $json, true );
 			if ( $this->jsonObject === null ) {
-				throw new MWException( wfMessage( 'externaldata-invalid-json' )->text() );
+				throw new MWException( wfMessage( 'externaldata-invalid-format', 'JSON' )->text() );
 			}
 		} elseif ( is_array( $json ) ) {
 			$this->jsonObject = $json;
 		} elseif ( is_object( $json ) ) {
 			$this->jsonObject = json_decode( json_encode( $json ), true );
 		} else {
-			throw new MWException( wfMessage( 'externaldata-invalid-json' )->text() );
+			throw new MWException( wfMessage( 'externaldata-invalid-format', 'JSON' )->text() );
 		}
 	}
 

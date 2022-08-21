@@ -7,7 +7,7 @@
  */
 
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
-	/** @const string|array|null EXT The usual file extension of this format. */
+	/** @const array EXT The usual file extensions of this format. */
 	protected const EXT = [ 'htm', 'html' ];
 
 	/** @var array Mappings of CSS selectors to XPaths. */
@@ -44,7 +44,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 		$selector_regex = '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i';
 		foreach ( $this->external as &$selector ) {
 			if ( !preg_match( $selector_regex, $selector, $matches ) ) {
-				throw new EDParserException( 'externaldata-css-invalid', $selector );
+				throw new EDParserException( 'externaldata-invalid-format-explicit', $selector, 'CSS selector' );
 			}
 			try {
 				$xpath = $converter->toXPath( $matches['selector'] );

@@ -6,7 +6,9 @@
  */
 
 class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
-	/** @const string|array|null EXT The usual file extension of this format. */
+	/** @const string NAME The name of this format. */
+	public const NAME = 'HTML';
+	/** @const array EXT The usual file extensions of this format. */
 	protected const EXT = [ 'htm', 'html' ];
 
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
@@ -57,10 +59,15 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			try {
 				$entries = $domxpath->evaluate( $xpath );
 			} catch ( Exception $e ) {
-				throw new EDParserException( 'externaldata-xpath-invalid', $xpath, $e->getMessage() );
+				throw new EDParserException(
+					'externaldata-invalid-format-explicit',
+					$xpath,
+					'XPath',
+					$e->getMessage()
+				);
 			}
 			if ( $entries === false ) {
-				throw new EDParserException( 'externaldata-xpath-invalid', $xpath );
+				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath' );
 			}
 			if ( $entries instanceof DOMNodeList ) {
 				// It's a list of DOM nodes.

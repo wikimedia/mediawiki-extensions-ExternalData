@@ -157,6 +157,7 @@
 			"description": "Rules for choosing EDParser* class",
 			"value": [
 				[ { "format": "text", "regex": true }, "EDParserRegex" ],
+				[ { "format": "auto", "regex": true }, "EDParserRegex" ],
 				[ { "format": "text with regex" }, "EDParserRegex" ],
 				[ { "format": "text" }, "EDParserText" ],
 				[ { "format": "ini" }, "EDParserIni" ],

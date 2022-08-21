@@ -47,7 +47,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 		try {
 			$xml = new SimpleXMLElement( $text );
 		} catch ( Exception $e ) {
-			throw new EDParserException( 'externaldata-invalid-xml', $e->getMessage() );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
 		}
 		self::restoreWarnings();
 
@@ -82,7 +82,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 			// Now, get all the matching values, and remove any empty results.
 			$nodes = $xml->xpath( $xpath );
 			if ( $nodes === false ) {
-				throw new EDParserException( 'externaldata-xpath-invalid', $xpath );
+				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath' );
 			}
 			$nodes = self::filterEmptyNodes( $nodes );
 			if ( !$nodes ) {

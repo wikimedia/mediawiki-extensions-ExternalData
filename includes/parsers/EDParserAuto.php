@@ -39,6 +39,10 @@ class EDParserAuto extends EDParserBase {
 
 		// We need a copy of all parameters and setting, since we don't know which we will need.
 		$this->args = $params;
+		// CSV will try to detect a header line.
+		if ( !isset( $this->args['header'] ) ) {
+			$this->args['header'] = 'auto';
+		}
 	}
 
 	/**
@@ -56,12 +60,8 @@ class EDParserAuto extends EDParserBase {
 		$failed = [];
 		if ( $extension ) {
 			foreach ( self::$parsers as $parser ) {
-				$class_extension = $parser::extension();
-				if (
-					$class_extension
-					&& ( $class_extension === $extension
-						|| is_array( $class_extension ) && in_array( $extension, $class_extension, true ) )
-				) {
+				$class_extensions = $parser::extensions();
+				if ( in_array( $extension, $class_extensions, true ) ) {
 					$values = $this->tryFormat( $parser, $text );
 					if ( $values ) {
 						$this->keepExternalVarsCase = $this->parser->keepExternalVarsCase;
@@ -105,6 +105,7 @@ class EDParserAuto extends EDParserBase {
 			return null;
 		}
 		if ( is_array( $values ) && self::count( $values ) ) {
+			$values['__format'] = [ $class::NAME ];
 			return $values;
 		}
 		return null;

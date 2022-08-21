@@ -5,6 +5,8 @@
  * @author Alexander Mashin
  */
 class EDParserYAMLwithJSONPath extends EDParserJSONwithJSONPath {
+	/** @const string NAME The name of this format. */
+	public const NAME = 'YAML';
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 5;
 
@@ -36,16 +38,16 @@ class EDParserYAMLwithJSONPath extends EDParserJSONwithJSONPath {
 		try {
 			$yaml_tree = yaml_parse( $text );
 		} catch ( Exception $e ) {
-			throw new EDParserException( 'externaldata-invalid-yaml' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
 		}
 		if ( $yaml_tree === null ) {
 			// It's probably invalid JSON.
-			throw new EDParserException( 'externaldata-invalid-yaml' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
 		}
 		try {
 			$json = new EDJsonObject( $yaml_tree );
 		} catch ( MWException $e ) {
-			throw new EDParserException( 'externaldata-invalid-yaml' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
 		}
 		$values = $this->extractJsonPaths( $json );
 		// Save the whole YAML tree for Lua.

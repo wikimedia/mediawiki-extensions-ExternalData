@@ -7,6 +7,8 @@
  */
 
 class EDParserRegex extends EDParserBase {
+	/** @const string NAME The name of this format. */
+	public const NAME = 'TEXT';
 	/** @var string The regular expression. */
 	private $regex;
 
@@ -36,7 +38,11 @@ class EDParserRegex extends EDParserBase {
 			$this->regex = $regex;
 		} else {
 			// A broken regular expression.
-			throw new EDParserException( 'externaldata-invalid-regex', $regex );
+			throw new EDParserException(
+				'externaldata-invalid-format-explicit',
+				$regex,
+				'PERL-compatible regular expression'
+			);
 		}
 		// Restore warnings.
 		self::restoreWarnings();

@@ -5,8 +5,10 @@
  * @author Alexander Mashin
  */
 class EDParserYAMLsimple extends EDParserJSONsimple {
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = 'yaml';
+	/** @const string NAME The name of this format. */
+	public const NAME = 'YAML';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [ 'yaml', 'yml' ];
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 5;
 
@@ -40,14 +42,17 @@ class EDParserYAMLsimple extends EDParserJSONsimple {
 	 */
 	public function __invoke( $text, $path = null ): array {
 		$values = [];
+		self::throwWarnings();
 		try {
 			$yaml_tree = yaml_parse( $text );
 		} catch ( Exception $e ) {
-			throw new EDParserException( 'externaldata-invalid-yaml' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
+		} finally {
+			self::stopThrowingWarnings();
 		}
 		if ( $yaml_tree === null ) {
 			// It's probably invalid JSON.
-			throw new EDParserException( 'externaldata-invalid-yaml' );
+			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
 		}
 		if ( is_array( $yaml_tree ) ) {
 			self::parseTree( $yaml_tree, $values );

@@ -7,8 +7,10 @@
  */
 
 class EDParserGFF extends EDParserBase {
-	/** @const string|array|null EXT The usual file extension of this format. */
-	protected const EXT = 'gff';
+	/** @const string NAME The name of this format. */
+	public const NAME = 'GFF';
+	/** @const array EXT The usual file extensions of this format. */
+	protected const EXT = [ 'gff' ];
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 10;
 
@@ -24,34 +26,26 @@ class EDParserGFF extends EDParserBase {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $path = null ): array {
-		// use an fgetcsv() call, similar to the one in getCSVData()
-		// (fgetcsv() can handle delimiters other than commas, in this
-		// case a tab)
-		$fiveMBs = 5 * 1024 * 1024;
-		$fp = fopen( "php://temp/maxmemory:$fiveMBs", 'r+' );
-		fwrite( $fp, $text );
-		rewind( $fp );
-		$table = [];
-		// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
-		while ( $line = fgetcsv( $fp, null, "\t" ) ) {
-			// ignore comment lines
-			if ( strpos( $line[0], '##' ) !== 0 ) {
-				// special handling for final 'attributes' column
-				if ( array_key_exists( 8, $line ) ) {
-					$attributes = explode( ';', $line[8] );
-					foreach ( $attributes as $attribute ) {
-						$keyAndValue = explode( '=', $attribute, 2 );
-						if ( count( $keyAndValue ) === 2 ) {
-							$key = strtolower( $keyAndValue[0] );
-							$value = $keyAndValue[1];
-							$line[$key] = $value;
-						}
+		$table = array_map( static function ( $line ) {
+			$cells = str_getcsv( $line, "\t" );
+			// Require at least eight columns.
+			if ( count( $cells ) < 8 ) {
+				throw new EDParserException( 'externaldata-invalid-format', self::NAME, 'At least 8 columns required' );
+			}
+			if ( array_key_exists( 8, $cells ) ) {
+				$attributes = explode( ';', $cells[8] );
+				foreach ( $attributes as $attribute ) {
+					if ( strpos( $attribute, '=' ) !== false ) {
+						[ $key, $value ] = explode( '=', $attribute, 2 );
+						$cells[strtolower( $key )] = $value;
 					}
 				}
-				array_push( $table, $line );
 			}
-		}
-		fclose( $fp );
+			return $cells;
+		// Filter out empty lines after splitting the text by various newlines.
+		}, array_filter( preg_split( "/\r\n|\n|\r/", $text ), static function ( $line ) {
+			return trim( $line ) !== '';
+		} ) );
 
 		$values = parent::__invoke( $text );
 		foreach ( $table as $line ) {

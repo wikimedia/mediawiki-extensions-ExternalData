@@ -46,7 +46,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 			// MW parser.
 			$this->aggregate = json_decode( $args['aggregate'], true );
 			if ( !$this->aggregate ) {
-				$this->error( 'externaldata-invalid-json' );
+				$this->error( 'externaldata-invalid-format', 'JSON' );
 			}
 		} elseif ( isset( $args['find query'] ) ) {
 			// Otherwise, was a direct MongoDB "find" query JSON string provided?
