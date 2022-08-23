@@ -15,7 +15,7 @@ class EDParserYAMLwithJSONPath extends EDParserJSONwithJSONPath {
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
-	 * @throws EDParserException.
+	 * @throws EDParserException
 	 *
 	 */
 	public function __construct( array $params ) {

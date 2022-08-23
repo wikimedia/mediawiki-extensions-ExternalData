@@ -22,6 +22,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		// the MongoDB connect string, which may have sensitive
 		// information.
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			return new MongoClient( $this->connectString );
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
@@ -39,6 +40,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 		if ( !$this->mongoClient ) {
 			return null;
 		}
+		// @phan-suppress-next-line PhanUndeclaredClassMethod optional extension.
 		$db = $this->mongoClient->SelectDb( $this->credentials['dbname'] );
 		if ( !$db ) {
 			$this->error( 'externaldata-db-unknown-database', $this->dbId );
@@ -51,6 +53,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 			return null;
 		}
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			$collection = new MongoCollection( $db, $this->from );
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-mongodb-unknown-collection', $this->dbId . ':' . $this->from );
@@ -71,6 +74,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 * @return array MongoCursor
 	 */
 	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 		return iterator_to_array( $collection->find( $filter, $columns )->sort( $sort )->limit( $limit ) );
 	}
 
@@ -80,14 +84,15 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 * @param MongoCollection $collection
 	 * @param array $aggregate
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	protected function aggregate( $collection, array $aggregate ) {
-		$aggregateResult = $collection->aggregate( $this->aggregate );
-		if ( $aggregateResult['ok'] ) {
-			return $aggregateResult['result'];
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+		$aggregate_result = $collection->aggregate( $this->aggregate );
+		if ( $aggregate_result['ok'] ) {
+			return $aggregate_result['result'];
 		} else {
-			$this->error( 'externaldata-mongodb-aggregation-failed', $aggregateResult['errmsg'] );
+			$this->error( 'externaldata-mongodb-aggregation-failed', $aggregate_result['errmsg'] );
 			return null;
 		}
 	}
@@ -96,6 +101,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 * Disconnect from MongoDB.
 	 */
 	protected function disconnect() {
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 		$this->mongoClient->close();
 	}
 }

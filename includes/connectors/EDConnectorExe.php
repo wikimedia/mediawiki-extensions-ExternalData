@@ -24,7 +24,7 @@ class EDConnectorExe extends EDConnectorBase {
 	private $command;
 	/** @var array $params Parameters to $command. */
 	private $params;
-	/** @var array $validatedParams Parameter values after filtering and applying defaults. */
+	/** @var array|null $validatedParams Parameter values after filtering and applying defaults. */
 	private $validatedParams = [];
 	/** @var array $paramFilters An associative array of regular expression filters for parameters. */
 	private $paramFilters;
@@ -93,6 +93,7 @@ class EDConnectorExe extends EDConnectorBase {
 		// The required parameters are stored as a secret in LocalSettings.php.
 		$this->validatedParams = null;
 		if ( isset( $args['params'] ) && is_array( $args['params'] ) ) {
+			// @phan-suppress-next-line SecurityCheck-ReDoS Make PHAN sut up.
 			$this->validatedParams = $this->validateParams( $args, $args['params'], $this->paramFilters );
 		}
 
@@ -131,10 +132,12 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 
 		// Get program's output from a temporary file rather than standard output.
-		if ( isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
+		global $wgTmpDirectory;
+		if ( $wgTmpDirectory && isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
 			$hash = hash( 'fnv1a64', $this->input );
-			global $wgTmpDirectory;
+			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable WTF?
 			$this->tempFile = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $args['temp'] );
+			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable WTF?
 			$command = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $command );
 		}
 
@@ -275,7 +278,7 @@ class EDConnectorExe extends EDConnectorBase {
 			] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->add( [ '__throttled_till' => [ $this->waitTill ] ], true );
+				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
 			}
 			if ( $error ) {
 				// Let's save the ignored warning.
@@ -288,7 +291,7 @@ class EDConnectorExe extends EDConnectorBase {
 			// Nothing to serve.
 			if ( $this->waitTill ) {
 				// It was throttled, and there was no cached value.
-				$this->error( 'externaldata-throttled', $this->program, (int)ceil( $this->waitTill ) );
+				$this->error( 'externaldata-throttled', $this->program, (string)(int)ceil( $this->waitTill ) );
 			} else {
 				// It wasn't throttled; just could not get it.
 				$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );
@@ -317,14 +320,19 @@ class EDConnectorExe extends EDConnectorBase {
 					$params['data'] = "$id=__text";
 					$params['format'] = 'text';
 					$params = self::supplementParams( $params );
-					$connector = new self( $params, $parser->getTitle() );
-					if ( !$connector->errors() ) {
-						if ( $connector->run() ) {
-							$values = $connector->result();
-							return [ $values[$id][0], 'markerType' => 'nowiki' ];
+					$title = $parser->getTitle();
+					if ( $title ) {
+						// @phan-suppress-next-line SecurityCheck-ReDoS
+						$connector = new self( $params, $title );
+						if ( !$connector->errors() ) {
+							if ( $connector->run() ) {
+								$values = $connector->result();
+								return [ $values[$id][0], 'markerType' => 'nowiki' ];
+							}
 						}
+						return EDParserFunctions::formatErrorMessages( $connector->errors() );
 					}
-					return EDParserFunctions::formatErrorMessages( $connector->errors() );
+					return false;
 				}
 			);
 		}
@@ -417,19 +425,20 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param string $str Text to add wikilinks in dot format.
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4dot( string $str ) {
+	public static function wikilinks4dot( $str ) {
 		// Process URL = "[[wikilink]]" in properties.
 		$dewikified = preg_replace_callback(
 			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
 			static function ( array $m ) {
-				return $m['attr'] . ' = "' . CoreParserFunctions::localurl( null, $m['url'] ) . '"';
+				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
 			},
 			$str
 		);
 		// Process [[wikilink]] in nodes.
 		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
 			$props = isset( $m[2] ) ? $m[2] : '';
-			return '"' . $m[1] . '"[URL = "' . CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
+			return '"' . $m[1]
+				 . '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
 		}, $dewikified );
 		return $dewikified;
 	}
@@ -440,11 +449,11 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param string $str Text to add wikilinks in UML format.
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4uml( string $str ) {
+	public static function wikilinks4uml( $str ) {
 		// Process [[wikilink]] in nodes.
 		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^\]]*))?]]/', static function ( array $m ) {
 			$alias = isset( $m[2] ) ? $m[2] : $m[1];
-			return '[[' . CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
+			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
 		}, $str );
 	}
 
@@ -454,7 +463,7 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param string $xml XML to extract SVG from.
 	 * @return string The stripped SVG.
 	 */
-	public static function innerXML( string $xml ): string {
+	public static function innerXML( $xml ) {
 		$dom = new DOMDocument();
 		$dom->loadXML( $xml );
 		return $dom->saveHTML();

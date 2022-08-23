@@ -150,37 +150,37 @@ trait EDParsesParams {
 			/x
 END;
 			// " - fix for color highlighting in vi :)
-			$keyValuePairs = preg_split( $pattern, $arg );
-			$splitArray = [];
+			$key_value_pairs = preg_split( $pattern, $arg );
+			$split_array = [];
 			$counter = 0;
-			foreach ( $keyValuePairs as $keyValuePair ) {
-				if ( $keyValuePair === '' ) {
+			foreach ( $key_value_pairs as $key_value_pair ) {
+				if ( $key_value_pair === '' ) {
 					// Ignore.
-				} elseif ( strpos( $keyValuePair, '=' ) !== false ) {
-					[ $key, $value ] = explode( '=', $keyValuePair, 2 );
-					$splitArray[trim( $key )] = trim( $value );
+				} elseif ( strpos( $key_value_pair, '=' ) !== false ) {
+					[ $key, $value ] = explode( '=', $key_value_pair, 2 );
+					$split_array[trim( $key )] = trim( $value );
 				} elseif ( $numeric ) {
-					$splitArray[$counter++] = trim( $keyValuePair );
+					$split_array[$counter++] = trim( $key_value_pair );
 				} else {
-					$splitArray[trim( $keyValuePair )] = trim( $keyValuePair );
+					$split_array[trim( $key_value_pair )] = trim( $key_value_pair );
 				}
 			}
 		} else {
 			// It's already an array.
-			$splitArray = $arg;
+			$split_array = $arg;
 		}
 		// Set the letter case as required.
-		$caseConvertedArray = [];
-		foreach ( $splitArray as $key => $value ) {
+		$case_converted_array = [];
+		foreach ( $split_array as $key => $value ) {
 			$new_key = trim( $lowercaseKeys ? strtolower( $key ) : $key );
 			if ( is_string( $value ) ) {
 				$new_value = trim( $lowercaseValues ? strtolower( $value ) : $value );
 			} else {
 				$new_value = $value;
 			}
-			$caseConvertedArray[$new_key] = $new_value;
+			$case_converted_array[$new_key] = $new_value;
 		}
-		return $caseConvertedArray;
+		return $case_converted_array;
 	}
 
 	/**
@@ -235,9 +235,9 @@ END;
 
 	/**
 	 * Instead of producing a warning, throw an exception.
-	 * @throws Exception
 	 */
 	protected static function throwWarnings() {
+		// @phan-suppress-next-line PhanTypeMismatchArgumentInternal, PhanPluginNeverReturnFunction
 		set_error_handler( static function ( $errno, $errstr ) {
 			throw new Exception( $errstr );
 		} );

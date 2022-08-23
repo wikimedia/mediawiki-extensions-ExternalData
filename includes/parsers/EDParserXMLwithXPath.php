@@ -18,7 +18,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
-	 * @throws MWException.
+	 * @throws MWException
 	 *
 	 */
 	public function __construct( array $params ) {

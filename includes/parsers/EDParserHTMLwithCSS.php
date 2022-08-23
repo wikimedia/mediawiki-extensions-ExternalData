@@ -1,11 +1,12 @@
 <?php
+use Symfony\Component\CssSelector\CssSelectorConverter;
+
 /**
  * Class for HTML parser extracting data using CSS selectors with slightly extended syntax.
  *
  * @author Alexander Mashin
  *
  */
-
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	/** @const array EXT The usual file extensions of this format. */
 	protected const EXT = [ 'htm', 'html' ];
@@ -18,7 +19,7 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
-	 * @throws EDParserException.
+	 * @throws EDParserException
 	 *
 	 */
 	public function __construct( array $params ) {
@@ -40,13 +41,15 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 		}
 
 		// Convert CSS selectors to XPaths and record them in $mappings.
-		$converter = new Symfony\Component\CssSelector\CssSelectorConverter();
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+		$converter = new CssSelectorConverter();
 		$selector_regex = '/(?<selector>.+?)(\.\s*attr\s*\(\s*(?<quote>["\']?)(?<attr>.+?)\k<quote>\s*\))?$/i';
 		foreach ( $this->external as &$selector ) {
 			if ( !preg_match( $selector_regex, $selector, $matches ) ) {
 				throw new EDParserException( 'externaldata-invalid-format-explicit', $selector, 'CSS selector' );
 			}
 			try {
+				// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 				$xpath = $converter->toXPath( $matches['selector'] );
 			} catch ( Exception $e ) {
 				throw new EDParserException(

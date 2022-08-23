@@ -32,8 +32,9 @@ class EDParserGFF extends EDParserBase {
 			if ( count( $cells ) < 8 ) {
 				throw new EDParserException( 'externaldata-invalid-format', self::NAME, 'At least 8 columns required' );
 			}
-			if ( array_key_exists( 8, $cells ) ) {
-				$attributes = explode( ';', $cells[8] );
+			if ( isset( $cells[8] ) ) {
+				// @phan-suppress-next-line PhanTypeMismatchArgumentNullableInternal
+				$attributes = $cells[8] ? explode( ';', $cells[8] ) : [];
 				foreach ( $attributes as $attribute ) {
 					if ( strpos( $attribute, '=' ) !== false ) {
 						[ $key, $value ] = explode( '=', $attribute, 2 );

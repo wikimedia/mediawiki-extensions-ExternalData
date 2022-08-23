@@ -77,6 +77,7 @@ trait EDConnectorCached {
 
 		// If there is no fresh cache, try to get from the web.
 		$this->cached = (bool)$cached;
+		// @phan-suppress-next-line PhanSuspiciousValueComparison WTF?
 		if ( !self::$cacheIsUp || !$this->cached || !$this->cacheFresh || $this->cacheExpires === 0 ) {
 			$result = $func( ...$args ); // actually call the function.
 			if ( $result ) {

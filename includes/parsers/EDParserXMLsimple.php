@@ -54,7 +54,7 @@ class EDParserXMLsimple extends EDParserXML {
 		if ( !xml_parse( $xml_parser, $xml, true ) ) {
 			throw new EDParserException( 'externaldata-xml-error',
 				xml_error_string( xml_get_error_code( $xml_parser ) ),
-				xml_get_current_line_number( $xml_parser )
+				(string)xml_get_current_line_number( $xml_parser )
 			);
 		}
 		xml_parser_free( $xml_parser );

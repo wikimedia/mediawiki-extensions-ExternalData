@@ -165,11 +165,11 @@ abstract class EDConnectorBase {
 	 *
 	 * @param string $name Parser function name.
 	 * @param array $args Its parameters.
-	 * @param Title $title A title object.
+	 * @param Title|null $title A title object.
 	 *
 	 * @return EDConnectorBase An EDConnector* object.
 	 */
-	public static function getConnector( $name, array $args, Title $title ): EDConnectorBase {
+	public static function getConnector( $name, array $args, ?Title $title ): EDConnectorBase {
 		$supplemented = self::supplementParams( $args );
 		$class = self::getConnectorClass( $name, $supplemented );
 		// Instantiate the connector. If $class is empty, either this extension or $wgExternalDataConnectors is broken.
@@ -183,11 +183,9 @@ abstract class EDConnectorBase {
 		$sources = self::setting( 'Sources' );
 
 		// Read old style settings.
-		$deprecated = [];
 		$old_prefix = self::$oldPrefix;
 		foreach ( self::OLD_CONFIG as $old => $new ) {
 			if ( isset( $GLOBALS["$old_prefix$old"] ) ) {
-				$deprecated[] = "$old_prefix$old";
 				$global = $GLOBALS["$old_prefix$old"];
 				if ( is_array( $global ) && !in_array( $old, self::GLOBAL_ARRAYS ) ) {
 					// This $wgExternalData... is per data source.
@@ -202,11 +200,6 @@ abstract class EDConnectorBase {
 					$sources['*'][$new] = $global;
 				}
 			}
-		}
-
-		// Issue deprecation warnings:
-		foreach ( $deprecated as $global ) {
-			// wfDeprecated( $global, 'since October 20th, 2021', 'External Data' );
 		}
 
 		self::$sources = $sources;
@@ -229,16 +222,20 @@ abstract class EDConnectorBase {
 			// Get URL components.
 			$supplemented['components'] = parse_url( $supplemented['url'] );
 			if ( isset( $supplemented['components']['host'] ) ) {
+				// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset Make PHAN shut up.
 				$supplemented['host'] = $supplemented['components']['host'];
 			}
 			// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
+			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
 			if ( $supplemented['host'] && preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
 				$supplemented['2nd_lvl_domain'] = $matches[0];
 			} else {
+				// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
 				$supplemented['2nd_lvl_domain'] = $supplemented['host'];
 			}
 			$fields = self::URL_PARAMS;
 		}
+		// @phan-suppress-next-line PhanSuspiciousBinaryAddLists Shut up.
 		$fields += self::ID_PARAMS;
 		$supplemented['*'] = '*';
 
@@ -354,7 +351,7 @@ abstract class EDConnectorBase {
 	 * Register an error.
 	 *
 	 * @param array|string $code Error message key or array of errors.
-	 * @param string $params,... Message parameters.
+	 * @param string ...$params Message parameters.
 	 */
 	protected function error( $code, ...$params ) {
 		if ( !$this->errors ) {

@@ -66,7 +66,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 
 	/**
 	 * Get query result as a two-dimensional array.
-	 * @return ?array
+	 * @return \Wikimedia\Rdbms\IResultWrapper|null
 	 */
 	protected function fetch() {
 		try {

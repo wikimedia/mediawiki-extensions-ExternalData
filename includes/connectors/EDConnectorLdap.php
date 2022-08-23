@@ -21,7 +21,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	private $user;
 	/** @var string Real LDAP password. */
 	private $password;
-	/** @var resource Connection to LDAP server. */
+	/** @var resource|null Connection to LDAP server. */
 	private $connection;
 
 	/**

@@ -40,7 +40,7 @@ class EDConnectorWeb extends EDConnectorHttp {
 				if ( is_array( $error ) && isset( $error['message'] ) && isset( $error['params'] ) ) {
 					$this->error( $error['message'], $error['params'] ); // -- MW message.
 				} else {
-					$this->error( 'externaldata-url-not-fetched', $error ); // -- plain string.
+					$this->error( 'externaldata-url-not-fetched', (string)$error ); // -- plain string.
 				}
 			}
 			$log_errors = false; // once is enough.

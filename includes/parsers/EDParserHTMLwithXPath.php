@@ -43,7 +43,7 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			// Give the log a rest. See https://stackoverflow.com/a/10482622.
 			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 			if ( !$doc->loadHTML( $html ) ) {
-				throw EDParserException( 'externaldata-parsing-html-failed' );
+				throw new EDParserException( 'externaldata-parsing-html-failed' );
 			}
 			libxml_clear_errors();
 			libxml_use_internal_errors( $internalErrors ); // -- restore.

@@ -9,9 +9,9 @@
 class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 	/** @var string $connectionString PostgreSQL connection string. */
 	private $connectionString;
-	/** @var PgSql\Connection $pg Connection to PostrgreSQL server. */
+	/** @var resource|false $pg Connection to PostrgreSQL server. */
 	private $pg;
-	/** @var mysqli_stmt $prepared The prepared query. */
+	/** @var resource|false $prepared The prepared query. */
 	protected $prepared;
 
 	/**
@@ -49,6 +49,7 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 		// Throw exceptions instead of warnings.
 		self::throwWarnings();
 		try {
+			// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
 			$this->pg = pg_connect( $this->connectionString, PGSQL_CONNECT_FORCE_NEW );
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
@@ -56,6 +57,7 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 			return false;
 		}
 		self::stopThrowingWarnings();
+		// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
 		if ( $this->pg === false || pg_connection_status( $this->pg ) !== PGSQL_CONNECTION_OK ) {
 			// Could not create Database object.
 			$this->error( 'externaldata-db-could-not-connect', '(no connection)' );
@@ -78,6 +80,7 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 		// Execute query.
 		$result = pg_execute( $this->pg, $this->name, $this->parameters );
 		if ( $result !== false ) {
+			// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
 			$rows = pg_fetch_all( $result, PGSQL_ASSOC );
 			return $rows;
 		} else {

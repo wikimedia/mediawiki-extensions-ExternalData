@@ -65,6 +65,7 @@ class EDConnectorSoap extends EDConnectorHttp {
 		// Suppress warnings.
 		self::suppressWarnings();
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
 			$client = new SoapClient( $url, [ 'trace' => true ] );
 		} catch ( Exception $e ) {
 			if ( $log_errors_client ) {
@@ -86,6 +87,7 @@ class EDConnectorSoap extends EDConnectorHttp {
 			return null;
 		}
 		if ( $result ) {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
 			$this->headers = self::headers( $client->__getLastResponseHeaders() );
 			$response = $this->responseName;
 			return $result->$response;

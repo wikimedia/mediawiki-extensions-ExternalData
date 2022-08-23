@@ -273,17 +273,17 @@ class EDJsonObject {
 	/**
 	 * Evaluates a disjunction.
 	 *
-	 * @param mixed &$jsonObject
+	 * @param mixed &$json_object
 	 * @param string $expression A disjunction of boolean expressions
 	 *
 	 * @return bool
 	 *
 	 * @throws MWException
 	 */
-	private function booleanExpression( &$jsonObject, $expression ) {
+	private function booleanExpression( &$json_object, $expression ) {
 		$ands = preg_split( self::RE_OR, $expression );
 		foreach ( $ands as $subexpr ) {
-			if ( $this->booleanExpressionAnds( $jsonObject, $subexpr ) ) {
+			if ( $this->booleanExpressionAnds( $json_object, $subexpr ) ) {
 				return true;
 			}
 		}
@@ -293,72 +293,68 @@ class EDJsonObject {
 	/**
 	 * Splits a jsonPath.
 	 *
-	 * @param string $jsonPath jsonPath
-	 * @param array &$result Split jsonPath
+	 * @param string $json_path jsonPath
 	 * @param int $offset Initial offset in jsonPath
-	 *
-	 * @return int|bool
+	 * @return array|null
 	 */
-	private function matchValidExpression( $jsonPath, array &$result, $offset = 0 ) {
-		if ( $jsonPath[$offset] != self::TOK_SELECTOR_BEGIN ) {
-			return false;
+	private function matchValidExpression( $json_path, $offset = 0 ) {
+		if ( $json_path[$offset] != self::TOK_SELECTOR_BEGIN ) {
+			return null;
 		}
-		$initialOffset = $offset;
+		$initial_offset = $offset;
 		$offset += 1;
-		$parenCount = 0;
-		$bracesCount = 1;
+		$parent_count = 0;
+		$braces_count = 1;
 		// $count is a reference to the counter of the $startChar type
 		$match = [];
-		while ( $bracesCount > 0 && $parenCount >= 0 ) {
-			if ( preg_match( self::RE_NEXT_SUBEXPR, $jsonPath, $match,  PREG_OFFSET_CAPTURE, $offset ) ) {
+		while ( $braces_count > 0 && $parent_count >= 0 ) {
+			if ( preg_match( self::RE_NEXT_SUBEXPR, $json_path, $match, PREG_OFFSET_CAPTURE, $offset ) ) {
 				$c = $match[1][0];
 				if ( $c === self::TOK_EXPRESSION_BEGIN ) {
-					$parenCount += 1;
+					$parent_count += 1;
 				} elseif ( $c === self::TOK_EXPRESSION_END ) {
-					$parenCount -= 1;
+					$parent_count -= 1;
 				} elseif ( $c === self::TOK_SELECTOR_BEGIN ) {
-					$bracesCount += 1;
+					$braces_count += 1;
 				} elseif ( $c === self::TOK_SELECTOR_END ) {
-					$bracesCount -= 1;
+					$braces_count -= 1;
 				}
 				$offset = $match[1][1] + 1;
 			} else {
 				break;
 			}
 		}
-		if ( $bracesCount == 0 && $parenCount == 0 ) {
-			$result = [
-				substr( $jsonPath, $initialOffset + 1, $offset - $initialOffset - 2 ),
-				substr( $jsonPath, $offset - $initialOffset )
+		if ( $braces_count == 0 && $parent_count == 0 ) {
+			return [
+				substr( $json_path, $initial_offset + 1, $offset - $initial_offset - 2 ),
+				substr( $json_path, $offset - $initial_offset )
 			];
-			return 1;
 		}
-		$result = [];
-		return 0;
+		return null;
 	}
 
 	/**
 	 * Get a child JSON object.
 	 *
-	 * @param mixed &$jsonObject
+	 * @param mixed &$json_object
 	 * @param string $childName Name of the child JSON object
 	 * @param array &$result An enumerated array of child JSON objects
 	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
 	 *
 	 * @return bool
 	 */
-	private function opChildName( &$jsonObject, $childName, &$result, $createInexistent = false ) {
-		if ( is_array( $jsonObject ) ) {
+	private function opChildName( &$json_object, $childName, &$result, $createInexistent = false ) {
+		if ( is_array( $json_object ) ) {
 			if ( $childName === self::TOK_ALL ) {
 				$this->hasDiverged = true;
-				foreach ( $jsonObject as $key => $item ) {
-					$result[] = &$jsonObject[$key];
+				foreach ( $json_object as $key => $item ) {
+					$result[] = &$json_object[$key];
 				}
-			} elseif ( array_key_exists( $childName, $jsonObject ) ) {
-				$result[] = &$jsonObject[$childName];
+			} elseif ( array_key_exists( $childName, $json_object ) ) {
+				$result[] = &$json_object[$childName];
 			} elseif ( $createInexistent ) {
-				$jsonObject[$childName] = [];
-				$result[] = &$jsonObject[$childName];
+				$json_object[$childName] = [];
+				$result[] = &$json_object[$childName];
 			}
 			return true;
 		}
@@ -367,23 +363,23 @@ class EDJsonObject {
 
 	/**
 	 *
-	 * @param mixed &$jsonObject
+	 * @param mixed &$json_object
 	 * @param string $contents
 	 * @param array &$result An enumerated array of child JSON objects
-	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
+	 * @param bool $create_nonexistent Whether to create an empty field for non-existent JOSN child object
 	 *
 	 * @return bool
 	 *
 	 * @throws MWException
 	 */
-	private function opChildSelector( &$jsonObject, $contents, &$result, $createInexistent = false ) {
-		if ( is_array( $jsonObject ) ) {
+	private function opChildSelector( &$json_object, $contents, &$result, $create_nonexistent = false ) {
+		if ( is_array( $json_object ) ) {
 			$match = [];
-			$contentsLen = strlen( $contents );
+			$contents_len = strlen( $contents );
 			if ( $contents === self::TOK_ALL ) {
 				$this->hasDiverged = true;
-				foreach ( $jsonObject as $key => $item ) {
-					$result[] = &$jsonObject[$key];
+				foreach ( $json_object as $key => $item ) {
+					$result[] = &$json_object[$key];
 				}
 			} elseif ( preg_match( self::RE_CHILD_NAME_LIST, $contents, $match ) ) {
 				$names = array_map(
@@ -397,23 +393,23 @@ class EDJsonObject {
 				}
 				$names = array_filter(
 					$names,
-					static function ( $x ) use ( $createInexistent, $jsonObject ) {
-						return $createInexistent || array_key_exists( $x, $jsonObject );
+					static function ( $x ) use ( $create_nonexistent, $json_object ) {
+						return $create_nonexistent || array_key_exists( $x, $json_object );
 					}
 				);
 				foreach ( $names as $name ) {
-					if ( !array_key_exists( $name, $jsonObject ) ) {
-						$jsonObject[$name] = [];
+					if ( !array_key_exists( $name, $json_object ) ) {
+						$json_object[$name] = [];
 					}
-					$result[] = &$jsonObject[$name];
+					$result[] = &$json_object[$name];
 				}
 			} elseif ( preg_match( self::RE_INDEX_LIST, $contents ) ) {
 				$index = array_map(
-					static function ( $x ) use ( $jsonObject ) {
+					static function ( $x ) use ( $json_object ) {
 						$i = (int)trim( $x );
 						if ( $i < 0 ) {
-							$n = count( $jsonObject );
-							$i = $i % $n;
+							$n = count( $json_object );
+							$i %= $n;
 							if ( $i < 0 ) {
 								$i += $n;
 							}
@@ -427,15 +423,15 @@ class EDJsonObject {
 				}
 				$index = array_filter(
 					$index,
-					static function ( $x ) use ( $createInexistent, $jsonObject ) {
-						return $createInexistent || array_key_exists( $x, $jsonObject );
+					static function ( $x ) use ( $create_nonexistent, $json_object ) {
+						return $create_nonexistent || array_key_exists( $x, $json_object );
 					}
 				);
 				foreach ( $index as $i ) {
-					if ( !array_key_exists( $i, $jsonObject ) ) {
-						$jsonObject[$i] = [];
+					if ( !array_key_exists( $i, $json_object ) ) {
+						$json_object[$i] = [];
 					}
-					$result[] = &$jsonObject[$i];
+					$result[] = &$json_object[$i];
 				}
 			} elseif ( preg_match( self::RE_ARRAY_INTERVAL, $contents, $match ) ) {
 				$this->hasDiverged = true;
@@ -452,7 +448,7 @@ class EDJsonObject {
 				}
 				$end = ( $numbers[1] !== '' ? intval( $numbers[1] ) : $end );
 				$begin = ( $numbers[0] !== '' ? intval( $numbers[0] ) : $begin );
-				$slice = EDArraySlice::slice( $jsonObject, $begin, $end, $step, true );
+				$slice = EDArraySlice::slice( $json_object, $begin, $end, $step, true );
 				foreach ( $slice as $i => $x ) {
 					if ( $x !== null ) {
 						$result[] = &$slice[$i];
@@ -461,11 +457,11 @@ class EDJsonObject {
 			} elseif (
 				$contents[0] === self::TOK_BOOL_EXPR
 				&& $contents[1] === self::TOK_EXPRESSION_BEGIN
-				&& $contents[$contentsLen - 1] === self::TOK_EXPRESSION_END
+				&& $contents[$contents_len - 1] === self::TOK_EXPRESSION_END
 			) {
 				$this->hasDiverged = true;
-				$subexpr = substr( $contents, 2, $contentsLen - 3 );
-				foreach ( $jsonObject as &$child ) {
+				$subexpr = substr( $contents, 2, $contents_len - 3 );
+				foreach ( $json_object as &$child ) {
 					if ( $this->booleanExpression( $child, $subexpr ) ) {
 						$result[] = &$child;
 					}
@@ -484,9 +480,7 @@ class EDJsonObject {
 	 * @param mixed &$jsonObject
 	 * @param string $childName Name of JSON child object
 	 * @param array &$result An enumerated array of child JSON objects
-	 *
 	 * @return bool
-	 *
 	 * @throws MWException
 	 */
 	private function opRecursiveSelector( &$jsonObject, $childName, &$result ) {
@@ -501,83 +495,82 @@ class EDJsonObject {
 	/**
 	 * Really evaluate an expression.
 	 *
-	 * @param mixed &$jsonObject
-	 * @param string $jsonPath jsonPath
-	 * @param bool $createInexistent Whether to create an empty field for non-existent JOSN child object
+	 * @param mixed &$json_object
+	 * @param string $json_path jsonPath
+	 * @param bool $create_nonexistent Whether to create an empty field for non-existent JOSN child object
 	 *
 	 * @return mixed
 	 *
 	 * @throws MWException
 	 */
-	private function getReal( &$jsonObject, $jsonPath, $createInexistent = false ) {
+	private function getReal( &$json_object, $json_path, $create_nonexistent = false ) {
 		$match = [];
-		if ( preg_match( self::RE_ROOT_OBJECT, $jsonPath, $match ) === 0 ) {
+		if ( !preg_match( self::RE_ROOT_OBJECT, $json_path, $match ) ) {
 			throw new MWException( wfMessage( 'externaldata-jsonpath-error' )->text() );
 		}
-		$jsonPath = $match[1];
-		$rootObjectPrev = &$this->jsonObject;
-		$this->jsonObject = &$jsonObject;
-		$selection = [ &$jsonObject ];
-		while ( strlen( $jsonPath ) > 0 && count( $selection ) > 0 ) {
-			$newSelection = [];
-			if ( preg_match( self::RE_CHILD_NAME, $jsonPath, $match ) ) {
-				foreach ( $selection as &$jsonObject ) {
-					$this->opChildName( $jsonObject, $match[1], $newSelection, $createInexistent );
+		$json_path = $match[1];
+		$root_object_prev = &$this->jsonObject;
+		$this->jsonObject = &$json_object;
+		$selection = [ &$json_object ];
+		while ( strlen( $json_path ) > 0 && count( $selection ) > 0 ) {
+			$new_selection = [];
+			if ( preg_match( self::RE_CHILD_NAME, $json_path, $match ) ) {
+				foreach ( $selection as &$current_object ) {
+					$this->opChildName( $current_object, $match[1], $new_selection, $create_nonexistent );
 				}
+				unset( $current_object );
 				if (
-					empty( $newSelection ) &&
-					preg_match( self::RE_PARENT_LENGTH, $match[0], $lengthMatch )
+					empty( $new_selection ) &&
+					preg_match( self::RE_PARENT_LENGTH, $match[0] )
 				) {
 					if ( count( $selection ) > 1 ) {
-						$newSelection = [];
+						$new_selection = [];
 						/** .length of each array/string in array of arrays $item */
 						foreach ( $selection as $item ) {
-							if ( is_array( $item ) ) {
-								array_push( $newSelection, count( $item ) );
-							} else {
-								array_push( $newSelection, strlen( $item ) );
-							}
+							$new_selection[] = is_array( $item ) ? count( $item ) : strlen( $item );
 						}
 					} elseif ( count( $selection ) == 1 ) {
 						if ( is_array( $selection[0] ) ) {
-							$newSelection = count( $selection[0] );
+							$new_selection = count( $selection[0] );
 						} else {
-							$newSelection = strlen( $selection[0] );
+							$new_selection = strlen( $selection[0] );
 						}
 					}
 				}
-				if ( empty( $newSelection ) ) {
+				if ( empty( $new_selection ) ) {
 					$selection = false;
 					break;
 				} else {
-					$jsonPath = $match[2];
+					$json_path = $match[2];
 				}
-			} elseif ( $this->matchValidExpression( $jsonPath, $match ) ) {
+			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
+			} elseif ( $match = $this->matchValidExpression( $json_path ) ) {
 				$contents = $match[0];
-				foreach ( $selection as &$jsonObject ) {
-					$this->opChildSelector( $jsonObject, $contents, $newSelection, $createInexistent );
+				foreach ( $selection as &$current_object ) {
+					$this->opChildSelector( $current_object, $contents, $new_selection, $create_nonexistent );
 				}
-				if ( empty( $newSelection ) ) {
+				unset( $current_object );
+				if ( empty( $new_selection ) ) {
 					$selection = false;
 					break;
 				} else {
-					$jsonPath = $match[1];
+					$json_path = $match[1];
 				}
-			} elseif ( preg_match( self::RE_RECURSIVE_SELECTOR, $jsonPath, $match ) ) {
+			} elseif ( preg_match( self::RE_RECURSIVE_SELECTOR, $json_path, $match ) ) {
 				$this->hasDiverged = true;
-				$this->opRecursiveSelector( $selection, $match[1], $newSelection );
-				if ( empty( $newSelection ) ) {
+				$this->opRecursiveSelector( $selection, $match[1], $new_selection );
+				if ( empty( $new_selection ) ) {
 					$selection = false;
 					break;
 				} else {
-					$jsonPath = $match[2];
+					$json_path = $match[2];
 				}
 			} else {
 				throw new MWException( wfMessage( 'externaldata-jsonpath-error' )->text() );
 			}
-			$selection = $newSelection;
+			$selection = $new_selection;
 		}
-		$this->jsonObject = &$rootObjectPrev;
+		$this->jsonObject = &$root_object_prev;
 		return $selection;
 	}
 }

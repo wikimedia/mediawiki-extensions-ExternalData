@@ -14,16 +14,16 @@ class EDParserCSV extends EDParserBase {
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 15;
 
-	/** @var @const int NO_HEADER There is no header line. */
+	/** @const int NO_HEADER There is no header line. */
 	private const NO_HEADER = 0;
-	/** @var @const int HEADER There is a header line. */
+	/** @const int HEADER There is a header line. */
 	private const HEADER = 1;
-	/** @var @const int DETECT_HEADER Detect, whether there is a header line. */
+	/** @const int DETECT_HEADER Detect, whether there is a header line. */
 	private const DETECT_HEADER = 2;
 	/** @var int $header Whether the header is present, not, or has to be autodetected. */
 	private $header;
 
-	/** @var string $delimiters Possible column delimiters. */
+	/** @var string[] $delimiters Possible column delimiters. */
 	private $delimiters = [ ';', ',', "\t", '|' ];
 
 	/**
@@ -103,11 +103,10 @@ class EDParserCSV extends EDParserBase {
 			"\x00\x00\xFE\xFF",
 			"\xDD\x73\x66\x73",
 		];
-		// $decodedFirstCell = utf8_decode( $table[0][0] );
-		$decodedFirstCell = mb_convert_encoding( $table[0][0], 'ISO-8859-1', 'UTF-8' );
+		$decoded_first_cell = mb_convert_encoding( $table[0][0], 'ISO-8859-1', 'UTF-8' );
 		foreach ( $sets as $set ) {
-			if ( strncmp( $decodedFirstCell, $set, strlen( $set ) ) === 0 ) {
-				$table[0][0] = substr( $decodedFirstCell, strlen( $set ) + 1 );
+			if ( strncmp( $decoded_first_cell, $set, strlen( $set ) ) === 0 ) {
+				$table[0][0] = substr( $decoded_first_cell, strlen( $set ) + 1 );
 				break;
 			}
 		}
@@ -115,8 +114,8 @@ class EDParserCSV extends EDParserBase {
 		// Another "byte order mark" test, this one copied from the
 		// Data Transfer extension - somehow the first one doesn't work
 		// in all cases.
-		$byteOrderMark = pack( "CCC", 0xef, 0xbb, 0xbf );
-		if ( strncmp( $table[0][0], $byteOrderMark, 3 ) === 0 ) {
+		$byte_order_mark = pack( "CCC", 0xef, 0xbb, 0xbf );
+		if ( strncmp( $table[0][0], $byte_order_mark, 3 ) === 0 ) {
 			$table[0][0] = substr( $table[0][0], 3 );
 		}
 
@@ -124,6 +123,7 @@ class EDParserCSV extends EDParserBase {
 		$header = $this->header === self::HEADER ||
 				$this->header === self::DETECT_HEADER &&
 				self::headerDetected( $table[0], isset( $table[1] ) ? $table[1] : null );
+		$header_vals = null;
 		if ( $header ) {
 			$header_vals = array_shift( $table );
 			// On the off chance that there are one or more blank
@@ -131,15 +131,13 @@ class EDParserCSV extends EDParserBase {
 			while ( count( $header_vals ) === 0 ) {
 				$header_vals = array_shift( $table );
 			}
-		}
 
-		// Unfortunately, some subpar CSV generators don't include
-		// trailing commas, so that a line that should look like
-		// "A,B,,," instead is just printed as "A,B".
-		// To get around this, we first figure out the correct number
-		// of columns in this table - which depends on whether the
-		// CSV has a header or not.
-		if ( $header ) {
+			// Unfortunately, some subpar CSV generators don't include
+			// trailing commas, so that a line that should look like
+			// "A,B,,," instead is just printed as "A,B".
+			// To get around this, we first figure out the correct number
+			// of columns in this table - which depends on whether the
+			// CSV has a header or not.
 			$num_columns = count( $header_vals );
 		} else {
 			$num_columns = 0;
@@ -161,7 +159,7 @@ class EDParserCSV extends EDParserBase {
 				} else {
 					$row_val = '';
 				}
-				if ( $header ) {
+				if ( $header_vals ) {
 					$column = strtolower( trim( $header_vals[$i] ) );
 				} else {
 					// start with an index of 1 instead of 0
@@ -215,7 +213,7 @@ class EDParserCSV extends EDParserBase {
 			return trim( $line ) !== '';
 		} );
 		$any_columns = 0;
-		$any_csv = null;
+		$any_csv = [];
 		$good_columns = 0;
 		$good_csv = null;
 		foreach ( $delimiters as $delimiter ) {

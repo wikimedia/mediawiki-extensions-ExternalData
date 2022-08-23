@@ -1,6 +1,6 @@
 <?php
-
 use SMW\ParserFunctionFactory;
+use SMW\ParserParameterProcessor;
 
 /**
  * Class for handling the parser functions for External Data.
@@ -76,7 +76,7 @@ class EDParserFunctions {
 	 * @param string $name Parser function name.
 	 * @param array $args Parser function parameters ($parser not included).
 	 *
-	 * @return string|array Return an array of values on success, an error message otherwise.
+	 * @return string|array|null Return an array of values on success, an error message otherwise.
 	 */
 	private static function get( Parser $parser, $name, array $args ) {
 		$title = $parser->getTitle();
@@ -143,7 +143,7 @@ class EDParserFunctions {
 	 * @return string
 	 */
 	private static function htmlencode( $str ) {
-		return htmlentities( $str, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, null, false );
+		return htmlentities( $str, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, 'UTF-8', false );
 	}
 
 	/**
@@ -346,12 +346,11 @@ class EDParserFunctions {
 			// Message is created here rather than in EDParserFunctions::actuallyDisplayExternalTable()
 			//      to clear that method from MediaWiki installation-dependent code and make it testable.
 			return [
-				self::formatErrorMessages( wfMessage( $result['error'] )->inContentLanguage()->text() ),
+				self::formatErrorMessages( [ wfMessage( $result['error'] )->inContentLanguage()->text() ] ),
 				'noparse' => false
 			];
-		} else {
-			return $result;
 		}
+		return $result;
 	}
 
 	/**
@@ -375,6 +374,7 @@ class EDParserFunctions {
 				$values[$row][$cargo] = self::getIndexedValue( $local, $row, '' );
 			}
 		}
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Cargo is not necessarily installed.
 		return CargoDisplayFormat::formatArray( $parser, $values, $mappings, $args );
 	}
 
@@ -415,8 +415,10 @@ class EDParserFunctions {
 			}
 
 			// SMW 1.9+
+			// @phan-suppress-next-line PhanUndeclaredClassMethod SMW is optional.
 			$instance = ParserFunctionFactory::newFromParser( $parser )->newSubobjectParserFunction( $parser );
-			return $instance->parse( new SMW\ParserParameterFormatter( $subobject_args ) );
+			// @phan-suppress-next-line PhanUndeclaredClassMethod SMW is optional.
+			return $instance->parse( new ParserParameterProcessor( $subobject_args ) );
 		}
 	}
 
@@ -428,7 +430,7 @@ class EDParserFunctions {
 	public static function doStoreExternalTable( Parser $parser ) {
 		// Quick exit if Semantic MediaWiki is not installed.
 		if ( !class_exists( '\SMW\ParserFunctionFactory' ) ) {
-			return self::formatErrorMessages( wfMessage( 'externaldata-smw-needed' )->inContentLanguage()->text() );
+			return self::formatErrorMessages( [ wfMessage( 'externaldata-smw-needed' )->inContentLanguage()->text() ] );
 		}
 
 		$params = func_get_args();

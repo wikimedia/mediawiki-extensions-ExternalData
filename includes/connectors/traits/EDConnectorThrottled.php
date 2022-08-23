@@ -1,5 +1,4 @@
 <?php
-
 use MediaWiki\MediaWikiServices;
 
 /**
@@ -93,6 +92,7 @@ trait EDConnectorThrottled {
 	private function planPurge( $when ) {
 		if ( method_exists( MediaWikiServices::class, 'getJobQueueGroup' ) ) {
 			// MW 1.37+
+			// @phan-suppress-next-line PhanUndeclaredMethod Different MW versions.
 			$queue_group = MediaWikiServices::getInstance()->getJobQueueGroup();
 		} else {
 			$queue_group = JobQueueGroup::singleton();

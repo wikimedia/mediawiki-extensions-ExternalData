@@ -9,6 +9,8 @@
 class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 	/** @var resource $odbcConnection The ODBC connection resource. */
 	private $odbcConnection;
+	/** @var resource|false $prepared The prepared statement. */
+	private $prepared;
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
 

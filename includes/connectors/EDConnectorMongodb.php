@@ -10,6 +10,9 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
 
+	/** @var string $regexClass Class that stores MongoDB regular expressions. */
+	protected static $regexClass;
+
 	/** @var string MondoDB connection string. */
 	protected $connectString;
 	/** @var array MongoDB aggregate. */
@@ -60,53 +63,54 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 			// use the operators OR, AND, >=, >, <=, < and LIKE
 			// - and NO NUMERIC LITERALS.
 			if ( is_array( $this->conditions ) ) {
-				$whereElements = $this->conditions;
+				$where_elements = $this->conditions;
 			} else {
 				$where = str_ireplace( ' and ', ' AND ', $this->conditions );
-				$whereElements = explode( ' AND ', $where );
+				$where_elements = explode( ' AND ', $where );
 			}
-			foreach ( $whereElements as $key => $whereElement ) {
-				$whereElement = str_ireplace( ' like ', ' LIKE ', $whereElement );
-				if ( strpos( $whereElement, '>=' ) ) {
-					[ $fieldName, $value ] = explode( '>=', $whereElement );
-					$this->find[trim( $fieldName )] = [ '$gte' => trim( $value ) ];
-				} elseif ( strpos( $whereElement, '>' ) ) {
-					[ $fieldName, $value ] = explode( '>', $whereElement );
-					$this->find[trim( $fieldName )] = [ '$gt' => trim( $value ) ];
-				} elseif ( strpos( $whereElement, '<=' ) ) {
-					[ $fieldName, $value ] = explode( '<=', $whereElement );
-					$this->find[trim( $fieldName )] = [ '$lte' => trim( $value ) ];
-				} elseif ( strpos( $whereElement, '<' ) ) {
-					[ $fieldName, $value ] = explode( '<', $whereElement );
-					$this->find[trim( $fieldName )] = [ '$lt' => trim( $value ) ];
-				} elseif ( strpos( $whereElement, ' LIKE ' ) ) {
-					[ $fieldName, $value ] = explode( ' LIKE ', $whereElement );
+			foreach ( $where_elements as $key => $where_element ) {
+				$where_element = str_ireplace( ' like ', ' LIKE ', $where_element );
+				if ( strpos( $where_element, '>=' ) ) {
+					[ $field_name, $value ] = explode( '>=', $where_element );
+					$this->find[trim( $field_name )] = [ '$gte' => trim( $value ) ];
+				} elseif ( strpos( $where_element, '>' ) ) {
+					[ $field_name, $value ] = explode( '>', $where_element );
+					$this->find[trim( $field_name )] = [ '$gt' => trim( $value ) ];
+				} elseif ( strpos( $where_element, '<=' ) ) {
+					[ $field_name, $value ] = explode( '<=', $where_element );
+					$this->find[trim( $field_name )] = [ '$lte' => trim( $value ) ];
+				} elseif ( strpos( $where_element, '<' ) ) {
+					[ $field_name, $value ] = explode( '<', $where_element );
+					$this->find[trim( $field_name )] = [ '$lt' => trim( $value ) ];
+				} elseif ( strpos( $where_element, ' LIKE ' ) ) {
+					[ $field_name, $value ] = explode( ' LIKE ', $where_element );
 					$value = trim( $value );
 					$regex_class = static::$regexClass; // late binding.
-					$this->find[trim( $fieldName )] = new $regex_class( "/$value/i" );
-				} elseif ( strpos( $whereElement, '=' ) ) {
-					[ $fieldName, $value ] = explode( '=', $whereElement );
-					$this->find[trim( $fieldName )] = trim( $value );
+					$this->find[trim( $field_name )] = new $regex_class( "/$value/i" );
+				} elseif ( strpos( $where_element, '=' ) ) {
+					[ $field_name, $value ] = explode( '=', $where_element );
+					$this->find[trim( $field_name )] = trim( $value );
 				} elseif ( is_string( $key ) ) {
-					$this->find[$key] = $whereElement;
+					$this->find[$key] = $where_element;
 				}
 			}
 		}
 
 		// Do the same for the "order=" parameter as the "where=" parameter
 		if ( $this->sqlOptions['ORDER BY'] ) {
-			$sortElements = explode( ',', $this->sqlOptions['ORDER BY'] );
-			foreach ( $sortElements as $sortElement ) {
-				if ( strpos( $sortElement, ' ' ) !== false ) {
-					[ $fieldName, $order ] = explode( ' ', $sortElement, 2 );
-					$orderingNum = 1;
+			$sort_slements = explode( ',', $this->sqlOptions['ORDER BY'] );
+			foreach ( $sort_slements as $sort_element ) {
+				$ordering_num = 1;
+				if ( strpos( $sort_element, ' ' ) !== false ) {
+					[ $field_name, $order ] = explode( ' ', $sort_element, 2 );
+					$ordering_num = 1;
 					if ( $order && strtolower( trim( $order ) ) === 'desc' ) {
-						$orderingNum = -1;
+						$ordering_num = -1;
 					}
 				} else {
-					$fieldName = $sortElement;
+					$field_name = $sort_element;
 				}
-				$this->sort[trim( $fieldName )] = $orderingNum;
+				$this->sort[trim( $field_name )] = $ordering_num;
 			}
 		}
 
@@ -297,7 +301,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 
 		while ( $token !== false ) {
 			if ( !isset( $current[$token] ) ) {
-				return $default;
+				return [ $default ];
 			}
 			$current = $current[$token];
 			$token = strtok( '.' );

@@ -11,13 +11,13 @@ trait EDConnectorParsable {
 	/** @var string[] $encodings Try these encodings. */
 	private $encodings = [];
 
-	/** @var string $startAbsolute Start from this line (absolute, zero-based). */
+	/** @var int $startAbsolute Start from this line (absolute, zero-based). */
 	private $startAbsolute;
-	/** @var string $endAbsolute End with this line (absolute, zero-based). */
+	/** @var int $endAbsolute End with this line (absolute, zero-based). */
 	private $endAbsolute;
-	/** @var string $startPercent Start from this line (percents). */
+	/** @var float $startPercent Start from this line (percents). */
 	private $startPercent;
-	/** @var string $endPercent End with this line (percents). */
+	/** @var float $endPercent End with this line (percents). */
 	private $endPercent;
 	/** @var int $headerLines Always include so many lines from the beginning. */
 	private $headerLines;
@@ -47,6 +47,7 @@ trait EDConnectorParsable {
 			return;
 		}
 
+		// @phan-suppress-next-line PhanUndeclaredProperty keepExternalVarsCase is declared in EDConnectorBase.
 		$this->keepExternalVarsCase = $this->parser->keepExternalVarsCase || $this->keepExternalVarsCase;
 
 		// Set start and end lines.
@@ -148,6 +149,7 @@ trait EDConnectorParsable {
 		// Parsing itself.
 		try {
 			$parsed = array_merge( $parser( $text, $path ), $special_variables );
+			// @phan-suppress-next-line PhanUndeclaredProperty keepExternalVarsCase is declared in EDConnectorBase.
 			$this->keepExternalVarsCase = $parser->keepExternalVarsCase; // can be altered by 'auto' format.
 		} catch ( EDParserException $e ) {
 			$parsed = null;
@@ -171,6 +173,7 @@ trait EDConnectorParsable {
 		if ( isset( $args[$index] ) && $args[$index] ) {
 			[ $this->$attr_absolute, $this->$attr_percent ] = self::parseAbsoluteOrPercent( $args[$index] );
 			if ( $this->$attr_absolute === null && $this->$attr_percent === null ) {
+				// @phan-suppress-next-line PhanUndeclaredMethod error is declared in EDConnectorBase.
 				$this->error( 'externaldata-param-type-error', $name, 'integer or percent' );
 			}
 		}

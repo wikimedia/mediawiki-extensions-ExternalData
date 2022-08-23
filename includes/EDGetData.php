@@ -36,6 +36,7 @@ class EDGetData extends SpecialPage {
 
 		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
 			// MW 1.36+
+			// @phan-suppress-next-line PhanUndeclaredMethod Not necessarily existing in the current version.
 			$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
 		} else {
 			$wikiPage = WikiPage::factory( $title );
@@ -71,14 +72,14 @@ class EDGetData extends SpecialPage {
 			}
 			$row_values = self::getValuesFromCSVLine( $line );
 			$found_match = true;
-			foreach ( $queried_headers as $i => $query_value ) {
-				$single_value = str_replace( ' ', '_', $row_values[$i] );
+			foreach ( $queried_headers as $j => $query_value ) {
+				$single_value = str_replace( ' ', '_', $row_values[$j] );
 				if ( $single_value != $query_value ) {
 					$found_match = false;
 				}
 			}
 			if ( $found_match ) {
-				if ( $text != '' ) {
+				if ( $text !== '' ) {
 					$text .= "\n";
 				}
 				$text .= $line;

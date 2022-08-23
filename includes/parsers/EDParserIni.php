@@ -83,6 +83,7 @@ REGEX;
 			$assignments_found = 0;
 			$assignments = [];
 			foreach ( $lines as $line ) {
+				$comment = null;
 				if ( preg_match( $regex, $line, $match, PREG_UNMATCHED_AS_NULL ) ) {
 					if ( isset( $match['key'] ) ) {
 						$key = trim( $match['key'] );

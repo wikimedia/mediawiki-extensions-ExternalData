@@ -174,13 +174,15 @@ class EDConnectorOdbc extends EDConnectorComposed {
 			$alias1 = static::getTable( $field1 );  // late binding.
 			$alias2 = static::getTable( $field2 );  // late binding.
 			// First table AS alias in the first join.
-			if ( $first ) {
+			if ( $first && $alias1 ) {
 				$from .= "{$tables[$alias1]} AS $alias1";
 				$listed[$alias1] = true;
 				$first = false;
 			}
-			$from .= " JOIN {$tables[$alias2]} ON $field1 = $field2";
-			$listed[$alias2] = true;
+			if ( $alias2 ) {
+				$from .= " JOIN {$tables[$alias2]} ON $field1 = $field2";
+				$listed[$alias2] = true;
+			}
 		}
 
 		// Table not mentioned in JOIN conditions will be comma-separated.

@@ -27,14 +27,16 @@
 		"test": [
 			"parallel-lint . --exclude node_modules --exclude vendor",
 			"@phpcs",
-			"minus-x check ."
+			"minus-x check .",
+			"@phan"
 		],
 		"cover": "phpunit --coverage-html coverage",
 		"fix": [
 			"minus-x fix .",
 			"phpcbf"
 		],
-		"phpcs": "phpcs -sp --cache"
+		"phpcs": "phpcs -sp --cache",
+		"phan": "vendor/bin/phan -d . --allow-polyfill-parser"
 	},
 	"config": {
 		"optimize-autoloader": true,

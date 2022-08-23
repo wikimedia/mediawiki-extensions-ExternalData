@@ -22,6 +22,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 		// the MongoDB connect string, which may have sensitive
 		// information.
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			return new MongoDB\Client( $this->connectString );
 		} catch ( Exception $e ) {
 			return null;
@@ -39,6 +40,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 			$this->error( 'externaldata-db-could-not-connect' );
 			return null;
 		}
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 		return $this->mongoClient->selectCollection( $this->credentials['dbname'], $this->from );
 	}
 
@@ -51,10 +53,11 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 * @param array $sort
 	 * @param int $limit
 	 *
-	 * @return array MongoDB\Driver\Cursor
+	 * @return array|null MongoDB\Driver\Cursor
 	 */
 	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
@@ -69,10 +72,11 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 * @param MongoDB\Collection $collection
 	 * @param array $aggregate
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	protected function aggregate( $collection, array $aggregate ) {
 		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			return $collection->aggregate( $aggregate, [ 'useCursor' => true ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
@@ -84,6 +88,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 * Disconnect from MongoDB.
 	 */
 	protected function disconnect() {
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 		$this->mongoClient->close();
 	}
 }

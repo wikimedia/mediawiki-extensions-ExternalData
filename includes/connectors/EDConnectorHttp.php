@@ -169,10 +169,10 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			// Nothing to serve.
 			if ( $this->waitTill ) {
 				// It was throttled, and there was no cached value.
-				$this->error( 'externaldata-throttled', $this->originalUrl, (int)ceil( $this->waitTill ) );
+				$this->error( 'externaldata-throttled', $this->originalUrl, (string)(int)ceil( $this->waitTill ) );
 			} else {
 				// It wasn't throttled; just could not get it.
-				$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, self::$maxTries );
+				$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, (string)self::$maxTries );
 			}
 			return false;
 		}
