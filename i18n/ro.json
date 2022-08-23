@@ -10,9 +10,9 @@
 	},
 	"getdata": "Obține date",
 	"externaldata-desc": "Permite obținerea de date structurate din URL-uri externe, baze de date și alte surse",
-	"externaldata-web-invalid-format": "Fomat invalid: „$1”",
 	"externaldata-ldap-unable-to-connect": "Nu se poate conecta la $1",
 	"externaldata-xml-error": "Eroare XML: $1 la linia $2",
+	"externaldata-web-invalid-format": "Fomat invalid: „$1”",
 	"externaldata-db-unknown-type": "Eroare: Tipul bazei de date $1 necunoscut.",
 	"externaldata-db-could-not-connect": "Eroare: Nu s-a putut conecta la baza de date.",
 	"externaldata-db-invalid-query": "Interogarea $1 este invalidă."
