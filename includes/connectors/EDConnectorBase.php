@@ -9,7 +9,7 @@ abstract class EDConnectorBase {
 	use EDParsesParams;	// Needs paramToArray().
 
 	/** @const string[] ID_PARAMS An array of name of params that will serve as data sources' names. */
-	private const ID_PARAMS = [ 'db', 'server', 'domain', 'program', 'file', 'directory', '*' ];
+	private const ID_PARAMS = [ 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', '*' ];
 	/** @const string[] URL_PARAMS An array of name of params that will serve as data sources' names for URLs. */
 	private const URL_PARAMS = [ 'url', 'host', '2nd_lvl_domain' ];
 
@@ -137,7 +137,7 @@ abstract class EDConnectorBase {
 		$connectors = [];
 		foreach ( self::setting( 'Connectors' ) as $connector ) {
 			$parser_function = $connector[0]['__pf'];
-			if ( !isset( $connectors[$parser_function] ) ) {
+			if ( !isset( $connectors[$parser_function] ) && is_string( $parser_function ) ) {
 				// 'get_some_data' => 'getSomeData'.
 				$connectors[$parser_function] = preg_replace_callback( '/_(\w)/', static function ( array $captures ) {
 					return strtoupper( $captures[1] );

@@ -17,6 +17,7 @@
 	"externaldata-no-param-specified": "Не указан параметр «$1».",
 	"externaldata-param-type-error": "Параметр $1 должен быть типа $2.",
 	"externaldata-php-library-missing": "Библиотека PHP $1, необходимая для использования $2, не подключена.",
+	"external-data-no-suitable-connector": "Ошибка: переданные данные и настройки вики не позволяют выбрать подходящий коннектор для получения внешних данных.",
 	"externaldata-throttled": "Обращения к $1 ограничены до {{#time:H:i:s j xg Y T (P)|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "Псевдодомен LDAP $1 не определён.",
 	"externaldata-ldap-unable-to-connect": "Не удаётся подключиться к псевдодомену LDAP $1",

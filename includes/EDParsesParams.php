@@ -61,30 +61,49 @@ trait EDParsesParams {
 	}
 
 	/**
-	 * Check, if the passed parameters fit a 'pattern':
+	 * Check if the passed parameters fit a 'pattern'
+	 * set in $wgExternalDataConnectors or $wgExternalDataParsers:
 	 *
 	 * @param array $params Parameters to be checked.
 	 * @param array $pattern Parameters 'pattern'.
-	 *
 	 * @return bool
 	 */
 	private static function paramsFit( array $params, array $pattern ) {
 		foreach ( $pattern as $key => $value ) {
-			if ( $key === '__exists' ) {
-				if ( class_exists( $value ) || function_exists( $value ) ) {
-					// A necessary class is provided by a library.
-					continue;
+			if ( $key === '__exists' ) { // this part of the 'pattern' is a dependency.
+				if ( class_exists( $value ) || function_exists( $value ) ) { // and it is met.
+					continue; // continue with this 'pattern'.
 				} else {
-					return false;
+					return false; // dependency is not met, and the 'pattern' fails.
 				}
 			}
-			if ( !array_key_exists( $key, $params ) // | use xpath, etc.
-			  || !(
-					$value === true // argument should be present.
-				 || strtolower( $params[$key] ) === strtolower( $value ) // argument should have a certain value.
-				 || self::isRegex( $value ) && preg_match( $value, $params[$key] ) // argument should match a regex.
-				) // format = (format), etc.
-			) {
+			$parameter_present = array_key_exists( $key, $params );
+			if ( $value === true ) { // parameter is required.
+				if ( $parameter_present ) { // and is present.
+					continue; // this parameter needs no further checks.
+				} else {
+					return false; // parameter is absent, and the 'pattern' fails.
+				}
+			}
+			if ( $value === false ) { // parameter is forbidden.
+				if ( !$parameter_present ) { // and is absent.
+					continue; // this parameter needs no further checks.
+				} else {
+					return false; // parameter is present, and the 'pattern' fails.
+				}
+			}
+			if ( !$parameter_present ) {
+				return false; // at this point, parameter ought to be set.
+			}
+			if ( self::isRegex( $value ) ) { // parameter is a regular expression.
+				if ( preg_match( $value, $params[$key] ) ) { // and it matches.
+					continue; // this parameter needs no further checks.
+				} else {
+					return false; // does not match, and the 'pattern' fails.
+				}
+			}
+			// At this point, only exact (case insensitive) match will do.
+			if ( strtolower( $params[$key] ) !== strtolower( $value ) ) {
 				return false;
 			}
 		}

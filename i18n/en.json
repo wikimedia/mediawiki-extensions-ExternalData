@@ -10,6 +10,7 @@
 	"externaldata-no-param-specified": "Error: No \"$1\" parameter specified.",
 	"externaldata-param-type-error": "Error: Parameter $1 must be of the type $2.",
 	"externaldata-php-library-missing": "Error: The PHP library $1, needed to use $2, is missing.",
+	"external-data-no-suitable-connector": "Error: No suitable data source is defined for this external data query",
 	"externaldata-throttled": "Calls to $1 are throttled till {{#time:c|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "LDAP domain $1 is not defined.",
 	"externaldata-ldap-unable-to-connect": "Unable to connect to $1.",
