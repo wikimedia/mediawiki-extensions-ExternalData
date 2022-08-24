@@ -17,6 +17,8 @@
 	"externaldata-ldap-base-dn-not-defined": "Основниот DN не е зададен за LDAP-доменот $1.",
 	"externaldata-xml-error": "XML грешка: $1 во ред $2",
 	"externaldata-web-invalid-format": "Неважечки формат: „$1“",
+	"externaldata-invalid-format": "Грешка: Неважечки $1 ($2).",
+	"externaldata-invalid-format-explicit": "Грешка: „$1“ не претставува важечки $2 ($3).",
 	"externaldata-db-incomplete-information": "Грешка: Нецелосни информации за оваа база со назнака $1 ($2).",
 	"externaldata-db-could-not-get-url": "Не можев да ја добијам URL-адресата $1 по $2 {{PLURAL:$1|обид|обиди}}.",
 	"externaldata-db-unknown-type": "Грешка: Непознат вид на база $1.",

@@ -29,6 +29,8 @@
 	"externaldata-ldap-base-dn-not-defined": "DN de base non défini pour le domaine LDAP $1.",
 	"externaldata-xml-error": "Erreur XML : $1 à la ligne $2",
 	"externaldata-web-invalid-format": "Format invalide: \"$1\"",
+	"externaldata-invalid-format": "Erreur : $1 non valide ($2).",
+	"externaldata-invalid-format-explicit": "Erreur : « $1 » n’est pas un code $2 valide ($3).",
 	"externaldata-db-incomplete-information": "Erreur : Informations incomplètes pour cet identifiant $1 de base de données ($2).",
 	"externaldata-db-could-not-get-url": "Impossible d'obtenir l'URL $1 après $2 {{PLURAL:$2|essai|essais}}.",
 	"externaldata-db-unknown-type": "Erreur : Type de base de données $1 inconnu.",
