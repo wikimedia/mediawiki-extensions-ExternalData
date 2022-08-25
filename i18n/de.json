@@ -17,6 +17,7 @@
 	"externaldata-no-param-specified": "Fehler: Kein Parameter „$1“ angegeben.",
 	"externaldata-param-type-error": "Fehler: Parameter $1 muss vom Typ $2 sein.",
 	"externaldata-php-library-missing": "Fehler: Die PHP-Bibliothek $1, die für die Verwendung von $2 benötigt wird, fehlt.",
+	"external-data-no-suitable-connector": "Fehler: Für diese externe Datenabfrage ist keine passende Datenquelle definiert",
 	"externaldata-throttled": "Aufrufe von $1 werden bis {{#time:c|@$2}} gedrosselt.",
 	"externaldata-ldap-domain-not-defined": "LDAP-Domain $1 ist nicht definiert.",
 	"externaldata-ldap-unable-to-connect": "Es konnte keine Verbindung zu $1 hergestellt werden",
