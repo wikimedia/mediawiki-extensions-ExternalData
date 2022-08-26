@@ -12,6 +12,7 @@
 	"externaldata-no-param-specified": "錯誤：未指定「$1」參數。",
 	"externaldata-param-type-error": "錯誤：參數 $1 必須是 $2 類型。",
 	"externaldata-php-library-missing": "錯誤：缺少 $2 所需的 PHP 函式庫 $1。",
+	"external-data-no-suitable-connector": "錯誤：沒有給這個外部資料查詢定義合適的資料來源",
 	"externaldata-throttled": "對 $1 的呼叫被限制到 {{#time:c|@$2}}。",
 	"externaldata-ldap-domain-not-defined": "未定義 LDAP 網域 $1。",
 	"externaldata-ldap-unable-to-connect": "無法連結至 $1。",

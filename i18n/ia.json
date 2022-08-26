@@ -10,6 +10,7 @@
 	"externaldata-no-param-specified": "Error: Nulle parametro \"$1\" specificate.",
 	"externaldata-param-type-error": "Error: Parametro $1 debe esser del typo $2.",
 	"externaldata-php-library-missing": "Error: Le bibliotheca PHP $1, necessari pro usar $2, manca.",
+	"external-data-no-suitable-connector": "Error: Nulle fonte de datos appropriate es definite pro iste requesta de datos externe",
 	"externaldata-throttled": "Appellos a $1 es limitate usque a {{#time:c|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "Le dominio LDAP $1 non es definite.",
 	"externaldata-ldap-unable-to-connect": "Impossibile connecter se a $1",
