@@ -42,7 +42,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			$this->error( 'externaldata-no-param-specified', 'db' );
 		}
 		if ( isset( $args['type'] ) ) {
-			$this->type = $args['type'];
+			$this->type = strtolower( $args['type'] );
 		} else {
 			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'type' );
 		}
