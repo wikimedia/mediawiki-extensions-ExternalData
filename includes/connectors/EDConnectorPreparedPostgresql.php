@@ -55,8 +55,9 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			self::stopThrowingWarnings();
 			return false;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 		// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
 		if ( $this->pg === false || pg_connection_status( $this->pg ) !== PGSQL_CONNECTION_OK ) {
 			// Could not create Database object.

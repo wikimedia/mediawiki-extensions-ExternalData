@@ -92,11 +92,8 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}
 
 		// Throttling.
-		$template = $args['throttle key'];
-		$interval = $args['throttle interval'];
-		if ( $template && $interval ) {
-			$key = $this->substitute( $template, $args['components'] );
-			$this->setupThrottle( $title, $key, $interval );
+		if ( isset( $args['throttle key'] ) && isset( $args['throttle interval'] ) ) {
+			$this->setupThrottle( $title, $args['throttle key'], $args['throttle interval'] );
 		}
 
 		// Cache.

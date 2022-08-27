@@ -64,7 +64,7 @@
 	"externaldata-not-a-directory": "The error message when the 'path' field of the data source $1 is not a valid directory.",
 	"externaldata-exe-shell-disabled": "The error message, when PHP admin has disabled access to shell (no proc_open() function).",
 	"externaldata-exe-incomplete-information": "Used as error message if not all necessary settings to run a program are provided in wiki settings.\n\nPath to program and its parameters are necessary params.\nParameters:\n* $1 is the program ID,\n* $2 is the name of the missing parameter.",
-	"externaldata-exe-illegal-parameter": "The error message shown when a parameter passed to #get_program_data has a value not allowed by $wgExternalDataSources['program id']['filters']. Parameters:\n\n* $1 is the program alias used in parser function,\n* $2 is the parameter name,\n* is the offending value.",
+	"externaldata-illegal-parameter": "The error message shown when a parameter passed to #get_*_data has a value not allowed by $wgExternalDataSources['source']['filters']. Parameters:\n\n$1 is the parameter name,\n* #2 is the offending value.",
 	"externaldata-exe-exception": "The error message, when Shell throws an exception while trying to run the command. Parameters:\n\n$1 is the program id,\n$2 is the exception message.",
 	"externaldata-exe-error": "The error message when the invoked program returns an error. Parameters:\n\n* $1 is the program ID,\n\n* $2 is the exit code,\n\n* $3 is the error text.",
 	"externaldata-no-local-variable": "This error message is shown when no local variable \"$1\" has been set.",

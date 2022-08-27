@@ -320,6 +320,11 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_ldap_data:}}' => [ 'get_ldap_data', [], 'EDConnectorLdap' ],
 			'{{#get_db_data:}}, mySQL, prepared' =>
 				[ 'get_db_data', [ 'type' => 'mysql', 'prepared' => 'statement 1' ], 'EDConnectorPreparedMysql' ],
+			'{{#get_db_data:}}, PostgreSQL, prepared' => [
+					'get_db_data',
+					[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
+					'EDConnectorPreparedPostgresql'
+			],
 			'{{#get_db_data:}}, sqlite' => [ 'get_db_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
 			'{{#get_db_data:}}, ODBC prepared' => [
 				'get_db_data',
@@ -332,8 +337,16 @@ class EDConnectorBaseTest extends EDTestBase {
 				'EDConnectorOdbcMssql'
 			],
 			'{{#get_db_data:}}, MongoDB' =>	[ 'get_db_data', [ 'type' => 'mongodb' ], $mongo ],
+			'{{#get_db_data:}}, PostgreSQL' => [ 'get_db_data', [ 'type' => 'postgres' ], 'EDConnectorPostgresql' ],
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
 			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
+
+			// Misused specific function on obscure data source.
+			'{{#get_db_data:}}, Misused obscure source' => [
+				'get_db_data',
+				[ 'type' => 'postgres', 'source' => 'PG1' ],
+				'EDConnectorDummy'
+			],
 
 			// Universal function.
 			'{{#get_external_data:}}, POST' =>
@@ -353,6 +366,11 @@ class EDConnectorBaseTest extends EDTestBase {
 				[ 'get_external_data', [ 'domain' => 'ldap domain' ], 'EDConnectorLdap' ],
 			'{{#get_external_data:}}, mySQL, prepared' =>
 				[ 'get_external_data', [ 'type' => 'mysql', 'prepared' => true ], 'EDConnectorPreparedMysql' ],
+			'{{#get_external_data:}}, PostgreSQL, prepared' => [
+					'get_external_data',
+					[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
+					'EDConnectorPreparedPostgresql'
+			],
 			'{{#get_external_data:}}, sqlite' => [ 'get_external_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
 			'{{#get_external_data:}}, ODBC prepared' => [
 				'get_external_data',
@@ -366,9 +384,16 @@ class EDConnectorBaseTest extends EDTestBase {
 			],
 			'{{#get_external_data:}}, MongoDB' =>
 				[ 'get_external_data', [ 'from' => 'MongoDB dataset', 'type' => 'mongodb' ], $mongo ],
+			'{{#get_external_data:}}, PostgreSQL' => [
+				'get_external_data',
+				[ 'type' => 'postgres' ], 'EDConnectorPostgresql'
+			],
 			'{{#get_external_data:}}, mySQL, etc.' =>
 				[ 'get_external_data', [ 'from' => 'mysql_table', 'type' => 'mysql' ], 'EDConnectorSql' ],
-			'{{#get_external_data:}}, program' => [ 'get_external_data', [ 'program' => 'man' ], 'EDConnectorExe' ]
+			'{{#get_external_data:}}, program' => [ 'get_external_data', [ 'program' => 'man' ], 'EDConnectorExe' ],
+
+			// Universal function without a suitable connector.
+			'{{#get_external_data:}}, No source' => [ 'get_external_data', [ 'source' => 'PG1' ], 'EDConnectorDummy' ],
 		];
 	}
 

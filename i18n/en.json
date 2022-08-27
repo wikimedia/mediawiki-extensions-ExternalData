@@ -55,7 +55,7 @@
 	"externaldata-not-a-directory": "$1 is not a directory or is missing.",
 	"externaldata-exe-shell-disabled": "Error: PHP admin has disabled access to shell.",
 	"externaldata-exe-incomplete-information": "Error: Incomplete information for this command ID $1 ($2).",
-	"externaldata-exe-illegal-parameter": "Error: The parameter $2 for program $1 has illegal value $3.",
+	"externaldata-illegal-parameter": "Error: The parameter $1 has illegal value $2.",
 	"externaldata-exe-exception": "Error: Exception while trying to run program $1. Message: $2.",
 	"externaldata-exe-error": "Error: The program $1 returned exit code $2. Message: $3.",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",

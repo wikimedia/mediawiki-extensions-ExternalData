@@ -131,8 +131,9 @@ class EDConnectorOdbc extends EDConnectorComposed {
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			return false;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 		if ( !$this->odbcConnection ) {
 			$this->error( 'externaldata-db-could-not-connect' );
 			return false;
@@ -238,8 +239,9 @@ class EDConnectorOdbc extends EDConnectorComposed {
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-invalid-query', $query, $e->getMessage() );
 			return null;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 		if ( !$rowset ) {
 			$this->error( 'externaldata-db-invalid-query', $query );
 			return null;

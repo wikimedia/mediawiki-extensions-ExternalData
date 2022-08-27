@@ -63,6 +63,16 @@ abstract class EDConnectorBase {
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true, false );
 
+		// Check the presence of required values.
+		if ( isset( $args['params'] ) ) {
+			$args = $this->checkPresence( $args, $args['params'] );
+		}
+
+		// Validate parameters.
+		if ( isset( $args['param filters'] ) ) {
+			$args = $this->validateParams( $args, $args['param filters'] );
+		}
+
 		// Data mappings. May be handled by the parser or by self. Delay settings, if format auto-detection is set.
 		if ( array_key_exists( 'data', $args ) ) {
 			// Whether to bring the external variables to lower case. It depends on the parser, if any.
@@ -206,11 +216,104 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * Substitute default values for the absent parameters. Log an error if a required parameter is not supplied.
+	 *
+	 * @param array $parameters User-supplied parameters.
+	 * @param array $defaults An array of parameter defaults. A numeric key means that the value is a required param.
+	 * @return array The supplemented parameters.
+	 */
+	private static function setDefaults( array $parameters, array $defaults ): array {
+		// Check if the required parameters are present and provide default values for the optional ones.
+		foreach ( $defaults as $key => $value ) {
+			if ( is_string( $key ) && !isset( $parameters[$key] ) ) { // no value provided.
+					$parameters[$key] = $value;
+			}
+		}
+		return $parameters;
+	}
+
+	/**
+	 * Log an error if a required parameter is not supplied.
+	 *
+	 * @param array $parameters User-supplied parameters.
+	 * @param array $defaults An array of parameter defaults. A numeric key means that the value is a required param.
+	 * @return array The same $parameters.
+	 */
+	private function checkPresence( array $parameters, array $defaults ): array {
+		// Check if the required parameters are present and provide default values for the optional ones.
+		foreach ( $defaults as $key => $value ) {
+			if ( is_numeric( $key ) && !isset( $parameters[$value] ) ) {
+					$this->error( 'externaldata-no-param-specified', $key );
+			}
+		}
+		return $parameters;
+	}
+
+	/**
+	 * Validate parameters. Log an error if a parameter has an illegal value.
+	 *
+	 * @param array $parameters User-supplied parameters.
+	 * @param array $filters An array of parameter filters (callables or regexes).
+	 * @return array The validated parameters.
+	 */
+	private function validateParams( array $parameters, array $filters ): array {
+		// Validate parameters.
+		foreach ( $parameters as $key => $value ) {
+			if ( !(
+				// no filter for this parameter.
+				!isset( $filters[$key] )
+				// filter is a function and returns true.
+				|| is_callable( $filters[$key] ) && $filters[$key]( $value )
+				// filter is a regular expression and parameter matches it.
+				|| is_string( $filters[$key] ) && preg_match( $filters[$key], $value )
+			) ) {
+				$this->error( 'externaldata-illegal-parameter', $key, $value );
+			}
+
+		}
+		return $parameters;
+	}
+
+	/**
+	 * Convert an associative array of wildcards into one usable directly by strtr().
+	 * @param array $wildcards The wildcards.
+	 * @return array The wildcards surrounded by '$...$'.
+	 */
+	private static function forStrtr( array $wildcards ): array {
+		$filtered = array_filter( $wildcards, static function ( $value ) {
+			return is_string( $value ) || is_numeric( $value );
+		} );
+		return array_combine(
+			array_map( static function ( $wildcard ) {
+				return '$' . (string)$wildcard . '$';
+			}, array_keys( $filtered ) ),
+			array_values( $filtered )
+		);
+	}
+
+	/**
+	 * Substitute each $parameter$ in $parameters recursively using the $replacements associative array.
+	 *
+	 * @param string|array $parameters Parameters in which wildcards should be substituted.
+	 * @param array $replacements Optional associative array of replacements, $parameters by default.
+	 * @return string|array The string(s) with substituted parameters.
+	 */
+	private static function substitute( $parameters, array $replacements ) {
+		if ( is_string( $parameters ) ) {
+			$parameters = strtr( $parameters, $replacements );
+		} elseif ( is_array( $parameters ) ) {
+			foreach ( $parameters as &$value ) {
+				$value = self::substitute( $value, self::forStrtr( $parameters ) + $replacements );
+			}
+		}
+		return $parameters;
+	}
+
+	/**
 	 * This method adds secret parameters to user-supplied ones, extracting them from
 	 * global configuration variables.
 	 *
 	 * @param array $params User-supplied parameters.
-	 *
 	 * @return array Supplemented parameters.
 	 */
 	protected static function supplementParams( array $params ): array {
@@ -254,10 +357,19 @@ abstract class EDConnectorBase {
 			}
 		}
 
+		// Set default values.
+		if ( isset( $wiki_wide['params'] ) ) {
+			$params = self::setDefaults( $params, $wiki_wide['params'] );
+		}
+
+		// Substitute user-supplied parameters into wiki-wide, where they contain wildcards.
+		$wiki_wide = self::substitute( $wiki_wide, self::forStrtr( $params ) );
+
 		// Apply wiki-wide settings. They override user-provided ones.
 		foreach ( $wiki_wide as $param => $value ) {
 			$supplemented[$param] = $value;
 		}
+
 		return $supplemented;
 	}
 

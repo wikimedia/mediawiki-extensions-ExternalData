@@ -24,10 +24,6 @@ class EDConnectorExe extends EDConnectorBase {
 	private $command;
 	/** @var array $params Parameters to $command. */
 	private $params;
-	/** @var array|null $validatedParams Parameter values after filtering and applying defaults. */
-	private $validatedParams = [];
-	/** @var array $paramFilters An associative array of regular expression filters for parameters. */
-	private $paramFilters;
 	/** @var string $input This will be fed to program's standard input. */
 	private $input;
 	/** @var ?string $tempFile The program will send its output to a temporary file rather than stdout. */
@@ -54,6 +50,8 @@ class EDConnectorExe extends EDConnectorBase {
 		$this->error( $this->parseErrors );
 
 		parent::__construct( $args, $title );
+
+		$this->params = $args;
 
 		if ( Shell::isDisabled() ) {
 			$this->error( 'externaldata-exe-shell-disabled' );
@@ -82,28 +80,6 @@ class EDConnectorExe extends EDConnectorBase {
 		$this->limits = self::defaultLimits();
 		if ( isset( $args['limits'] ) && is_array( $args['limits'] ) ) {
 			$this->limits = array_merge( $this->limits, $args['limits'] );
-		}
-
-		// Parameter filters.
-		if ( isset( $args['param filters'] ) && is_array( $args['param filters'] ) ) {
-			$this->paramFilters = $args['param filters'];
-		}
-
-		// Parameters.
-		// The required parameters are stored as a secret in LocalSettings.php.
-		$this->validatedParams = null;
-		if ( isset( $args['params'] ) && is_array( $args['params'] ) ) {
-			// @phan-suppress-next-line SecurityCheck-ReDoS Make PHAN sut up.
-			$this->validatedParams = $this->validateParams( $args, $args['params'], $this->paramFilters );
-		}
-
-		if ( $this->validatedParams ) {
-			// Substitute parameters in the shell command:
-			$command = $this->substitute( $command, $this->validatedParams );
-			// And in the environment variables.
-			foreach ( $this->environment as $_ => &$value ) {
-				$value = $this->substitute( $value, $this->validatedParams );
-			}
 		}
 
 		// Ignore warnings in stderr, if the exit code is 0.
@@ -159,10 +135,9 @@ class EDConnectorExe extends EDConnectorBase {
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 
 		// Throttle.
-		$template = isset( $args['throttle key'] ) ? $args['throttle key'] : null;
+		$key = isset( $args['throttle key'] ) ? $args['throttle key'] : null;
 		$interval = isset( $args['throttle interval'] ) ? $args['throttle interval'] : null;
-		if ( $template && $interval ) {
-			$key = $this->substitute( $template, $this->validatedParams + $this->environment );
+		if ( $key && $interval ) {
 			$this->setupThrottle( $title, $key, $interval );
 		}
 	}
@@ -180,41 +155,6 @@ class EDConnectorExe extends EDConnectorBase {
 			'memory' => $wgMaxShellMemory,
 			'filesize' => $wgMaxShellFileSize
 		];
-	}
-
-	/**
-	 * Validate parameters. Log an error if a required parameter is not supplied or a parameter has an illegal value.
-	 *
-	 * @param array $parameters User-supplied parameters.
-	 * @param array $defaults An array of parameter defaults. A numeric key means that the value is a required param.
-	 * @param array $filters An array of parameter filters (callables or regexes).
-	 *
-	 * @return array The validated parameters.
-	 */
-	private function validateParams( array $parameters, array $defaults, array $filters ): array {
-		$validated = [];
-		foreach ( $defaults as $key => $val ) {
-			$param = is_numeric( $key ) ? $val : $key;
-			$default = is_numeric( $key ) ? null : $val;
-			$value = isset( $parameters[$param] ) ? $parameters[$param] : $default;
-			if ( $value !== null ) {
-				if (
-					// no filter.
-					!isset( $filters[$param] )
-					// filter is a function.
-					|| is_callable( $filters[$param] ) && $filters[$param]( $value )
-					// filter is a regular expression.
-					|| is_string( $filters[$param] ) && preg_match( $filters[$param], $value )
-				) {
-					$validated[$param] = $value;
-				} else {
-					$this->error( 'externaldata-exe-illegal-parameter', $this->program, $param, $value );
-				}
-			} else {
-				$this->error( 'externaldata-no-param-specified', $param );
-			}
-		}
-		return $validated;
 	}
 
 	/**
@@ -260,7 +200,7 @@ class EDConnectorExe extends EDConnectorBase {
 				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
 					$postprocessor = $this->postprocessor;
 					if ( $output && is_callable( $postprocessor ) ) {
-						$output = $postprocessor( $output, $this->validatedParams );
+						$output = $postprocessor( $output, $this->params );
 					}
 					return $output;
 				} else {
@@ -451,7 +391,7 @@ class EDConnectorExe extends EDConnectorBase {
 	 */
 	public static function wikilinks4uml( $str ) {
 		// Process [[wikilink]] in nodes.
-		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^\]]*))?]]/', static function ( array $m ) {
+		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
 			$alias = isset( $m[2] ) ? $m[2] : $m[1];
 			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
 		}, $str );

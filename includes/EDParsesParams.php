@@ -224,21 +224,6 @@ END;
 	}
 
 	/**
-	 * Substitute parameters into a string (command, environment variable, etc.).
-	 *
-	 * @param string|array $template The string(s) in which parameters are to be substituted.
-	 * @param array $parameters Validated parameters.
-	 *
-	 * @return string|array The string(s) with substituted parameters.
-	 */
-	protected function substitute( $template, array $parameters ) {
-		foreach ( $parameters as $name => $value ) {
-			$template = preg_replace( '/\\$' . preg_quote( $name, '/' ) . '\\$/', $value, $template );
-		}
-		return $template;
-	}
-
-	/**
 	 * Suppress warnings absolutely.
 	 */
 	protected static function suppressWarnings() {

@@ -312,12 +312,14 @@ class EDParserFunctions {
 		}
 
 		// Loop body.
+		$variables = array_keys( $mappings );
+		$values = array_values( $mappings );
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$loops[] = '{{' . $template . '|' . implode( '|', array_map( static function ( $param, $var ) use( $loop ) {
 					$value = self::getIndexedValue( $var, $loop, '' );
 					return "$param=$value";
-			}, array_keys( $mappings ), array_values( $mappings ) ) ) . '}}';
+			}, $variables, $values ) ) . '}}';
 		}
 		$text .= implode( $delimiter, $loops );
 

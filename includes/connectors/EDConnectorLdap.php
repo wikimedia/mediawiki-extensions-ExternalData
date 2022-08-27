@@ -135,9 +135,10 @@ class EDConnectorLdap extends EDConnectorBase {
 				$this->error( 'externaldata-ldap-unable-to-bind', $this->domain );
 				$this->connection = null;
 				$exception = true;
+			} finally {
+				// Restore warnings.
+				self::stopThrowingWarnings();
 			}
-			// Restore warnings.
-			self::stopThrowingWarnings();
 			if ( !$bound && !$exception /* Do not repeat  twice. */ ) {
 				$this->error( 'externaldata-ldap-unable-to-bind', $this->domain ); // not $this->server!
 				$this->connection = null;

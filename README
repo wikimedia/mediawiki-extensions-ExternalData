@@ -15,8 +15,8 @@ server (all in CSV, GFF, JSON, XML, HTML or INI formats), plus database tables,
 LDAP servers and program output.
 
 The extension defines the following parser functions:
-* `#get_web_data` - retrieves the data from a URL that holds CSV, GFF, JSON or
-  XML, and assigns it to local variables or arrays
+* `#get_web_data` - retrieves the data from a URL that holds CSV, GFF, JSON, XML,
+   INI or YAML and assigns it to local variables or arrays
 * `#get_soap_data` - retrieves data from a URL via SOAP
 * `#get_file_data:` - retrieves data from local file(s), which can be in any of
   the same formats that `#get_web_data` handles
@@ -26,6 +26,8 @@ The extension defines the following parser functions:
   variables
 * `#get_program_data` - retrieves data returned by a program called server-side,
   parses it and assigns it to local variables
+* `#get_inline_data` - parses the passed text without connecting to any external
+  services
 * `#get_external_data` - can do all of the above
 * `#external_value` - displays the value of any retrieved variable, or the first
   value if it's an array
@@ -47,6 +49,7 @@ external variables `__json` or `__xml` are used) row-based tables of values:
 * `mw.ext.externalData.getSoapData`
 * `mw.ext.externalData.getLdapData`
 * `mw.ext.externalData.getProgramData`
+* `mw.ext.externalData.getInlineData`
 * `mw.ext.externalData.getExternalData`
 
 Additionally, the extension allows wiki admins to define their own tags for
@@ -68,18 +71,14 @@ higher.
 == Installation ==
 
 To install the extension, place the entire 'ExternalData' directory
-within your MediaWiki 'extensions' directory, then add the following
-line to your 'LocalSettings.php' file:
+within your MediaWiki 'extensions' directory, run `composer install` there
+then add the following line to your 'LocalSettings.php' file:
 ```
 wfLoadExtension( 'ExternalData' );
 ```
 
-To cache the data from the URLs being accessed, you can call the contents
-of ExternalData.sql in your database, then add the following to
-LocalSettings.php:
-```
-$wgExternalDataCacheTable = 'ed_url_cache';
-```
+To cache the data from the URLs being accessed, run `maintenance/update.php`
+script.
 
 You should also add a line like the following, to set the expiration time
 of the cache, in seconds; this line will cache data for a week:

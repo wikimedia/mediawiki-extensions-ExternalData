@@ -75,8 +75,9 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			return false;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 		if ( !$this->odbcConnection ) {
 			$this->error( 'externaldata-db-could-not-connect' );
 			return false;
@@ -98,8 +99,9 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 			$msg = $e->getMessage() ?: odbc_errormsg( $this->odbcConnection );
 			$this->error( 'externaldata-db-invalid-query', $this->query, $msg );
 			return null;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 		if ( !$this->prepared ) {
 			$this->error( 'externaldata-db-invalid-query', $this->query, odbc_errormsg( $this->odbcConnection ) );
 			return null;
@@ -114,8 +116,9 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 			$msg = $e->getMessage() ?: odbc_errormsg( $this->odbcConnection );
 			$this->error( 'externaldata-db-invalid-query', $this->query, $msg );
 			return null;
+		} finally {
+			self::stopThrowingWarnings();
 		}
-		self::stopThrowingWarnings();
 
 		if ( $success ) {
 			// Get values.
