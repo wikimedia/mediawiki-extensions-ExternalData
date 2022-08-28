@@ -216,10 +216,10 @@ class EDParserFunctionsTest extends EDTestBase {
 	}
 
 	/**
-	 * Data provider for EDParserFunctions::actuallyExternalTable().
+	 * Data provider for EDParserFunctions::actuallyExternalTableFirst().
 	 * @return array
 	 */
-	public function actuallyForExternalTableProvider(): array {
+	public function actuallyForExternalTableFirstProvider(): array {
 		return [
 			'one var' => [ 'Extension: {{{title}}}, ', 'Extension: External Data, Extension: Cargo, ' ],
 			'two vars' => [
@@ -243,15 +243,15 @@ class EDParserFunctionsTest extends EDTestBase {
 	}
 
 	/**
-	 * Test EDParserFunctions::actuallyForExternalTable().
-	 * @dataProvider actuallyForExternalTableProvider
+	 * Test EDParserFunctions::actuallyForExternalTableFirst().
+	 * @dataProvider actuallyForExternalTableFirstProvider
 	 * @param string $expression
 	 * @param string $result
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	public function testActuallyForExternalTable( $expression, $result ) {
-		$this->testPrivateMethod( 'actuallyForExternalTable', self::VALUES, $result, $expression );
+	public function testActuallyForExternalTableFirst( $expression, $result ) {
+		$this->testPrivateMethod( 'actuallyForExternalTableFirst', self::VALUES, $result, $expression );
 	}
 
 	/**

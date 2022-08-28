@@ -25,7 +25,11 @@ class ExternalDataHooks {
 
 		// Data display functions.
 		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
-		$parser->setFunctionHook( 'for_external_table', [ 'EDParserFunctions', 'doForExternalTable' ] );
+		$parser->setFunctionHook(
+			'for_external_table',
+			[ 'EDParserFunctions', 'doForExternalTable' ],
+			Parser::SFH_OBJECT_ARGS
+		);
 		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );
 		if ( class_exists( 'CargoDisplayFormat' ) ) {
 			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );

@@ -217,13 +217,13 @@ class EDParserFunctions {
 	}
 
 	/**
-	 * Actually render the #for_external_table parser function.
-	 * @param string $expression
+	 * Actually render the #for_external_table parser function. The "template" is passed as the first parameter.
+	 * @param string $body
 	 * @return string
 	 */
-	private static function actuallyForExternalTable( $expression ) {
+	private static function actuallyForExternalTableFirst( $body ) {
 		$macros = [];
-		preg_match_all( '/{{{(?<var>[^}|]*)(?:\|(?<default>[^}]*))?}}}/', $expression, $macros, PREG_SET_ORDER );
+		preg_match_all( '/{{{(?<var>[^}|]*)(?:\|(?<default>[^}]*))?}}}/', $body, $macros, PREG_SET_ORDER );
 
 		$num_loops = self::numLoops( array_map( static function ( $set ) {
 			return $set['var'];
@@ -231,16 +231,37 @@ class EDParserFunctions {
 
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
-			$cur_expression = $expression;
+			$current = $body;
+
 			foreach ( $macros as $macro ) {
 				$value = self::getIndexedValue(
 					$macro['var'],
 					$loop,
 					isset( $macro['default'] ) ? $macro['default'] : ''
 				);
-				$cur_expression = str_replace( $macro[0], $value, $cur_expression );
+				$current = str_replace( $macro[0], $value, $current );
 			}
-			$loops[] = $cur_expression;
+			$loops[] = $current;
+		}
+		return implode( '', $loops );
+	}
+
+	/**
+	 * Actually render the #for_external_table parser function. The "template" is passed as the second parameter.
+	 * @param Parser $parser
+	 * @param PPNode_Hash_Tree $tree
+	 * @return string
+	 */
+	private static function actuallyForExternalTableSecond( Parser $parser, PPNode_Hash_Tree $tree ) {
+		$variables = array_keys( self::getAllValues() );
+		$num_loops = self::numLoops( $variables );
+		$loops = [];
+		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
+			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop ){
+				return self::getIndexedValue( $var, $loop, null );
+			}, $variables ) );
+			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
+			$loops[] = $row_as_frame->expand( $tree );
 		}
 		return implode( '', $loops );
 	}
@@ -248,11 +269,15 @@ class EDParserFunctions {
 	/**
 	 * Render the #for_external_table parser function.
 	 * @param Parser $parser
-	 * @param string $expression
+	 * @param PPFrame $frame
+	 * @param array $args
 	 * @return string
 	 */
-	public static function doForExternalTable( Parser $parser, $expression = '' ) {
-		return self::actuallyForExternalTable( $expression );
+	public static function doForExternalTable( Parser $parser, PPFrame $frame, array $args ) {
+		return $frame->expand( isset( $args[1] )
+			? self::actuallyForExternalTableSecond( $parser, $args[1] )
+			: self::actuallyForExternalTableFirst( $args[0] )
+		);
 	}
 
 	/**
