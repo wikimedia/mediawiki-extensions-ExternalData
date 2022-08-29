@@ -7,13 +7,14 @@
 			"Александр Сигачёв",
 			"Alex Mashin",
 			"Kareyac",
-			"Megakott"
+			"Megakott",
+			"Pacha Tchernof"
 		]
 	},
 	"getdata": "Получить данные",
 	"externaldata-desc": "Позволяет получать структурированные данные с внешних адресов, баз данных и других источников",
 	"externaldata-no-param-specified": "Не указан параметр «$1».",
-	"externaldata-web-invalid-format": "Недопустимый формат:  <q>$1</q>",
+	"externaldata-web-invalid-format": "Недопустимый формат: <q>$1</q>",
 	"externaldata-ldap-unable-to-connect": "Не удаётся подключиться к псевдодомену LDAP $1",
 	"externaldata-xml-error": "Ошибка XML. $1 в строке $2",
 	"externaldata-invalid-json": "Недопустимый JSON",
