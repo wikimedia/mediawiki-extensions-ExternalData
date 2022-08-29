@@ -10,6 +10,7 @@
 	"externaldata-no-param-specified": "Грешка: Го немате укажано параметарот „$1“.",
 	"externaldata-param-type-error": "Грешка: Параметарот $1 мора да биде од видот $2.",
 	"externaldata-php-library-missing": "Грешка: Недостасува PHP-библиотеката $1, потребна за употреба на $2.",
+	"external-data-no-suitable-connector": "Грешка: Нема зададено погоден извор на податоци за ова барање за надворешни податоци",
 	"externaldata-throttled": "Повикувањата на $1 се ограничени до {{#time:c|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "Не е укажан LDAP-доменот $1.",
 	"externaldata-ldap-unable-to-connect": "Не можам да се поврзам со  $1",
