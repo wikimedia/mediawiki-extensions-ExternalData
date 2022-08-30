@@ -20,5 +20,6 @@
 	"externaldata-db-invalid-query": "La query $1 non è valida ($2).",
 	"externaldata-mongodb-unknown-collection": "Errore: collezione MongoDB $1 sconosciuta.",
 	"externaldata-url-unknown-error": "Errore sconosciuto durante il recupero dei dati dall'URL $1.",
-	"externaldata-no-file-in-directory": "La cartella $1 non contiene il file $2."
+	"externaldata-no-file-in-directory": "La cartella $1 non contiene il file $2.",
+	"externaldata-illegal-parameter": "Errore: il parametro $1 ha un valore non valido $2."
 }

@@ -19,6 +19,5 @@
 	"externaldata-mongodb-unknown-collection": "Ralat: Koleksi MongoDB tidak dikenali.",
 	"externaldata-exe-shell-disabled": "Ralat: Admin PHP telah menyahaktifkan capaian ke petala.",
 	"externaldata-exe-incomplete-information": "Ralat: Maklumat tidak lengkap untuk ID arahan ini $1 ($2)",
-	"externaldata-exe-illegal-parameter": "Ralat: Parameter $2 bagi program $1 mempunyai nilai tidak sah $3.",
 	"externaldata-exe-error": "Ralat: Program $1 mengembalikan kod keluar $2. Mesej: $3"
 }

@@ -56,7 +56,6 @@
 	"externaldata-not-a-directory": "$1 אינה תיקייה או שהיא חסרה.",
 	"externaldata-exe-shell-disabled": "שגיאה: מנהל PHP כיבה את הגישה למסוף.",
 	"externaldata-exe-incomplete-information": "שגיאה: מידע לא מלא למזהה הפקודה הזה $1 (פרמטר חסר: $2).",
-	"externaldata-exe-illegal-parameter": "שגיאה: לפרמטר $2 לתוכנית $1 יש ערך בלתי־תקין $3.",
 	"externaldata-exe-exception": "שגיאה: בעתד הרצת התוכנית $1 אירע חריג. הודעה: $2.",
 	"externaldata-exe-error": "שגיאה: התוכנית $1 החזירה את קוד היציאה $2. הודעה: $3.",
 	"externaldata-no-local-variable": "שגיאה: המשתנה המקומי \"$1\" לא הוגדר.",

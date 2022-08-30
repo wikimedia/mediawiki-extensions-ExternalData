@@ -51,7 +51,6 @@
 	"externaldata-no-directory": "O diretório $1 não está definido.",
 	"externaldata-exe-shell-disabled": "Erro: o administrador de PHP desativou o acesso à shell.",
 	"externaldata-exe-incomplete-information": "Erro: informação incompleta para este identificador de comando $1 ($2).",
-	"externaldata-exe-illegal-parameter": "Erro: o parâmetro $2 do programa $1 tem o valor não permitido $3.",
 	"externaldata-exe-error": "Erro: o programa $1 devolveu o código de saída $2. Mensagem: $3.",
 	"externaldata-no-local-variable": "Erro: não foi definida nenhuma variável local \"$1\".",
 	"externaldata-no-template": "Erro: não foi especificada nenhuma predefinição."

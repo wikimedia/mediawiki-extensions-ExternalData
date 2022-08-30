@@ -37,7 +37,6 @@
 	"externaldata-missing-file": "Filen $1 saknas.",
 	"externaldata-exe-shell-disabled": "Fel: PHP-administratör har inaktiverat tillgång till skalet.",
 	"externaldata-exe-incomplete-information": "Fel: Ofullständig information för detta kommando-ID $1 ($2).",
-	"externaldata-exe-illegal-parameter": "Fel: Parametern $2 för programmet $1 har ogiltiga värdet $3.",
 	"externaldata-exe-error": "Fel: Programmet $1 returnerade slutkoden $2. Meddelande: $3.",
 	"externaldata-no-local-variable": "Fel: ingen lokal variabel \"$1\" har angetts.",
 	"externaldata-no-template": "Fel: ingen mall angiven."

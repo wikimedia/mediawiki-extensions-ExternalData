@@ -57,7 +57,6 @@
 	"externaldata-not-a-directory": "$1 不是目錄或並不存在。",
 	"externaldata-exe-shell-disabled": "錯誤：PHP 管理員已禁用存取殼層。",
 	"externaldata-exe-incomplete-information": "錯誤：此 $1 命令 ID ($2) 有未完成的資訊",
-	"externaldata-exe-illegal-parameter": "錯誤：$1 程式的 $2 參數擁有 $3 非法值。",
 	"externaldata-exe-exception": "錯誤：嘗試運作程式 $1 時出現例外狀況。訊息：$2。",
 	"externaldata-exe-error": "錯誤：$1 程式送回退出代碼 $2。消息：$3。",
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",

@@ -55,7 +55,6 @@
 	"externaldata-not-a-directory": "$1 не є каталогом або відсутній.",
 	"externaldata-exe-shell-disabled": "Помилка: адміністратор PHP вимкнув доступ до оболонки.",
 	"externaldata-exe-incomplete-information": "Помилка: Неповна інформація для цієї команди з ідентифікатором $1 ($2).",
-	"externaldata-exe-illegal-parameter": "Помилка: параметр $2 для програми $1 має недопустиме значення $3.",
 	"externaldata-exe-exception": "Помилка: Виняток під час спроби запустити програму $1. Повідомлення: $2.",
 	"externaldata-exe-error": "Помилка: програма $1 повернула код виходу $2. Повідомлення: $3.",
 	"externaldata-no-local-variable": "Помилка: не встановлено локальну змінну «$1».",
