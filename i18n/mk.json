@@ -55,6 +55,7 @@
 	"externaldata-not-a-directory": "$1 не е папка или недостасува.",
 	"externaldata-exe-shell-disabled": "Грешка: PHP-администраторот го оневозможи пристапот до обвивката.",
 	"externaldata-exe-incomplete-information": "Грешка: Нецелосни информации за оваа наредба со назнака $1 ($2).",
+	"externaldata-illegal-parameter": "Грешка: Параметарот $1 има недозволена вредност $2.",
 	"externaldata-exe-exception": "Грешка: Исклучок при пуштањето на програмата $1. Порака: $2.",
 	"externaldata-exe-error": "Грешка: Прогрмаот $1 даде повратен код $2. Порака: $3.",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
