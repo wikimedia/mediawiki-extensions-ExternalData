@@ -11,7 +11,7 @@ use Wikimedia\Rdbms\Database;
 
 abstract class EDConnectorRdbms extends EDConnectorComposed {
 	/** @var Database The database object. */
-	private $database;
+	protected $database;
 
 	/**
 	 * Set credentials settings for database from $this->dbId.
