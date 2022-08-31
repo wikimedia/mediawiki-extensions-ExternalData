@@ -211,10 +211,12 @@ END;
 	 */
 	protected static function parseParams( $params ) {
 		$args = [];
-		foreach ( $params as $param ) {
+		foreach ( $params as $key => $param ) {
 			$param_parts = preg_split( '/\s*=\s*/', $param, 2 );
 			if ( count( $param_parts ) < 2 ) {
 				$args[$param_parts[0]] = null;
+				// Also, keep the numbered parameter.
+				$args[$key] = $param;
 			} else {
 				[ $name, $value ] = $param_parts;
 				$args[$name] = $value;

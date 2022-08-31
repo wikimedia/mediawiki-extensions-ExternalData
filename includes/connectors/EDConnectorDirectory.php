@@ -8,6 +8,9 @@
  *
  */
 class EDConnectorDirectory extends EDConnectorPath {
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'directory';
+
 	/** @var string $directrory Directory. */
 	private $directory;
 	/** @var string File in directory. */
@@ -25,27 +28,23 @@ class EDConnectorDirectory extends EDConnectorPath {
 		parent::__construct( $args, $title );
 
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
-		if ( isset( $args['directory'] ) ) {
-			$this->directory = $args['directory'];
-			if ( isset( $args['path'] ) ) {
-				if ( is_dir( $args['path'] ) ) {
-					$this->real_directory = $args['path'];
-					// Add trailing slash:
-					$final = substr( $this->real_directory, -1 );
-					$this->real_directory
-						.= $final === DIRECTORY_SEPARATOR || $final === '/' ? '' : DIRECTORY_SEPARATOR;
-				} else {
-					// Not a directory.
-					$this->error( 'externaldata-not-a-directory', $this->directory );
-				}
+		$this->directory = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		if ( isset( $args['path'] ) ) {
+			if ( is_dir( $args['path'] ) ) {
+				$this->real_directory = $args['path'];
+				// Add trailing slash:
+				$final = substr( $this->real_directory, -1 );
+				$this->real_directory
+					.= $final === DIRECTORY_SEPARATOR || $final === '/' ? '' : DIRECTORY_SEPARATOR;
 			} else {
-				// No directory defined in 'path'.
-				$this->error( 'externaldata-no-directory', $this->directory );
+				// Not a directory.
+				$this->error( 'externaldata-not-a-directory', $this->directory );
 			}
 		} else {
-			// No directory given.
-			$this->error( 'externaldata-no-param-specified', 'directory' );
+			// No directory defined in 'path'.
+			$this->error( 'externaldata-no-directory', $this->directory );
 		}
+
 		if ( isset( $args['file name'] ) ) {
 			$this->file_name = $args['file name'];
 		} else {

@@ -9,7 +9,9 @@ abstract class EDConnectorBase {
 	use EDParsesParams;	// Needs paramToArray().
 
 	/** @const string[] ID_PARAMS An array of name of params that will serve as data sources' names. */
-	private const ID_PARAMS = [ 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', '*' ];
+	private const ID_PARAMS = [ 'url', 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', '*' ];
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'source';
 	/** @const string[] URL_PARAMS An array of name of params that will serve as data sources' names for URLs. */
 	private const URL_PARAMS = [ 'url', 'host', '2nd_lvl_domain' ];
 
@@ -62,6 +64,16 @@ abstract class EDConnectorBase {
 	protected function __construct( array &$args, Title $title ) {
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true, false );
+
+		// Check the presence of the identifier parameter ('source', 'url', 'db', etc.).
+		if ( !isset( $args[static::ID_PARAM] ) ) {
+			if ( isset( $args[self::ID_PARAM] ) ) {
+				// 'source' is a universal replacement for 'url', 'db', etc.
+				$args[static::ID_PARAM] = $args[self::ID_PARAM];
+			} else {
+				$this->error( 'externaldata-no-param-specified', static::ID_PARAM );
+			}
+		}
 
 		// Check the presence of required values.
 		if ( isset( $args['params'] ) ) {
@@ -319,6 +331,20 @@ abstract class EDConnectorBase {
 	protected static function supplementParams( array $params ): array {
 		$supplemented = $params;
 
+		// Allow concise syntax with unnamed first parameter instead of 'source', etc.
+		if ( isset( $params[0] ) ) {
+			$supplemented[self::ID_PARAM] = $params[0];
+		}
+
+		// URL passed as 'source'.
+		if (
+			!isset( $supplemented['url'] ) &&
+			isset( $supplemented[self::ID_PARAM] ) &&
+			filter_var( $supplemented[self::ID_PARAM], FILTER_VALIDATE_URL )
+		) {
+			$supplemented['url'] = $supplemented[self::ID_PARAM];
+		}
+
 		// A list of fields containing names data sources to read.
 		$fields = [];
 		if ( isset( $supplemented['url'] ) ) {
@@ -341,6 +367,11 @@ abstract class EDConnectorBase {
 		// @phan-suppress-next-line PhanSuspiciousBinaryAddLists Shut up.
 		$fields += self::ID_PARAMS;
 		$supplemented['*'] = '*';
+
+		// 'db' passed as 'server'.
+		if ( isset( $supplemented['server'] ) && !isset( $supplemented['db'] ) ) {
+			$supplemented['db'] = $supplemented['server'];
+		}
 
 		// Read the settings for data source(s).
 		$wiki_wide = [];

@@ -8,6 +8,9 @@
  *
  */
 class EDConnectorFile extends EDConnectorPath {
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'file';
+
 	/** @var string File name. */
 	private $file;
 
@@ -20,17 +23,12 @@ class EDConnectorFile extends EDConnectorPath {
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
-		if ( isset( $args['file'] ) ) {
-			$this->file = $args['file'];
-			if ( isset( $args['path'] ) ) {
-				$this->realPath = $args['path'];
-			} else {
-				// File not defined.
-				$this->error( 'externaldata-undefined-file', $this->file );
-			}
+		$this->file = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		if ( isset( $args['path'] ) ) {
+			$this->realPath = $args['path'];
 		} else {
-			// No file parameter given.
-			$this->error( 'externaldata-no-param-specified', 'file' );
+			// File not defined.
+			$this->error( 'externaldata-undefined-file', $this->file );
 		}
 	}
 

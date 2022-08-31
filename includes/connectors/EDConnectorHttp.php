@@ -15,6 +15,9 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	use EDConnectorThrottled; // throttles calls.
 	use EDConnectorCached; // uses cache.
 
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'url';
+
 	/** @var string URL to fetch data from as provided by user. */
 	protected $originalUrl;
 	/** @var string URL to fetch data from after substitutions. */
@@ -46,31 +49,6 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 
 		parent::__construct( $args, $title );
 
-		// Form URL.
-		if ( isset( $args['url'] ) ) {
-			$url = $args['url'];
-			$url = str_replace( ' ', '%20', $url ); // -- do some minor URL-encoding.
-			$this->originalUrl = $url;
-			// If the URL isn't allowed (based on a whitelist), exit.
-			$allowed_urls = isset( $args['allowed urls'] ) ? $args['allowed urls'] : null;
-			if ( self::isURLAllowed( $url, $allowed_urls ) ) {
-				// Do any special variable replacements in the URLs, for secret API keys and the like.
-				if ( isset( $args['replacements'] ) ) {
-					foreach ( $args['replacements'] as $key => $value ) {
-						$url = str_replace( $key, $value, $url );
-					}
-				}
-				$this->realUrl = $url;
-			} else {
-				// URL not allowed.
-				$this->error( 'externaldata-url-not-allowed', $url );
-			}
-		} else {
-			// URL not provided.
-			$this->error( 'externaldata-no-param-specified', 'url' );
-			return; // no need to continue.
-		}
-
 		// HTTP options.
 		$this->options = isset( $args['options'] ) ? $args['options'] : [];
 		// @TODO inject into data sources.
@@ -84,11 +62,11 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			: $wgHTTPConnectTimeout;
 		if ( isset( $args['allow ssl'] ) ) {
 			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] )
-											? $this->options['sslVerifyCert']
-											: false;
+				? $this->options['sslVerifyCert']
+				: false;
 			$this->options['followRedirects'] = isset( $this->options['followRedirects'] )
-											  ? $this->options['followRedirects']
-											  : false;
+				? $this->options['followRedirects']
+				: false;
 		}
 
 		// Throttling.
@@ -105,6 +83,29 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$allow_stale_cache = array_key_exists( 'use stale cache', $args )
 			|| array_key_exists( 'always use stale cache', $args );
 		$this->setupCache( $cache_expires, $allow_stale_cache );
+
+		// Form URL.
+		if ( isset( $args[self::ID_PARAM] ) ) {
+			$url = $args[self::ID_PARAM];
+		} else {
+			return; // further work is impossible without a URL.
+		}
+		$url = str_replace( ' ', '%20', $url ); // -- do some minor URL-encoding.
+		$this->originalUrl = $url;
+		// If the URL isn't allowed (based on a whitelist), exit.
+		$allowed_urls = isset( $args['allowed urls'] ) ? $args['allowed urls'] : null;
+		if ( self::isURLAllowed( $url, $allowed_urls ) ) {
+			// Do any special variable replacements in the URLs, for secret API keys and the like.
+			if ( isset( $args['replacements'] ) ) {
+				foreach ( $args['replacements'] as $key => $value ) {
+					$url = str_replace( $key, $value, $url );
+				}
+			}
+			$this->realUrl = $url;
+		} else {
+			// URL not allowed.
+			$this->error( 'externaldata-url-not-allowed', $url );
+		}
 	}
 
 	/**

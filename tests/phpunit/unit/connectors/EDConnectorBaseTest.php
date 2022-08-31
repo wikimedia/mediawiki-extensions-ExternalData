@@ -151,7 +151,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		$cases = [];
 
 		$cases['Typical'] = [
-			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin' ],
+			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin', 'source' => 'some source' ],
 			[
 				'mappings' => [ 'name' => 'Name', 'time' => '__time' ],
 				'filters' => [ 'name' => 'Alexander Mashin' ],
@@ -161,7 +161,12 @@ class EDConnectorBaseTest extends EDTestBase {
 		];
 
 		$cases['Suppress error'] = [
-			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin', 'suppress error' => null ],
+			[
+				'data' => 'name=Name,time=__time',
+				'filters' => 'name=Alexander Mashin',
+				'suppress error' => null,
+				'source' => 'some source'
+			],
 			[
 				'mappings' => [ 'name' => 'Name', 'time' => '__time' ],
 				'filters' => [ 'name' => 'Alexander Mashin' ],
@@ -171,7 +176,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		];
 
 		$cases['Lower case'] = [
-			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin' ],
+			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin', 'source' => 'some source' ],
 			[
 				'mappings' => [ 'name' => 'name', 'time' => '__time' ],
 				'filters' => [ 'name' => 'Alexander Mashin' ],
@@ -181,11 +186,31 @@ class EDConnectorBaseTest extends EDTestBase {
 		];
 
 		$cases['Lua table'] = [
-			[ 'data' => [ 'name' => 'Name' , 'time' => '__time' ], 'filters' => [ 'name' => 'Alexander Mashin' ] ],
+			[
+				'data' => [ 'name' => 'Name' , 'time' => '__time' ],
+				'filters' => [ 'name' => 'Alexander Mashin' ],
+				'source' => 'some source'
+			],
 			[
 				'mappings' => [ 'name' => 'Name', 'time' => '__time' ],
 				'filters' => [ 'name' => 'Alexander Mashin' ],
 				'suppress' => false, 'errors' => null
+			],
+			true
+		];
+
+		$cases['No data source id'] = [
+			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin' ],
+			[
+				'mappings' => [ 'name' => 'Name', 'time' => '__time' ],
+				'filters' => [ 'name' => 'Alexander Mashin' ],
+				'suppress' => false,
+				'errors' => [
+					'6503c3799268ad392b259f7ea1d71951' => [
+						'code' => 'externaldata-no-param-specified',
+						'params' => [ 0 => 'source' ]
+					]
+				]
 			],
 			true
 		];
@@ -341,11 +366,31 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
 			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
 
-			// Misused specific function on obscure data source.
-			'{{#get_db_data:}}, Misused obscure source' => [
+			'{{#get_db_data:}}, source instead of db' => [
 				'get_db_data',
 				[ 'type' => 'postgres', 'source' => 'PG1' ],
+				'EDConnectorPostgresql'
+			],
+
+			// Misused specific function on hidden data source.
+			'{{#get_db_data:}}, Misused parser function with hidden source' => [
+				'get_db_data',
+				[ 'type' => 'postgres', 'source' => 'PG1', 'hidden' => true ],
 				'EDConnectorDummy'
+			],
+
+			// Misused id on hidden data source.
+			'{{#get_external_data:}}, Misused identifier with hidden source' => [
+				'get_external_data',
+				[ 'type' => 'postgres', 'db' => 'PG1', 'hidden' => true ],
+				'EDConnectorDummy'
+			],
+
+			// Correctly used hidden data source.
+			'{{#get_external_data:}}, Correctly used hidden source' => [
+				'get_external_data',
+				[ 'type' => 'postgres', 'source' => 'PG1', 'hidden' => true ],
+				'EDConnectorPostgresql'
 			],
 
 			// Universal function.
@@ -394,6 +439,71 @@ class EDConnectorBaseTest extends EDTestBase {
 
 			// Universal function without a suitable connector.
 			'{{#get_external_data:}}, No source' => [ 'get_external_data', [ 'source' => 'PG1' ], 'EDConnectorDummy' ],
+
+			// 'source' instead of a specific parameter.
+			// Specific functions.
+			'{{#get_web_data:}}, source' => [
+				'get_web_data',
+				[ 'source' => 'https://mediawiki.org' ], 'EDConnectorWeb'
+			],
+			'{{#get_file_data:}}, file mask, source' =>
+				[ 'get_file_data', [ 'source' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker' ],
+			'{{#get_file_data:}}, directory, source' => [
+				'get_file_data',
+				[ 'source' => '/etc', 'file name' => 'hosts' ],
+				'EDConnectorDirectory'
+			],
+
+			// Universal function.
+			'{{#get_external_data:}}, URL, source' =>
+				[ 'get_external_data', [ 'source' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
+			'{{#get_external_data:}}, file mask, source' =>	[
+				'get_external_data',
+				[ 'source' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
+			],
+			'{{#get_external_data:}}, directory, source' =>
+				[ 'get_external_data', [ 'source' => '/etc', 'file name' => 'hosts' ], 'EDConnectorDirectory' ],
+			'{{#get_external_data:}}, file, source' => [
+				'get_external_data', [ 'source' => 'file example', 'path' => '/etc' ], 'EDConnectorFile'
+			],
+			'{{#get_external_data:}}, LDAP, source' => [
+				'get_external_data',
+				 [ 'source' => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
+				 'EDConnectorLdap'
+			],
+
+			// First parameter instead of a specific parameter.
+			// Specific functions.
+			'{{#get_web_data:}}, anonymous' => [
+				'get_web_data',
+				[ 0 => 'https://mediawiki.org' ], 'EDConnectorWeb'
+			],
+			'{{#get_file_data:}}, file mask, anonymous' =>
+				[ 'get_file_data', [ 0 => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker' ],
+			'{{#get_file_data:}}, directory, anonymous' => [
+				'get_file_data',
+				[ 0 => '/etc', 'file name' => 'hosts' ],
+				'EDConnectorDirectory'
+			],
+
+			// Universal function.
+			'{{#get_external_data:}}, URL, anonymous' =>
+				[ 'get_external_data', [ 0 => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
+			'{{#get_external_data:}}, file mask, anonymous' => [
+				'get_external_data',
+				[ 0 => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
+			],
+			'{{#get_external_data:}}, directory, anonymous' =>
+				[ 'get_external_data', [ 0 => '/etc', 'file name' => 'hosts' ], 'EDConnectorDirectory' ],
+			'{{#get_external_data:}}, file, anonymous' => [
+				'get_external_data', [ 0 => 'file example', 'path' => '/etc' ], 'EDConnectorFile'
+			],
+			'{{#get_external_data:}}, LDAP, anonymous' => [
+				'get_external_data',
+				[ 0 => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
+				'EDConnectorLdap'
+			],
+
 		];
 	}
 
@@ -458,6 +568,32 @@ class EDConnectorBaseTest extends EDTestBase {
 		$components = self::parseUrl( $url );
 		$cases['Common URL'] = [
 			[ 'url' => $url ], $sources,
+			[
+				'url' => $url,
+				'host' => $components['host'],
+				'2nd_lvl_domain' => $components['2nd_lvl_domain'],
+				'min cache seconds' => $sources['*']['min cache seconds']
+			]
+		];
+
+		// Simplest case: 'source'.
+		$url = 'https://mediawiki.org/Extension:External_Data';
+		$components = self::parseUrl( $url );
+		$cases['Common URL passed in "source"'] = [
+			[ 'source' => $url ], $sources,
+			[
+				'url' => $url,
+				'host' => $components['host'],
+				'2nd_lvl_domain' => $components['2nd_lvl_domain'],
+				'min cache seconds' => $sources['*']['min cache seconds']
+			]
+		];
+
+		// Simplest case: anonymous.
+		$url = 'https://mediawiki.org/Extension:External_Data';
+		$components = self::parseUrl( $url );
+		$cases['Common URL passed anonymously'] = [
+			[ 0 => $url ], $sources,
 			[
 				'url' => $url,
 				'host' => $components['host'],
@@ -532,6 +668,43 @@ class EDConnectorBaseTest extends EDTestBase {
 			'password' => ''
 		];
 		$cases['Database parameters'] = [ [ 'db' => $id ], $sources, [ 'db' => $id ] + $sources[$id] ];
+
+		// Database parameters with 'server' instead of 'db'.
+		$id = 'rfam2';
+		$sources[$id] = [
+			'host' => 'mysql-rfam-public.ebi.ac.uk:4497',
+			'type' => 'mysql',
+			'name' => 'Rfam',
+			'user' => 'rfamro',
+			'password' => ''
+		];
+		$cases['Database parameters with "server" instead of "id"'] = [
+			[ 'server' => $id ],
+			$sources,
+			[ 'server' => $id ] + $sources[$id]
+		];
+
+		// Database parameters with 'source'.
+		$id = 'rfam';
+		$sources[$id] = [
+			'source' => 'mysql-rfam-public.ebi.ac.uk:4497',
+			'type' => 'mysql',
+			'name' => 'Rfam',
+			'user' => 'rfamro',
+			'password' => ''
+		];
+		$cases['Database parameters with "source"'] = [ [ 'db' => $id ], $sources, [ 'db' => $id ] + $sources[$id] ];
+
+		// Database parameters with unnamed source.
+		$id = 'rfam';
+		$sources[$id] = [
+			0 => 'mysql-rfam-public.ebi.ac.uk:4497',
+			'type' => 'mysql',
+			'name' => 'Rfam',
+			'user' => 'rfamro',
+			'password' => ''
+		];
+		$cases['Database parameters, anonymous'] = [ [ 'db' => $id ], $sources, [ 'db' => $id ] + $sources[$id] ];
 
 		// Settings per program.
 		$id = 'man';

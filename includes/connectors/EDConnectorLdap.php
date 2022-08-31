@@ -7,6 +7,9 @@
  *
  */
 class EDConnectorLdap extends EDConnectorBase {
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'domain';
+
 	/** @var string LDAP filter. */
 	private $filter;
 	/** @var bool Get all LDAP data. */
@@ -33,6 +36,8 @@ class EDConnectorLdap extends EDConnectorBase {
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
+		$this->domain = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+
 		// This connector needs an explicit set of fields.
 		if ( !array_key_exists( 'data', $args ) ) {
 			$this->error( 'externaldata-no-param-specified', 'data' );
@@ -51,11 +56,6 @@ class EDConnectorLdap extends EDConnectorBase {
 			$this->filter = $args['filter'];
 		} else {
 			$this->error( 'externaldata-no-param-specified', 'filter' );
-		}
-		if ( isset( $args['domain'] ) ) {
-			$this->domain = $args['domain'];
-		} else {
-			$this->error( 'externaldata-no-param-specified', 'domain' );
 		}
 		if ( isset( $args['server'] ) ) {
 			$this->server = $args['server'];

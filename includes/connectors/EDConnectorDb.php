@@ -7,8 +7,11 @@
  *
  */
 abstract class EDConnectorDb extends EDConnectorBase {
-	/** @var string Database ID. */
-	protected $dbId;	// Database ID.
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'db';
+
+	/** @var string|null Database ID. */
+	protected $dbId = null;	// Database ID.
 
 	/** @var string Database type. */
 	protected $type;
@@ -31,23 +34,10 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		parent::__construct( $args, $title );
 
 		// Specific parameters.
-		if ( isset( $args['db'] ) ) {
-			$this->dbId = $args['db'];
-		} elseif ( isset( $args['server'] ) ) {
-			// For backwards-compatibility - 'db' parameter was
-			// added in External Data version 1.3.
-			$this->dbId = $args['server'];
+		if ( isset( $args[self::ID_PARAM] ) ) {
+			$this->dbId = $args[self::ID_PARAM];
 		}
-		if ( !$this->dbId ) {
-			$this->error( 'externaldata-no-param-specified', 'db' );
-		}
-		if ( isset( $args['type'] ) ) {
-			$this->type = strtolower( $args['type'] );
-		} else {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'type' );
-		}
-		// Database credentials.
-		$this->setCredentials( $args );	// late binding.
+
 		// Query parts.
 		$mappings = $this->mappings();
 		if ( count( $mappings ) === 0 || isset( $mappings['__all'] ) ) {
@@ -66,6 +56,16 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			}
 			$this->aliases[$column] = $alias;
 		}
+		if ( !$this->dbId ) {
+			return; // further checks and initialisations are impossible.
+		}
+		if ( isset( $args['type'] ) ) {
+			$this->type = strtolower( $args['type'] );
+		} else {
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'type' );
+		}
+		// Database credentials.
+		$this->setCredentials( $args );	// late binding.
 	}
 
 	/**

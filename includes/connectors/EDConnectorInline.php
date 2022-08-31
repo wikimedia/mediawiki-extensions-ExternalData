@@ -8,6 +8,9 @@
 class EDConnectorInline extends EDConnectorBase {
 	use EDConnectorParsable; // needs parser.
 
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'text';
+
 	/** @var string $text Text to parse. */
 	private $text;
 
@@ -25,11 +28,7 @@ class EDConnectorInline extends EDConnectorBase {
 		parent::__construct( $args, $title );
 
 		// Text to parse.
-		if ( array_key_exists( 'text', $args ) ) {
-			$this->text = $args['text'];
-		} else {
-			$this->error( 'externaldata-no-param-specified', 'text' );
-		}
+		$this->text = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
 	}
 
 	/**

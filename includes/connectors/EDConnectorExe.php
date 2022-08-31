@@ -14,6 +14,9 @@ class EDConnectorExe extends EDConnectorBase {
 	use EDConnectorParsable; // needs parser.
 	use EDConnectorThrottled; // throttles calls.
 
+	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
+	protected const ID_PARAM = 'program';
+
 	/** @var string $program Program ID. */
 	private $program;
 	/** @var array $environment An array of environment variables. */
@@ -51,6 +54,8 @@ class EDConnectorExe extends EDConnectorBase {
 
 		parent::__construct( $args, $title );
 
+		$this->program = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+
 		$this->params = $args;
 
 		if ( Shell::isDisabled() ) {
@@ -59,11 +64,11 @@ class EDConnectorExe extends EDConnectorBase {
 
 		// Specific parameters.
 		$command = null;
-		if ( !isset( $args['program'] ) ) {
-			$this->error( 'externaldata-no-param-specified', 'program' );
+		if ( !isset( $args[self::ID_PARAM] ) ) {
+			$this->error( 'externaldata-no-param-specified', self::ID_PARAM );
 			return; // no need to continue.
 		}
-		$this->program = $args['program'];
+
 		// The command, stored as a secret in LocalSettings.php.
 		if ( isset( $args['command'] ) ) {
 			$command = $args['command'];
