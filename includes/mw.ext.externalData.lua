@@ -27,10 +27,11 @@ function external.setupInterface()
 	-- Prepare parameters.
 	local function prepareParams( parameters )
 		local args = {}
-		for key, value in pairs( parameters or {} ) do
+		for key, value in pairs( type( parameters ) == 'table' and parameters or { parameters } ) do
 			if tonumber( key ) then
 				-- parameters without '=', like 'use xpath'.
 				args[value] = true
+				args[key - 1] = value -- one-based -> zero-based.
 			else
 				args[key] = value
 			end

@@ -178,6 +178,28 @@ class EDParserCSV extends EDParserBase {
 	}
 
 	/**
+	 * An extended is_numeric with units of measurement and various decimal separators.
+	 * @param string $str String value to check.
+	 * @return bool
+	 */
+	private static function isNumeric( $str ) {
+		$regex = <<<REGEX
+/^-? ( # optional minus
+    \d{1,3} (, \d{3} )* # class separator is comma
+    ( \. \d+ )? # decimal separator is dot
+|
+    \d{1,3} ( [.\s] \d{3} )* # class separator is dot or space
+    ( , \d+ )? # decimal separator is comma
+|
+    \d+ # no class separator
+    ( [.,\s] \d+ )? # decimal separator is dot or comma
+)( \s? \D+ )? # optional unit of measurement
+$/x
+REGEX;
+		return preg_match( $regex, $str );
+	}
+
+	/**
 	 * Detect header line in the table.
 	 * @param array $first The first line that may be a header line.
 	 * @param ?array $second The second line -- a specimen of data.
@@ -193,7 +215,7 @@ class EDParserCSV extends EDParserBase {
 		// Compare data types in the first and the second lines.
 		if ( $second ) {
 			foreach ( $first as $column => $cell ) {
-				if ( is_numeric( $cell ) !== is_numeric( $second[$column] ) ) {
+				if ( self::isNumeric( $cell ) !== self::isNumeric( $second[$column] ) ) {
 					return true;
 				}
 			}
