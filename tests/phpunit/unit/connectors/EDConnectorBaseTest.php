@@ -175,6 +175,21 @@ class EDConnectorBaseTest extends EDTestBase {
 			true
 		];
 
+		$cases['Suppress error: hidden'] = [
+			[
+				'data' => 'name=Name,time=__time',
+				'filters' => 'name=Alexander Mashin',
+				'hidden' => true,
+				'source' => 'some source'
+			],
+			[
+				'mappings' => [ 'name' => 'Name', 'time' => '__time' ],
+				'filters' => [ 'name' => 'Alexander Mashin' ],
+				'suppress' => true, 'errors' => null
+			],
+			true
+		];
+
 		$cases['Lower case'] = [
 			[ 'data' => 'name=Name,time=__time', 'filters' => 'name=Alexander Mashin', 'source' => 'some source' ],
 			[

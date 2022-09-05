@@ -97,7 +97,7 @@ abstract class EDConnectorBase {
 					   : [];
 
 		// Whether to suppress error messages.
-		if ( array_key_exists( 'suppress error', $args ) ) {
+		if ( array_key_exists( 'suppress error', $args ) || array_key_exists( 'hidden', $args ) ) {
 			$this->suppressError = true;
 		}
 	}
