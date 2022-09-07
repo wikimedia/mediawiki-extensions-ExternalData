@@ -59,5 +59,6 @@
 	"externaldata-exe-exception": "Error: Exception while trying to run program $1. Message: $2.",
 	"externaldata-exe-error": "Error: The program $1 returned exit code $2. Message: $3.",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
-	"externaldata-no-template": "Error: no template specified."
+	"externaldata-no-template": "Error: no template specified.",
+	"externaldata-no-loop-body": "Error: no loop body set as the first or the second parameter."
 }

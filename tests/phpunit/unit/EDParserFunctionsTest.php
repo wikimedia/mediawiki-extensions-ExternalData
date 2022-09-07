@@ -339,6 +339,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * @throws ReflectionException
 	 */
 	public function testActuallyDisplayExternalTable( array $args, $result ) {
-		$this->testPrivateMethod( 'actuallyDisplayExternalTable', self::VALUES, $result, $args );
+		$title = Title::makeTitle( 0, 'Dummy' );
+		$this->testPrivateMethod( 'actuallyDisplayExternalTable', self::VALUES, $result, $args, $title );
 	}
 }

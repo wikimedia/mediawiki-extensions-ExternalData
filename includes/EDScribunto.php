@@ -12,10 +12,18 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	public function register() {
 		// Data retrieval functions:
 		$functions = [];
-		foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
-			$functions[$lua_function] = function ( array $arguments ) use( $parser_function ) {
+		global $wgExternalDataAllowGetters;
+		if ( $wgExternalDataAllowGetters ) {
+			foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
+				$functions[$lua_function] = function ( array $arguments ) use ( $parser_function ) {
+					// @phan-suppress-next-line PhanUndeclaredMethod To make PHAN shut up.
+					return self::fetch( $parser_function, $arguments, $this->getTitle() );
+				};
+			}
+		} else {
+			$functions['getExternalData'] = function ( array $arguments ) {
 				// @phan-suppress-next-line PhanUndeclaredMethod To make PHAN shut up.
-				return self::fetch( $parser_function, $arguments, $this->getTitle() );
+				return self::fetch( 'get_external_data', $arguments, $this->getTitle() );
 			};
 		}
 		// @phan-suppress-next-line PhanUndeclaredMethod To make PHAN shut up.

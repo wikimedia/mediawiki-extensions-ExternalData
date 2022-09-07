@@ -68,5 +68,6 @@
 	"externaldata-exe-exception": "The error message, when Shell throws an exception while trying to run the command. Parameters:\n\n$1 is the program id,\n$2 is the exception message.",
 	"externaldata-exe-error": "The error message when the invoked program returns an error. Parameters:\n\n* $1 is the program ID,\n\n* $2 is the exit code,\n\n* $3 is the error text.",
 	"externaldata-no-local-variable": "This error message is shown when no local variable \"$1\" has been set.",
-	"externaldata-no-template": "Error message if {{#display_external_table:}} has no template parameter."
+	"externaldata-no-template": "Error message if {{#display_external_table:}} has no template parameter.",
+	"externaldata-no-loop-body": "Error message if neither the first nor the second parameter to {{#for_external_table:}}, holding the loop body, is set."
 }

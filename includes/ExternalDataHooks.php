@@ -14,13 +14,18 @@ class ExternalDataHooks {
 	 */
 	public static function registerParser( Parser $parser ) {
 		// Add data retrieval parser functions as defined by $wgExternalDataConnectors.
-		foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
-			$parser->setFunctionHook(
-				$parser_function,
-				static function ( Parser $parser, ...$params ) use ( $parser_function ) {
-					return EDParserFunctions::fetch( $parser, $parser_function, $params );
-				}
-			);
+		global $wgExternalDataAllowGetters;
+		if ( $wgExternalDataAllowGetters ) {
+			foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
+				$parser->setFunctionHook(
+					$parser_function,
+					static function ( Parser $parser, ...$params ) use ( $parser_function ) {
+						$title = $parser->getTitle();
+						return EDParserFunctions::fetch( $title, $parser_function, $params );
+					}
+				);
+			}
+			$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
 		}
 
 		// Data display functions.
@@ -34,8 +39,9 @@ class ExternalDataHooks {
 		if ( class_exists( 'CargoDisplayFormat' ) ) {
 			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );
 		}
-		$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
-		$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
+		if ( class_exists( '\SMW\ParserFunctionFactory' ) ) {
+			$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
+		}
 
 		EDConnectorExe::registerTags( $parser );
 

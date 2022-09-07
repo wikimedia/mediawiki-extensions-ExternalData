@@ -151,15 +151,29 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * A list of available connectors.
+	 * @return array
+	 */
+	private static function connectors(): array {
+		$connectors = self::setting( 'IntegratedConnectors' );
+		global $wgExternalDataAllowGetters;
+		if ( $wgExternalDataAllowGetters ) {
+			$last = array_pop( $connectors );
+			$connectors = array_merge( self::setting( 'Connectors' ), $connectors, [ $last ] );
+		}
+		return $connectors;
+	}
+
+	/**
 	 * Returns a list of connectors configured in $wgExternalDataConnectors.
 	 *
 	 * @return array An associative array of the form [ 'get_some_data' => 'getSomeData' ].
 	 */
 	public static function getConnectors(): array {
 		$connectors = [];
-		foreach ( self::setting( 'Connectors' ) as $connector ) {
-			$parser_function = $connector[0]['__pf'];
-			if ( !isset( $connectors[$parser_function] ) && is_string( $parser_function ) ) {
+		foreach ( self::connectors() as $connector ) {
+			$parser_function = isset( $connector[0]['__pf'] ) ? $connector[0]['__pf'] : null;
+			if ( is_string( $parser_function ) && !isset( $connectors[$parser_function] ) ) {
 				// 'get_some_data' => 'getSomeData'.
 				$connectors[$parser_function] = preg_replace_callback( '/_(\w)/', static function ( array $captures ) {
 					return strtoupper( $captures[1] );
@@ -172,20 +186,21 @@ abstract class EDConnectorBase {
 	/**
 	 * Chooses the proper EDConnector* class.
 	 *
-	 * @param string $name Parser function name.
+	 * @param string|null $name Parser function name.
 	 * @param array $args Its parameters.
 	 *
 	 * @return string Name of a EDConnector* class.
 	 */
 	protected static function getConnectorClass( $name, array $args ) {
 		$args['__pf'] = $name;
-		return self::getMatch( $args, self::setting( 'Connectors' ) );
+		$connectors = self::connectors();
+		return self::getMatch( $args, $connectors );
 	}
 
 	/**
 	 * A factory method that chooses and instantiates the proper EDConnector* class.
 	 *
-	 * @param string $name Parser function name.
+	 * @param string|null $name Parser function name.
 	 * @param array $args Its parameters.
 	 * @param Title|null $title A title object.
 	 *

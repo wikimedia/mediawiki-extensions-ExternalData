@@ -117,7 +117,7 @@
 			"value": true
 		},
 		"Connectors": {
-			"description": "Rules for choosing EDConnector* class",
+			"description": "Rules for choosing EDConnector* class in compatibility mode",
 			"value": [
 				[ { "__pf": "get_web_data", "hidden": false }, "EDConnectorWeb" ],
 				[ { "__pf": "get_file_data", "directory": true, "file name": "/[[\\]?*]/", "hidden": false }, "EDConnectorDirectoryWalker" ],
@@ -162,7 +162,33 @@
 				[ { "__pf": "get_external_data", "from": true }, "EDConnectorSql" ],
 				[ { "__pf": "get_external_data", "prepared": true }, "EDConnectorPreparedMysql" ],
 				[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ],
-				[ { "__pf": "get_external_data", "text": true }, "EDConnectorInline" ],
+				[ { "__pf": "get_external_data", "text": true }, "EDConnectorInline" ]
+			]
+		},
+		"IntegratedConnectors": {
+			"description": "Rules for choosing EDConnector* class in standalone mode",
+			"value": [
+				[ { "__pf": null, "source": false }, "EDConnectorDummy" ],
+				[ { "__pf": null, "url": true, "request": false }, "EDConnectorWeb" ],
+				[ { "__pf": null, "post data": true }, "EDConnectorWeb" ],
+				[ { "__pf": null, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
+				[ { "__pf": null, "file name": true }, "EDConnectorDirectory" ],
+				[ { "__pf": null, "path": true }, "EDConnectorFile" ],
+				[ { "__pf": null, "request": true }, "EDConnectorSoap" ],
+				[ { "__pf": null, "requestData": true }, "EDConnectorSoap" ],
+				[ { "__pf": null, "base dn": true }, "EDConnectorLdap" ],
+				[ { "__pf": null, "type": "mysql", "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": null, "type": "postgres", "prepared": true }, "EDConnectorPreparedPostgresql" ],
+				[ { "__pf": null, "type": "sqlite" }, "EDConnectorSqlite" ],
+				[ { "__pf": null, "type": "odbc", "prepared": true }, "EDConnectorPreparedOdbc" ],
+				[ { "__pf": null, "type": "odbc", "driver": "ODBC Driver 17 for SQL Server" }, "EDConnectorOdbcMssql" ],
+				[ { "__pf": null, "type": "mongodb", "__exists": "MongoDB\\Client" }, "EDConnectorMongodb7" ],
+				[ { "__pf": null, "type": "mongodb", "__exists": "MongoClient" }, "EDConnectorMongodb5" ],
+				[ { "__pf": null, "type": "postgres" }, "EDConnectorPostgresql" ],
+				[ { "__pf": null, "from": true }, "EDConnectorSql" ],
+				[ { "__pf": null, "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": null, "program": true }, "EDConnectorExe" ],
+				[ { "__pf": null, "text": true }, "EDConnectorInline" ],
 				[ { "__pf": true }, "EDConnectorDummy" ]
 			]
 		},
@@ -193,6 +219,10 @@
 				[ { "format": "gff" }, "EDParserGFF" ],
 				[ { "format": "auto" }, "EDParserAuto" ]
 			]
+		},
+		"AllowGetters": {
+			"description": "Drop all {{#get_*_data:}} functions and all mw.ext.getExternalData.get*Data() except mw.ext.getExternalData.getExternalData()",
+			"value": true
 		}
 	},
 	"manifest_version": 2
