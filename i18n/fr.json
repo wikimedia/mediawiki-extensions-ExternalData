@@ -71,5 +71,6 @@
 	"externaldata-exe-exception": "Erreur : exception lors de la tentative d’exécution du programme $1. Message : $2.",
 	"externaldata-exe-error": "Erreur : le programme $1 a renvoyé le code de sortie $2. Message : $3.",
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
-	"externaldata-no-template": "Erreur : aucun modèle spécifié."
+	"externaldata-no-template": "Erreur : aucun modèle spécifié.",
+	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre."
 }

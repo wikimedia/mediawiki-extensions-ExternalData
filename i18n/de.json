@@ -66,5 +66,6 @@
 	"externaldata-exe-exception": "Fehler: Ausnahme beim Versuch, Programm $1 auszuführen. Meldung: $2.",
 	"externaldata-exe-error": "Fehler: Das Programm $1 hat den Exit-Code $2 zurückgegeben. Nachricht: $3.",
 	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable „$1“ gesetzt.",
-	"externaldata-no-template": "Fehler: keine Vorlage angegeben."
+	"externaldata-no-template": "Fehler: keine Vorlage angegeben.",
+	"externaldata-no-loop-body": "Fehler: Kein Schleifenkörper als erster oder zweiter Parameter gesetzt."
 }
