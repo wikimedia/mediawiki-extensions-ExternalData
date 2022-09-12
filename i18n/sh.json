@@ -8,7 +8,7 @@
 	"externaldata-desc": "Omogućuje preuzimanje strukturnih podataka iz vanjskih URL-adresa, baza podataka i drugih izvora",
 	"externaldata-ldap-unable-to-connect": "Ne može se spojiti sa  $1",
 	"externaldata-db-incomplete-information": "Greška: Nepotpune informacije za ovaj serverski id. br.",
-	"externaldata-db-could-not-get-url": "Nisam mogao dohvatiti URL adresu nakon $1 {{PLURAL:$1|pokušaja}}.",
+	"externaldata-db-could-not-get-url": "Nije bilo moguće dohvaćanje URL-a $1 nakon $2 {{PLURAL:$2|pokušaj|pokušaja}}.",
 	"externaldata-db-unknown-type": "Greška: Nepoznat tip baze podataka.",
 	"externaldata-db-could-not-connect": "Greška: Nisam mogao povezati se s bazom podataka.",
 	"externaldata-db-unknown-collection": "Greška: Nepoznata kolekcija od MongoDB-a.",
