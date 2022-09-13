@@ -59,5 +59,6 @@
 	"externaldata-exe-exception": "Грешка: Исклучок при пуштањето на програмата $1. Порака: $2.",
 	"externaldata-exe-error": "Грешка: Прогрмаот $1 даде повратен код $2. Порака: $3.",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
-	"externaldata-no-template": "Грешка: нема укажано параметар."
+	"externaldata-no-template": "Грешка: нема укажано параметар.",
+	"externaldata-no-loop-body": "Грешка: нема зададено тело на јамката како прв или втор параметар."
 }
