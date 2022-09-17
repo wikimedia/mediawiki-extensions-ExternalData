@@ -71,10 +71,13 @@ trait EDParsesParams {
 	private static function paramsFit( array $params, array $pattern ) {
 		foreach ( $pattern as $key => $value ) {
 			if ( $key === '__exists' ) { // this part of the 'pattern' is a dependency.
-				if ( class_exists( $value ) || function_exists( $value ) ) { // and it is met.
-					continue; // continue with this 'pattern'.
-				} else {
-					return false; // dependency is not met, and the 'pattern' fails.
+				$dependencies = is_array( $value ) ? $value : [ $value ];
+				foreach ( $dependencies as $dependency ) {
+					if ( class_exists( $dependency ) || function_exists( $dependency ) ) { // and it is met.
+						continue 2; // continue with this 'pattern'.
+					} else {
+						return false; // dependency is not met, and the 'pattern' fails.
+					}
 				}
 			}
 			$parameter_present = array_key_exists( $key, $params );
@@ -227,6 +230,35 @@ END;
 			}
 		}
 		return $args;
+	}
+
+	/**
+	 * Pile a set of columns atop another set of columns in-place.
+	 * @param array &$lower The lower set of columns, atop of which $upper will be piled.
+	 * @param array $upper The upper set of columns, to be piled atop of $lower.
+	 * @return void
+	 */
+	protected static function pile( array &$lower, array $upper ) {
+		if ( !$upper ) {
+			return;
+		}
+		// Find maximum height of columns to be built on.
+		$maximum_height = 0;
+		foreach ( $upper as $variable => $_ ) {
+			// Create new columns if necessary.
+			if ( !array_key_exists( $variable, $lower ) ) {
+				$lower[$variable] = [];
+			}
+			$maximum_height = max( count( $lower[$variable] ), $maximum_height );
+		}
+		foreach ( $upper as $variable => $column ) {
+			// Stretch out columns if they are to be built on.
+			for ( $counter = count( $lower[$variable] ); $counter < $maximum_height; $counter++ ) {
+				$lower[$variable][$counter] = null;
+			}
+			// Superimpose column from $upper on column from $lower.
+			$lower[$variable] = array_merge( $lower[$variable], $column );
+		}
 	}
 
 	/**

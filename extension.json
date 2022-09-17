@@ -80,6 +80,10 @@
 		"EDParserYAMLwithJSONPath": "includes/parsers/EDParserYAMLwithJSONPath.php",
 		"EDParserCSV": "includes/parsers/EDParserCSV.php",
 		"EDParserGFF": "includes/parsers/EDParserGFF.php",
+		"EDParserArchive": "includes/parsers/EDParserArchive.php",
+		"EDParserPhar": "includes/parsers/EDParserPhar.php",
+		"EDParserZip": "includes/parsers/EDParserZip.php",
+		"EDParserRar": "includes/parsers/EDParserRar.php",
 		"EDParserAuto": "includes/parsers/EDParserAuto.php",
 		"EDParserException": "includes/parsers/EDParserException.php"
 	},
@@ -195,6 +199,31 @@
 		"Parsers": {
 			"description": "Rules for choosing EDParser* class",
 			"value": [
+				[ { "__exists": [ "PharData", "ZipArchive" ], "url": "/\\.zip$/i", "archive path": true }, "EDParserZip" ],
+				[ { "__exists": [ "PharData", "ZipArchive" ], "file name": "/\\.zip$/i", "archive path": true }, "EDParserZip" ],
+				[ { "__exists": [ "PharData", "ZipArchive" ], "path": "/\\.zip$/i", "archive path": true }, "EDParserZip" ],
+				[ { "__exists": [ "PharData", "ZipArchive" ], "source": "/\\.zip$/i", "archive path": true }, "EDParserZip" ],
+
+				[ { "__exists": [ "PharData", "RarArchive" ], "url": "/\\.rar$/i", "archive path": true }, "EDParserRar" ],
+				[ { "__exists": [ "PharData", "RarArchive" ], "file name": "/\\.rar$/i", "archive path": true }, "EDParserRar" ],
+				[ { "__exists": [ "PharData", "RarArchive" ], "path": "/\\.rar$/i", "archive path": true }, "EDParserRar" ],
+				[ { "__exists": [ "PharData", "RarArchive" ], "source": "/\\.rar$/i", "archive path": true }, "EDParserRar" ],
+
+				[ { "__exists": "PharData", "url": "/\\.tar$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": "PharData", "file name": "/\\.tar$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": "PharData", "path": "/\\.tar$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": "PharData", "source": "/\\.tar$/i", "archive path": true }, "EDParserPhar" ],
+
+				[ { "__exists": [ "PharData", "gzopen" ], "url": "/\\.tar\\.gz$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "gzopen" ], "file name": "/\\.tar\\.gz$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "gzopen" ], "path": "/\\.tar\\.gz$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "gzopen" ], "source": "/\\.tar\\.gz$/i", "archive path": true }, "EDParserPhar" ],
+
+				[ { "__exists": [ "PharData", "bzopen" ], "url": "/\\.tar\\.bz2$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "bzopen" ], "file name": "/\\.tar\\.bz2$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "bzopen" ], "path": "/\\.tar\\.bz2$/i", "archive path": true }, "EDParserPhar" ],
+				[ { "__exists": [ "PharData", "bzopen" ], "source": "/\\.tar\\.bz2$/i", "archive path": true }, "EDParserPhar" ],
+
 				[ { "format": "text", "regex": true }, "EDParserRegex" ],
 				[ { "format": "auto", "regex": true }, "EDParserRegex" ],
 				[ { "format": "text with regex" }, "EDParserRegex" ],
@@ -217,7 +246,8 @@
 				[ { "format": "csv" }, "EDParserCSV" ],
 				[ { "format": "csv with header" }, "EDParserCSV" ],
 				[ { "format": "gff" }, "EDParserGFF" ],
-				[ { "format": "auto" }, "EDParserAuto" ]
+				[ { "format": "auto" }, "EDParserAuto" ],
+				[ {}, "EDParserText" ]
 			]
 		},
 		"AllowGetters": {

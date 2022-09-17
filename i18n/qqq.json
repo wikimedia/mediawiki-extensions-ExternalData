@@ -67,6 +67,8 @@
 	"externaldata-illegal-parameter": "The error message shown when a parameter passed to #get_*_data has a value not allowed by $wgExternalDataSources['source']['filters']. Parameters:\n\n$1 is the parameter name,\n* #2 is the offending value.",
 	"externaldata-exe-exception": "The error message, when Shell throws an exception while trying to run the command. Parameters:\n\n$1 is the program id,\n$2 is the exception message.",
 	"externaldata-exe-error": "The error message when the invoked program returns an error. Parameters:\n\n* $1 is the program ID,\n\n* $2 is the exit code,\n\n* $3 is the error text.",
+	"external-data-archive-could-not-read": "The error message, when an archive could not be opened as such. Parameters:\n* $1 -- archive type,\n* $2 -- archive file name,\n* $3 -- error text",
+	"external-data-archive-could-not-extract": "The error message when the file $2 could not be extracted from archive of the type $1 with the error message $3",
 	"externaldata-no-local-variable": "This error message is shown when no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error message if {{#display_external_table:}} has no template parameter.",
 	"externaldata-no-loop-body": "Error message if neither the first nor the second parameter to {{#for_external_table:}}, holding the loop body, is set."

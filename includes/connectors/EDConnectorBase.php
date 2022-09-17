@@ -129,25 +129,7 @@ abstract class EDConnectorBase {
 		if ( !$values ) {
 			return;
 		}
-		// Find maximum height of columns to be built on.
-		$maximum_height = 0;
-		foreach ( $values as $variable => $_ ) {
-			// Create new columns if necessary.
-			if ( !array_key_exists( $variable, $this->values ) ) {
-				$this->values[$variable] = [];
-			}
-			$maximum_height = count( $this->values[$variable] ) > $maximum_height
-				? count( $this->values[$variable] )
-				: $maximum_height;
-		}
-		foreach ( $values as $variable => $column ) {
-			// Stretch out columns if they are to be built on.
-			for ( $counter = count( $this->values[$variable] ); $counter < $maximum_height; $counter++ ) {
-				$this->values[$variable][$counter] = null;
-			}
-			// Superimpose column from $values on column from $this->values.
-			$this->values[$variable] = array_merge( $this->values[$variable], $column );
-		}
+		self::pile( $this->values, $values );
 	}
 
 	/**
@@ -202,11 +184,11 @@ abstract class EDConnectorBase {
 	 *
 	 * @param string|null $name Parser function name.
 	 * @param array $args Its parameters.
-	 * @param Title|null $title A title object.
+	 * @param ?Title $title A title object.
 	 *
 	 * @return EDConnectorBase An EDConnector* object.
 	 */
-	public static function getConnector( $name, array $args, ?Title $title ): EDConnectorBase {
+	public static function getConnector( $name, array $args, $title ): EDConnectorBase {
 		$supplemented = self::supplementParams( $args );
 		$class = self::getConnectorClass( $name, $supplemented );
 		// Instantiate the connector. If $class is empty, either this extension or $wgExternalDataConnectors is broken.

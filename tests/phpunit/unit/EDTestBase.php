@@ -19,7 +19,12 @@ class EDTestBase extends MediaWikiUnitTestCase {
 
 	/** @var array $globals A list of global variables that are needed to run the test. */
 	protected static $globals = [
-		'wgMessageCacheType', 'wgUseLocalMessageCache', 'wgUseDatabaseMessages', 'wgConfigRegistry'
+		'wgMessageCacheType' => CACHE_NONE,
+		'wgMainCacheType' => CACHE_NONE,
+		'wgUseLocalMessageCache' => false,
+		'wgUseDatabaseMessages' => false,
+		// 'wgConfigRegistry' => [ 'main' => 'GlobalVarConfig::newInstance' ],
+		// 'AllowImageMoving' => false
 	];
 
 	/** @var array $backup A backup of chosen global variables. */
@@ -33,13 +38,16 @@ class EDTestBase extends MediaWikiUnitTestCase {
 		foreach ( self::config() as $name => $value ) {
 			self::$backup[$name] = $value;
 		}
+		// Load some really necessary globals.
+		foreach ( self::$globals as $name => $value ) {
+			self::$backup[$name] = $value;
+		}
 
 		parent::setUpBeforeClass();
 
-		// Restore globals needed to run the tests.
-		foreach ( self::$backup as $name => $value ) {
-			$GLOBALS[$name] = $value;
-		}
+		$GLOBALS['wgAllowImageMoving'] = false;
+
+		self::restoreGlobals();
 	}
 
 	/**
@@ -75,7 +83,7 @@ class EDTestBase extends MediaWikiUnitTestCase {
 	 */
 	protected static function restoreGlobals() {
 		foreach ( self::$backup as $global => $value ) {
-			$GLOBALS[$global] = self::$backup[$global];
+			$GLOBALS[$global] = $value;
 		}
 	}
 }

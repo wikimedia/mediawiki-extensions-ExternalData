@@ -10,6 +10,8 @@ trait EDConnectorParsable {
 	protected $encoding;
 	/** @var string[] $encodings Try these encodings. */
 	private $encodings = [];
+	/** @var bool $do_not_decode Do not decode archives and suchlike. */
+	private $do_not_decode = false;
 
 	/** @var int $startAbsolute Start from this line (absolute, zero-based). */
 	private $startAbsolute;
@@ -35,10 +37,14 @@ trait EDConnectorParsable {
 	 * @param string|null $parser The optional name ot the EDParser class.
 	 */
 	protected function prepareParser( array $args, $parser = null ) {
-		// Encoding override supplied by wiki user may also be needed.
-		$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
-		// Try these encodings.
-		$this->encodings = isset( $args['encodings'] ) && $args['encodings'] ? $args['encodings'] : [];
+		if ( isset( $args['archive path'] ) ) {
+			$this->do_not_decode = true;
+		} else {
+			// Encoding override supplied by wiki user may also be needed.
+			$this->encoding = isset( $args['encoding'] ) && $args['encoding'] ? $args['encoding'] : null;
+			// Try these encodings.
+			$this->encodings = isset( $args['encodings'] ) && $args['encodings'] ? $args['encodings'] : [];
+		}
 
 		try {
 			$this->parser = $parser ? new $parser( $args ) : EDParserBase::getParser( $args );
@@ -209,6 +215,10 @@ trait EDConnectorParsable {
 	 * @return string The converted text.
 	 */
 	private function toUTF8( $text, $encoding_override = null ) {
+		if ( $this->do_not_decode ) {
+			return $text;
+		}
+
 		$encoding = $encoding_override ?: null;
 
 		// Try to find encoding in the XML/HTML.

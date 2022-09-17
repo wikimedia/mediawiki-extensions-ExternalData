@@ -58,6 +58,8 @@
 	"externaldata-illegal-parameter": "Error: The parameter $1 has illegal value $2.",
 	"externaldata-exe-exception": "Error: Exception while trying to run program $1. Message: $2.",
 	"externaldata-exe-error": "Error: The program $1 returned exit code $2. Message: $3.",
+	"external-data-archive-could-not-read": "Error: could not open $1 archive <code>$2</code> ($3)",
+	"external-data-archive-could-not-extract": "Error: could not extract file <code>$2</code> from $1 archive ($3)",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error: no template specified.",
 	"externaldata-no-loop-body": "Error: no loop body set as the first or the second parameter."

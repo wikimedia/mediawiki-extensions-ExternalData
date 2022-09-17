@@ -22,7 +22,7 @@ class EDParserAuto extends EDParserBase {
 	 *
 	 * @throws EDParserException
 	 */
-	protected function __construct( array $params, array $headers = [] ) {
+	public function __construct( array $params, array $headers = [] ) {
 		parent::__construct( $params, $headers );
 
 		// Get a list of all available non-abstract EDParser* classes.
@@ -91,20 +91,12 @@ class EDParserAuto extends EDParserBase {
 	 * @return array|null Parsed values or null, if parsing failed.
 	 */
 	private function tryFormat( $class, $text ) {
-		try {
-			$this->prepareParser( $this->args, $class );
-		} catch ( EDParserException $e ) {
-			return null;
-		}
+		$this->prepareParser( $this->args, $class );
 		if ( !$this->parser ) {
 			return null;
 		}
-		try {
-			$values = $this->parse( $text );
-		} catch ( EDParserException $e ) {
-			return null;
-		}
-		if ( is_array( $values ) && self::count( $values ) ) {
+		$values = $this->parse( $text );
+		if ( is_array( $values ) && ( self::count( $values ) || $class === 'EDParserText' ) ) {
 			$values['__format'] = [ $class::NAME ];
 			return $values;
 		}

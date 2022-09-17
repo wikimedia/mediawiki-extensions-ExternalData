@@ -21,7 +21,12 @@
 		"ext-soap": "*",
 		"ext-yaml": "*",
 		"ext-mongodb": "*",
-		"mongodb/mongodb": "*"
+		"mongodb/mongodb": "*",
+		"ext-bz2": "*",
+		"ext-phar": "*",
+		"ext-zip": "*",
+		"ext-rar": "*",
+		"ext-zlib": "*"
 	},
 	"scripts": {
 		"test": [

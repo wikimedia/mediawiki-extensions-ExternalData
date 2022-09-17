@@ -760,7 +760,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	public function testSupplementParams( array $params, array $sources, array $expected ) {
 		self::setGlobals( array_merge( self::$backup, [ EDParsesParams::$prefix . 'Sources' => $sources ] ) );
 		$mock = $this->mock( $params, true );
-		$mock->loadConfig();
+		$mock::loadConfig();
 
 		$supplemented = $mock->supplement( $params );
 		foreach ( $expected as $param => $value ) {

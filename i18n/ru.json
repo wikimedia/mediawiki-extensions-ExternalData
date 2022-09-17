@@ -65,6 +65,8 @@
 	"externaldata-illegal-parameter": "У параметра $1 недопустимое значение $2.",
 	"externaldata-exe-exception": "При попытке выполнить программу $1 выброшено исключение. Сообщение: $2.",
 	"externaldata-exe-error": "Программа $1 завершилась с ошибкой. Код возврата: $2, ошибка: $3.",
+	"external-data-archive-could-not-read": "Ошибка: $1-архив $2 не открывается ($3)",
+	"external-data-archive-could-not-extract": "Ошибка: невозможно извлечь файл <code>$2</code> из $1-архива ($3)",
 	"externaldata-no-local-variable": "Ошибка: локальная переменная &laquo;$1&raquo; не установлена.",
 	"externaldata-no-template": "Не указан шаблон (параметр <code>template</code>).",
 	"externaldata-no-loop-body": "Ошибка: необходимо указать тело цикла в качестве первого или второго параметра."

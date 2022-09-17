@@ -19,7 +19,7 @@ class EDParserException extends Exception {
 	 * @param string ...$params Message parameters.
 	 */
 	public function __construct( $code, ...$params ) {
-		parent::__construct( wfMessage( $code, $params )->inContentLanguage()->text() );
+		parent::__construct();
 		$this->msgCode = $code;
 		$this->params = $params;
 	}
