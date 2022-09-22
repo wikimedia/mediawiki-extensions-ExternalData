@@ -55,6 +55,7 @@
 	"externaldata-not-a-directory": "$1 non es un directorio o es mancante.",
 	"externaldata-exe-shell-disabled": "Error: Le administrator de PHP ha disactivate le accesso al shell.",
 	"externaldata-exe-incomplete-information": "Error: Information incomplete pro le ID de commando $1 ($2).",
+	"externaldata-illegal-parameter": "Error: Le parametro $1 ha un valor non valide $2.",
 	"externaldata-exe-exception": "Error: Exception durante le tentativa de executar le programma $1. Message: $2.",
 	"externaldata-exe-error": "Error: Le programma $1 ha restituite le codice de exito $2. Message: $3",
 	"externaldata-no-local-variable": "Error: nulle variabile local \"$1\" ha essite definite.",
