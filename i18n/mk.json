@@ -58,6 +58,8 @@
 	"externaldata-illegal-parameter": "Грешка: Параметарот $1 има недозволена вредност $2.",
 	"externaldata-exe-exception": "Грешка: Исклучок при пуштањето на програмата $1. Порака: $2.",
 	"externaldata-exe-error": "Грешка: Прогрмаот $1 даде повратен код $2. Порака: $3.",
+	"external-data-archive-could-not-read": "Грешка: не можам да го отворам $1-архив <code>$2</code> ($3)",
+	"external-data-archive-could-not-extract": "Грешка: не можев да ја извлечам податотеката <code>$2</code> од $1-архивот ($3)",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
 	"externaldata-no-template": "Грешка: нема укажано параметар.",
 	"externaldata-no-loop-body": "Грешка: нема зададено тело на јамката како прв или втор параметар."

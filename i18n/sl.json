@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"external-data-archive-could-not-read": "Napaka: arhiva $1 ni bilo mogoče odpreti <code>$2</code> ($3)",
+	"external-data-archive-could-not-extract": "Napaka: Datoteke <code>$2</code> ni bilo mogoče ekstrahirati iz arhiva $1 ($3)"
+}
