@@ -247,7 +247,7 @@ REGEX;
 			}, $lines );
 			// Rate the success of this delimiter.
 			$lengths = array_map( 'count', $table ); // number of fields in each line.
-			$max_lengths = max( $lengths );
+			$max_lengths = count( $lengths ) > 0 ? max( $lengths ) : 0;
 			if ( $max_lengths > 1 && $max_lengths > $good_columns && min( $lengths ) === $max_lengths ) {
 				// The current delimiter makes the widest well-formed CSV so far.
 				$good_columns = $max_lengths;

@@ -74,8 +74,11 @@ abstract class EDParserArchive extends EDParserBase {
 	 */
 	public function __invoke( $text, $path = null ): array {
 		parent::__invoke( $text, $path );
-		preg_match( '/(' . implode( '|', static::extensions() ) . ')$/', $path, $matches );
-		$this->type = $matches[1] ?: static::extensions()[0];
+		if ( preg_match( '/\.(' . implode( '|', static::extensions() ) . ')$/', $path, $matches ) ) {
+			$this->type = $matches[1];
+		} else {
+			$this->type = static::extensions()[0];
+		}
 
 		// Write a temporary file.
 		$temp_file_name = tempnam( $this->tmp, 'arch' ) . '.' . $this->type;
@@ -145,4 +148,16 @@ abstract class EDParserArchive extends EDParserBase {
 	 * @return string|bool The file contents or false on error.
 	 */
 	abstract protected function read( $file );
+
+	/** This function matches $path against the $this->mask,
+	 * taking into account $this->depth and whether $path is a directory.
+	 *
+	 * @param string $path Path to match.
+	 * @return bool
+	 */
+	protected function matches( string $path ) {
+		return substr( $path, -1 ) !== DIRECTORY_SEPARATOR // not a directory.
+			&& substr_count( $path, DIRECTORY_SEPARATOR ) <= $this->depth // not too deep.
+			&& fnmatch( $this->mask, $path ); // path matches the mask.
+	}
 }

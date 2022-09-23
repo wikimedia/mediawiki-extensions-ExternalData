@@ -64,26 +64,60 @@ abstract class EDParserArchiveTest extends EDParserBaseTest {
 						'__archived_file' => [ '1.csv', '1.csv', '1.csv' ]
 					]
 				],
-				$extension . ': mask *.csv, two files' => [
+				$extension . ': one file in a folder' => [
+					$archive,
+					[ 'archive path' => 'folder/3.csv' ],
+					'path' => $path,
+					[
+						'col1' => [ '71', '81', '91' ],
+						'col2' => [ '72', '82', '92' ],
+						'__archived_file' => [ 'folder/3.csv', 'folder/3.csv', 'folder/3.csv' ]
+					]
+				],
+				$extension . ': mask *.csv, four files' => [
 					$archive,
 					[ 'archive path' => '*.csv' ],
 					'path' => $path,
 					[
-						'col1' => [ '11', '21', '31', '41', '51', '61' ],
-						'col2' => [ '12', '22', '32', '42', '52', '62' ],
-						'__archived_file' => [ '1.csv', '1.csv', '1.csv', '2.csv', '2.csv', '2.csv' ]
+						'col1' => [ '11', '21', '31', '41', '51', '61', '71', '81', '91', '101', '111', '121' ],
+						'col2' => [ '12', '22', '32', '42', '52', '62', '72', '82', '92', '102', '112', '122' ],
+						'__archived_file' => [
+							'1.csv', '1.csv', '1.csv',
+							'2.csv', '2.csv', '2.csv',
+							'folder/3.csv', 'folder/3.csv', 'folder/3.csv',
+							'folder/subfolder/4.csv', 'folder/subfolder/4.csv', 'folder/subfolder/4.csv'
+						]
 					]
 				],
-				$extension . ': mask *, two files' => [
+				$extension . ': mask *, four files' => [
 					$archive,
 					[ 'archive path' => '*' ],
 					'path' => $path,
 					[
-						'col1' => [ '11', '21', '31', '41', '51', '61' ],
-						'col2' => [ '12', '22', '32', '42', '52', '62' ],
-						'__archived_file' => [ '1.csv', '1.csv', '1.csv', '2.csv', '2.csv', '2.csv' ]
+						'col1' => [ '11', '21', '31', '41', '51', '61', '71', '81', '91', '101', '111', '121' ],
+						'col2' => [ '12', '22', '32', '42', '52', '62', '72', '82', '92', '102', '112', '122' ],
+						'__archived_file' => [
+							'1.csv', '1.csv', '1.csv',
+							'2.csv', '2.csv', '2.csv',
+							'folder/3.csv', 'folder/3.csv', 'folder/3.csv',
+							'folder/subfolder/4.csv', 'folder/subfolder/4.csv', 'folder/subfolder/4.csv'
+						]
 					]
 				],
+				$extension . ': mask *, limited depth, three files' => [
+					$archive,
+					[ 'archive path' => '*', 'archive depth' => 1 ],
+					'path' => $path,
+					[
+						'col1' => [ '11', '21', '31', '41', '51', '61', '71', '81', '91' ],
+						'col2' => [ '12', '22', '32', '42', '52', '62', '72', '82', '92' ],
+						'__archived_file' => [
+							'1.csv', '1.csv', '1.csv',
+							'2.csv', '2.csv', '2.csv',
+							'folder/3.csv', 'folder/3.csv', 'folder/3.csv'
+						]
+					]
+				]
 			];
 		}
 		return $cases;
@@ -108,10 +142,10 @@ abstract class EDParserArchiveTest extends EDParserBaseTest {
 				],
 				$extension . ' wanted file is not found in the archive' => [
 					$archive,
-					[ 'archive path' => '3.csv' ],
+					[ 'archive path' => 'absent.csv' ],
 					'path' => $path,
 					'external-data-archive-could-not-extract',
-					[ $extension, '3.csv' ]
+					[ $extension, 'absent.csv' ]
 				],
 			];
 		}

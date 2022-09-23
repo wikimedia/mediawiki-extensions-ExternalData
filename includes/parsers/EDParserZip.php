@@ -52,9 +52,9 @@ class EDParserZip extends EDParserArchive {
 	protected function files( $mask ): array {
 		$files = [];
 		for ( $index = 0; $index < $this->archive->numFiles; $index++ ) {
-			$name = $this->archive->statIndex( $index )['name'];
-			if ( fnmatch( $mask, $name ) ) {
-				$files[] = $name;
+			$path = $this->archive->statIndex( $index )['name'];
+			if ( $this->matches( $path ) ) {
+				$files[] = $path;
 			}
 		}
 		return $files;

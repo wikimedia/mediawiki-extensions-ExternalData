@@ -60,9 +60,12 @@ class EDParserRar extends EDParserArchive {
 	protected function files( $mask ): array {
 		$files = [];
 		foreach ( $this->archive as $entry ) {
-			$name = $entry->getName();
-			if ( fnmatch( $mask, $name ) ) {
-				$files[] = $name;
+			if ( $entry->isDirectory() ) {
+				continue; // we do not need directories; and EDParserArchive::matches() cannot recognise one for RAR.
+			}
+			$path = $entry->getName();
+			if ( $this->matches( $path ) ) {
+				$files[] = $path;
 			}
 		}
 		return $files;
