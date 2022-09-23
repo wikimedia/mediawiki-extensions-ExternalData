@@ -58,6 +58,8 @@
 	"externaldata-illegal-parameter": "Error: Le parametro $1 ha un valor non valide $2.",
 	"externaldata-exe-exception": "Error: Exception durante le tentativa de executar le programma $1. Message: $2.",
 	"externaldata-exe-error": "Error: Le programma $1 ha restituite le codice de exito $2. Message: $3",
+	"external-data-archive-could-not-read": "Error: non poteva aperir le archivo $1 <code>$2</code> ($3)",
+	"external-data-archive-could-not-extract": "Error: non poteva extraher le file <code>$2</code> del archivo $1 ($3)",
 	"externaldata-no-local-variable": "Error: nulle variabile local \"$1\" ha essite definite.",
 	"externaldata-no-template": "Error: nulle patrono specificate.",
 	"externaldata-no-loop-body": "Error: nulle corpore de bucla es definite como prime o secunde parametro."
