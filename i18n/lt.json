@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Eitvys200"
+			"Eitvys200",
+			"Pavel1513"
 		]
 	},
 	"getdata": "Gauti duomenys",
@@ -14,5 +15,7 @@
 	"externaldata-db-could-not-connect": "Klaida: Nepavyko prisijungti prie duomenų bazės.",
 	"externaldata-db-no-return-values": "Klaida: Nenurodytos jokios gražinimo reikšmės.",
 	"externaldata-db-invalid-query": "Negalima užklausa.",
-	"externaldata-mongodb-unknown-collection": "Klaida: Nežinoma MongoDB kolekcija."
+	"externaldata-mongodb-unknown-collection": "Klaida: Nežinoma MongoDB kolekcija.",
+	"external-data-archive-could-not-read": "Klaia: nepavyko atidaryti $1 archivo <code>$2</code> ($3)",
+	"external-data-archive-could-not-extract": "Klaida: negali išgauti failo <code>$2</code> iš $1 archyvo ($3)"
 }
