@@ -95,6 +95,7 @@ trait EDConnectorThrottled {
 			// @phan-suppress-next-line PhanUndeclaredMethod Different MW versions.
 			$queue_group = MediaWikiServices::getInstance()->getJobQueueGroup();
 		} else {
+			// @phan-suppress-next-line PhanUndeclaredStaticMethod
 			$queue_group = JobQueueGroup::singleton();
 		}
 		$params = [
