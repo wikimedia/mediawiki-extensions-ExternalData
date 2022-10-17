@@ -15,6 +15,7 @@
 	"externaldata-no-param-specified": "שגיאה: לא הוגדר פרמטר \"$1\".",
 	"externaldata-param-type-error": "שגיאה: פרמטר $1 צריך להיות מסוג $2.",
 	"externaldata-php-library-missing": "שגיאה: ספריית ה־PHP $1, שנחוצה לשימוש באפשרות $2, חסרה.",
+	"external-data-no-suitable-connector": "שגיאה: לא הוגדר מקור נתונים מתאים עבור שאילתת הנתונים החיצוניים הזאת",
 	"externaldata-throttled": "קריאות ל־$1 מוגבלות עד {{#time:c|@$2}}.",
 	"externaldata-ldap-domain-not-defined": "תחום LDAP $1 אינו מוגדר.",
 	"externaldata-ldap-unable-to-connect": "לא ניתן להתחבר ל־$1.",
@@ -22,6 +23,8 @@
 	"externaldata-ldap-base-dn-not-defined": "DN בסיסי אינו מוגדר לתחום ה־LDAP בשם $1.",
 	"externaldata-xml-error": "ב־XML יש שגיאה: $1 בשורה $2.",
 	"externaldata-web-invalid-format": "תסדיר בלתי־תקין: \"$1\".",
+	"externaldata-invalid-format": "שגיאה: $1 בלתי־תקין (מידע נוסף: $2).",
+	"externaldata-invalid-format-explicit": "שגיאה: \"$1\" אינו תקין $2 (מידע נוסף: $3).",
 	"externaldata-db-incomplete-information": "שגיאה: יש רק מידע חלקי על מזהה מסד הנתונים הזה $1 (שם הפרמטר: $2).",
 	"externaldata-db-could-not-get-url": "לא ניתן לקבל את כתובת ה־URL‏ $1 לאחר {{PLURAL:$2|ניסיון אחד|$2 ניסיונות}}.",
 	"externaldata-db-unknown-type": "שגיאה: סוג מסד הנתונים אינו מוכר $1.",
@@ -38,6 +41,7 @@
 	"externaldata-mongodb-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע $1.",
 	"externaldata-mongodb-aggregation-failed": "הצרפת MongoDB נכשלה עם השגיאה $1",
 	"externaldata-format-unavailable": "הספרייה $1, שנחוצה לשימוש בתסדיר \"$2\" ללא הרפשאות \"$3\", חסרה.",
+	"externaldata-format-unavailable-absolute": "הספרייה $1, שנדרשת לשימוש בתסדיר \"$2\", חסרה.",
 	"externaldata-post-failed": "בקשת POST אל $1 נכשלה: $2.",
 	"externaldata-url-hooks-aborted": "פעולת המפענח $1 הופסקה והחזירה שגיאות: $2",
 	"externaldata-url-not-fetched": "בעת אחזור נתונים מהכתובת $1 אירעה שגיאה: $2.",
@@ -56,8 +60,12 @@
 	"externaldata-not-a-directory": "$1 אינה תיקייה או שהיא חסרה.",
 	"externaldata-exe-shell-disabled": "שגיאה: מנהל PHP כיבה את הגישה למסוף.",
 	"externaldata-exe-incomplete-information": "שגיאה: מידע לא מלא למזהה הפקודה הזה $1 (פרמטר חסר: $2).",
+	"externaldata-illegal-parameter": "שגיאה: לפרמטר $1 יש ערך בלתי־תקין $2.",
 	"externaldata-exe-exception": "שגיאה: בעתד הרצת התוכנית $1 אירע חריג. הודעה: $2.",
 	"externaldata-exe-error": "שגיאה: התוכנית $1 החזירה את קוד היציאה $2. הודעה: $3.",
+	"external-data-archive-could-not-read": "שגיאה: לא היה ניתן לפתוח את הארכיון מסוג $1 בשם <code>$2</code> (מידע נוסף: $3)",
+	"external-data-archive-could-not-extract": "שגיאה: לא היה ניתן לחלץ את הקובץ <code>$2</code> מארכיון מסוג $1 (מידע נוסף: $3)",
 	"externaldata-no-local-variable": "שגיאה: המשתנה המקומי \"$1\" לא הוגדר.",
-	"externaldata-no-template": "שגיאה: לא הוגדרה תבנית."
+	"externaldata-no-template": "שגיאה: לא הוגדרה תבנית.",
+	"externaldata-no-loop-body": "שגיאה: אין גוף לולאה שהוגדר כפרמטר הראשון או השני."
 }
