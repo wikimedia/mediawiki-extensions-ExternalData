@@ -172,7 +172,6 @@
 		"IntegratedConnectors": {
 			"description": "Rules for choosing EDConnector* class in standalone mode",
 			"value": [
-				[ { "__pf": null, "source": false }, "EDConnectorDummy" ],
 				[ { "__pf": null, "url": true, "request": false }, "EDConnectorWeb" ],
 				[ { "__pf": null, "post data": true }, "EDConnectorWeb" ],
 				[ { "__pf": null, "file name": "/[[\\]?*]/" }, "EDConnectorDirectoryWalker" ],
@@ -193,6 +192,7 @@
 				[ { "__pf": null, "prepared": true }, "EDConnectorPreparedMysql" ],
 				[ { "__pf": null, "program": true }, "EDConnectorExe" ],
 				[ { "__pf": null, "text": true }, "EDConnectorInline" ],
+				[ { "__pf": null, "source": false }, "EDConnectorDummy" ],
 				[ { "__pf": true }, "EDConnectorDummy" ]
 			]
 		},
