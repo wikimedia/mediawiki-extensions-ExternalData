@@ -16,7 +16,7 @@
 	"externaldata-xml-error": "خطأ XML: $1 عند السطر $2",
 	"externaldata-invalid-json": "خطأ: جسون غير صالح.",
 	"externaldata-db-incomplete-information": "خطأ: معلومات غير كاملة عن هوية هذا الخادوم.",
-	"externaldata-db-could-not-get-url": "تعذّر الحصول على المسار بعد {{PLURAL:$1||محاولة واحدة|محاوتين|$1 محاولات|$1 محاولة }}.",
+	"externaldata-db-could-not-get-url": "تعذر الحصول على URL $1 بعد $2 {{PLURAL:$2| حاول | محاولات}}.",
 	"externaldata-db-unknown-type": "خطأ: نوع قاعدة بيانات غير معروف.",
 	"externaldata-db-could-not-connect": "خطأ: تعذّر الاتصال بقاعدة البيانات.",
 	"externaldata-db-unknown-collection": "خطأ: مجموعة مونغو دي بي غير معروفة.",
