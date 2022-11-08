@@ -15,11 +15,11 @@
 	"externaldata-ldap-unable-to-connect": "تعذّر الاتصال ب$1",
 	"externaldata-xml-error": "خطأ XML: $1 عند السطر $2",
 	"externaldata-invalid-json": "خطأ: جسون غير صالح.",
-	"externaldata-db-incomplete-information": "خطأ: معلومات غير كاملة عن هوية هذا الخادوم.",
-	"externaldata-db-could-not-get-url": "تعذّر الحصول على المسار بعد {{PLURAL:$1||محاولة واحدة|محاوتين|$1 محاولات|$1 محاولة }}.",
-	"externaldata-db-unknown-type": "خطأ: نوع قاعدة بيانات غير معروف.",
-	"externaldata-db-could-not-connect": "خطأ: تعذّر الاتصال بقاعدة البيانات.",
+	"externaldata-db-incomplete-information": "خطأ: معلومات غير كاملة عن هوية هذا الخادوم $1 ($2).",
+	"externaldata-db-could-not-get-url": "تعذر الحصول على URL $1 بعد $2 {{PLURAL:$2| حاول | محاولات}}.",
+	"externaldata-db-unknown-type": "خطأ: نوع قاعدة بيانات غير معروف $1.",
+	"externaldata-db-could-not-connect": "خطأ: تعذر الاتصال بقاعدة البيانات ( $1 ).",
 	"externaldata-db-no-return-values": "خطأ: لم تحدد أي قيم عائدة.",
-	"externaldata-db-invalid-query": "استعلام غير صالح.",
+	"externaldata-db-invalid-query": "الاستعلام $1 غير صالح ( $2 ).",
 	"externaldata-mongodb-unknown-collection": "خطأ: مجموعة مونغو دي بي غير معروفة."
 }
