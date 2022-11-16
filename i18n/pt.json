@@ -34,7 +34,7 @@
 	"externaldata-db-too-many-joins": "O número de condições JOIN (agora $1) não pode exceder o número de tabelas ($2)",
 	"externaldata-db-invalid-join": "Condição JOIN inválida $1: todas as partes têm de conter um sinal \"=\".",
 	"externaldata-db-empty-rowset": "A consulta $1 devolveu um resultado vazio.",
-	"externaldata-db-prepared-not-specified": "Especifique o parâmetro (from=), que preparou a declaração a usar para a base de dados com o identificador $1.",
+	"externaldata-db-prepared-not-specified": "Especifique o parâmetro (query=), que preparou a declaração a usar para a base de dados com o identificador $1.",
 	"externaldata-db-no-such-prepared": "A declaração preparada $2 não foi definida para a base de dados com o identificador $1.",
 	"externaldata-db-odbc-illegal": "O parâmetro $2 contém uma sequência não permitida $1. Pare, por favor.",
 	"externaldata-mongodb-unknown-collection": "Erro: coleção $1 desconhecida no MongoDB.",

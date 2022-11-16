@@ -32,7 +32,7 @@
 	"externaldata-db-too-many-joins": "JOIN 條件數量（目前為 $1）不能超過表格數量（$2）",
 	"externaldata-db-invalid-join": "無效的 JOIN 條件 $1：每個部份都應包含「=」符號。",
 	"externaldata-db-empty-rowset": "查詢 $1 回傳空白的列集合。",
-	"externaldata-db-prepared-not-specified": "請指定(from=)，用於資料庫 ID $1 的參數化查詢。",
+	"externaldata-db-prepared-not-specified": "請指定(query=)，用於資料庫 ID $1 的參數化查詢。",
 	"externaldata-db-no-such-prepared": "未為資料庫 ID $1 設定參數化查詢 $2。",
 	"externaldata-db-odbc-illegal": "參數 $2 含有不合規範的序列 $1。請停止。",
 	"externaldata-mongodb-unknown-collection": "錯誤：未知的 MongoDB 集合 $1。",

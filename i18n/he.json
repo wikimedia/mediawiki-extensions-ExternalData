@@ -35,7 +35,7 @@
 	"externaldata-db-too-many-joins": "מספר תנאי ה־JOIN (עכשי $1) צריך לא לגלוש מעביר למספר הטבלאות ($2)",
 	"externaldata-db-invalid-join": "תנאי JOIN בלתי־תקין: $1: כל חלק צריך להכיל תו \"=\".",
 	"externaldata-db-empty-rowset": "השאילתה $1 החזירה ערכת שורות ריקה.",
-	"externaldata-db-prepared-not-specified": "יש לציין את (<span dir=\"ltr\">from=</span>), באיזה ביטוי מוכן להשתמש עבור מסד נתונים עם המזהה $1.",
+	"externaldata-db-prepared-not-specified": "יש לציין את (<span dir=\"ltr\">query=</span>), באיזה ביטוי מוכן להשתמש עבור מסד נתונים עם המזהה $1.",
 	"externaldata-db-no-such-prepared": "המשפט המוכן $2 אינו מוגדר למזהה מסד הנתונים $1.",
 	"externaldata-db-odbc-illegal": "הפרמטר $2 מכיל סדרה בלתי־תקינה $1. נא לעצור.",
 	"externaldata-mongodb-unknown-collection": "שגיאה: אוסף MongoDB לא ידוע $1.",
