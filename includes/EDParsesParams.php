@@ -98,6 +98,14 @@ trait EDParsesParams {
 			if ( !$parameter_present ) {
 				return false; // at this point, parameter ought to be set.
 			}
+			// This works only with integrated connectors.
+			if ( $value === null ) {
+				if ( !isset( $params[$key] ) || $params[$key] === null ) {
+					continue;
+				} else {
+					return false;
+				}
+			}
 			if ( self::isRegex( $value ) ) { // parameter is a regular expression.
 				if ( preg_match( $value, $params[$key] ) ) { // and it matches.
 					continue; // this parameter needs no further checks.

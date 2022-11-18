@@ -80,8 +80,8 @@ class EDConnectorBaseTest extends EDTestBase {
 	public function provideLoadConfig(): array {
 		// Load the default configuration.
 		$globals = self::config();
-		$prefix = EDParsesParams::$prefix;
-		$old_prefix = EDParsesParams::$oldPrefix;
+		$prefix = 'wgExternalData';
+		$old_prefix = 'edg';
 
 		$sources = $globals["{$prefix}Sources"];
 
@@ -575,7 +575,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 */
 	public function provideSupplementParams(): array {
 		// Load the default configuration.
-		$sources = self::config()[EDParsesParams::$prefix . 'Sources'];
+		$sources = self::config()['wgExternalDataSources'];
 		$cases = [];
 
 		// Simplest case.
@@ -758,7 +758,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 */
 	public function testSupplementParams( array $params, array $sources, array $expected ) {
-		self::setGlobals( array_merge( self::$backup, [ EDParsesParams::$prefix . 'Sources' => $sources ] ) );
+		self::setGlobals( array_merge( self::$backup, [ 'wgExternalDataSources' => $sources ] ) );
 		$mock = $this->mock( $params, true );
 		$mock::loadConfig();
 
