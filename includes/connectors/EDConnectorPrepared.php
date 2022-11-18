@@ -32,7 +32,16 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 			if ( isset( $args['query'] ) && is_string( $args['query'] ) ) {
 				if ( isset( $args['prepared'][$args['query']] ) ) {
 					$this->name = $args['query'];
-					$this->query = $args['prepared'][$this->name];
+
+					$query = $args['prepared'][$args['query']];
+					if ( is_array( $query ) && isset( $query['query'] ) && isset( $query['types'] ) ) {
+						$this->query = $query['query'];
+						$this->types = $query['types'];
+					} elseif ( is_string( $query ) ) {
+						$this->query = $query;
+					} else {
+						$this->error( 'externaldata-db-prepared-config-wrong-type', $this->dbId, $args['query'] );
+					}
 				} else {
 					$this->error( 'externaldata-db-no-such-prepared', $this->dbId, $args['query'] );
 				}
@@ -47,7 +56,24 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 		if ( isset( $args['parameters'] ) ) {
 			$this->parameters = self::paramToArray( $args['parameters'], false, false, true );
 		}
-		$this->types = isset( $args['types'] ) ? $args['types'] : str_repeat( 's', count( $this->parameters ) );
+		if ( !isset( $this->types ) ) {
+			$paramCount = count( $this->parameters );
+			if ( isset( $args['types'] ) ) {
+				// We just set $this->types to $args['types'],
+				// but we also make sure the string is exactly $paramCount long.
+				$this->types = str_pad(
+					substr(
+						$args['types'],
+						0,
+						$paramCount
+					),
+					$paramCount,
+					's'
+				);
+			} else {
+				$this->types = str_repeat( 's', $paramCount );
+			}
+		}
 	}
 
 	/**
