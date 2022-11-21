@@ -42,7 +42,7 @@
 	"externaldata-db-too-many-joins": "Le nombre de conditions JOIN ($1 actuellement) ne doit pas dépasser le nombre de tables ($2)",
 	"externaldata-db-invalid-join": "Condition JOIN $1 non valide : chaque partie doit contenir un signe « = ».",
 	"externaldata-db-empty-rowset": "La requête $1 a renvoyé un résultat vide.",
-	"externaldata-db-prepared-not-specified": "Veuillez spécifier (« query= ») quelle requête préparée utiliser pour la base de données d’identifiant $1.",
+	"externaldata-db-prepared-not-specified": "Veuillez spécifier (avec « query= ») quelle requête préparée utiliser pour la base de données d’identifiant $1.",
 	"externaldata-db-no-such-prepared": "La requête préparée $2 n’est pas définie pour la base de données d’identifiant $1.",
 	"externaldata-db-odbc-illegal": "Le paramètre $2 contient une séquence $1 illégale. Veuillez arrêter.",
 	"externaldata-mongodb-unknown-collection": "Erreur : collection MongoDB $1 inconnue.",
