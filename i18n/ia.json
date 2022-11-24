@@ -31,6 +31,7 @@
 	"externaldata-db-invalid-join": "Condition JOIN $1 non valide: cata parte debe continer un signo \"=\".",
 	"externaldata-db-empty-rowset": "Le consulta $1 ha restituite un resultato vacue.",
 	"externaldata-db-prepared-not-specified": "Per favor specifica (con query=) qual declaration preparate usar pro le base de datos con ID $1.",
+	"externaldata-db-prepared-config-wrong-datatype": "Le consulta preparate ($2) specificate pro le ID del base de datos \"$1\" existe, ma non ha essite configurate correctemente.",
 	"externaldata-db-no-such-prepared": "Le declaration preparate $2 non es definite pro le base de datos con ID $1.",
 	"externaldata-db-odbc-illegal": "Le parametro $2 contine un sequentia interdicite $1. Per favor cessa.",
 	"externaldata-mongodb-unknown-collection": "Error: Collection MongoDB $1 incognite.",
