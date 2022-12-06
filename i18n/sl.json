@@ -4,7 +4,7 @@
 			"Eleassar"
 		]
 	},
-	"externaldata-db-prepared-not-specified": "Določite (query=), katera pripravljena trditev naj se uporabi za ID podatkovne zbirke $1.",
+	"externaldata-db-prepared-not-specified": "Določite (query=), katera pripravljena izjava naj se uporabi za ID zbirke podatkov $1.",
 	"externaldata-db-prepared-config-wrong-datatype": "Pripravljena poizvedba ($2), podana za ID baze podatkov »$1«, obstaja, vendar ni bila pravilno nastavljena.",
 	"external-data-archive-could-not-read": "Napaka: arhiva $1 ni bilo mogoče odpreti <code>$2</code> ($3)",
 	"external-data-archive-could-not-extract": "Napaka: Datoteke <code>$2</code> ni bilo mogoče ekstrahirati iz arhiva $1 ($3)",
