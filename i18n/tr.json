@@ -7,7 +7,8 @@
 			"Karduelis",
 			"MuratTheTurkish",
 			"SaldırganSincap",
-			"Vito Genovese"
+			"Vito Genovese",
+			"ToprakM"
 		]
 	},
 	"getdata": "Veri al",
@@ -22,6 +23,7 @@
 	"externaldata-ldap-base-dn-not-defined": "LDAP alanı $1 için temel DN ayarlanmadı.",
 	"externaldata-xml-error": "XML hatası: $1 satırında $2.",
 	"externaldata-web-invalid-format": "Geçersiz biçim: \"$1\".",
+	"externaldata-invalid-format": "Hata: Geçersiz $1 ($2).",
 	"externaldata-db-incomplete-information": "Hata: Bu veritabanı kimliği için eksik bilgi $1 ($2).",
 	"externaldata-db-could-not-get-url": "$2 denemeden sonra URL $1 alınamadı.",
 	"externaldata-db-unknown-type": "Hata: Bilinmeyen veritabanı türü $1.",
