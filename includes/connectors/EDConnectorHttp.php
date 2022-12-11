@@ -204,7 +204,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	}
 
 	/**
-	 * @see Http::request() /
+	 * @see MediaWiki\Http\HttpRequestFactory::request() /
 	 * Only difference - $options variable and also have value 'headers', and would append to request before sending.
 	 *
 	 * @param string $method HTTP request method: 'GET' or 'POST'.
