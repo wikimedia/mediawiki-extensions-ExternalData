@@ -1,0 +1,18 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eleassar"
+		]
+	},
+	"getdata": "Pridobi podatke",
+	"externaldata-desc": "Omogoča pridobitev strukturiranih podatkov iz zunanjih URL-jev, podatkovnih zbirk in drugih virov",
+	"externaldata-no-param-specified": "Napaka: Določeni ni noben parameter »$1«.",
+	"externaldata-web-invalid-format": "Neveljaven format: »$1«.",
+	"externaldata-ldap-unable-to-connect": "Povezave z $1 ni mogoče vzpostaviti.",
+	"externaldata-xml-error": "Napaka XML: $1 v vrstici $2.",
+	"externaldata-db-could-not-get-url": "URL-ja $1 ni bilo mogoče pridobiti kljub $2 {{PLURAL:$2|poskusu|poskusoma|poskusom}}.",
+	"externaldata-db-no-return-values": "Napaka: Določena ni bila nobena vrnjena vrednost.",
+	"externaldata-url-unknown-error": "Neznana napaka pri pridobivanju podatkov iz URL-ja $1.",
+	"externaldata-parsing-html-failed": "HTML-ja ni bilo mogoče razčleniti.",
+	"externaldata-caught-exception-parsing-html": "Pri razčlenjevanju HTML-ja je bila ujeta izjema. Sporočilo o napaki: »$1«."
+}
