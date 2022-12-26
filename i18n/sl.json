@@ -39,7 +39,7 @@
 	"externaldata-format-unavailable": "Knjižnica $1, ki je potrebna za uporabo formata »$2« brez možnosti »$3«, manjka.",
 	"externaldata-format-unavailable-absolute": "Knjižnica $1, ki je potrebna za uporabo formata »$2«, manjka.",
 	"externaldata-post-failed": "Zahtevek POST za $1 ni uspel: $2.",
-	"externaldata-url-hooks-aborted": "Vstavek »$2« je bil prekinjen; vrnjene napake: $2",
+	"externaldata-url-hooks-aborted": "Vstavek »$1« je bil prekinjen; vrnjene napake: $2",
 	"externaldata-url-not-fetched": "Napaka pri pridobivanju podatkov z URL-ja $1: $2.",
 	"externaldata-url-unknown-error": "Neznana napaka pri pridobivanju podatkov iz URL-ja $1.",
 	"externaldata-url-not-allowed": "URL $1 v tem vikiju ni dovoljen.",
