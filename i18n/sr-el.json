@@ -7,12 +7,17 @@
 	},
 	"getdata": "Preuzmi podatke",
 	"externaldata-desc": "Omogućava preuzimanje podataka iz spoljašnjih adresa, bazi podataka i drugih izvora",
+	"externaldata-no-param-specified": "Greška: Nije naveden parametar „$1”.",
 	"externaldata-ldap-unable-to-connect": "Povezivanje na $1 nije uspelo",
 	"externaldata-xml-error": "XML greška: $1 po liniji $2",
-	"externaldata-db-incomplete-information": "Greška: Nepotpuni podaci za ovaj ID servera.",
-	"externaldata-db-could-not-get-url": "Preuzimanje adrese posle $1 {{PLURAL:$1|pokušaja}} nije uspelo.",
-	"externaldata-db-unknown-type": "Greška: Nepoznata vrsta baze podataka.",
-	"externaldata-db-could-not-connect": "Greška: Povezivanje s bazom podataka nije uspelo.",
+	"externaldata-web-invalid-format": "Nevažeći format: „$1”.",
+	"externaldata-db-incomplete-information": "Greška: Nepotpuni podaci za ID baze podataka $1 ($2).",
+	"externaldata-db-could-not-get-url": "Preuzimanje adrese $1 posle $2 {{PLURAL:$2|pokušaja}} nije uspelo.",
+	"externaldata-db-unknown-type": "Greška: Nepoznata vrsta baze podataka $1.",
+	"externaldata-db-could-not-connect": "Greška: Povezivanje s bazom podataka nije uspelo ($1).",
 	"externaldata-db-no-return-values": "Greška: Povratne vrednosti nisu određene.",
-	"externaldata-db-invalid-query": "Neispravan upit."
+	"externaldata-db-invalid-query": "Upit $1 nije važeći ($2).",
+	"externaldata-mongodb-unknown-collection": "Greška: Nepoznata MongoDB zbirka $1.",
+	"externaldata-undefined-file": "Datoteka $1 nije definisana.",
+	"externaldata-no-template": "Greška: Nije naveden šablon (parametar: <code>template</code>)."
 }
