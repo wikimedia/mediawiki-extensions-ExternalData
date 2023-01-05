@@ -39,7 +39,7 @@
 	"externaldata-format-unavailable": "Le bibliotheca $1, necessari pro usar le formato '$2' sin option '$3', manca.",
 	"externaldata-format-unavailable-absolute": "Le bibliotheca $1, necessari pro usar le formato '$2', manca.",
 	"externaldata-post-failed": "Le requesta POST a $1 ha fallite: $2.",
-	"externaldata-url-hooks-aborted": "Le hamo '$1' ha essite abortate a causa de errores: $2",
+	"externaldata-url-hooks-aborted": "Le uncino '$1' ha essite abortate a causa de errores: $2",
 	"externaldata-url-not-fetched": "Error durante le obtention de datos ab URL $1: $2.",
 	"externaldata-url-unknown-error": "Error incognite durante le obtention de datos ab URL $1.",
 	"externaldata-url-not-allowed": "URL $1 non es permittite sur iste wiki.",
