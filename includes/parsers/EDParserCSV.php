@@ -25,6 +25,13 @@ class EDParserCSV extends EDParserBase {
 
 	/** @var string[] $delimiters Possible column delimiters. */
 	private $delimiters = [ ';', ',', "\t", '|' ];
+	/** @const string ENCLOSURE The enclosure character -- a double quote. @TODO: make variable. */
+	private const ENCLOSURE = '"';
+	/** @const string ESCAPE The esape character -- a backslash. @TODO: make variable. */
+	private const ESCAPE = '\\';
+
+	/** @const int MAX_SIZE Maximum CSV size in bytes. */
+	private const MAX_SIZE = 16 * 1024 * 1024; // 16 MB.
 
 	/**
 	 * Constructor.
@@ -230,21 +237,27 @@ REGEX;
 	 * @return string[][] 2D line-based array of values.
 	 */
 	private function parseCSV( $text, array $delimiters ): array {
-		// Filter out empty lines after splitting the text by various newlines.
-		$lines = array_filter( preg_split( "/\r\n|\n|\r/", $text ), static function ( $line ) {
-			return trim( $line ) !== '';
-		} );
 		$any_columns = 0;
 		$any_csv = [];
 		$good_columns = 0;
 		$good_csv = null;
+
+		// Do not try replacing with preg_split().
+		$temp_file = fopen( 'php://temp/maxmemory:' . self::MAX_SIZE, 'r+' );
+		fwrite( $temp_file, $text );
+
 		foreach ( $delimiters as $delimiter ) {
-			$table = array_map( static function ( $line ) use ( $delimiter ) {
-				return array_map( static function ( $cell ) {
+			rewind( $temp_file );
+			$table = [];
+			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
+			while ( $line = fgetcsv( $temp_file, 0, $delimiter, self::ENCLOSURE, self::ESCAPE ) ) {
+				// @TODO: consider trying different enclosures and escape characters.
+				$table[] = array_map( static function ( $cell ) {
 					// Get rid of \0's sometimes showing up for certain encodings, presumably, after splitting.
-					return str_replace( chr( 0 ), '', $cell );
-				}, str_getcsv( $line, $delimiter ) );
-			}, $lines );
+					return $cell ? str_replace( chr( 0 ), '', $cell ) : '';
+				}, $line );
+			}
+
 			// Rate the success of this delimiter.
 			$lengths = array_map( 'count', $table ); // number of fields in each line.
 			$max_lengths = count( $lengths ) > 0 ? max( $lengths ) : 0;
@@ -260,6 +273,9 @@ REGEX;
 				$any_columns = $max_lengths;
 			}
 		}
+
+		fclose( $temp_file );
+
 		return $good_csv ?: $any_csv; // return the widest well-formed CSV; if none, then the widest CSV.
 	}
 }
