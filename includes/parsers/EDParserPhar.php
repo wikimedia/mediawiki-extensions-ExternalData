@@ -10,6 +10,15 @@ class EDParserPhar extends EDParserArchive {
 	protected const EXT = [ 'tar', 'tar.bz2', 'tar.gz' ];
 
 	/**
+	 * Return true, if this parser is available under current PHP settings.
+	 *
+	 * @return bool
+	 */
+	public static function available() {
+		return class_exists( 'PharData' );
+	}
+
+	/**
 	 * Create archive object from temporary file name.
 	 *
 	 * @param string $temp Temporary file name.

@@ -29,8 +29,8 @@ class EDParserAuto extends EDParserBase {
 		self::$parsers = array_filter( array_unique( array_map( static function ( array $record ) {
 			return $record[1];
 		}, self::setting( 'Parsers' ) ) ), static function ( $name ) {
-			// We don't need EDParserAuto.
-			return $name !== __CLASS__;
+			// We don't need EDParserAuto and the parser should be available.
+			return $name !== __CLASS__ && $name::available();
 		} );
 		// Too successful formats will be tried last.
 		usort( self::$parsers, static function ( $a, $b ) {

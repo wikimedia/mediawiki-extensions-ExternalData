@@ -22,6 +22,15 @@ class EDParserZip extends EDParserArchive {
 	];
 
 	/**
+	 * Return true, if this parser is available under current PHP settings.
+	 *
+	 * @return bool
+	 */
+	public static function available() {
+		return class_exists( 'ZipArchive' );
+	}
+
+	/**
 	 * Create archive object from temporary file name.
 	 *
 	 * @param string $temp Temporary file name.

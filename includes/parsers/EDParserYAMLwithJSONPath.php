@@ -27,6 +27,15 @@ class EDParserYAMLwithJSONPath extends EDParserJSONwithJSONPath {
 	}
 
 	/**
+	 * Return true, if this parser is available under current PHP settings.
+	 *
+	 * @return bool
+	 */
+	public static function available() {
+		return function_exists( 'yaml_parse' );
+	}
+
+	/**
 	 * Parse the text. Called as $parser( $text ) as syntactic sugar.
 	 *
 	 * @param string $text The text to be parsed.

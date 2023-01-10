@@ -60,6 +60,15 @@ abstract class EDParserBase {
 	}
 
 	/**
+	 * Return true, if this parser is available under current PHP settings.
+	 *
+	 * @return bool
+	 */
+	public static function available() {
+		return true;
+	}
+
+	/**
 	 * Instantiate needed parser object according to $params.
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
