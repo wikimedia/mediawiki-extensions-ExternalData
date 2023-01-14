@@ -25,6 +25,8 @@ class EDParserCSV extends EDParserBase {
 
 	/** @var string[] $delimiters Possible column delimiters. */
 	private $delimiters = [ ';', ',', "\t", '|' ];
+	/** @var string $real_delimiter The actual delimiter used in the CSV file. */
+	private $real_delimiter;
 	/** @const string ENCLOSURE The enclosure character -- a double quote. @TODO: make variable. */
 	private const ENCLOSURE = '"';
 	/** @const string ESCAPE The esape character -- a backslash. @TODO: make variable. */
@@ -180,6 +182,7 @@ class EDParserCSV extends EDParserBase {
 		}
 
 		$values['__text'] = [ $text ]; // CSV succeeds too often; this helps plain text format.
+		$values['__delimiter'] = [ $this->real_delimiter ];
 
 		return $values;
 	}
@@ -239,8 +242,10 @@ REGEX;
 	private function parseCSV( $text, array $delimiters ): array {
 		$any_columns = 0;
 		$any_csv = [];
+		$any_delimiter = null;
 		$good_columns = 0;
 		$good_csv = null;
+		$good_delimiter = null;
 
 		// Do not try replacing with preg_split().
 		$temp_file = fopen( 'php://temp/maxmemory:' . self::MAX_SIZE, 'r+' );
@@ -265,17 +270,21 @@ REGEX;
 				// The current delimiter makes the widest well-formed CSV so far.
 				$good_columns = $max_lengths;
 				$good_csv = $table;
+				$good_delimiter = $delimiter;
 			}
 			if ( $max_lengths > $any_columns ) {
 				// The current delimiter has managed to split at least one line into a greater number of fields.
 				// But this CSV can be badly formed, i.e. uneven.
 				$any_csv = $table;
 				$any_columns = $max_lengths;
+				$any_delimiter = $delimiter;
 			}
 		}
 
 		fclose( $temp_file );
 
-		return $good_csv ?: $any_csv; // return the widest well-formed CSV; if none, then the widest CSV.
+		// Return the widest well-formed CSV; if none, then the widest CSV.
+		$this->real_delimiter = $good_csv ? $good_delimiter : $any_delimiter;
+		return $good_csv ?: $any_csv;
 	}
 }
