@@ -95,7 +95,7 @@ class EDParserFunctions {
 		}
 
 		// There have been errors.
-		return $connector->suppressError() ? null : self::formatErrorMessages( $connector->errors() );
+		return $connector->suppressError() ? null : self::formatErrorMessages( $connector->errors() ?: [] );
 	}
 
 	/**
