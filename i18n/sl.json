@@ -14,5 +14,5 @@
 	"externaldata-db-no-return-values": "Napaka: Določena ni bila nobena vrnjena vrednost.",
 	"externaldata-url-unknown-error": "Neznana napaka pri pridobivanju podatkov iz URL-ja $1.",
 	"externaldata-parsing-html-failed": "HTML-ja ni bilo mogoče razčleniti.",
-	"externaldata-caught-exception-parsing-html": "Pri razčlenjevanju HTML-ja je bila ujeta izjema. Sporočilo o napaki: »$1«."
+	"externaldata-caught-exception-parsing-html": "Pri razčlenjevanju HTML-ja je bila prestrežena izjema. Sporočilo o napaki: »$1«."
 }
