@@ -30,7 +30,7 @@
 	"externaldata-db-too-many-joins": "Število pogojev JOIN (zdaj $1) ne sme preseči števila tabel ($2)",
 	"externaldata-db-invalid-join": "Neveljaven pogoj JOIN $1: vsak del mora vsebovati znak »=«.",
 	"externaldata-db-empty-rowset": "Poizvedba $1 je vrnila prazen niz vrstic.",
-	"externaldata-db-prepared-not-specified": "Določite (query=), katera pripravljena izjava naj se uporabi za ID zbirke podatkov $1.",
+	"externaldata-db-prepared-not-specified": "Določite (query=), katera pripravljena izjava naj se uporabi za ID podatkovne zbirke $1.",
 	"externaldata-db-prepared-config-wrong-datatype": "Pripravljena poizvedba ($2), podana za ID baze podatkov »$1«, obstaja, vendar ni bila pravilno nastavljena.",
 	"externaldata-db-no-such-prepared": "Pripravljena izjava $2 za podatkovno zbirko z identifikatorjem $1 ni nastavljena.",
 	"externaldata-db-odbc-illegal": "Parameter $2 vsebuje neveljavno zaporedje $1. Prosimo, ustavite.",
