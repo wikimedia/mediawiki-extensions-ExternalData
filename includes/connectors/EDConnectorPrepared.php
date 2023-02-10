@@ -55,6 +55,10 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 		}
 		if ( isset( $args['parameters'] ) ) {
 			$this->parameters = self::paramToArray( $args['parameters'], false, false, true );
+			// Strip quotes. @TODO: other cases may need it to, so, perhaps, move to ParsesParams.
+			$this->parameters = array_map( static function ( $quoted ) {
+				return preg_replace( [ '/^"/', '/"$/' ], [], $quoted );
+			}, $this->parameters );
 		}
 		if ( !isset( $this->types ) ) {
 			$paramCount = count( $this->parameters );

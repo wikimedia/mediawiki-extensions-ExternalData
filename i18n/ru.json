@@ -39,6 +39,7 @@
 	"externaldata-db-empty-rowset": "Запрос $1 не возвратил ни одной строки.",
 	"externaldata-db-prepared-not-specified": "Укажите (<code>query=</code>), который из заданных для БД с ID $1 подготавливаемых запросов использовать.",
 	"externaldata-db-prepared-config-wrong-datatype": "Подготовленный запрос ($2), указанный для идентификатора базы данных \"$1\", существует, но не настроен правильно.",
+	"externaldata-db-prepared-wrong-params": "Подготовленный запрос ($2), указанный для идентификатора базы данных \"$1\" выполнился с ошибкой ($3)",
 	"externaldata-db-no-such-prepared": "Подготовленный запрос $2 не задан для БД с ID $1.",
 	"externaldata-db-odbc-illegal": "В параметре $2 обнаружена недопустимая последовательность $1. Перестаньте.",
 	"externaldata-mongodb-unknown-collection": "Ошибка: Неизвестная коллекция MongoDB $1.",

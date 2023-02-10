@@ -32,6 +32,7 @@
 	"externaldata-db-empty-rowset": "The query $1 returned an empty rowset.",
 	"externaldata-db-prepared-not-specified": "Please specify (query=), which prepared statement to use for the database ID $1.",
 	"externaldata-db-prepared-config-wrong-datatype": "The prepared query ($2) specified for database ID \"$1\" exists, but it has not been set up correctly.",
+	"externaldata-db-prepared-wrong-params": "The prepared query ($2) specified for database ID \"$1\" produced an error ($3)",
 	"externaldata-db-no-such-prepared": "The prepared statement $2 is not set up for the database ID $1.",
 	"externaldata-db-odbc-illegal": "The parameter $2 contains an illegal sequence $1. Please stop.",
 	"externaldata-mongodb-unknown-collection": "Error: Unknown MongoDB collection $1.",

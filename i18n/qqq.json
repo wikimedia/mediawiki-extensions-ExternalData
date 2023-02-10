@@ -41,6 +41,7 @@
 	"externaldata-db-empty-rowset": "An error message used when an SQL query returns an empty rowset.\n* $1 is an SQL query.",
 	"externaldata-db-prepared-not-specified": "The error message shown if several prepared statements are set up for the database, but no statement key is provided in the query parameter.\n* $1 is the database ID.",
 	"externaldata-db-prepared-config-wrong-datatype": "The error message shown if a prepared query has been correctly specified by the end-user, but the information in the config is not in the correct format.\nParameters: $1 is the database ID\n$2 is the identifier of the prepared query in the config.",
+	"externaldata-db-prepared-wrong-params": "This error message is shown, if a prepared statement fails.\n Parameters:\n$1 -- the database ID,\n$2 -- the prepared statement id,\n$3 -- error text.",
 	"externaldata-db-no-such-prepared": "This error message is shown when prepared statements array for the database does not include the provided key. Parameters:\n* $1 is the database ID,\n* $2 is the prepared statement key.",
 	"externaldata-db-odbc-illegal": "This error message shown if an attempted SQL injection is suspected. $1 is the offending substring, and $2 is the parameter in which it was found.",
 	"externaldata-mongodb-unknown-collection": "The error message if #get_db_data can't find the specified \"collection\" when connecting to MongoDB. $1 is the collection name",

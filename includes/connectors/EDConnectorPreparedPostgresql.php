@@ -79,7 +79,15 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 		}
 
 		// Execute query.
-		$result = pg_execute( $this->pg, $this->name, $this->parameters );
+		self::throwWarnings();
+		try {
+			$result = pg_execute( $this->pg, $this->name, $this->parameters );
+		} catch ( Exception $e ) {
+			$this->error( 'externaldata-db-prepared-wrong-params', $this->dbId, $this->name, $e->getMessage() );
+			$result = false;
+		} finally {
+			self::stopThrowingWarnings();
+		}
 		if ( $result !== false ) {
 			// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
 			$rows = pg_fetch_all( $result, PGSQL_ASSOC );
