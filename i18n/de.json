@@ -39,6 +39,7 @@
 	"externaldata-db-empty-rowset": "Die Abfrage $1 gab ein leeres Rowset zurück.",
 	"externaldata-db-prepared-not-specified": "Bitte gib an (query=), welche vorbereitete Anweisung für die Datenbank-ID $1 verwendet werden soll.",
 	"externaldata-db-prepared-config-wrong-datatype": "Die vorbereitete Abfrage ($2), die für die Datenbank-ID „$1“ angegeben ist, existiert, wurde aber nicht richtig eingerichtet.",
+	"externaldata-db-prepared-wrong-params": "Die für die Datenbank-ID „$1“ angegebene vorbereitete Abfrage ($2) erzeugte einen Fehler ($3)",
 	"externaldata-db-no-such-prepared": "Die vorbereitete Anweisung $2 ist nicht für die Datenbank-ID $1 eingerichtet.",
 	"externaldata-db-odbc-illegal": "Der Parameter $2 enthält eine unzulässige Sequenz $1. Bitte anhalten.",
 	"externaldata-mongodb-unknown-collection": "Fehler: Unbekannte MongoDB-Sammlung $1.",

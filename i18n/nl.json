@@ -21,6 +21,7 @@
 	"externaldata-db-no-return-values": "Fout: er zijn geen return-waarden ingesteld.",
 	"externaldata-db-invalid-query": "De zoekopdracht $1 is ongeldig ($2).",
 	"externaldata-db-prepared-config-wrong-datatype": "De gevraagde query ($2) voor de database met ID \"$1\" is gevonden, maar niet goed geconfigureerd. Vraag een site-beheerder om hulp.",
+	"externaldata-db-prepared-wrong-params": "De voorbereide query ($2) die is opgegeven voor database-ID \"$1\" heeft een fout veroorzaakt ($3)",
 	"externaldata-mongodb-unknown-collection": "Fout: onbekende MongoDB-verzameling.",
 	"externaldata-caught-exception-soap": "Uitzondering $1 aangetroffen tijdens het aanmaken van SOAP-client."
 }

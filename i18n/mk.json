@@ -32,6 +32,7 @@
 	"externaldata-db-empty-rowset": "Барањето $1 не даде ниеден ред.",
 	"externaldata-db-prepared-not-specified": "Укажете (query=), кој од подготвените искази да се користи за базата со назнака $1.",
 	"externaldata-db-prepared-config-wrong-datatype": "Изготвеното барање ($2) укажано за ознаката „$1“ во базата постои, но не е исправно поставено.",
+	"externaldata-db-prepared-wrong-params": "Подготвеното барање ($2) укажано во базата со ознака „$1“ даде грешка ($3)",
 	"externaldata-db-no-such-prepared": "Подготвениот исказ $2 не е поставен за базата со назнака $1.",
 	"externaldata-db-odbc-illegal": "Параметарот $2 содржи недозволена низа $1. Запрете.",
 	"externaldata-mongodb-unknown-collection": "Грешка: Непозната збирка $1 од MongoDB.",
