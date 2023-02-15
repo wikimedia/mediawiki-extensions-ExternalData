@@ -43,13 +43,14 @@ class EDConnectorPreparedMysql extends EDConnectorPrepared {
 
 	/**
 	 * Get query result as a two-dimensional array.
-	 * @return string[][]|void
+	 * @return string[][]|null
 	 */
 	protected function fetch() {
 		// Prepared statement.
 		$this->prepared = $this->mysqli->prepare( $this->query );
 		if ( !$this->prepared ) {
-			$this->error( 'externaldata-db-invalid-query', $this->query );
+			$this->error( 'externaldata-db-invalid-query', $this->name, '' );
+			return null;
 		}
 
 		// Bind parameters.
