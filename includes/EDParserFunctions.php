@@ -149,7 +149,7 @@ class EDParserFunctions {
 	 * Apply .suffix function (urlencode, htmlencode, etc), if any.
 	 * @param string $var
 	 * @param int $i
-	 * @param ?string $default
+	 * @param string|false|null $default false to return an error message
 	 * @return string
 	 */
 	private static function getIndexedValue( $var, $i, $default ) {
@@ -165,7 +165,7 @@ class EDParserFunctions {
 		if ( array_key_exists( $var, self::getAllValues() ) && array_key_exists( $i, self::getAllValues()[$var] ) ) {
 			$value = self::getAllValues()[$var][$i];
 		} else {
-			if ( $default !== null ) {
+			if ( $default !== false ) {
 				$value = $default;
 			} else {
 				return self::setting( 'Verbose' )
@@ -213,14 +213,12 @@ class EDParserFunctions {
 	 */
 	public static function doExternalValue( Parser $parser, $variable, ...$params ) {
 		$args = self::parseParams( $params );
-		$default = null;
+		$default = false;
 		if ( isset( $args[0] ) ) {
 			$default = $args[0];
 			array_shift( $args );
 		}
-		if ( !isset( $args['data'] ) ) {
-			$args['data'] = "$variable=$variable";
-		}
+		$args['data'] ??= "$variable=$variable";
 		$fetched = self::emulateGetExternalData( $args, $parser->getTitle() );
 		if ( $fetched ) {
 			// There is an error.
@@ -261,13 +259,30 @@ class EDParserFunctions {
 	}
 
 	/**
+	 * Cast an array or string to string in a meaningful way.
+	 * @param array|string $value
+	 * @return string
+	 */
+	private static function serialise( $value ) {
+		if ( is_array( $value ) ) {
+			$serialised = [];
+			foreach ( $value as $key => $val ) {
+				$val = self::serialise( $val );
+				$serialised[] = is_int( $key ) ? $val : "$key: $val";
+			}
+			return implode( ', ', $serialised );
+		} else {
+			return (string)$value;
+		}
+	}
+
+	/**
 	 * Actually render the #for_external_table parser function. The "template" is passed as the first parameter.
 	 * @param string $body
 	 * @return string
 	 */
 	private static function actuallyForExternalTableFirst( $body ) {
 		$macros = self::getMacros( $body );
-
 		$num_loops = self::numLoops( array_map( static function ( $set ) {
 			return $set['var'];
 		}, $macros ) );
@@ -277,11 +292,11 @@ class EDParserFunctions {
 			$current = $body;
 
 			foreach ( $macros as $macro ) {
-				$value = self::getIndexedValue(
+				$value = self::serialise( self::getIndexedValue(
 					$macro['var'],
 					$loop,
-					isset( $macro['default'] ) ? $macro['default'] : ''
-				);
+					$macro['default'] ?? null
+				) );
 				$current = str_replace( $macro[0], $value, $current );
 			}
 			$loops[] = $current;
@@ -293,15 +308,16 @@ class EDParserFunctions {
 	 * Actually render the #for_external_table parser function. The "template" is passed as the second parameter.
 	 * @param Parser $parser
 	 * @param PPNode_Hash_Tree $tree
+	 * @param array $defaults
 	 * @return string
 	 */
-	private static function actuallyForExternalTableSecond( Parser $parser, PPNode_Hash_Tree $tree ) {
+	private static function actuallyForExternalTableSecond( Parser $parser, PPNode_Hash_Tree $tree, array $defaults ) {
 		$variables = array_keys( self::getAllValues() );
 		$num_loops = self::numLoops( $variables );
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
-			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop ){
-				return self::getIndexedValue( $var, $loop, null );
+			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop, $defaults ){
+				return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ) );
 			}, $variables ) );
 			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
 			$loops[] = $row_as_frame->expand( $tree ); // substitution of {{{var}}} happens here.
@@ -330,6 +346,14 @@ class EDParserFunctions {
 		}
 		$body = array_shift( $args );
 
+		$macros = self::getMacros( $second ? $frame->expand( $body, PPFrame::NO_ARGS ) : $body );
+
+		// Get default values:
+		$defaults = [];
+		foreach ( $macros as $macro ) {
+			$defaults[$macro['var']] = $macro['default'] ?? null;
+		}
+
 		if ( count( $args ) > 0 ) {
 			// There are other parameters, presumably, for data retrieval. Standalone mode.
 			$data_params = self::parseParams( array_map( static function ( PPNode_Hash_Tree $node ) use ( $frame ) {
@@ -338,10 +362,11 @@ class EDParserFunctions {
 
 			// If there is no 'data', build one from {{{variables}}}.
 			if ( !isset( $data_params['data'] ) ) {
-				$variables = array_map( static function ( array $captures ) {
-					return $captures['var'] . '=' . $captures['var'];
-				}, self::getMacros( $frame->expand( $body ) ) );
-				$data_params['data'] = implode( ',', $variables );
+				$variables = [];
+				foreach ( $macros as $macro ) {
+					$variables[$macro['var']] = $macro['var'];
+				}
+				$data_params['data'] = $variables;
 			}
 
 			$fetched = self::emulateGetExternalData( $data_params, $parser->getTitle() );
@@ -352,7 +377,7 @@ class EDParserFunctions {
 		}
 
 		return $frame->expand( $second
-			? self::actuallyForExternalTableSecond( $parser, $body )
+			? self::actuallyForExternalTableSecond( $parser, $body, $defaults )
 			: self::actuallyForExternalTableFirst( $body )
 		);
 	}
@@ -426,7 +451,7 @@ class EDParserFunctions {
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$loops[] = '{{' . $template . '|' . implode( '|', array_map( static function ( $param, $var ) use( $loop ) {
-					$value = self::getIndexedValue( $var, $loop, '' );
+					$value = self::serialise( self::getIndexedValue( $var, $loop, '' ) );
 					return "$param=$value";
 			}, $variables, $values ) ) . '}}';
 		}
@@ -588,8 +613,8 @@ class EDParserFunctions {
 			$params = [];
 			foreach ( $templates as $property => $template ) {
 				$params[$property] = preg_replace_callback( $pattern, static function ( array $matches ) use ( $i ) {
-					return self::getIndexedValue( $matches['var'], $i, '' ) ?: $matches['default'];
-				},                                          $template );
+					return self::getIndexedValue( $matches['var'], $i, null ) ?: $matches['default'];
+				}, $template );
 			}
 			self::callSubobject( $parser, $back_property, $params );
 		}
