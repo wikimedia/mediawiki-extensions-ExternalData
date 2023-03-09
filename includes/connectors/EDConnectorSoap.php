@@ -36,6 +36,7 @@ class EDConnectorSoap extends EDConnectorHttp {
 				'mw.ext.getExternalData.getSoapData'
 			);
 		}
+		$this->options['trace'] = true;
 		if ( array_key_exists( 'request', $args ) ) {
 			$this->requestName = $args['request'];
 		} else {
@@ -66,16 +67,17 @@ class EDConnectorSoap extends EDConnectorHttp {
 		self::suppressWarnings();
 		try {
 			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
-			$client = new SoapClient( $url, [ 'trace' => true ] );
+			$client = new SoapClient( $url, $this->options );
 		} catch ( Exception $e ) {
 			if ( $log_errors_client ) {
 				$this->error( 'externaldata-caught-exception-soap', $e->getMessage() );
 			}
 			$log_errors_client = false;	// once is enough.
 			return null;
+		} finally {
+			// Restore warnings.
+			self::restoreWarnings();
 		}
-		// Restore warnings.
-		self::restoreWarnings();
 		$request = $this->requestName;
 		try {
 			$result = $client->$request( $this->requestData );
@@ -101,7 +103,7 @@ class EDConnectorSoap extends EDConnectorHttp {
 	 *
 	 * @return array Parsed headers.
 	 */
-	private static function headers( $str ) {
+	private static function headers( string $str ): array {
 		preg_match_all( '/^(?<header>.+?):\s(?<value>.+)$/m', $str, $matches, PREG_SET_ORDER );
 		$headers = [];
 		foreach ( $matches as $match ) {
