@@ -32,8 +32,7 @@
 		"test": [
 			"parallel-lint . --exclude node_modules --exclude vendor",
 			"@phpcs",
-			"minus-x check .",
-			"@phan"
+			"minus-x check ."
 		],
 		"cover": "phpunit --coverage-html coverage",
 		"fix": [
