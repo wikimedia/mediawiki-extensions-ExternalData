@@ -154,12 +154,9 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		if ( $value instanceof DateTime ) {
 			$value = $value->format( 'Y-m-d H:i:s' );
 		}
-		// Convert the encoding to UTF-8
-		// if necessary - based on code at
-		// http://www.php.net/manual/en/function.mb-detect-encoding.php#102510
-		return mb_detect_encoding( $value, 'UTF-8', true ) === 'UTF-8'
-			? $value
-			: utf8_encode( $value );
+		// Convert the encoding to UTF-8 if necessary.
+		$encoding = mb_detect_encoding( $value, 'UTF-8', true );
+		return $encoding === 'UTF-8' ? $value : mb_convert_encoding( $value, 'UTF-8', $encoding );
 	}
 
 	/**
