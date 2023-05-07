@@ -20,7 +20,7 @@ class EDConnectorSqlite extends EDConnectorRdbms {
 		parent::setCredentials( $params );
 
 		if ( isset( $params['directory'] ) ) {
-			$this->credentials['directory'] = $params['directory'];
+			$this->credentials['dbDirectory'] = $params['directory'];
 		} else {
 			$this->error( 'externaldata-db-incomplete-information', 'sqlite directory' );
 		}
