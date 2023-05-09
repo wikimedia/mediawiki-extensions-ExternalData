@@ -121,18 +121,13 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 				// Allow extensions or LocalSettings.php to alter HTTP options.
 				$hook_name = 'ExternalDataBeforeWebCall';
 				$errors = [];
-				if ( class_exists( '\MediaWiki\HookContainer\HookContainer' ) ) {
-					// MW 1.35+
-					$hook_container = MediaWikiServices::getInstance()->getHookContainer();
-					$hook_result = $hook_container->run(
-						$hook_name,
-						[ static::$method, &$url, &$options, &$errors ],
-						[]
-					);
-				} else {
-					$hook_result = Hooks::run( $hook_name, [ static::$method, &$url, &$options, &$errors ] );
-				}
-				if ( $hook_result === false ) {
+				$hook_container = MediaWikiServices::getInstance()->getHookContainer();
+				$hook_result = $hook_container->run(
+					$hook_name,
+					[ static::$method, &$url, &$options, &$errors ],
+					[]
+				);
+				if ( !$hook_result ) {
 					$this->error( 'externaldata-url-hooks-aborted', $hook_name, implode( ', ', $errors ) );
 					return false;
 				}
