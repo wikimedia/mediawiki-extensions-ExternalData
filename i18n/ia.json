@@ -54,7 +54,7 @@
 	"externaldata-empty-file": "Impossibile obtener le contento del file $1.",
 	"externaldata-no-file-in-directory": "Le directorio $1 non ha le file $2.",
 	"externaldata-no-directory": "Le directorio $1 non es definite.",
-	"externaldata-not-a-directory": "$1 non es un directorio o es mancante.",
+	"externaldata-not-a-directory": "$1 non es un directorio o manca.",
 	"externaldata-exe-shell-disabled": "Error: Le administrator de PHP ha disactivate le accesso al shell.",
 	"externaldata-exe-incomplete-information": "Error: Information incomplete pro le ID de commando $1 ($2).",
 	"externaldata-exe-illegal-parameter": "Error: Le parametro $2 pro le programma $1 ha le valor invalide $3.",
