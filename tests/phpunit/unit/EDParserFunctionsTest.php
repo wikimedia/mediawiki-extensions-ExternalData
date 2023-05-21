@@ -66,7 +66,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider to test EDParserFunctions::urlencode().
 	 * @return array
 	 */
-	public function urlencodeProvider(): array {
+	public static function urlencodeProvider(): array {
 		$strings = [
 			'https://traditio.wiki/Alexander_Mashin',
 			'https://traditio.wiki/Александр_Машин'
@@ -91,7 +91,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider to test EDParserFunctions::htmlencode().
 	 * @return array
 	 */
-	public function htmlencodeProvider(): array {
+	public static function htmlencodeProvider(): array {
 		$strings = [
 			'html',
 			'<html>',
@@ -117,7 +117,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::saveValues().
 	 * @return array
 	 */
-	public function saveValuesProvider(): array {
+	public static function saveValuesProvider(): array {
 		return [
 			'Initial' => [ [], [ 'key1' => [ 'Value11', 'Value12' ] ], [ 'key1' => [ 'Value11', 'Value12' ] ] ],
 			'Additional' => [
@@ -149,7 +149,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::getIndexedValue().
 	 * @return array
 	 */
-	public function getIndexedValueProvider(): array {
+	public static function getIndexedValueProvider(): array {
 		$cases = [];
 		// Existent.
 		foreach ( self::VALUES as $var => $column ) {
@@ -191,7 +191,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::numLoops().
 	 * @return array
 	 */
-	public function numLoopsProvider(): array {
+	public static function numLoopsProvider(): array {
 		return [
 			'no vars' => [ [], 0 ],
 			'absent var' => [ [ 'absent' => 'absent' ], 0 ],
@@ -219,7 +219,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::actuallyExternalTableFirst().
 	 * @return array
 	 */
-	public function actuallyForExternalTableFirstProvider(): array {
+	public static function actuallyForExternalTableFirstProvider(): array {
 		return [
 			'one var' => [ 'Extension: {{{title}}}, ', 'Extension: External Data, Extension: Cargo, ' ],
 			'two vars' => [
@@ -258,7 +258,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::getMappings().
 	 * @return array
 	 */
-	public function getMappingsProvider(): array {
+	public static function getMappingsProvider(): array {
 		return [
 			'no data' => [
 				[],
@@ -286,7 +286,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * Data provider for EDParserFunctions::actuallyDisplayExternalTable().
 	 * @return array
 	 */
-	public function actuallyDisplayExternalTableProvider(): array {
+	public static function actuallyDisplayExternalTableProvider(): array {
 		return [
 			'one var' => [
 				[ 'template' => 'Template', 'data' => 'Title = title' ],

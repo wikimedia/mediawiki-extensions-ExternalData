@@ -77,7 +77,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public function provideLoadConfig(): array {
+	public static function provideLoadConfig(): array {
 		// Load the default configuration.
 		$globals = self::config();
 		$prefix = 'wgExternalData';
@@ -147,7 +147,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public function provideConstruct(): array {
+	public static function provideConstruct(): array {
 		$cases = [];
 
 		$cases['Typical'] = [
@@ -281,7 +281,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public function provideAdd(): array {
+	public static function provideAdd(): array {
 		return [
 			'First' => [ [], [ 'name' => [ 'Alexander Mashin' ] ], [ 'name' => [ 'Alexander Mashin' ] ] ],
 			'Pile' => [
@@ -340,7 +340,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public function provideGetConnector(): array {
+	public static function provideGetConnector(): array {
 		if ( class_exists( 'MongoDB\Client' ) ) {
 			$mongo = 'EDConnectorMongodb7';
 		} elseif ( class_exists( 'MongoClient' ) ) {
@@ -573,7 +573,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public function provideSupplementParams(): array {
+	public static function provideSupplementParams(): array {
 		// Load the default configuration.
 		$sources = self::config()['wgExternalDataSources'];
 		$cases = [];
@@ -780,7 +780,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	/**
 	 * Data provider for EDConnectorBase::filteredAndMappedValues().
 	 */
-	public function provideFilteredAndMappedValues() {
+	public static function provideFilteredAndMappedValues() {
 		return [
 			// Simplest case.
 			'Simple' => [ [ '__text' => [ 'Text' ] ], 'text=__text', '', [ 'text' => [ 'Text' ] ] ],
