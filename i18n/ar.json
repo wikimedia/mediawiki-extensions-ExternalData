@@ -5,7 +5,8 @@
 			"Imksa",
 			"Meno25",
 			"OsamaK",
-			"ديفيد"
+			"ديفيد",
+			"Alshamiri1"
 		]
 	},
 	"getdata": "الحصول على البيانات",
@@ -21,5 +22,8 @@
 	"externaldata-db-could-not-connect": "خطأ: تعذّر الاتصال بقاعدة البيانات.",
 	"externaldata-db-unknown-collection": "خطأ: مجموعة مونغو دي بي غير معروفة.",
 	"externaldata-db-no-return-values": "خطأ: لم تحدد أي قيم عائدة.",
-	"externaldata-db-invalid-query": "استعلام غير صالح."
+	"externaldata-db-invalid-query": "استعلام غير صالح.",
+	"externaldata-url-unknown-error": "خطأ غير معروف أثناء جلب البيانات من URL $1 .",
+	"externaldata-parsing-html-failed": "تعذر تحليل HTML.",
+	"externaldata-caught-exception-parsing-html": "تم اكتشاف استثناء أثناء تحليل HTML. رسالة الخطأ هي \" $1 \"."
 }
