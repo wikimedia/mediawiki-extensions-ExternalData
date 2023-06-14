@@ -19,15 +19,18 @@ class EDGetData extends SpecialPage {
 
 	/** @inheritDoc */
 	public function execute( $query ) {
-		$this->getOutput()->disable();
 		$this->setHeaders();
 
 		$page_name = $query;
 		$title = Title::newFromText( $page_name );
 		if ( $title === null ) {
+			$badURLText = $this->msg( 'externaldata-getdata-badurl' )->text();
+			$text = Html::element( 'p', [ 'class' => 'error' ], $badURLText ) . "\n";
+			$this->getOutput()->addHTML( $text );
 			return;
 		}
 
+		$this->getOutput()->disable();
 		$user = $this->getUser();
 		$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
 		if ( !$permissionManager->userCan( 'read', $user, $title ) ) {
