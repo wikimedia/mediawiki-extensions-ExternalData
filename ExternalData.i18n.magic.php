@@ -146,6 +146,24 @@ $magicWords['mr'] = [
 	'for_external_table' => [ 0, 'बाह्य_सारणी_करिता' ],
 ];
 
+/** Norwegian Bokmål (norsk bokmål) */
+$magicWords['nb'] = [
+	'get_web_data' => [ 0, 'hent_webdata' ],
+	'get_file_data' => [ 0, 'hent_fildata' ],
+	'get_soap_data' => [ 0, 'hent_soap-data' ],
+	'get_ldap_data' => [ 0, 'hent_ldap-data' ],
+	'get_db_data' => [ 0, 'hent_db-data' ],
+	'get_program_data' => [ 0, 'hent_programdata' ],
+	'get_inline_data' => [ 0, 'hent_inline-data' ],
+	'get_external_data' => [ 0, 'hent_eksterne_data' ],
+	'external_value' => [ 0, 'ekstern_verdi' ],
+	'for_external_table' => [ 0, 'for_ekstern_tabell' ],
+	'display_external_table' => [ 0, 'vis_ekstern_tabell' ],
+	'format_external_table' => [ 0, 'formater_ekstern_tabell' ],
+	'store_external_table' => [ 0, 'lagre_ekstern_tabell' ],
+	'clear_external_data' => [ 0, 'tøm_ekstern_tabell' ],
+];
+
 /** Low Saxon (Netherlands) (Nedersaksies) */
 $magicWords['nds-nl'] = [
 	'get_web_data' => [ 0, 'webgegevens_ophaolen' ],
@@ -168,6 +186,24 @@ $magicWords['nl'] = [
 	'display_external_table' => [ 0, 'externe_tabel_weergeven' ],
 	'store_external_table' => [ 0, 'opslaan_externe_tabel' ],
 	'clear_external_data' => [ 0, 'externe_gegevens_opschonen' ],
+];
+
+/** Norwegian Nynorsk (norsk nynorsk) */
+$magicWords['nn'] = [
+	'get_web_data' => [ 0, 'hent_webdata' ],
+	'get_file_data' => [ 0, 'hent_fildata' ],
+	'get_soap_data' => [ 0, 'hent_soap-data' ],
+	'get_ldap_data' => [ 0, 'hent_ldap-data' ],
+	'get_db_data' => [ 0, 'hent_db-data' ],
+	'get_program_data' => [ 0, 'hent_programdata' ],
+	'get_inline_data' => [ 0, 'hent_inline-data' ],
+	'get_external_data' => [ 0, 'hent_eksterne_data' ],
+	'external_value' => [ 0, 'ekstern_verdi' ],
+	'for_external_table' => [ 0, 'for_ekstern_tabell' ],
+	'display_external_table' => [ 0, 'syn_ekstern_tabell' ],
+	'format_external_table' => [ 0, 'formater_ekstern_tabell' ],
+	'store_external_table' => [ 0, 'lagra_ekstern_tabell' ],
+	'clear_external_data' => [ 0, 'tøm_ekstern_tabell' ],
 ];
 
 /** Russian (русский) */
