@@ -46,5 +46,6 @@
 	"externaldata-no-file-in-directory": "Mappa $1 har ikke fila $2.",
 	"externaldata-no-directory": "Mappa $1 er ikke definert.",
 	"externaldata-no-local-variable": "Feil: ingen lokal variabel «$1» har blitt satt.",
-	"externaldata-no-template": "Feil: ingen mal angitt."
+	"externaldata-no-template": "Feil: ingen mal angitt.",
+	"externaldata-getdata-badurl": "Du må angi et sidenavn i URL-en;\nURL-en bør se ut som «Special:GetData/<sidenavn>»."
 }

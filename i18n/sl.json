@@ -64,5 +64,6 @@
 	"external-data-archive-could-not-extract": "Napaka: Datoteke <code>$2</code> ni bilo mogoče ekstrahirati iz arhiva $1 ($3)",
 	"externaldata-no-local-variable": "Napaka: Nastavljena ni bila nobena lokalna spremenljivka »$1«.",
 	"externaldata-no-template": "Napaka: Določena ni bila nobena predloga.",
-	"externaldata-no-loop-body": "Napaka: nobeno telo zanke ni nastavljeno kot prvi ali drugi parameter."
+	"externaldata-no-loop-body": "Napaka: nobeno telo zanke ni nastavljeno kot prvi ali drugi parameter.",
+	"externaldata-getdata-badurl": "V URL-ju morate določiti ime strani;\nURL bi moral biti videti kot »Special:RunQuery/<form name>«."
 }

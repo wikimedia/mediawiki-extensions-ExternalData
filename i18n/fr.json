@@ -76,5 +76,6 @@
 	"external-data-archive-could-not-extract": "Erreur : impossible d’extraire le fichier <code>$2</code> de l’archive $1 ($3)",
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié.",
-	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre."
+	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre.",
+	"externaldata-getdata-badurl": "Vous devez spécifier un nom de page dans l’URL ;\nl’URL doit être de la forme « {{#Special:GetData}}/<nom de page> »."
 }

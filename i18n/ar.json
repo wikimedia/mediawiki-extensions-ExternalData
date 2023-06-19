@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Alshamiri1",
+			"Asma",
 			"DRIHEM",
 			"Imksa",
 			"Meno25",
@@ -69,5 +70,6 @@
 	"external-data-archive-could-not-extract": "خطأ: تعذر استخراج الملف <code>$2</code> من أرشيف $1 ( $3 )",
 	"externaldata-no-local-variable": "خطأ: لم يتم تعيين متغير محلي \" $1 \".",
 	"externaldata-no-template": "خطأ: لم يتم تحديد قالب.",
-	"externaldata-no-loop-body": "خطأ: لم يتم تعيين نص الحلقة كمعامل أول أو ثاني."
+	"externaldata-no-loop-body": "خطأ: لم يتم تعيين نص الحلقة كمعامل أول أو ثاني.",
+	"externaldata-getdata-badurl": "يجب عليك تحديد اسم الصفحة في عنوان URL ؛\nيجب أن يبدو عنوان URL \"Special:GetData/<page name>\"."
 }

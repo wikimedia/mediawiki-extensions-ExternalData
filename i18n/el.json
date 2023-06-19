@@ -6,6 +6,7 @@
 			"Norhorn",
 			"Omnipaedista",
 			"Protnet",
+			"Spyridon Eftychios Kokotos",
 			"ZaDiak"
 		]
 	},
@@ -27,5 +28,6 @@
 	"externaldata-missing-file": "Το αρχείο $1 απουσιάζει.",
 	"externaldata-empty-file": "Δεν δύναται να ληφθεί το περιεχόμενο του αρχείου $1.",
 	"externaldata-no-file-in-directory": "Το αρχείο $1 δεν υπάρχει στον κατάλογο $1.",
-	"externaldata-no-directory": "Ο κατάλογος $1 δεν έχει καθοριστεί."
+	"externaldata-no-directory": "Ο κατάλογος $1 δεν έχει καθοριστεί.",
+	"externaldata-getdata-badurl": "Πρέπει να ορίσετε το όνομα μιας σελίδας μέσα στον URL; ο URL πρέπει να μοίαζει κάπως έτσι: \"{{#Special:GetData}}/<page name>\"."
 }
