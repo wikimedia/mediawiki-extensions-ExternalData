@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Piano1forte2"
+		]
+	},
+	"externaldata-no-param-specified": "Error: No '$1' parameter specified.",
+	"externaldata-web-invalid-format": "Invalid format: '$1'.",
+	"externaldata-invalid-format-explicit": "Error: '$1' is not valid $2 ($3).",
+	"externaldata-db-invalid-join": "Invalid JOIN condition $1: every part must contain an '=' sign.",
+	"externaldata-no-local-variable": "Error: no local variable '$1' has been set."
+}
