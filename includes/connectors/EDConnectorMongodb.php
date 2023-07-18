@@ -243,30 +243,31 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 * @param array $rows Results from MongoDB.
 	 * @param array $aliases Stub.
 	 *
-	 * @return array $values Column-based array of values.
+	 * @return array Column-based array of values.
 	 */
 	protected function processRows( $rows, array $aliases = [] ): array {
 		$values = [];
 		foreach ( $rows as $doc ) {
+			$cast_doc = (array)$doc;
 			foreach ( $this->columns as $column ) {
 				if ( strstr( $column, "." ) ) {
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
-					$values[$column][] = self::getValueFromJSONArray( $doc, $column );
-				} elseif ( isset( $doc[$column] )
-						&& ( ( is_array( $doc[$column] )
-							|| is_a( $doc[$column], 'MongoDB\Model\BSONArray' )
-							|| is_a( $doc[$column], 'MongoDB\Model\BSONDocument' ) ) ) ) {
+					$values[$column][] = self::getValueFromJSONArray( $cast_doc, $column );
+				} elseif ( isset( $cast_doc[$column] )
+						&& ( ( is_array( $cast_doc[$column] )
+							|| is_a( $cast_doc[$column], 'MongoDB\Model\BSONArray' )
+							|| is_a( $cast_doc[$column], 'MongoDB\Model\BSONDocument' ) ) ) ) {
 					// If MongoDB returns an array for a column,
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
-					if ( $column === 'geometry' && array_key_exists( 'coordinates', $doc['geometry'] ) ) {
+					if ( $column === 'geometry' && array_key_exists( 'coordinates', $cast_doc['geometry'] ) ) {
 						// Check if it's GeoJSON geometry.
 						// http://www.geojson.org/geojson-spec.html#geometry-objects
 						// If so, return it in a format that
 						// the Maps extension can understand.
-						$coordinates = $doc['geometry']['coordinates'][0];
+						$coordinates = $cast_doc['geometry']['coordinates'][0];
 						$coordinateStrings = [];
 						foreach ( $coordinates as $coordinate ) {
 							$coordinateStrings[] = $coordinate[1] . ',' . $coordinate[0];
@@ -275,11 +276,11 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 					} else {
 						// Just return it as JSON, the
 						// lingua franca of MongoDB.
-						$values[$column][] = json_encode( $doc[$column] );
+						$values[$column][] = json_encode( $cast_doc[$column] );
 					}
 				} else {
 					// It's a simple literal.
-					$values[$column][] = ( isset( $doc[$column] ) ? (string)$doc[$column] : null );
+					$values[$column][] = ( isset( $cast_doc[$column] ) ? (string)$cast_doc[$column] : null );
 				}
 			}
 		}

@@ -42,6 +42,7 @@ class EDGetData extends SpecialPage {
 			// @phan-suppress-next-line PhanUndeclaredMethod Not necessarily existing in the current version.
 			$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
 		} else {
+			// @phan-suppress-next-line PhanUndeclaredStaticMethod Not necessarily existing in the current version.
 			$wikiPage = WikiPage::factory( $title );
 		}
 		$page_text = ContentHandler::getContentText( $wikiPage->getContent() );

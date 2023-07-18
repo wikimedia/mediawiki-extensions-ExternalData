@@ -33,6 +33,7 @@ class EDReparseJob extends Job {
 				$success = MediaWikiServices::getInstance()->getWikiPageFactory()
 					->newFromTitle( $title )->doPurge();
 			} else {
+				// @phan-suppress-next-line PhanUndeclaredStaticMethod Not necessarily existing in the current version.
 				$success = WikiPage::factory( $title )->doPurge();
 			}
 		} else {
