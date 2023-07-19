@@ -1,8 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Valentine Badu"
+			"Valentine Badu",
+			"Piano1forte2"
 		]
 	},
-	"externaldata-url-hooks-aborted": "Sɛ '$1' deɛ. Ɛsom no yi gueɛ no, ɛde mfomsoɔ no nyinaa baeɛ: $2"
+	"externaldata-no-param-specified": "Error: No '$1' parameter specified.",
+	"externaldata-web-invalid-format": "Invalid format: '$1'.",
+	"externaldata-db-invalid-join": "Invalid JOIN condition $1: every part must contain an '=' sign.",
+	"externaldata-url-hooks-aborted": "Sɛ '$1' deɛ. Ɛsom no yi gueɛ no, ɛde mfomsoɔ no nyinaa baeɛ: $2",
+	"externaldata-no-local-variable": "Error: no local variable '$1' has been set."
 }
