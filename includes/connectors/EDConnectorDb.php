@@ -155,7 +155,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			$value = $value->format( 'Y-m-d H:i:s' );
 		}
 		// Convert the encoding to UTF-8 if necessary.
-		$encoding = mb_detect_encoding( $value, 'UTF-8', true );
+		$encoding = mb_detect_encoding( $value, 'UTF-8', true ) ?? 'UTF-8';
 		return $encoding === 'UTF-8' ? $value : mb_convert_encoding( $value, 'UTF-8', $encoding );
 	}
 

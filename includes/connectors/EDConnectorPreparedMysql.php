@@ -7,6 +7,9 @@
  *
  */
 class EDConnectorPreparedMysql extends EDConnectorPrepared {
+	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
+	public $keepExternalVarsCase = true;
+
 	/** @var mysqli $mysqli Connection to mySQL server. */
 	private $mysqli;
 	/** @var mysqli_stmt $prepared The prepared query. */

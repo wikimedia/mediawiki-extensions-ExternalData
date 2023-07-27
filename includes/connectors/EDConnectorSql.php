@@ -7,8 +7,8 @@
  *
  */
 class EDConnectorSql extends EDConnectorRdbms {
-	/** @var bool $keepExternalVarsCase External variables' case need not be preserved. */
-	public $keepExternalVarsCase = false;
+	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */
+	public $keepExternalVarsCase = true;
 
 	/**
 	 * Set credentials settings for database from $this->dbId.
