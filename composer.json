@@ -4,7 +4,7 @@
 	"description": "Allows retrieving structured data from external URLs, databases and other sources into MediaWiki-powered wikis",
 	"license": "GPL-2.0-or-later",
 	"require": {
-		"composer/installers": "~2.1",
+		"composer/installers": "^2|^1.0.1",
 		"symfony/css-selector": "~5.1"
 	},
 	"require-dev": {
