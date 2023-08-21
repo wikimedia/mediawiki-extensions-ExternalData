@@ -3,7 +3,8 @@
 		"authors": [
 			"Азат Хәлилов",
 			"Айбикә",
-			"Ләйсән"
+			"Ләйсән",
+			"З. ӘЙЛЕ"
 		]
 	},
 	"getdata": "Мәғлүмәттәр алырға",
@@ -14,7 +15,7 @@
 	"externaldata-xml-error": "XML хата. $1 $2 юлында",
 	"externaldata-invalid-json": "Хата: Рөхсәт ителмәгән JSON",
 	"externaldata-db-incomplete-information": "Хата: Был ID сервер өсөн мәғлүмәт тулы түгел.",
-	"externaldata-db-could-not-get-url": "$1 {{PLURAL:$1|мөмкинлектән}} һуң URL алып булманы.",
+	"externaldata-db-could-not-get-url": "$2 {{PLURAL:$1|мөмкинлектән}} һуң $1 URL алып булманы.",
 	"externaldata-db-unknown-type": "ХАТА: Билдәһеҙ мәғлүмәт базаһы.",
 	"externaldata-db-could-not-connect": "ХАТА: Мәғлүмәт базаһы менән бәйләнеш булдырып булмай.",
 	"externaldata-db-unknown-collection": "Хата: Билдәһеҙ коллекция MongoDB.",
