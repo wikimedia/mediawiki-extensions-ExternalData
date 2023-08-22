@@ -18,7 +18,7 @@
 	"externaldata-undefined-file": "$1 файл тодмамтэ.",
 	"externaldata-missing-file": "$1 файл ӧвӧл.",
 	"externaldata-empty-file": "$1 файллэсь пуштроссэ басьтыны уг лу.",
-	"externaldata-no-file-in-directory": "$1 директориын $1 файл ӧвӧл.",
+	"externaldata-no-file-in-directory": "$1 директориын $2 файлэз ӧвӧл.",
 	"externaldata-no-directory": "$1 директори тодмамтэ.",
 	"externaldata-no-local-variable": "Янгыш: интыысь «$1» вошъяськись тупатымтэ.",
 	"externaldata-no-template": "Янгыш: шаблон верамтэ."
