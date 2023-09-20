@@ -181,9 +181,11 @@ class EDConnectorExe extends EDConnectorBase {
 				array $environment
 			) use( &$exit_code, &$error ) /* $this is bound. */ {
 				$prepared = Shell::command( $command ) // Shell class demands an array of words.
-					->input( $input )
 					->environment( $environment )
 					->limits( $this->limits );
+				if ( $input !== null ) {
+					$prepared = $prepared->input( $input );
+				}
 				try {
 					$result = $prepared->execute();
 				} catch ( Exception $e ) {
