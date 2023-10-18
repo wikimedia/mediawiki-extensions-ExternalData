@@ -16,13 +16,15 @@
 			"Juan t2905",
 			"Manuelt15",
 			"Sanbec",
-			"Translationista"
+			"Translationista",
+			"No se"
 		]
 	},
 	"getdata": "Obtener datos",
 	"externaldata-desc": "Permite la recuperación de datos estructurados a partir de direcciones URL externas, bases de datos y otras fuentes",
 	"externaldata-smw-needed": "Error: Semantic MediaWiki debe estar instalado para llamar {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Error: No se ha especificado el parámetro «$1».",
+	"externaldata-throttled": "Las llamadas a $1 están limitadas hasta las {{#time:c|@$2}}.",
 	"externaldata-ldap-unable-to-connect": "No se pudo conectar con $1",
 	"externaldata-xml-error": "Error XML: $1 en línea $2",
 	"externaldata-web-invalid-format": "El formato «$1» no es válido.",
