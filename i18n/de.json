@@ -8,7 +8,8 @@
 			"Merlissimo",
 			"Metalhead64",
 			"Purodha",
-			"Umherirrender"
+			"Umherirrender",
+			"McDutchie"
 		]
 	},
 	"getdata": "Daten holen",
@@ -21,7 +22,7 @@
 	"externaldata-throttled": "Aufrufe von $1 werden bis {{#time:c|@$2}} gedrosselt.",
 	"externaldata-ldap-domain-not-defined": "LDAP-Domain $1 ist nicht definiert.",
 	"externaldata-ldap-unable-to-connect": "Es konnte keine Verbindung zu $1 hergestellt werden",
-	"externaldata-ldap-unable-to-bind": "Die Bindung an die LDAP-Domain $1 ist nicht möglich, wenn Benutzername und Kennwort für diese Domain festgelegt sind.",
+	"externaldata-ldap-unable-to-bind": "Mit dem Benutzernamen und dem Kennwort, die für die LDAP-Domain $1 festgelegt wurden, ist die Bindung an diese Domain nicht möglich.",
 	"externaldata-ldap-base-dn-not-defined": "Base DN ist nicht gesetzt für LDAP-Domain $1.",
 	"externaldata-xml-error": "XML-Fehler: $1 in Zeile $2",
 	"externaldata-web-invalid-format": "Ungültiges Format: „$1“",
