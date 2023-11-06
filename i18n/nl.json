@@ -4,7 +4,8 @@
 			"Effeietsanders",
 			"SPQRobin",
 			"Siebrand",
-			"McDutchie"
+			"McDutchie",
+			"Romaine"
 		]
 	},
 	"getdata": "Gegevens ophalen",
@@ -20,5 +21,8 @@
 	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden.",
 	"externaldata-db-unknown-collection": "Fout: onbekende MongoDB-verzameling.",
 	"externaldata-db-no-return-values": "Fout: er zijn geen return-waarden ingesteld.",
-	"externaldata-db-invalid-query": "Ongeldige zoekopdracht."
+	"externaldata-db-invalid-query": "Ongeldige zoekopdracht.",
+	"externaldata-url-unknown-error": "Onbekende fout bij het ophalen van gegevens van URL $1.",
+	"externaldata-parsing-html-failed": "Kon de HTML niet verwerken.",
+	"externaldata-caught-exception-parsing-html": "Er is een fout opgetreden bij het verwerken van de HTML. De foutmelding is “$1”."
 }
