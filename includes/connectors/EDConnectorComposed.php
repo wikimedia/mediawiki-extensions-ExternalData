@@ -40,21 +40,13 @@ abstract class EDConnectorComposed extends EDConnectorDb {
 		foreach ( isset( $args['join on'] ) ? self::paramToArray( $args['join on'] ) : [] as $left => $right ) {
 			$left_refers_table = preg_match( '/^(?<table>.+)\.(?<field>[^.]+)$/', $left, $left_parsed );
 			$right_refers_table = preg_match( '/^(?<table>.+)\.(?<field>[^.]+)$/', $right, $right_parsed );
-			if (
-				$right_refers_table &&
-				!isset( $this->tables[$right_parsed['table']] ) &&
-				!isset( $this->joins[$right_parsed['table']] )
-			) {
+			if ( $right_refers_table && !isset( $this->joins[$right_parsed['table']] ) ) {
 				$joined = $right_parsed['table'];
 				$tables[$joined] = $joined;
 				if ( $left_parsed['table'] ) {
 					$tables[$left_parsed['table']] = $left_parsed['table'];
 				}
-			} elseif (
-				$left_refers_table &&
-				!isset( $this->tables[$left_parsed['table']] ) &&
-				!isset( $this->joins[$left_parsed['table']] )
-			) {
+			} elseif ( $left_refers_table && !isset( $this->joins[$left_parsed['table']] ) ) {
 				$joined = $left_parsed['table'];
 				$tables[$joined] = $joined;
 				if ( $right_parsed['table'] ) {
