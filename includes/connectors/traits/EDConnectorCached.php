@@ -47,7 +47,7 @@ trait EDConnectorCached {
 		$this->cacheExpires = $seconds;
 		$this->allowStaleCache = $stale;
 		if ( self::$cacheIsUp ) {
-			self::$primaryDB = wfGetDB( defined( 'DB_PRIMARY' ) ? DB_PRIMARY : DB_MASTER );
+			self::$primaryDB = wfGetDB( DB_PRIMARY );
 			self::$replicaDB = wfGetDB( DB_REPLICA );
 			if ( !self::$replicaDB->tableExists( self::$cacheTable ) ) {
 				self::$cacheIsUp = false;
