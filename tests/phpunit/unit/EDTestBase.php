@@ -3,13 +3,7 @@
 /**
  * Base class for unit tests in External Data extension.
  *
- * To run,
- * tests/phpunit/phpunit.php --wiki='(project)' \\
- * extensions/ExternalData/tests/phpunit/unit/...Test.php
- * in the MediaWiki directory.
- *
  * @group Standalone
- * @covers ...
  *
  * @author Alexander Mashin
  */

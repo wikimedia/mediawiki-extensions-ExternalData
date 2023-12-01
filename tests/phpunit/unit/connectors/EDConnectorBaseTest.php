@@ -1,12 +1,7 @@
 <?php
-require_once __DIR__ . '/../EDTestBase.php';
+
 /**
  * Test for the abstract class EDConnectorBase.
- *
- * To run,
- * tests/phpunit/phpunit.php --wiki='(project)' \\
- * extensions/ExternalData/tests/phpunit/unit/connectors/EDConnectorBaseTest.php
- * in the MediaWiki directory.
  *
  * @group Standalone
  * @covers EDConnectorBase

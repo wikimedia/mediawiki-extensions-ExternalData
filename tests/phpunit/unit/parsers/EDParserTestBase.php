@@ -1,19 +1,14 @@
 <?php
-require_once __DIR__ . '/../EDTestBase.php';
+
 /**
  * Base class for the tests of EDParser*.
- *
- * To run,
- * tests/phpunit/phpunit.php --wiki='(project)' \\
- * extensions/ExternalData/tests/phpunit/unit/parsers/EDParser...Test.php
- * in the MediaWiki directory.
  *
  * @group Standalone
  * @covers EDParserBase
  *
  * @author Alexander Mashin
  */
-abstract class EDParserBaseTest extends EDTestBase {
+abstract class EDParserTestBase extends EDTestBase {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserBase';
 

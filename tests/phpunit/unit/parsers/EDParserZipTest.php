@@ -1,19 +1,14 @@
 <?php
-require_once 'EDParserArchiveTest.php';
+
 /**
  * Test for the class EDParserZip.
- *
- * To run,
- * tests/phpunit/phpunit.php --wiki='(project)' \\
- * extensions/ExternalData/tests/phpunit/unit/parsers/EDParserZipTest.php
- * in the MediaWiki directory.
  *
  * @group Standalone
  * @covers EDParserZip
  *
  * @author Alexander Mashin
  */
-class EDParserZipTest extends EDParserArchiveTest {
+class EDParserZipTest extends EDParserArchiveTestBase {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserZip';
 

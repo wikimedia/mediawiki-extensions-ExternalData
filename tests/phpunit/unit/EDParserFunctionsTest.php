@@ -1,12 +1,7 @@
 <?php
-require_once 'EDTestBase.php';
+
 /**
  * Test for the class EDParserFunctions.
- *
- * To run,
- * php7.4 tests/phpunit/phpunit.php --wiki='(project)' \\
- * extensions/ExternalData/tests/phpunit/unit/EDParserFunctionsTest.php
- * in the MediaWiki directory.
  *
  * @group Standalone
  * @group Database

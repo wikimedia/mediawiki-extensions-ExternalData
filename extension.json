@@ -255,5 +255,10 @@
 			"value": true
 		}
 	},
+	"TestAutoloadClasses": {
+		"EDTestBase": "tests/phpunit/unit/EDTestBase.php",
+		"EDParserTestBase": "tests/phpunit/unit/parsers/EDParserTestBase.php",
+		"EDParserArchiveTestBase": "tests/phpunit/unit/parsers/EDParserArchiveTestBase.php"
+	},
 	"manifest_version": 2
 }
