@@ -24,6 +24,17 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	/** @var array $aliases Column aliases. */
 	protected $aliases = [];
 
+	/** @const string IDENTIFIER */
+	private const IDENTIFIER = <<<'ID'
+		/(?<=\.|^)(?:
+			(?<identifier>[\w$\x{0080}-\x{FFFF}]+) #Unquoted
+		  | (?<quote>`|") (?<identifier> #Quoted
+		        (?:(?!(?P=quote)).
+			  | (?P=quote){2}
+			)+) (?P=quote)
+		)$/uJx
+	ID;
+
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
 	 *
@@ -51,8 +62,8 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			$chunks = preg_split( '/\bas\s+/i', $column, 2 );
 			$alias = isset( $chunks[1] ) ? trim( $chunks[1] ) : $column;
 			// Deal with table prefixes in column names (internal_var=tbl1.col1).
-			if ( preg_match( '/[^.]+$/', $alias, $matches ) ) {
-				$alias = $matches[0];
+			if ( preg_match( self::IDENTIFIER, $alias, $matches ) ) {
+				$alias = $matches['identifier'];
 			}
 			$this->aliases[$column] = $alias;
 		}
