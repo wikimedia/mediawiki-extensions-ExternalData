@@ -16,7 +16,6 @@
 	},
 	"getdata": "{{doc-special|GetData}}",
 	"externaldata-desc": "{{desc|name=External Data|url=https://www.mediawiki.org/wiki/Extension:External_Data}}",
-	"externaldata-smw-needed": "The error message if Semantic MediaWiki is not installed, but {{#store_external_table:}} is called.",
 	"externaldata-no-param-specified": "The error message if a parameter to some parser function is not set. Parameters:\n* $1 - parameter name. any one of the following: <code>url</code>, <code>data</code>, <code>filter</code>, <code>domain</code>, <code>db</code>, <code>from</code>",
 	"externaldata-param-type-error": "The error message if a parameter of a wrong type has been passed. Parameters:/n* $1 is the parameter name,\n* $2 is the expected type, i.e. integer.",
 	"externaldata-php-library-missing": "The error message when a PHP library, needed to use the feature $2 (not parser function per se), is missing. Parameters:\n* $1 is the PHP library name,\n* $2 is the short feature description.",
