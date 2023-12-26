@@ -14,7 +14,6 @@
 	},
 	"getdata": "Ambil data",
 	"externaldata-desc": "Memungkinkan untuk mengambil data terstruktur dari URL eksternal, database dan sumber lainnya",
-	"externaldata-smw-needed": "Galat: Semantic MediaWiki harus dipasang untuk memanggil {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Galat: Parameter \"$1\" tidak diberikan.",
 	"externaldata-param-type-error": "Galat: Parameter $1 harus bertipe $2.",
 	"externaldata-php-library-missing": "Galat: Pustaka PHP $1, diperlukan untuk menggunakan $2, tidak tersedia.",

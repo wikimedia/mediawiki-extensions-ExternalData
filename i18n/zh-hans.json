@@ -16,7 +16,6 @@
 	},
 	"getdata": "获取数据",
 	"externaldata-desc": "允许从外部URL、数据库和其他来源检索结构化数据",
-	"externaldata-smw-needed": "错误：必须安装语义MediaWiki才能调用{{#store_external_table:}}。",
 	"externaldata-no-param-specified": "错误：未指定“$1”参数。",
 	"externaldata-param-type-error": "错误：参数$1必须是$2类型。",
 	"externaldata-php-library-missing": "错误：缺少使用$2所需的PHP库$1。",

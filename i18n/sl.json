@@ -6,7 +6,6 @@
 	},
 	"getdata": "Pridobi podatke",
 	"externaldata-desc": "Omogoča pridobitev strukturiranih podatkov iz zunanjih URL-jev, podatkovnih zbirk in drugih virov",
-	"externaldata-smw-needed": "Napaka: Za klic mora biti nameščen Semantični MediaWiki\n{{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Napaka: Določeni ni noben parameter »$1«.",
 	"externaldata-param-type-error": "Napaka: Parameter $1 mora biti tipa $2.",
 	"externaldata-php-library-missing": "Napaka: PHP-knjižnica $1, potrebna za uporabo $2, manjka.",

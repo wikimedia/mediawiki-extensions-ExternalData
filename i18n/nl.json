@@ -10,7 +10,6 @@
 	},
 	"getdata": "Gegevens ophalen",
 	"externaldata-desc": "Maakt het mogelijk gegevens van externe URL's, database en andere externe bronnen op te halen",
-	"externaldata-smw-needed": "Fout: Semantic MediaWiki moet geïnstalleerd zijn om {{#store_external_table:}} aan te roepen.",
 	"externaldata-no-param-specified": "Fout: er is geen parameter \"$1\" opgegeven.",
 	"externaldata-param-type-error": "Fout: Parameter $1 moet van het type $2 zijn.",
 	"externaldata-php-library-missing": "Fout: De PHP-bibliotheek $1, die nodig is om $2 te gebruiken, ontbreekt.",

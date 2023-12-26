@@ -13,7 +13,6 @@
 	},
 	"getdata": "الحصول على البيانات",
 	"externaldata-desc": "يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى",
-	"externaldata-smw-needed": "خطأ: يجب تثبيت Semantic MediaWiki لاستدعاء {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "خطأ: لم يتم تحديد وسيط \"$1\".",
 	"externaldata-param-type-error": "خطأ: يجب أن تكون المعلمة $1 من النوع $2 .",
 	"externaldata-php-library-missing": "خطأ: مكتبة PHP $1 ، اللازمة لاستخدام $2 ، مفقودة.",

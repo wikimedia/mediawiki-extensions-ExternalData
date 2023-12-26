@@ -14,7 +14,6 @@
 	},
 	"getdata": "Daten holen",
 	"externaldata-desc": "Ermöglicht das Abrufen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen",
-	"externaldata-smw-needed": "Fehler: Semantic MediaWiki muss installiert sein, um {{#store_external_table:}} aufrufen zu können.",
 	"externaldata-no-param-specified": "Fehler: Kein Parameter „$1“ angegeben.",
 	"externaldata-param-type-error": "Fehler: Parameter $1 muss vom Typ $2 sein.",
 	"externaldata-php-library-missing": "Fehler: Die PHP-Bibliothek $1, die für die Verwendung von $2 benötigt wird, fehlt.",

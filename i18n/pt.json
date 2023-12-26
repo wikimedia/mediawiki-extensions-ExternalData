@@ -10,7 +10,6 @@
 	},
 	"getdata": "Obter dados",
 	"externaldata-desc": "Permite a importação de dados estruturados a partir de endereços URL, bases de dados e outras fontes externas",
-	"externaldata-smw-needed": "Erro: o MediaWiki Semântico tem de estar instalado para poder chamar {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Erro: não foi especificado nenhum parâmetro \"$1\".",
 	"externaldata-param-type-error": "Erro: o parâmetro $1 tem de ser do tipo $2.",
 	"externaldata-php-library-missing": "Erro: a biblioteca PHP $1, necessária para usar $2, está em falta.",

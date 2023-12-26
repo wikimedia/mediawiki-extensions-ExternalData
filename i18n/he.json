@@ -11,7 +11,6 @@
 	},
 	"getdata": "קבלת נתונים",
 	"externaldata-desc": "אפשרות לקבלת נתונים מבניים מכתובות חיצוניות, מסדי נתונים ומקורות אחרים",
-	"externaldata-smw-needed": "שגיאה: מדיה־ויקי סמנטית צריכה להיות מותקנת כדי לקרוא ל־{{#store_external_table:}}.",
 	"externaldata-no-param-specified": "שגיאה: לא הוגדר פרמטר \"$1\".",
 	"externaldata-param-type-error": "שגיאה: פרמטר $1 צריך להיות מסוג $2.",
 	"externaldata-php-library-missing": "שגיאה: ספריית ה־PHP $1, שנחוצה לשימוש באפשרות $2, חסרה.",

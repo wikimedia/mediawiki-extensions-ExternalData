@@ -13,7 +13,6 @@
 	},
 	"getdata": "Hämta data",
 	"externaldata-desc": "Ger möjlighet att hämta strukturerad data från externa URL:er, databaser och andra källor",
-	"externaldata-smw-needed": "Fel: Semantic MediaWiki måste vara installerat för kalla på {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Fel: Ingen \"$1\" parameter specificerad.",
 	"externaldata-param-type-error": "Fel: Parametern $1 måste vara av typ $2.",
 	"externaldata-php-library-missing": "Fel: PHP-biblioteket $1, som behövs för att använda $2, saknas.",

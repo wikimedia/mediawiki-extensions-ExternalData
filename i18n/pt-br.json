@@ -12,7 +12,6 @@
 	},
 	"getdata": "Obter dados",
 	"externaldata-desc": "Permite a obtenção de dados em CSV, JSON e XML a partir de URLs externos, banco de dados e outras fontes",
-	"externaldata-smw-needed": "Erro: Semantic MediaWiki deve ser instalado para chamar {{#store_external_table:}}.",
 	"externaldata-no-param-specified": "Erro: nenhum parâmetro \"$1\" especificado.",
 	"externaldata-param-type-error": "Erro: o parâmetro $1 deve ser do tipo $2.",
 	"externaldata-php-library-missing": "Erro: a biblioteca PHP $1, necessária para usar $2, está ausente.",

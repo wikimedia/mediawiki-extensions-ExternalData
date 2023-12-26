@@ -12,7 +12,6 @@
 	},
 	"getdata": "Отримати дані",
 	"externaldata-desc": "Дозволяє отримувати структуровані дані із зовнішніх URL-адрес, баз даних та інших джерел",
-	"externaldata-smw-needed": "Помилка: щоб викликати {{#store_external_table:}}, потрібно встановити семантичну MediaWiki.",
 	"externaldata-no-param-specified": "Помилка: параметр \"$1\" - не вказаний.",
 	"externaldata-param-type-error": "Помилка: параметр $1 має мати тип $2 .",
 	"externaldata-php-library-missing": "Помилка: бібліотека PHP $1, необхідна для використання $2, відсутня.",
