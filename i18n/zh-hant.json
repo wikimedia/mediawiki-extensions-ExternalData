@@ -3,7 +3,8 @@
 		"authors": [
 			"Kly",
 			"LNDDYL",
-			"列维劳德"
+			"列维劳德",
+			"SunAfterRain"
 		]
 	},
 	"getdata": "取得資料",
@@ -33,6 +34,8 @@
 	"externaldata-db-invalid-join": "無效的 JOIN 條件 $1：每個部份都應包含「=」符號。",
 	"externaldata-db-empty-rowset": "查詢 $1 回傳空白的列集合。",
 	"externaldata-db-prepared-not-specified": "請指定(query=)，用於資料庫 ID $1 的參數化查詢。",
+	"externaldata-db-prepared-config-wrong-datatype": "給資料庫ID「$1」指定的預備查詢（$2）存在，但未正確設定。",
+	"externaldata-db-prepared-wrong-params": "給資料庫ID「$1」指定的預備查詢（$2）產生錯誤（$3）。",
 	"externaldata-db-no-such-prepared": "未為資料庫 ID $1 設定參數化查詢 $2。",
 	"externaldata-db-odbc-illegal": "參數 $2 含有不合規範的序列 $1。請停止。",
 	"externaldata-mongodb-unknown-collection": "錯誤：未知的 MongoDB 集合 $1。",
@@ -57,8 +60,12 @@
 	"externaldata-not-a-directory": "$1 不是目錄或並不存在。",
 	"externaldata-exe-shell-disabled": "錯誤：PHP 管理員已禁用存取殼層。",
 	"externaldata-exe-incomplete-information": "錯誤：此 $1 命令 ID ($2) 有未完成的資訊",
+	"externaldata-illegal-parameter": "錯誤：參數$1有非法值$2。",
 	"externaldata-exe-exception": "錯誤：嘗試運作程式 $1 時出現例外狀況。訊息：$2。",
 	"externaldata-exe-error": "錯誤：$1 程式送回退出代碼 $2。消息：$3。",
+	"external-data-archive-could-not-read": "錯誤：無法打開$1檔案<code>$2</code>（$3）",
+	"external-data-archive-could-not-extract": "錯誤：無法從$1檔案提取檔案<code>$2</code>（$3）",
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",
-	"externaldata-no-template": "錯誤：沒有指定模板。"
+	"externaldata-no-template": "錯誤：沒有指定模板。",
+	"externaldata-no-loop-body": "錯誤：第一個或第二個參數沒有設定為迴圈體。"
 }
