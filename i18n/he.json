@@ -52,6 +52,7 @@
 	"externaldata-parsing-html-failed": "לא ניתן לפענח HTML.",
 	"externaldata-caught-exception-parsing-html": "בעת פענוח HTML נתפס חריג. הודעת השגיאה הייתה &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "בעת המרת בורר CSS בשם $1 ל־XPath נתפס חריג: $2",
+	"externaldata-jsonpath-error": "תחביר JSONPath בלתי־תקין $1",
 	"externaldata-missing-library": "הספרייה $1, שנחוצה לשימוש בפונקציית המפענח \"$2\"  או לפונקציית הלואה <code>$3</code>, חסרה.",
 	"externaldata-undefined-file": "הקובץ $1 אינו מוגדר.",
 	"externaldata-missing-file": "הקובץ $1 חסר.",

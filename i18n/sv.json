@@ -32,6 +32,7 @@
 	"externaldata-mongodb-unknown-collection": "Fel: Okänd MongoDB samling.",
 	"externaldata-url-not-fetched": "Fel under hämtning av data från URL:en $1.",
 	"externaldata-url-not-allowed": "URL:en $1 tillåts inte på den här wikin.",
+	"externaldata-jsonpath-error": "Fel: Ogiltig JSONPath-notation $1.",
 	"externaldata-undefined-file": "Filen $1 har inte definierats.",
 	"externaldata-missing-file": "Filen $1 saknas.",
 	"externaldata-exe-shell-disabled": "Fel: PHP-administratör har inaktiverat tillgång till skalet.",

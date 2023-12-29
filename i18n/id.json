@@ -30,6 +30,7 @@
 	"externaldata-url-hooks-aborted": "Hook '$1' berhenti, kembali error: $2",
 	"externaldata-url-not-fetched": "Terjadi kesalahan saat mengambil data dari URL $1:$2.",
 	"externaldata-caught-exception-soap": "Kesalahan $1 ketika membuat klien SOAP.",
+	"externaldata-jsonpath-error": "Galat: Notasi JSONPath $1 tidak valid.",
 	"externaldata-undefined-file": "Berkas $1 tidak diketahui.",
 	"externaldata-missing-file": "Berkas $1 hilang.",
 	"externaldata-no-template": "Kesalahan: tidak ada templat ditentukan"

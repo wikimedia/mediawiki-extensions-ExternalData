@@ -18,5 +18,6 @@
 	"externaldata-db-no-return-values": "Errore: Nisciune valore de retorne specificate.",
 	"externaldata-db-invalid-query": "Inderrogazione $1 invalide ($2).",
 	"externaldata-mongodb-unknown-collection": "Errore: Collezzione scanusciute MongoDB $1.",
+	"externaldata-jsonpath-error": "Errore: Notazione JSONPath $1 non valide.",
 	"externaldata-no-template": "Errore: nisicune template specificate."
 }

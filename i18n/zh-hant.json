@@ -50,6 +50,7 @@
 	"externaldata-parsing-html-failed": "無法解析 HTML。",
 	"externaldata-caught-exception-parsing-html": "捕獲解析 HTML 時的例外狀況。錯誤訊息為 &quot;$1&quot;。",
 	"externaldata-error-converting-css-to-xpath": "捕獲轉換 CSS 選擇器 $1 成 XPath 時的例外狀況。錯誤訊息為：\n$2",
+	"externaldata-jsonpath-error": "錯誤：無效的 JSONPath 表示 $1。",
 	"externaldata-missing-library": "缺少使用解析函式「$2」或 Lua 函式「<code>$3</code>」時所需的函式庫 $1。",
 	"externaldata-undefined-file": "檔案 $1 未定義。",
 	"externaldata-missing-file": "缺少檔案 $1。",

@@ -38,6 +38,7 @@
 	"externaldata-parsing-html-failed": "HTML의 구문을 분석하지 못했습니다.",
 	"externaldata-caught-exception-parsing-html": "HTML 구문 분석 예외가 발생했습니다. 오류 메시지: &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "$1 CSS 선택자를 XPath로 변환하는 동안 예외가 발생했습니다:\n$2",
+	"externaldata-jsonpath-error": "오류: 유효하지 않은 JSONPath 표기 $1입니다.",
 	"externaldata-undefined-file": "$1 파일이 정의되어 있지 않습니다.",
 	"externaldata-missing-file": "$1 파일이 없습니다.",
 	"externaldata-empty-file": "$1 파일의 내용을 가져올 수 없습니다.",

@@ -39,6 +39,7 @@
 	"externaldata-parsing-html-failed": "Kunne ikke tolke HTML.",
 	"externaldata-caught-exception-parsing-html": "Fant feil under tolking av HTML. Feilbeskjeden er «$1».",
 	"externaldata-error-converting-css-to-xpath": "Fant unntak under konvertering av CSS-selektoren $1 til XPath:\n$2",
+	"externaldata-jsonpath-error": "Feil: Ugyldig JSONPath-notasjon $1.",
 	"externaldata-missing-library": "Biblioteket $1, som er påkrevd for å bruke parserfunksjonen «$2» eller Lua-funksjonen <code>$3</code>, mangler.",
 	"externaldata-undefined-file": "Fila $1 er ikke definert.",
 	"externaldata-missing-file": "Fila $1 mangler.",

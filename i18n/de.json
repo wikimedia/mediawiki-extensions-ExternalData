@@ -55,6 +55,7 @@
 	"externaldata-parsing-html-failed": "HTML konnte nicht geparst werden",
 	"externaldata-caught-exception-parsing-html": "Ausnahme beim Parsen von HTML abgefangen. Die Fehlermeldung lautet „$1“.",
 	"externaldata-error-converting-css-to-xpath": "Ausnahme bei der Konvertierung des CSS-Selektors $1 nach XPath abgefangen:\n$2",
+	"externaldata-jsonpath-error": "Ungültiger JSONpath $1",
 	"externaldata-missing-library": "Die Bibliothek $1, die für die Verwendung der Parserfunktion „$2“ oder der Lua-Funktion <code>$3</code> erforderlich ist, fehlt.",
 	"externaldata-undefined-file": "Die Datei $1 ist nicht definiert.",
 	"externaldata-missing-file": "Die Datei $1 fehlt.",

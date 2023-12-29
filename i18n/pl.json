@@ -42,6 +42,7 @@
 	"externaldata-parsing-html-failed": "Nie udało się sparsować kodu HTML.",
 	"externaldata-caught-exception-parsing-html": "Podczas parsowania kodu HTML wystąpił błąd. Komunikat błędu: „$1”.",
 	"externaldata-error-converting-css-to-xpath": "Podczas konwersji selektora CSS $1 na XPath wystąpił błąd:\n$2",
+	"externaldata-jsonpath-error": "Błąd: Nieprawidłowa notacja JSONPath: $1.",
 	"externaldata-missing-library": "Brakuje biblioteki $1, wymaganej do wykorzystania funkcji parsera „$2” bądź funkcji Lua „$3”.",
 	"externaldata-undefined-file": "Plik $1 nie jest zdefiniowany.",
 	"externaldata-missing-file": "Brakujący plik $1.",

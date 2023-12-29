@@ -44,6 +44,7 @@
 	"externaldata-parsing-html-failed": "Não foi possível analisar o HTML.",
 	"externaldata-caught-exception-parsing-html": "Captura de exceção ao analisar HTML. A mensagem de erro é &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Captura de exceção ao converter o seletor CSS $1 em XPath:\n$2",
+	"externaldata-jsonpath-error": "Erro: notação JSONPath inválida $1.",
 	"externaldata-missing-library": "A biblioteca $1, necessária para usar a função analisadora '$2' ou a função Lua <code>$3</code>, está ausente.",
 	"externaldata-undefined-file": "O arquivo $1 não está definido.",
 	"externaldata-missing-file": "Arquivo $1 ausente.",
