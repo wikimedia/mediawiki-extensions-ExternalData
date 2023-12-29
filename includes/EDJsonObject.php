@@ -373,6 +373,9 @@ class EDJsonObject {
 	 * @throws MWException
 	 */
 	private function opChildSelector( &$json_object, $contents, &$result, $create_nonexistent = false ) {
+		if ( !$contents ) {
+			throw new MWException( 'empty selector' );
+		}
 		if ( is_array( $json_object ) ) {
 			$match = [];
 			$contents_len = strlen( $contents );
@@ -467,7 +470,7 @@ class EDJsonObject {
 					}
 				}
 			} else {
-				throw new MWException( wfMessage( 'externaldata-jsonpath-error' )->text() );
+				throw new MWException();
 			}
 			return true;
 		}
@@ -506,7 +509,7 @@ class EDJsonObject {
 	private function getReal( &$json_object, $json_path, $create_nonexistent = false ) {
 		$match = [];
 		if ( !preg_match( self::RE_ROOT_OBJECT, $json_path, $match ) ) {
-			throw new MWException( wfMessage( 'externaldata-jsonpath-error' )->text() );
+			throw new MWException();
 		}
 		$json_path = $match[1];
 		$root_object_prev = &$this->jsonObject;

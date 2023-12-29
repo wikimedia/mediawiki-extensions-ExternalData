@@ -317,7 +317,7 @@ class EDParserFunctions {
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop, $defaults ){
-				return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ) );
+				return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ?? '' ) );
 			}, $variables ) );
 			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
 			$loops[] = $row_as_frame->expand( $tree ); // substitution of {{{var}}} happens here.

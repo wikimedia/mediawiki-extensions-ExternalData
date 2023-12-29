@@ -54,6 +54,7 @@
 	"externaldata-parsing-html-failed": "HTML не был разобран.",
 	"externaldata-caught-exception-parsing-html": "При разборе HTML выброшено исключение. Текст ошибки: &laquo;$1&raquo;.",
 	"externaldata-error-converting-css-to-xpath": "При преобразовании селектора CSS $1 в XPath выброшено исключение:\n$2",
+	"externaldata-jsonpath-error": "Некорректный JSONpath $1",
 	"externaldata-missing-library": "Отсутствует библиотека $1, необходимая для использования функции парсера '$2' или функции Lua <code>$3</code>.",
 	"externaldata-undefined-file": "Файл $1 не определён.",
 	"externaldata-missing-file": "Файл $1 отсутствует.",

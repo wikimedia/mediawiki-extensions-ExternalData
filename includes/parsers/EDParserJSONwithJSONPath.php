@@ -60,7 +60,11 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 				try {
 					$json_values = $json->get( $jsonpath );
 				} catch ( MWException $e ) {
-					throw new EDParserException( 'externaldata-jsonpath-error', $jsonpath );
+					$msg = $e->getMessage();
+					throw new EDParserException(
+						'externaldata-jsonpath-error',
+						$jsonpath . ( $msg ? ' (' . $msg . ')' : '' )
+					);
 				}
 				// EDJsonObject::get() returns false if values are not found, array otherwise.
 				if ( $json_values !== false ) {
