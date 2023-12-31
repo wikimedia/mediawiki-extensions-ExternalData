@@ -353,11 +353,13 @@ abstract class EDConnectorBase {
 			}
 			// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
 			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
-			if ( $supplemented['host'] && preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
-				$supplemented['2nd_lvl_domain'] = $matches[0];
-			} else {
-				// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
-				$supplemented['2nd_lvl_domain'] = $supplemented['host'];
+			if ( isset( $supplemented['host'] ) ) {
+				if ( preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
+					$supplemented['2nd_lvl_domain'] = $matches[0];
+				} else {
+					// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
+					$supplemented['2nd_lvl_domain'] = $supplemented['host'];
+				}
 			}
 			$fields = self::URL_PARAMS;
 		}
