@@ -47,7 +47,7 @@
 	"externaldata-parsing-html-failed": "Non poteva analysar le syntaxe del HTML.",
 	"externaldata-caught-exception-parsing-html": "Exception interceptate durante le analyse del syntaxe del HTML. Le message de error es &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Exception interceptate durante le conversion del selector CSS $1 a XPath:\n$2",
-	"externaldata-jsonpath-error": "Error: Notation JSONPath notation $1 non valide.",
+	"externaldata-jsonpath-error": "JSONpath non valide $1",
 	"externaldata-missing-library": "Le bibliotheca $1, necessari pro usar le function del analysator syntactic '$2' o le function Lua <code>$3</code>, manca.",
 	"externaldata-undefined-file": "Le file $1 non es definite.",
 	"externaldata-missing-file": "Le file $1 manca.",

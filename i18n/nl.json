@@ -51,6 +51,7 @@
 	"externaldata-parsing-html-failed": "Kon de HTML niet verwerken.",
 	"externaldata-caught-exception-parsing-html": "Er is een fout opgetreden bij het verwerken van de HTML. De foutmelding is “$1”.",
 	"externaldata-error-converting-css-to-xpath": "Er is een fout opgetreden bij het omzetten van de CSS-selector $1 naar XPath:\n $2",
+	"externaldata-jsonpath-error": "Ongeldig JSON-pad $1",
 	"externaldata-missing-library": "De bibliotheek $1, die nodig is om de parserfunctie ‘$2’ of de Lua-functie <code>$3</code> te gebruiken, ontbreekt.",
 	"externaldata-undefined-file": "Het bestand $1 is niet gedefinieerd.",
 	"externaldata-missing-file": "Het bestand $1 ontbreekt.",
