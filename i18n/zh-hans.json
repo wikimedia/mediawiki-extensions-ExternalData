@@ -57,7 +57,7 @@
 	"externaldata-parsing-html-failed": "无法解析HTML。",
 	"externaldata-caught-exception-parsing-html": "解析HTML时捕获异常。错误消息是“$1”。",
 	"externaldata-error-converting-css-to-xpath": "把CSS选择器$1转换为XPath时捕获异常：$2",
-	"externaldata-jsonpath-error": "错误：无效的 JSONPath 表示法 $1。",
+	"externaldata-jsonpath-error": "非法的 JSONPath$1",
 	"externaldata-missing-library": "缺少使用解析器函数“$2”或Lua函数<code>$3</code>所需的库$1。",
 	"externaldata-undefined-file": "文件$1未定义。",
 	"externaldata-missing-file": "文件$1丢失。",
