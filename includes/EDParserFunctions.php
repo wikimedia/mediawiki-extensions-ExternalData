@@ -42,8 +42,12 @@ class EDParserFunctions {
 	 * @return string Wrapped error message.
 	 */
 	public static function formatErrorMessages( array $errors ) {
-		$messages = array_map( static function ( array $error ) {
-			return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+		$messages = array_map( static function ( $error ) {
+			if ( is_array( $error ) && $error['code'] ) {
+				return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+			} else {
+				return $error;
+			}
 		}, $errors );
 		return '<span class="error">' . implode( "<br />", $messages ) . '</span>';
 	}
