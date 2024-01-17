@@ -45,6 +45,6 @@ class EDConnectorWeb extends EDConnectorHttp {
 			}
 			$log_errors = false; // once is enough.
 		}
-		return $result;
+		return trim( $result );
 	}
 }
