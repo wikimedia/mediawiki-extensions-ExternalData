@@ -19,7 +19,6 @@ $magicWords['en'] = [
 	'for_external_table' => [ 0, 'for_external_table' ],
 	'display_external_table' => [ 0, 'display_external_table' ],
 	'format_external_table' => [ 0, 'format_external_table' ],
-	'store_external_table' => [ 0, 'store_external_table' ],
 	'clear_external_data' => [ 0, 'clear_external_data' ],
 ];
 
@@ -33,7 +32,6 @@ $magicWords['ar'] = [
 	'external_value' => [ 0, 'قيمة_خارجية' ],
 	'for_external_table' => [ 0, 'لجدول_خارجي' ],
 	'display_external_table' => [ 0, 'عرض_جدول_خارجي' ],
-	'store_external_table' => [ 0, 'تخزين_جدول_خارجي' ],
 	'clear_external_data' => [ 0, 'إزالة_بيانات_خارجية' ],
 ];
 
@@ -45,7 +43,6 @@ $magicWords['arz'] = [
 	'external_value' => [ 0, 'قيمه_خارجيه' ],
 	'for_external_table' => [ 0, 'لجدول_خارجي' ],
 	'display_external_table' => [ 0, 'عرض_جدول_خارجى' ],
-	'store_external_table' => [ 0, 'تخزين_جدول_خارجى', 'تخزين_جدول_خارجي' ],
 	'clear_external_data' => [ 0, 'مسح_بيانات_خارجيه' ],
 ];
 
@@ -65,7 +62,6 @@ $magicWords['de'] = [
 	'external_value' => [ 0, 'externer_wert' ],
 	'for_external_table' => [ 0, 'für_externe_tabelle' ],
 	'display_external_table' => [ 0, 'zeige_externe_tabelle' ],
-	'store_external_table' => [ 0, 'speichere_externe_tabelle' ],
 	'clear_external_data' => [ 0, 'leere_externe_tabelle' ],
 ];
 
@@ -77,7 +73,6 @@ $magicWords['el'] = [
 	'external_value' => [ 0, 'εξωτερική_τιμή' ],
 	'for_external_table' => [ 0, 'για_εξωτερικό_πίνακα' ],
 	'display_external_table' => [ 0, 'προβολή_εξωτερικού_πίνακα' ],
-	'store_external_table' => [ 0, 'αποθήκευση_εξωτερικού_πίνακα' ],
 	'clear_external_data' => [ 0, 'εκκαθάριση_εξωτερικών_δεδομένων' ],
 ];
 
@@ -103,7 +98,6 @@ $magicWords['ja'] = [
 	'get_db_data' => [ 0, 'dbデータ取得' ],
 	'external_value' => [ 0, '外部値' ],
 	'for_external_table' => [ 0, '外部テーブル用' ],
-	'store_external_table' => [ 0, '外部テーブル格納' ],
 ];
 
 /** Korean (한국어) */
@@ -116,7 +110,6 @@ $magicWords['ko'] = [
 	'external_value' => [ 0, '바깥_값' ],
 	'for_external_table' => [ 0, '바깥_표_대해' ],
 	'display_external_table' => [ 0, '바깥_표_보기' ],
-	'store_external_table' => [ 0, '바깥_표_저장' ],
 	'clear_external_data' => [ 0, '바깥_데이터_지우기' ],
 ];
 
@@ -130,7 +123,6 @@ $magicWords['mk'] = [
 	'external_value' => [ 0, 'надворешна_вредност' ],
 	'for_external_table' => [ 0, 'за_надворешна_табела' ],
 	'display_external_table' => [ 0, 'прикажи_надворешна_табела' ],
-	'store_external_table' => [ 0, 'складирај_надворешна_табела' ],
 	'clear_external_data' => [ 0, 'исчисти_надворешни_податоци' ],
 ];
 
@@ -160,7 +152,6 @@ $magicWords['nb'] = [
 	'for_external_table' => [ 0, 'for_ekstern_tabell' ],
 	'display_external_table' => [ 0, 'vis_ekstern_tabell' ],
 	'format_external_table' => [ 0, 'formater_ekstern_tabell' ],
-	'store_external_table' => [ 0, 'lagre_ekstern_tabell' ],
 	'clear_external_data' => [ 0, 'tøm_ekstern_tabell' ],
 ];
 
@@ -171,7 +162,6 @@ $magicWords['nds-nl'] = [
 	'get_db_data' => [ 0, 'db-gegevens_ophaolen' ],
 	'external_value' => [ 0, 'externe_weerde' ],
 	'for_external_table' => [ 0, 'veur_externe_tabel' ],
-	'store_external_table' => [ 0, 'opslaon_externe_tabel' ],
 ];
 
 /** Dutch (Nederlands) */
@@ -184,7 +174,6 @@ $magicWords['nl'] = [
 	'external_value' => [ 0, 'externe_waarde' ],
 	'for_external_table' => [ 0, 'voor_externe_tabel' ],
 	'display_external_table' => [ 0, 'externe_tabel_weergeven' ],
-	'store_external_table' => [ 0, 'opslaan_externe_tabel' ],
 	'clear_external_data' => [ 0, 'externe_gegevens_opschonen' ],
 ];
 
@@ -202,7 +191,6 @@ $magicWords['nn'] = [
 	'for_external_table' => [ 0, 'for_ekstern_tabell' ],
 	'display_external_table' => [ 0, 'syn_ekstern_tabell' ],
 	'format_external_table' => [ 0, 'formater_ekstern_tabell' ],
-	'store_external_table' => [ 0, 'lagra_ekstern_tabell' ],
 	'clear_external_data' => [ 0, 'tøm_ekstern_tabell' ],
 ];
 
@@ -220,8 +208,7 @@ $magicWords['ru'] = [
 	'clear_external_data' => [ 0, 'очистить_внешнюю_таблицу' ],
 	'external_value' => [ 0, 'внешнее_значение' ],
 	'for_external_table' => [ 0, 'для_внешней_таблицы' ],
-	'store_external_table' => [ 0, 'внешняя_таблица_хранения' ],
-	];
+];
 
 /** Serbian (Cyrillic script) (српски (ћирилица)‎) */
 $magicWords['sr-ec'] = [
@@ -230,7 +217,6 @@ $magicWords['sr-ec'] = [
 	'get_db_data' => [ 0, 'добави_податке_базе' ],
 	'external_value' => [ 0, 'спољна_вредност' ],
 	'for_external_table' => [ 0, 'за_спољну_табелу' ],
-	'store_external_table' => [ 0, 'смести_спољну_табелу' ],
 ];
 
 /** Serbian (Latin script) (srpski (latinica)‎) */
@@ -240,7 +226,6 @@ $magicWords['sr-el'] = [
 	'get_db_data' => [ 0, 'dobavi_podatke_baze' ],
 	'external_value' => [ 0, 'spoljna_vrednost' ],
 	'for_external_table' => [ 0, 'za_spoljnu_tabelu' ],
-	'store_external_table' => [ 0, 'smesti_spoljnu_tabelu' ],
 	'clear_external_data' => [ 0, 'očisti_spoljne_podatke' ],
 ];
 
@@ -250,7 +235,6 @@ $magicWords['uk'] = [
 	'get_db_data' => [ 0, 'отримати_дані_db' ],
 	'external_value' => [ 0, 'зовнішнє_значення' ],
 	'for_external_table' => [ 0, 'для_зовнішньої_таблиці' ],
-	'store_external_table' => [ 0, 'зовнішня_таблиця_зберігання' ],
 ];
 
 /** Simplified Chinese (中文（简体）‎) */
@@ -263,7 +247,6 @@ $magicWords['zh-hans'] = [
 	'external_value' => [ 0, '外部取值' ],
 	'for_external_table' => [ 0, '用于外部表单' ],
 	'display_external_table' => [ 0, '显示外部表单' ],
-	'store_external_table' => [ 0, '存储外部表单' ],
 	'clear_external_data' => [ 0, '清空外部数据' ],
 ];
 
@@ -276,6 +259,5 @@ $magicWords['zh-hant'] = [
 	'get_db_data' => [ 0, '取得資料庫數據' ],
 	'for_external_table' => [ 0, '用於外部表單' ],
 	'display_external_table' => [ 0, '顯示外部表單' ],
-	'store_external_table' => [ 0, '儲存外部表單' ],
 	'clear_external_data' => [ 0, '清空外部數據' ],
 ];

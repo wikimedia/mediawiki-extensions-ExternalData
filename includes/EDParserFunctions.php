@@ -1,6 +1,4 @@
 <?php
-use SMW\ParserFunctionFactory;
-use SMW\ParserParameterProcessor;
 
 /**
  * Class for handling the parser functions for External Data.
@@ -528,101 +526,6 @@ class EDParserFunctions {
 
 		// @phan-suppress-next-line PhanUndeclaredClassMethod Cargo is not necessarily installed.
 		return CargoDisplayFormat::formatArray( $parser, $values, $mappings, $args );
-	}
-
-	/**
-	 * Based on Semantic Internal Objects'
-	 * SIOSubobjectHandler::doSetInternal().
-	 * @param Parser $parser
-	 * @param string $back_property
-	 * @param array $params
-	 * @return string|null
-	 */
-	private static function callSubobject( Parser $parser, $back_property, array $params ) {
-		// This is a hack, since SMW's SMWSubobject::render() call is
-		// not meant to be called outside SMW. However, this seemed
-		// like the better solution than copying over all of that
-		// method's code. Ideally, a true public function can be
-		// added to SMW, that handles a subobject creation, that this
-		// code can then call.
-
-		$title = $parser->getTitle();
-		if ( $title ) {
-			$subobject_args = [ $parser ];
-			// Blank first argument, so that subobject ID will be
-			// an automatically-generated random number.
-			$subobject_args[1] = '';
-			// "main" property, pointing back to the page.
-
-			$main_page_name = $title->getText();
-			$main_page_namespace = $title->getNsText();
-			if ( $main_page_namespace !== '' ) {
-				$main_page_name = $main_page_namespace . ':' . $main_page_name;
-			}
-			$subobject_args[2] = $back_property . '=' . $main_page_name;
-
-			foreach ( $params as $property => $value ) {
-				$subobject_args[] = "$property=$value";
-			}
-
-			// SMW 1.9+
-			// @phan-suppress-next-line PhanUndeclaredClassMethod SMW is optional.
-			$instance = ParserFunctionFactory::newFromParser( $parser )->newSubobjectParserFunction( $parser );
-			// @phan-suppress-next-line PhanUndeclaredClassMethod SMW is optional.
-			return $instance->parse( new ParserParameterProcessor( $subobject_args ) );
-		}
-	}
-
-	/**
-	 * Render the #store_external_table parser function.
-	 * @param Parser $parser
-	 * @param string ...$params
-	 * @return string|null
-	 */
-	public static function doStoreExternalTable( Parser $parser, ...$params ) {
-		$pattern = '/{{{(?<var>[^|}]+)(\|(?<default>[^}]+))?}}}/';
-		$args = self::parseParams( $params );
-		$back_property = '';
-		if ( isset( $args[0] ) ) {
-			$back_property = $args[0];
-			unset( $args[0] );
-		}
-
-		$templates = [];
-		$variables = [];
-		$data_params = [];
-		foreach ( $args as $key => $value ) {
-			if ( preg_match( $pattern, $value, $matches ) ) {
-				$templates[$key] = $matches[0];
-				$variables[] = $matches['var'];
-			} else {
-				$data_params[$key] = $value;
-			}
-		}
-		$variables = array_unique( $variables );
-		if ( !isset( $data_params['data'] ) ) {
-			$data_params['data'] = implode( ',', array_map( static function ( $var ) {
-				return "$var=$var";
-			}, $variables ) );
-		}
-
-		$fetched = self::emulateGetExternalData( $data_params, $parser->getTitle() );
-		if ( $fetched ) {
-			// There is an error.
-			return $fetched;
-		}
-
-		$num_loops = self::numLoops( $variables );
-		for ( $i = 0; $i < $num_loops; $i++ ) {
-			$params = [];
-			foreach ( $templates as $property => $template ) {
-				$params[$property] = preg_replace_callback( $pattern, static function ( array $matches ) use ( $i ) {
-					return self::getIndexedValue( $matches['var'], $i, null ) ?: $matches['default'];
-				}, $template );
-			}
-			self::callSubobject( $parser, $back_property, $params );
-		}
-		return null;
 	}
 
 	/**

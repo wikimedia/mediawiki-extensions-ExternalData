@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 3.3
+        Version 3.4-alpha
         Yaron Koren, Alexander Mashin and (many) others
 
 This is free software licensed under the GNU General Public License. Please
@@ -35,9 +35,6 @@ The extension defines the following parser functions:
   of the `#get_*_data` functions
 * `#display_external_table` - like `#for_external_table`, but passes the values
   of each row to a template, which handles the formatting
-* `#store_external_table` - mimics a call to the *Semantic MediaWiki* extension's
-  `#subobject` parser function onto each row retrieved by any of the `#get_*_data`
-  functions, in order to store the entire array of data semantically
 * `#clear_external_data` - erases some or all of the current set of retrieved data
 
 External Data also defines the following Lua functions, each of which act

@@ -39,9 +39,6 @@ class ExternalDataHooks {
 		if ( class_exists( 'CargoDisplayFormat' ) ) {
 			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );
 		}
-		if ( class_exists( '\SMW\ParserFunctionFactory' ) ) {
-			$parser->setFunctionHook( 'store_external_table', [ 'EDParserFunctions', 'doStoreExternalTable' ] );
-		}
 
 		EDConnectorExe::registerTags( $parser );
 
