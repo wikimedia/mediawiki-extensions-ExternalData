@@ -72,7 +72,11 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 			if ( $entries instanceof DOMNodeList ) {
 				// It's a list of DOM nodes.
 				foreach ( $entries as $entry ) {
-					$nodesArray[] = self::filterEmptyNodes( $entry->textContent );
+					$child_nodes = [];
+					foreach ( $entry->childNodes as $node ) {
+						$child_nodes[] = $entry->ownerDocument->saveHTML( $node );
+					}
+					$nodesArray[] = implode( '', $child_nodes );
 				}
 			} else {
 				// It's some calculated value.
