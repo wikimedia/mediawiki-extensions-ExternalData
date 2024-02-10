@@ -523,7 +523,7 @@ class EDJsonObject {
 				}
 				unset( $current_object );
 				if (
-					empty( $new_selection ) &&
+					!$new_selection &&
 					preg_match( self::RE_PARENT_LENGTH, $match[0] )
 				) {
 					if ( count( $selection ) > 1 ) {
@@ -540,7 +540,7 @@ class EDJsonObject {
 						}
 					}
 				}
-				if ( empty( $new_selection ) ) {
+				if ( !$new_selection ) {
 					$selection = false;
 					break;
 				} else {
@@ -553,7 +553,7 @@ class EDJsonObject {
 					$this->opChildSelector( $current_object, $contents, $new_selection, $create_nonexistent );
 				}
 				unset( $current_object );
-				if ( empty( $new_selection ) ) {
+				if ( !$new_selection ) {
 					$selection = false;
 					break;
 				} else {
@@ -562,7 +562,7 @@ class EDJsonObject {
 			} elseif ( preg_match( self::RE_RECURSIVE_SELECTOR, $json_path, $match ) ) {
 				$this->hasDiverged = true;
 				$this->opRecursiveSelector( $selection, $match[1], $new_selection );
-				if ( empty( $new_selection ) ) {
+				if ( !$new_selection ) {
 					$selection = false;
 					break;
 				} else {

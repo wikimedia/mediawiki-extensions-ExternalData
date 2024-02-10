@@ -41,7 +41,7 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			return null;
 		}
 		$file_contents = file_get_contents( $path );
-		if ( empty( $file_contents ) ) {
+		if ( !$file_contents ) {
 			// Show an error message if there's nothing there.
 			$this->error( 'externaldata-empty-file', $alias );
 			return null;

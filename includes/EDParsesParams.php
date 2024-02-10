@@ -289,7 +289,7 @@ END;
 	protected static function throwWarnings() {
 		// @phan-suppress-next-line PhanTypeMismatchArgumentInternal, PhanPluginNeverReturnFunction
 		set_error_handler( static function ( $errno, $errstr ) {
-			throw new Exception( $errstr );
+			throw new MWException( $errstr );
 		} );
 	}
 

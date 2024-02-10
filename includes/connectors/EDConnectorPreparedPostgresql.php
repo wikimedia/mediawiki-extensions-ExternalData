@@ -9,7 +9,7 @@
 class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 	/** @var string $connectionString PostgreSQL connection string. */
 	private $connectionString;
-	/** @var resource|false $pg Connection to PostrgreSQL server. */
+	/** @var string|\pgsql\connection $pg Connection to PostrgreSQL server. */
 	private $pg;
 	/** @var resource|false $prepared The prepared query. */
 	protected $prepared;

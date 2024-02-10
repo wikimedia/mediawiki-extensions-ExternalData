@@ -183,7 +183,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	 */
 	private static function isURLAllowed( $url, $allowed ) {
 		// this code is based on Parser::maybeMakeExternalImage().
-		if ( empty( $allowed ) ) {
+		if ( !$allowed ) {
 			return true;
 		}
 		if ( is_array( $allowed ) ) {
