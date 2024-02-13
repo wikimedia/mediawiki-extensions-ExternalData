@@ -165,6 +165,7 @@
 				[ { "__pf": "get_external_data", "type": "postgres" }, "EDConnectorPostgresql" ],
 				[ { "__pf": "get_external_data", "from": true }, "EDConnectorSql" ],
 				[ { "__pf": "get_external_data", "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": "get_external_data", "command": true }, "EDConnectorExe" ],
 				[ { "__pf": "get_external_data", "program": true }, "EDConnectorExe" ],
 				[ { "__pf": "get_external_data", "text": true }, "EDConnectorInline" ]
 			]
@@ -190,6 +191,7 @@
 				[ { "__pf": null, "type": "postgres" }, "EDConnectorPostgresql" ],
 				[ { "__pf": null, "from": true }, "EDConnectorSql" ],
 				[ { "__pf": null, "prepared": true }, "EDConnectorPreparedMysql" ],
+				[ { "__pf": null, "command": true }, "EDConnectorExe" ],
 				[ { "__pf": null, "program": true }, "EDConnectorExe" ],
 				[ { "__pf": null, "text": true }, "EDConnectorInline" ],
 				[ { "__pf": null, "source": false }, "EDConnectorDummy" ],

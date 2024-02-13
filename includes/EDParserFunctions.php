@@ -191,7 +191,12 @@ class EDParserFunctions {
 	 * @return null|string
 	 */
 	private static function emulateGetExternalData( array &$args, $title ) {
-		if ( isset( $args['source'] ) || isset( $args['url'] ) || isset( $args['text'] ) ) {
+		if (
+			isset( $args['source'] ) ||
+			isset( $args['url'] ) ||
+			isset( $args['text'] ) ||
+			isset( $args['program'] )
+		) {
 			// If {{#for_external_table:}} is called in standalone mode, there is no shared context,
 			// therefore, emulate {{#clear_external_data:}}.
 			self::actuallyClearExternalData( [] );
