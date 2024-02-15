@@ -65,5 +65,5 @@
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error: no template specified.",
 	"externaldata-no-loop-body": "Error: no loop body set as the first or the second parameter.",
-	"externaldata-getdata-badurl": "You must specify a page name in the URL;\nthe URL should look like \"{{#Special:GetData}}/<page name>\"."
+	"externaldata-getdata-badurl": "You must specify a page name in the URL. The URL should look like \"{{#Special:GetData}}/Page_name\"."
 }
