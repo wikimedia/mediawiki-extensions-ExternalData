@@ -65,5 +65,5 @@
 	"externaldata-no-local-variable": "Napaka: Nastavljena ni bila nobena lokalna spremenljivka »$1«.",
 	"externaldata-no-template": "Napaka: Določena ni bila nobena predloga.",
 	"externaldata-no-loop-body": "Napaka: nobeno telo zanke ni nastavljeno kot prvi ali drugi parameter.",
-	"externaldata-getdata-badurl": "V URL-ju morate določiti ime strani;\nURL bi moral biti videti kot »Special:RunQuery/<form name>«."
+	"externaldata-getdata-badurl": "V URL-ju morate določiti ime strani. URL bi moral biti videti kot »{{#Special:GetData}}/Page_name«."
 }

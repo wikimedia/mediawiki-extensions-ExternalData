@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Anterdc99",
 			"GuoPC",
 			"Hydra",
 			"Lakejason0",
@@ -75,5 +76,5 @@
 	"externaldata-no-local-variable": "错误：未设置本地变量“$1”。",
 	"externaldata-no-template": "错误：未指定模板。",
 	"externaldata-no-loop-body": "错误：第一个或第二个参数没有设置为循环体。",
-	"externaldata-getdata-badurl": "您必须在URL内指定页面名称，如“{{#Special:GetData}}/<页面名称>”。"
+	"externaldata-getdata-badurl": "您必须在URL内指定页面名称。如“{{#Special:GetData}}/页面名称”。"
 }

@@ -13,12 +13,15 @@
 	"externaldata-no-param-specified": "Feil: Ingen parameter «$1» oppgitt.",
 	"externaldata-param-type-error": "Feil: Parameteren $1 må være av typen $2.",
 	"externaldata-php-library-missing": "Feil: PHP-biblioteket $1, som trengs for å bruke $2, mangler.",
+	"external-data-no-suitable-connector": "Feil: Ingen passende datakilde er definert for denne spørringen mot eksterne data",
 	"externaldata-ldap-domain-not-defined": "LDAP-domenet $1 er ikke definert.",
 	"externaldata-ldap-unable-to-connect": "Klarte ikke å koble til $1",
 	"externaldata-ldap-unable-to-bind": "Kunne ikke binde til LDAP-domenet $1 med brukernavnet og passordet som er satt for dette domenet.",
 	"externaldata-ldap-base-dn-not-defined": "Grunndomenenavn ikke satt for LDAP-domenet $1.",
 	"externaldata-xml-error": "XML-feil: $1 på linje $2",
 	"externaldata-web-invalid-format": "Ugyldig format: «$1»",
+	"externaldata-invalid-format": "Feil: Ugyldig $1 ($2).",
+	"externaldata-invalid-format-explicit": "Feil: «$1» er ikke gyldig $2 ($3).",
 	"externaldata-db-incomplete-information": "Feil: Ufullstendig informasjon for database-ID-en $1 ($2).",
 	"externaldata-db-could-not-get-url": "Klarte ikke hente URL-en $1 etter {{PLURAL:$2|ett|$2}} forsøk.",
 	"externaldata-db-unknown-type": "Feil: Ukjent databasetype $1.",
@@ -28,6 +31,7 @@
 	"externaldata-db-invalid-query": "Spørringen $1 er ugyldig ($2).",
 	"externaldata-db-too-many-joins": "Antall JOIN-betingelser (nå $1) kan ikke overstige antall tabeller ($2)",
 	"externaldata-db-invalid-join": "Ugyldig JOIN-betingelse $1: hver del må inneholde et «=»-tegn.",
+	"externaldata-db-empty-rowset": "Spørringen $1 returnerte et tomt radsett.",
 	"externaldata-mongodb-unknown-collection": "Feil: Ukjent MongoDB-samling $1.",
 	"externaldata-mongodb-aggregation-failed": "MongoDB-aggregering feilet: $1",
 	"externaldata-format-unavailable": "Biblioteket $1, som kreves for å bruke formatet «$2» uten alternativet «$3», mangler.",
@@ -48,5 +52,5 @@
 	"externaldata-no-directory": "Mappa $1 er ikke definert.",
 	"externaldata-no-local-variable": "Feil: ingen lokal variabel «$1» har blitt satt.",
 	"externaldata-no-template": "Feil: ingen mal angitt.",
-	"externaldata-getdata-badurl": "Du må angi et sidenavn i URL-en;\nURL-en bør se ut som «Special:GetData/<sidenavn>»."
+	"externaldata-getdata-badurl": "Du må angi et sidenavn i URL-en. URL-en bør se ut som «{{#Special:GetData}}/Sidenavn»."
 }

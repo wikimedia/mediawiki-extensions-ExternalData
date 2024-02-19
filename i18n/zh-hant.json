@@ -4,6 +4,7 @@
 			"Kly",
 			"LNDDYL",
 			"SunAfterRain",
+			"Winston Sung",
 			"列维劳德"
 		]
 	},
@@ -68,5 +69,5 @@
 	"externaldata-no-local-variable": "錯誤：未設定本地變數「$1」。",
 	"externaldata-no-template": "錯誤：沒有指定模板。",
 	"externaldata-no-loop-body": "錯誤：第一個或第二個參數沒有設定為迴圈體。",
-	"externaldata-getdata-badurl": "您必須在URL內指定頁面名稱，如「{{#Special:GetData}}/<頁面名稱>」。"
+	"externaldata-getdata-badurl": "您必須在URL內指定頁面名稱，例如「{{#Special:GetData}}/頁面名稱」。"
 }

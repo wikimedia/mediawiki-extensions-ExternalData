@@ -3,6 +3,7 @@
 		"authors": [
 			"Dead3y3",
 			"Glavkos",
+			"NikosLikomitros",
 			"Norhorn",
 			"Omnipaedista",
 			"Protnet",
@@ -29,5 +30,5 @@
 	"externaldata-empty-file": "Δεν δύναται να ληφθεί το περιεχόμενο του αρχείου $1.",
 	"externaldata-no-file-in-directory": "Το αρχείο $1 δεν υπάρχει στον κατάλογο $1.",
 	"externaldata-no-directory": "Ο κατάλογος $1 δεν έχει καθοριστεί.",
-	"externaldata-getdata-badurl": "Πρέπει να ορίσετε το όνομα μιας σελίδας μέσα στον URL; ο URL πρέπει να μοίαζει κάπως έτσι: \"{{#Special:GetData}}/<page name>\"."
+	"externaldata-getdata-badurl": "Πρέπει να ορίσετε ένα όνομα σελίδας μέσα στο σύνδεσμο URL. Η μορφή του URL θα πρέπει να έχει την παρακάτω μορφή: \"{{#Special:GetData}}/Page_name\"."
 }

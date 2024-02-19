@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Crochet.david",
 			"DreZhsh",
 			"Florian COLLIN",
@@ -77,5 +78,5 @@
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié.",
 	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre.",
-	"externaldata-getdata-badurl": "Vous devez spécifier un nom de page dans l’URL ;\nl’URL doit être de la forme « {{#Special:GetData}}/<nom de page> »."
+	"externaldata-getdata-badurl": "Vous devez spécifier un nom de page dans l’URL. L’URL doit être de la forme « {{#Special:GetData}}/Nom_de_page »."
 }

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Alshamiri1",
+			"Amire80",
 			"Asma",
 			"DRIHEM",
 			"Imksa",
@@ -71,5 +72,5 @@
 	"externaldata-no-local-variable": "خطأ: لم يتم تعيين متغير محلي \" $1 \".",
 	"externaldata-no-template": "خطأ: لم يتم تحديد قالب.",
 	"externaldata-no-loop-body": "خطأ: لم يتم تعيين نص الحلقة كمعامل أول أو ثاني.",
-	"externaldata-getdata-badurl": "يجب عليك تحديد اسم الصفحة في عنوان URL ؛\nيجب أن يبدو عنوان URL \"Special:GetData/<page name>\"."
+	"externaldata-getdata-badurl": "يجب عليك تحديد اسم الصفحة في عنوان URL. يجب أن يبدو عنوان URL \"<bdi>{{#Special:GetData}}/Page_name</bdi>\"."
 }

@@ -70,5 +70,5 @@
 	"externaldata-no-local-variable": "שגיאה: המשתנה המקומי \"$1\" לא הוגדר.",
 	"externaldata-no-template": "שגיאה: לא הוגדרה תבנית.",
 	"externaldata-no-loop-body": "שגיאה: אין גוף לולאה שהוגדר כפרמטר הראשון או השני.",
-	"externaldata-getdata-badurl": "חובה לציין את שם הדף בכתובת;\nעל הכתובת להיות מהצורה \"Special:GetData/<שם הדף>\"."
+	"externaldata-getdata-badurl": "חובה לציין את שם הדף בכתובת;\nעל הכתובת להיות מהצורה \"{{#Special:GetData}}/שם_הדף\"."
 }

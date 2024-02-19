@@ -73,5 +73,5 @@
 	"externaldata-no-local-variable": "Fehler: Es wurde keine lokale Variable „$1“ gesetzt.",
 	"externaldata-no-template": "Fehler: keine Vorlage angegeben.",
 	"externaldata-no-loop-body": "Fehler: Kein Schleifenkörper als erster oder zweiter Parameter gesetzt.",
-	"externaldata-getdata-badurl": "Du musst einen Seitennamen in der URL angeben;\ndie URL muss wie folgt aussehen: „{{#Special:GetData}}/<page name> \"."
+	"externaldata-getdata-badurl": "Du musst einen Seitennamen in der URL angeben. Die URL muss wie folgt aussehen: „{{#Special:GetData}}/Page_name“."
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Effeietsanders",
 			"McDutchie",
 			"Romaine",
@@ -69,5 +70,5 @@
 	"externaldata-no-local-variable": "Fout: er is geen lokale variabele “$1” ingesteld.",
 	"externaldata-no-template": "Fout: geen sjabloon opgegeven.",
 	"externaldata-no-loop-body": "Fout: er is geen ‘loop body’ ingesteld als eerste of tweede parameter.",
-	"externaldata-getdata-badurl": "U moet een paginanaam in de URL vermelden; de URL moet eruit zien als “{{#Special:GetData}}/<paginanaam>”."
+	"externaldata-getdata-badurl": "U moet een paginanaam in de URL vermelden. De URL moet eruit zien als “{{#Special:GetData}}/Paginanaam”."
 }
