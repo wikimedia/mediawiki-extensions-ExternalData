@@ -373,7 +373,7 @@ class EDJsonObject {
 	 * @throws MWException
 	 */
 	private function opChildSelector( &$json_object, $contents, &$result, $create_nonexistent = false ) {
-		if ( !$contents ) {
+		if ( $contents == '' ) {
 			throw new MWException( 'empty selector' );
 		}
 		if ( is_array( $json_object ) ) {
