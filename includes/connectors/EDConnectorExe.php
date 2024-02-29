@@ -92,10 +92,8 @@ class EDConnectorExe extends EDConnectorBase {
 			$this->ignoreWarnings = $args['ignore warnings'];
 		}
 
-		// Postprocessor:
-		if ( isset( $args['preprocess'] ) && is_callable( $args['preprocess'] ) ) {
-			$this->preprocessor = $args['preprocess'];
-		}
+		// Preprocessor:
+		$this->preprocessor = self::processor( $args['preprocess'] ?? null );
 
 		// stdin.
 		if ( isset( $args['input'] ) ) {
@@ -105,7 +103,7 @@ class EDConnectorExe extends EDConnectorBase {
 				// Preprocess, if required.
 				$preprocessor = $this->preprocessor;
 				if ( $preprocessor ) {
-					$this->input = $preprocessor( $this->input );
+					$this->input = $preprocessor( $this->input, $args );
 				}
 			} else {
 				$this->error( 'externaldata-no-param-specified', $input );
@@ -125,9 +123,7 @@ class EDConnectorExe extends EDConnectorBase {
 		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
 
 		// Postprocessor.
-		if ( isset( $args['postprocess'] ) ) {
-			$this->postprocessor = $args['postprocess'];
-		}
+		$this->postprocessor = self::processor( $args['postprocess'] ?? null );
 
 		// Cache setting may be per PF call, program and the extension. More aggressive have the priority.
 		// Cache expiration.
@@ -136,7 +132,7 @@ class EDConnectorExe extends EDConnectorBase {
 		$cache_expires = max( $cache_expires_local, $cache_expires_per_program );
 		// Allow to use stale cache.
 		$allow_stale_cache = array_key_exists( 'use stale cache', $args )
-							|| array_key_exists( 'always use stale cache', $args );
+			|| array_key_exists( 'always use stale cache', $args );
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 
 		// Throttle.
@@ -145,6 +141,28 @@ class EDConnectorExe extends EDConnectorBase {
 		if ( $key && $interval ) {
 			$this->setupThrottle( $title, $key, $interval );
 		}
+	}
+
+	/**
+	 * The function analyses and converts 'preprocess' and 'postprocess' params into callables.
+	 * @param callable|array $param
+	 * @return callable|null
+	 */
+	private static function processor( $param ): ?callable {
+		$func = null;
+		if ( is_callable( $param ) ) {
+			$func = $param;
+		} elseif ( is_array( $param ) ) {
+			$callables = array_filter( $param, 'is_callable' );
+			$func = static function ( string $input, array $params ) use ( $callables ): string {
+				$output = $input;
+				foreach ( $callables as $callable ) {
+					$output = $callable( $output, $params );
+				}
+				return $output;
+			};
+		}
+		return $func;
 	}
 
 	/**
@@ -170,19 +188,13 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @return bool True on success, false if errors were encountered.
 	 */
 	public function run() {
-		$output = $this->callCached( function (
-			array $command,
-			$input,
-			array $environment
-		) use( &$exit_code, &$error )  /* $this is bound. */ {
-			return $this->callThrottled( function (
-				array $command,
-				$input,
-				array $environment
-			) use( &$exit_code, &$error ) /* $this is bound. */ {
+		$output = $this->callCached( function ( array $command, $input, array $environment )
+			use( &$exit_code, &$error )  /* $this is bound. */ {
+			return $this->callThrottled( function ( array $command, $input, array $environment )
+			use( &$exit_code, &$error ) /* $this is bound. */ {
 				$prepared = Shell::command( $command ) // Shell class demands an array of words.
-					->environment( $environment )
-					->limits( $this->limits );
+				->environment( $environment )
+				->limits( $this->limits );
 				if ( $input !== null ) {
 					$prepared = $prepared->input( $input );
 				}
@@ -206,7 +218,7 @@ class EDConnectorExe extends EDConnectorBase {
 
 				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
 					$postprocessor = $this->postprocessor;
-					if ( $output && is_callable( $postprocessor ) ) {
+					if ( $output && $postprocessor ) {
 						$output = $postprocessor( $output, $this->params );
 					}
 					return $output;
@@ -219,10 +231,7 @@ class EDConnectorExe extends EDConnectorBase {
 
 		if ( $output ) {
 			// Fill standard external variables.
-			$this->add( [
-				'__time' => [ $this->time ],
-				'__stale' => [ !$this->cacheFresh ]
-			] );
+			$this->add( [ '__time' => [ $this->time ], '__stale' => [ !$this->cacheFresh ] ] );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
 				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
@@ -369,23 +378,23 @@ class EDConnectorExe extends EDConnectorBase {
 	/**
 	 * Convert [[wikilinks]] to dot links.
 	 *
-	 * @param string $str Text to add wikilinks in dot format.
+	 * @param string $dot Text to add wikilinks in dot format.
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4dot( $str ) {
+	public static function wikilinks4dot( string $dot ): string {
 		// Process URL = "[[wikilink]]" in properties.
 		$dewikified = preg_replace_callback(
 			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
 			static function ( array $m ) {
 				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
 			},
-			$str
+			$dot
 		);
 		// Process [[wikilink]] in nodes.
 		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
 			$props = isset( $m[2] ) ? $m[2] : '';
 			return '"' . $m[1]
-				 . '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
+				. '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
 		}, $dewikified );
 		return $dewikified;
 	}
@@ -393,15 +402,15 @@ class EDConnectorExe extends EDConnectorBase {
 	/**
 	 * Convert [[wikilinks]] to UML links.
 	 *
-	 * @param string $str Text to add wikilinks in UML format.
+	 * @param string $uml Text to add wikilinks in UML format.
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4uml( $str ) {
+	public static function wikilinks4uml( string $uml ): string {
 		// Process [[wikilink]] in nodes.
 		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
 			$alias = isset( $m[2] ) ? $m[2] : $m[1];
 			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
-		}, $str );
+		}, $uml );
 	}
 
 	/**
@@ -410,9 +419,30 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @param string $xml XML to extract SVG from.
 	 * @return string The stripped SVG.
 	 */
-	public static function innerXML( $xml ) {
+	public static function innerXML( string $xml ): string {
 		$dom = new DOMDocument();
 		$dom->loadXML( $xml );
+		return $dom->saveHTML();
+	}
+
+	/**
+	 * Set SVG size, if not set.
+	 * @param string $svg
+	 * @param array $params
+	 * @return string
+	 */
+	public static function sizeSVG( string $svg, array $params ): string {
+		$dom = new DOMDocument();
+		$dom->loadXML( $svg );
+		$root = $dom->documentElement;
+		foreach ( [ 'width', 'height' ] as $attr ) {
+			if ( !$root->hasAttribute( $attr ) && isset( $params[$attr] ) ) {
+				$root->setAttribute( $attr, $params[$attr] );
+			}
+		}
+		if ( !$root->hasAttribute( 'viewport' ) && isset( $params['width'] ) && isset( $params['height'] ) ) {
+			$root->setAttribute( 'viewport', "0 0 {$params['width']} {$params['height']}" );
+		}
 		return $dom->saveHTML();
 	}
 }
