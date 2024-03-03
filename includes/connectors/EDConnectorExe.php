@@ -27,16 +27,10 @@ class EDConnectorExe extends EDConnectorBase {
 	private $command;
 	/** @var array $params Parameters to $command. */
 	private $params;
-	/** @var string $input This will be fed to program's standard input. */
-	private $input;
 	/** @var ?string $tempFile The program will send its output to a temporary file rather than stdout. */
 	private $tempFile;
 	/** @var bool $ignoreWarnings Ignore program warnings in stderr if exit code is 0. */
 	private $ignoreWarnings = false;
-	/** @var ?callable $preprocessor A preprocessor for program input. */
-	private $preprocessor;
-	/** @var ?callable $postprocessor A postprocessor for program output. */
-	private $postprocessor;
 
 	/** @const int VERSION_TTL Number of seconds that software version is to be cached. */
 	private const VERSION_TTL = 3600; // one hour.
@@ -92,24 +86,6 @@ class EDConnectorExe extends EDConnectorBase {
 			$this->ignoreWarnings = $args['ignore warnings'];
 		}
 
-		// Preprocessor:
-		$this->preprocessor = self::processor( $args['preprocess'] ?? null );
-
-		// stdin.
-		if ( isset( $args['input'] ) ) {
-			$input = $args['input'];
-			if ( isset( $args[$input] ) ) {
-				$this->input = $args[$input];
-				// Preprocess, if required.
-				$preprocessor = $this->preprocessor;
-				if ( $preprocessor ) {
-					$this->input = $preprocessor( $this->input, $args );
-				}
-			} else {
-				$this->error( 'externaldata-no-param-specified', $input );
-			}
-		}
-
 		// Get program's output from a temporary file rather than standard output.
 		global $wgTmpDirectory;
 		if ( $wgTmpDirectory && isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
@@ -121,9 +97,6 @@ class EDConnectorExe extends EDConnectorBase {
 		}
 
 		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
-
-		// Postprocessor.
-		$this->postprocessor = self::processor( $args['postprocess'] ?? null );
 
 		// Cache setting may be per PF call, program and the extension. More aggressive have the priority.
 		// Cache expiration.
@@ -141,28 +114,6 @@ class EDConnectorExe extends EDConnectorBase {
 		if ( $key && $interval ) {
 			$this->setupThrottle( $title, $key, $interval );
 		}
-	}
-
-	/**
-	 * The function analyses and converts 'preprocess' and 'postprocess' params into callables.
-	 * @param callable|array $param
-	 * @return callable|null
-	 */
-	private static function processor( $param ): ?callable {
-		$func = null;
-		if ( is_callable( $param ) ) {
-			$func = $param;
-		} elseif ( is_array( $param ) ) {
-			$callables = array_filter( $param, 'is_callable' );
-			$func = static function ( string $input, array $params ) use ( $callables ): string {
-				$output = $input;
-				foreach ( $callables as $callable ) {
-					$output = $callable( $output, $params );
-				}
-				return $output;
-			};
-		}
-		return $func;
 	}
 
 	/**
@@ -188,13 +139,13 @@ class EDConnectorExe extends EDConnectorBase {
 	 * @return bool True on success, false if errors were encountered.
 	 */
 	public function run() {
-		$output = $this->callCached( function ( array $command, $input, array $environment )
-			use( &$exit_code, &$error )  /* $this is bound. */ {
-			return $this->callThrottled( function ( array $command, $input, array $environment )
-			use( &$exit_code, &$error ) /* $this is bound. */ {
+		$output = $this->callCached( function ( array $command, ?string $input, array $environment )
+		use ( &$exit_code, &$error ) /* $this is bound. */ {
+			return $this->callThrottled( function ( array $command, ?string $input, array $environment )
+			use ( &$exit_code, &$error ) /* $this is bound. */ {
 				$prepared = Shell::command( $command ) // Shell class demands an array of words.
 				->environment( $environment )
-				->limits( $this->limits );
+					->limits( $this->limits );
 				if ( $input !== null ) {
 					$prepared = $prepared->input( $input );
 				}
@@ -253,44 +204,6 @@ class EDConnectorExe extends EDConnectorBase {
 				$this->error( 'externaldata-exe-error', $this->program, $exit_code, $error );
 			}
 			return false;
-		}
-	}
-
-	/**
-	 * Register tags for backward compatibility with other extensions.
-	 *
-	 * @param Parser $parser
-	 */
-	public static function registerTags( Parser $parser ) {
-		foreach ( self::$sources as $program => $config ) {
-			if ( !isset( $config['command'] ) || !isset( $config['tag'] ) ) {
-				continue; // not a program or no tag emulation mode for it.
-			}
-			$parser->setHook(
-				$config['tag'],
-				static function ( $inner, array $attributes, Parser $parser, PPFrame $_ ) use ( $program, $config ) {
-					$params = $attributes;
-					$params[$config['input']] = $inner;
-					$params['program'] = $program;
-					$id = isset( $params['id'] ) ? $params['id'] : 'output';
-					$params['data'] = "$id=__text";
-					$params['format'] = 'text';
-					$params = self::supplementParams( $params );
-					$title = $parser->getTitle();
-					if ( $title ) {
-						// @phan-suppress-next-line SecurityCheck-ReDoS
-						$connector = new self( $params, $title );
-						if ( !$connector->errors() ) {
-							if ( $connector->run() ) {
-								$values = $connector->result();
-								return [ $values[$id][0], 'markerType' => 'nowiki' ];
-							}
-						}
-						return EDParserFunctions::formatErrorMessages( $connector->errors() );
-					}
-					return false;
-				}
-			);
 		}
 	}
 
@@ -369,80 +282,5 @@ class EDConnectorExe extends EDConnectorBase {
 			}
 			$software[$name] = $version ?: '(unknown)';
 		}
-	}
-
-	/*
-	 * Pre- and postprocessing utilities.
-	 */
-
-	/**
-	 * Convert [[wikilinks]] to dot links.
-	 *
-	 * @param string $dot Text to add wikilinks in dot format.
-	 * @return string dot with links.
-	 */
-	public static function wikilinks4dot( string $dot ): string {
-		// Process URL = "[[wikilink]]" in properties.
-		$dewikified = preg_replace_callback(
-			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
-			static function ( array $m ) {
-				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
-			},
-			$dot
-		);
-		// Process [[wikilink]] in nodes.
-		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
-			$props = isset( $m[2] ) ? $m[2] : '';
-			return '"' . $m[1]
-				. '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
-		}, $dewikified );
-		return $dewikified;
-	}
-
-	/**
-	 * Convert [[wikilinks]] to UML links.
-	 *
-	 * @param string $uml Text to add wikilinks in UML format.
-	 * @return string dot with links.
-	 */
-	public static function wikilinks4uml( string $uml ): string {
-		// Process [[wikilink]] in nodes.
-		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
-			$alias = isset( $m[2] ) ? $m[2] : $m[1];
-			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
-		}, $uml );
-	}
-
-	/**
-	 * Strip SVG from surrounding XML.
-	 *
-	 * @param string $xml XML to extract SVG from.
-	 * @return string The stripped SVG.
-	 */
-	public static function innerXML( string $xml ): string {
-		$dom = new DOMDocument();
-		$dom->loadXML( $xml );
-		return $dom->saveHTML();
-	}
-
-	/**
-	 * Set SVG size, if not set.
-	 * @param string $svg
-	 * @param array $params
-	 * @return string
-	 */
-	public static function sizeSVG( string $svg, array $params ): string {
-		$dom = new DOMDocument();
-		$dom->loadXML( $svg );
-		$root = $dom->documentElement;
-		foreach ( [ 'width', 'height' ] as $attr ) {
-			if ( !$root->hasAttribute( $attr ) && isset( $params[$attr] ) ) {
-				$root->setAttribute( $attr, $params[$attr] );
-			}
-		}
-		if ( !$root->hasAttribute( 'viewport' ) && isset( $params['width'] ) && isset( $params['height'] ) ) {
-			$root->setAttribute( 'viewport', "0 0 {$params['width']} {$params['height']}" );
-		}
-		return $dom->saveHTML();
 	}
 }

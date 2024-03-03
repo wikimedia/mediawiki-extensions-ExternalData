@@ -40,7 +40,11 @@ class ExternalDataHooks {
 			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );
 		}
 
-		EDConnectorExe::registerTags( $parser );
+		// Register tags for backward compatibility with other extensions.
+		foreach ( EDConnectorBase::emulatedTags() as $tag => $function ) {
+			$parser->setHook( $tag, $function );
+			// @todo: add code for Parsoid.
+		}
 
 		return true; // always return true, in order not to stop MW's hook processing!
 	}

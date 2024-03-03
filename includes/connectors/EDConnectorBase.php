@@ -52,6 +52,14 @@ abstract class EDConnectorBase {
 	private $mappings = [];
 	/** @var array Data filters. */
 	protected $filters = [];
+
+	/** @var string $input This will be fed to program's standard input. */
+	protected $input;
+	/** @var ?callable $preprocessor A preprocessor for program input. */
+	private $preprocessor;
+	/** @var ?callable $postprocessor A postprocessor for program output. */
+	protected $postprocessor;
+
 	/** @var array Fetched data before filtering and mapping. */
 	protected $values = [];
 
@@ -93,13 +101,56 @@ abstract class EDConnectorBase {
 
 		// Filters.
 		$this->filters = array_key_exists( 'filters', $args ) && $args['filters']
-					   ? self::paramToArray( $args['filters'], true, false )
-					   : [];
+			? self::paramToArray( $args['filters'], true, false )
+			: [];
+
+		// Preprocessor:
+		$this->preprocessor = self::processor( $args['preprocess'] ?? null );
+
+		// stdin.
+		if ( isset( $args['input'] ) ) {
+			$input = $args['input'];
+			if ( isset( $args[$input] ) ) {
+				$this->input = $args[$input];
+				// Preprocess, if required.
+				$preprocessor = $this->preprocessor;
+				if ( $preprocessor ) {
+					$this->input = $preprocessor( $this->input, $args );
+				}
+			} else {
+				$this->error( 'externaldata-no-param-specified', $input );
+			}
+		}
+
+		// Postprocessor.
+		$this->postprocessor = self::processor( $args['postprocess'] ?? null );
 
 		// Whether to suppress error messages.
 		if ( array_key_exists( 'suppress error', $args ) || array_key_exists( 'hidden', $args ) ) {
 			$this->suppressError = true;
 		}
+	}
+
+	/**
+	 * The function analyses and converts 'preprocess' and 'postprocess' params into callables.
+	 * @param callable|array $param
+	 * @return callable|null
+	 */
+	private static function processor( $param ): ?callable {
+		$func = null;
+		if ( is_callable( $param ) ) {
+			$func = $param;
+		} elseif ( is_array( $param ) ) {
+			$callables = array_filter( $param, 'is_callable' );
+			$func = static function ( string $input, array $params ) use ( $callables ): string {
+				$output = $input;
+				foreach ( $callables as $callable ) {
+					$output = $callable( $output, $params );
+				}
+				return $output;
+			};
+		}
+		return $func;
 	}
 
 	/**
@@ -235,7 +286,7 @@ abstract class EDConnectorBase {
 		// Check if the required parameters are present and provide default values for the optional ones.
 		foreach ( $defaults as $key => $value ) {
 			if ( is_string( $key ) && !isset( $parameters[$key] ) ) { // no value provided.
-					$parameters[$key] = $value;
+				$parameters[$key] = $value;
 			}
 		}
 		return $parameters;
@@ -252,7 +303,7 @@ abstract class EDConnectorBase {
 		// Check if the required parameters are present and provide default values for the optional ones.
 		foreach ( $defaults as $key => $value ) {
 			if ( is_numeric( $key ) && !isset( $parameters[$value] ) ) {
-					$this->error( 'externaldata-no-param-specified', $key );
+				$this->error( 'externaldata-no-param-specified', $key );
 			}
 		}
 		return $parameters;
@@ -530,5 +581,132 @@ abstract class EDConnectorBase {
 	 */
 	public function suppressError() {
 		return $this->suppressError;
+	}
+
+	/**
+	 * Get a list of data sources emulating tags.
+	 * @return array[]
+	 */
+	public static function emulatedTags(): array {
+		$tags = [];
+		foreach ( self::$sources as $source => $config ) {
+			if ( isset( $config['tag'] ) ) {
+				$tag = $config['tag'];
+				$tags[$tag] = self::tagFunction( $config + [ 'source' => $source ] );
+				// @todo: is 'program' really necessary?
+			}
+		}
+		return $tags;
+	}
+
+	/**
+	 * Create a parser function implementing a tag.
+	 * @param array $config
+	 * @return callable
+	 */
+	private static function tagFunction( array $config ): callable {
+		return static function (
+			string $inner,
+			array $attributes,
+			Parser $parser,
+			PPFrame $_
+		) use ( $config ) {
+			$params = $attributes;
+			$params[$config['input']] = $inner;
+			$params['source'] = $config['source'];
+			$id = isset( $params['id'] ) ? $params['id'] : 'output';
+			$params['data'] = "$id=__text";
+			$params['format'] = 'text';
+			$params = self::supplementParams( $params );
+			$title = $parser->getTitle();
+			if ( $title ) {
+				// @phan-suppress-next-line SecurityCheck-ReDoS
+				$connector = self::getConnector( 'get_external_data', $params, $title );
+				if ( !$connector->errors() ) {
+					if ( $connector->run() ) {
+						$values = $connector->result();
+						// @todo: other markerTypes?
+						return [ $values[$id][0], 'markerType' => 'nowiki' ];
+					}
+				}
+				return EDParserFunctions::formatErrorMessages( $connector->errors() );
+			}
+			return false;
+		};
+	}
+
+	/*
+	 * Pre- and postprocessing utilities.
+	 */
+
+	/**
+	 * Convert [[wikilinks]] to dot links.
+	 *
+	 * @param string $dot Text to add wikilinks in dot format.
+	 * @return string dot with links.
+	 */
+	public static function wikilinks4dot( string $dot ): string {
+		// Process URL = "[[wikilink]]" in properties.
+		$dewikified = preg_replace_callback(
+			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
+			static function ( array $m ) {
+				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
+			},
+			$dot
+		);
+		// Process [[wikilink]] in nodes.
+		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
+			$props = isset( $m[2] ) ? $m[2] : '';
+			return '"' . $m[1]
+				. '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
+		}, $dewikified );
+		return $dewikified;
+	}
+
+	/**
+	 * Convert [[wikilinks]] to UML links.
+	 *
+	 * @param string $uml Text to add wikilinks in UML format.
+	 * @return string dot with links.
+	 */
+	public static function wikilinks4uml( string $uml ): string {
+		// Process [[wikilink]] in nodes.
+		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
+			$alias = isset( $m[2] ) ? $m[2] : $m[1];
+			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
+		}, $uml );
+	}
+
+	/**
+	 * Strip SVG from surrounding XML.
+	 *
+	 * @param string $xml XML to extract SVG from.
+	 * @return string The stripped SVG.
+	 */
+	public static function innerXML( string $xml ): string {
+		$dom = new DOMDocument();
+		$dom->loadXML( $xml );
+		return $dom->saveHTML();
+	}
+
+	/**
+	 * Set SVG size, if not set.
+	 * @param string $svg
+	 * @param array $params
+	 * @return string
+	 */
+	public static function sizeSVG( string $svg, array $params ): string {
+		$dom = new DOMDocument();
+		$dom->loadXML( $svg );
+		$root = $dom->documentElement;
+		foreach ( [ 'width', 'height' ] as $attr ) {
+			if ( !$root->hasAttribute( $attr ) && isset( $params[$attr] ) ) {
+				$root->setAttribute( $attr, $params[$attr] );
+			}
+		}
+		if ( !$root->hasAttribute( 'viewport' ) && isset( $params['width'] ) && isset( $params['height'] ) ) {
+			$root->setAttribute( 'viewport', "0 0 {$params['width']} {$params['height']}" );
+		}
+		return $dom->saveHTML();
 	}
 }
