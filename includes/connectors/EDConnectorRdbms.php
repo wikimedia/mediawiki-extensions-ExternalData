@@ -34,8 +34,9 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 		try {
 			if ( class_exists( 'Wikimedia\Rdbms\DatabaseFactory' ) ) {
 				// MW 1.39+
-				// @phan-suppress-next-line PhanUndeclaredClass Different MW versions.
+				// @phan-suppress-next-line PhanUndeclaredClass, PhanUndeclaredClassMethod Different MW versions.
 				$factory = new Wikimedia\Rdbms\DatabaseFactory( [] );
+				// @phan-suppress-next-line PhanUndeclaredClassMethod Different MW versions.
 				$this->database = $factory->create( $this->type, $this->credentials );
 			} else {
 				// MW 1.38-

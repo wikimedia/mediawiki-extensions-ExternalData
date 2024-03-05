@@ -88,6 +88,7 @@ class EDParserRar extends EDParserArchive {
 	 */
 	protected function read( $file ) {
 		try {
+			// @phan-suppress-next-line PhanParamTooFewInternal This might actually be a bug in Phan.
 			$entry = $this->archive->getEntry( $file );
 		// @phan-suppress-next-line PhanUndeclaredClassMethod,PhanUndeclaredClassCatch Optional extension.
 		} catch ( RarException $e ) {
@@ -101,7 +102,7 @@ class EDParserRar extends EDParserArchive {
 		}
 		if ( !$entry->isDirectory() ) {
 			$temp = "$this->tmp/$file";
-			$result = $entry->extract( null, $temp );
+			$result = $entry->extract( '', $temp );
 			if ( $result === true ) {
 				$contents = file_get_contents( $temp );
 				unlink( $temp );

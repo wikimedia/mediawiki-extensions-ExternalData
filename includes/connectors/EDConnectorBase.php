@@ -5,6 +5,8 @@
  * @author Alexander Mashin
  *
  */
+use MediaWiki\MediaWikiServices;
+
 abstract class EDConnectorBase {
 	use EDParsesParams;	// Needs paramToArray().
 
@@ -59,6 +61,8 @@ abstract class EDConnectorBase {
 	private $preprocessor;
 	/** @var ?callable $postprocessor A postprocessor for program output. */
 	protected $postprocessor;
+	/** @var array $communicate Data to be passed from the preprocessor to the postprocesor. */
+	private static $communicate = [];
 
 	/** @var array Fetched data before filtering and mapping. */
 	protected $values = [];
@@ -640,19 +644,55 @@ abstract class EDConnectorBase {
 	 */
 
 	/**
-	 * Convert [[wikilinks]] to dot links.
+	 * Convert [[wikilinks]] to dot links, including images and CSS.
 	 *
 	 * @param string $dot Text to add wikilinks in dot format.
 	 * @return string dot with links.
 	 */
 	public static function wikilinks4dot( string $dot ): string {
 		// Process URL = "[[wikilink]]" in properties.
+		$attrs = implode( '|', [
+			'edgehref', 'edgeURL', 'headhref', 'headURL', 'labelhref', 'labelURL', 'tailhref', 'tailURL', 'href', 'URL'
+		] );
 		$dewikified = preg_replace_callback(
-			'/(?<attr>URL|href)\s*=\s*"\[\[(?<url>[^|<>\]]+)]]"/',
+			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[(?<url>[^|<>\]"]+)]]"/',
 			static function ( array $m ) {
 				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
 			},
 			$dot
+		);
+		// Process image or shapefile = "[[File:somefile.png|150px]]" in properties.
+		$attrs = implode( '|', [
+			'image', 'shapefile', 'src'
+		] );
+		$repo = MediaWikiServices::getInstance()->getRepoGroup();
+		$dewikified = preg_replace_callback(
+			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[[^:|\]]+:(?<url>[^<>\]"]+)]]"/i',
+			static function ( array $m ) use ( $repo ) {
+				$args = array_map( 'trim', explode( '|', $m['url'] ) );
+				$name = array_shift( $args );
+				$file = $repo->findFile( $name );
+				$options = [];
+				foreach ( $args as $arg ) {
+					if ( strpos( '=', $arg ) !== false ) {
+						[ $key, $val ] = array_map( 'trim', explode( '=', $arg, 2 ) );
+					} else {
+						$key = isset( $options['width'] ) ? 'height' : 'width'; // first is width, second is height.
+						$val = trim( $arg );
+					}
+					$options[ $key ] = (int)$val;
+				}
+				global $wgDefaultUserOptions, $wgThumbLimits;
+				// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
+				$options['width'] = $options['width'] ?? $wgThumbLimits[$wgDefaultUserOptions['thumbsize']];
+				$thumb = $file->transform( $options );
+				$path = $thumb->getLocalCopyPath();
+				// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
+				self::$communicate['urls'] = self::$communicate['urls'] ?? [];
+				self::$communicate['urls'][$path] = $thumb->getUrl();
+				return $m['attr'] . ' = "' . $path . '"';
+			},
+			$dewikified
 		);
 		// Process [[wikilink]] in nodes.
 		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
@@ -686,6 +726,23 @@ abstract class EDConnectorBase {
 	public static function innerXML( string $xml ): string {
 		$dom = new DOMDocument();
 		$dom->loadXML( $xml );
+		return $dom->saveHTML();
+	}
+
+	/**
+	 * Replace local image paths with URLs in SVG.
+	 * @param string $svg SVG to process
+	 * @return string Prcessed SVG
+	 */
+	public static function filepathToUrl( string $svg ): string {
+		$dom = new DOMDocument();
+		$dom->loadXML( preg_replace( '/(?<!<!)--(?!>)/', '—', html_entity_decode( $svg ) ) );
+		$attr = 'xlink:href';
+		foreach ( $dom->getElementsByTagName( 'image' ) as $image ) {
+			$filepath = $image->getAttribute( $attr );
+			$url = ( self::$communicate['urls'] ?? [] )[$filepath] ?? '';
+			$image->setAttribute( $attr, $url );
+		}
 		return $dom->saveHTML();
 	}
 

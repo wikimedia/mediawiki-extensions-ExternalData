@@ -55,9 +55,9 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 *
 	 * @return array|null MongoDB\Driver\Cursor
 	 */
-	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
+	protected function find( $collection, array $filter, array $columns, array $sort, int $limit ): ?array {
 		try {
-			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
 			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
@@ -76,7 +76,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 */
 	protected function aggregate( $collection, array $aggregate ) {
 		try {
-			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
 			return $collection->aggregate( $aggregate, [ 'useCursor' => true ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
@@ -88,7 +88,7 @@ class EDConnectorMongodb7 extends EDConnectorMongodb {
 	 * Disconnect from MongoDB.
 	 */
 	protected function disconnect() {
-		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
-		$this->mongoClient->close();
+		// There is no method to close MongoDB connection in this driver.
+		// @see https://github.com/mongodb/mongo-php-driver/issues/393#issuecomment-245546480.
 	}
 }

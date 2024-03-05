@@ -175,7 +175,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return array MongoCursor|MongoDB\Driver\Cursor
 	 */
-	abstract protected function find( $collection, array $filter, array $columns, array $sort, $limit );
+	abstract protected function find( $collection, array $filter, array $columns, array $sort, int $limit );
 
 	/**
 	 * Run a aggregation query against MongoDB $collection.

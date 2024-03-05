@@ -73,7 +73,7 @@ class EDConnectorMongodb5 extends EDConnectorMongodb {
 	 *
 	 * @return array MongoCursor
 	 */
-	protected function find( $collection, array $filter, array $columns, array $sort, $limit ) {
+	protected function find( $collection, array $filter, array $columns, array $sort, int $limit ) {
 		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 		return iterator_to_array( $collection->find( $filter, $columns )->sort( $sort )->limit( $limit ) );
 	}
