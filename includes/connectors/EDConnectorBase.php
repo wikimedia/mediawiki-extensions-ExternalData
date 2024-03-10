@@ -672,9 +672,12 @@ abstract class EDConnectorBase {
 				$args = array_map( 'trim', explode( '|', $m['url'] ) );
 				$name = array_shift( $args );
 				$file = $repo->findFile( $name );
+				if ( !$file ) {
+					return $m[0];
+				}
 				$options = [];
 				foreach ( $args as $arg ) {
-					if ( strpos( '=', $arg ) !== false ) {
+					if ( strpos( $arg, '=' ) !== false ) {
 						[ $key, $val ] = array_map( 'trim', explode( '=', $arg, 2 ) );
 					} else {
 						$key = isset( $options['width'] ) ? 'height' : 'width'; // first is width, second is height.
