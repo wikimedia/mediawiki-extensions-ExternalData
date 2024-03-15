@@ -672,27 +672,34 @@ abstract class EDConnectorBase {
 				$args = array_map( 'trim', explode( '|', $m['url'] ) );
 				$name = array_shift( $args );
 				$file = $repo->findFile( $name );
-				if ( !$file ) {
-					return $m[0];
-				}
-				$options = [];
-				foreach ( $args as $arg ) {
-					if ( strpos( $arg, '=' ) !== false ) {
-						[ $key, $val ] = array_map( 'trim', explode( '=', $arg, 2 ) );
-					} else {
-						$key = isset( $options['width'] ) ? 'height' : 'width'; // first is width, second is height.
-						$val = trim( $arg );
+				$path = false;
+				$url = false;
+				if ( $file ) {
+					$options = [];
+					foreach ( $args as $arg ) {
+						if ( strpos( $arg, '=' ) !== false ) {
+							[ $key, $val ] = array_map( 'trim', explode( '=', $arg, 2 ) );
+						} else {
+							$key = isset( $options['width'] ) ? 'height' : 'width'; // first is width, second is height.
+							$val = trim( $arg );
+						}
+						$options[$key] = (int)$val;
 					}
-					$options[ $key ] = (int)$val;
+					global $wgDefaultUserOptions, $wgThumbLimits;
+					// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
+					$options['width'] = $options['width'] ?? $wgThumbLimits[$wgDefaultUserOptions['thumbsize']];
+					$thumb = $file->transform( $options );
+					$path = $thumb->getLocalCopyPath();
+					$url = $thumb->getUrl();
 				}
-				global $wgDefaultUserOptions, $wgThumbLimits;
-				// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
-				$options['width'] = $options['width'] ?? $wgThumbLimits[$wgDefaultUserOptions['thumbsize']];
-				$thumb = $file->transform( $options );
-				$path = $thumb->getLocalCopyPath();
+				// If there is no local file, feed GraphViz something so that it does not break.
+				// phpcs:ignore
+				global $IP;
+				$path = $path ?: "$IP/resources/assets/mediawiki.png";
+				$url = $url ?: "/resources/assets/mediawiki.png";
 				// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
 				self::$communicate['urls'] = self::$communicate['urls'] ?? [];
-				self::$communicate['urls'][$path] = $thumb->getUrl();
+				self::$communicate['urls'][$path] = $url;
 				return $m['attr'] . ' = "' . $path . '"';
 			},
 			$dewikified
