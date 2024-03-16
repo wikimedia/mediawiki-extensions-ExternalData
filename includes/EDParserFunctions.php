@@ -270,7 +270,7 @@ class EDParserFunctions {
 	 * @param array|string $value
 	 * @return string
 	 */
-	private static function serialise( $value ) {
+	private static function serialise( $value ): string {
 		if ( is_array( $value ) ) {
 			$serialised = [];
 			foreach ( $value as $key => $val ) {
@@ -288,7 +288,7 @@ class EDParserFunctions {
 	 * @param string $body
 	 * @return string
 	 */
-	private static function actuallyForExternalTableFirst( $body ) {
+	private static function actuallyForExternalTableFirst( $body ): string {
 		$macros = self::getMacros( $body );
 		$num_loops = self::numLoops( array_map( static function ( $set ) {
 			return $set['var'];
@@ -315,17 +315,23 @@ class EDParserFunctions {
 	 * Actually render the #for_external_table parser function. The "template" is passed as the second parameter.
 	 * @param Parser $parser
 	 * @param PPNode_Hash_Tree $tree
-	 * @param array $defaults
+	 * @param array $defaults Default values of {{{…|def}}} ED variables.
+	 * @param array $template_args Arguments {{{…}}} that may have come from outer template.
 	 * @return string
 	 */
-	private static function actuallyForExternalTableSecond( Parser $parser, PPNode_Hash_Tree $tree, array $defaults ) {
+	private static function actuallyForExternalTableSecond(
+		Parser $parser,
+		PPNode_Hash_Tree $tree,
+		array $defaults,
+		array $template_args
+	): string {
 		$variables = array_keys( self::getAllValues() );
 		$num_loops = self::numLoops( $variables );
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop, $defaults ){
 				return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ?? '' ) );
-			}, $variables ) );
+			}, $variables ) ) + $template_args;
 			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
 			$loops[] = $row_as_frame->expand( $tree ); // substitution of {{{var}}} happens here.
 		}
@@ -339,7 +345,7 @@ class EDParserFunctions {
 	 * @param array $args
 	 * @return string
 	 */
-	public static function doForExternalTable( Parser $parser, PPFrame $frame, array $args ) {
+	public static function doForExternalTable( Parser $parser, PPFrame $frame, array $args ): string {
 		if ( !$args[0] ) {
 			// {{#for_external_table:|loop body}}
 			if ( !isset( $args[1] ) ) {
@@ -384,7 +390,7 @@ class EDParserFunctions {
 		}
 
 		return $frame->expand( $second
-			? self::actuallyForExternalTableSecond( $parser, $body, $defaults )
+			? self::actuallyForExternalTableSecond( $parser, $body, $defaults, $frame->getArguments() )
 			: self::actuallyForExternalTableFirst( $body )
 		);
 	}
