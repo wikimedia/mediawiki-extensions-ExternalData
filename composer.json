@@ -8,7 +8,7 @@
 		"symfony/css-selector": "~5.1"
 	},
 	"require-dev": {
-		"mediawiki/mediawiki-codesniffer": "41.0.0",
+		"mediawiki/mediawiki-codesniffer": "43.0.0",
 		"mediawiki/mediawiki-phan-config": "0.14.0",
 		"mediawiki/minus-x": "1.1.1",
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
@@ -46,7 +46,8 @@
 		"optimize-autoloader": true,
 		"prepend-autoloader": false,
 		"allow-plugins": {
-			"composer/installers": true
+			"composer/installers": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	}
 }

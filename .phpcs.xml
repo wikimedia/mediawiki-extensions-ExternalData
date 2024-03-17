@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki">
+		<exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found" />
+		<exclude name="Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition" />
 		<!-- Until PHPCS sorts itself out -->
 		<properties>
 			<property name="allowedPrefixes" type="array">

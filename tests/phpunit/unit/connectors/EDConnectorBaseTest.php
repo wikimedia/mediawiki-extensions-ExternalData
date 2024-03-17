@@ -197,7 +197,7 @@ class EDConnectorBaseTest extends EDTestBase {
 
 		$cases['Lua table'] = [
 			[
-				'data' => [ 'name' => 'Name' , 'time' => '__time' ],
+				'data' => [ 'name' => 'Name', 'time' => '__time' ],
 				'filters' => [ 'name' => 'Alexander Mashin' ],
 				'source' => 'some source'
 			],

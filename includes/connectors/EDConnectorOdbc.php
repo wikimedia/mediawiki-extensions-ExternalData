@@ -216,8 +216,8 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 */
 	protected function getQuery() {
 		return strtr( static::TEMPLATE /* late binding */, [
-			'$columns' => static::listColumns( $this->columns ),   // late binding
-			'$from' => static::from( $this->tables, $this->joins ),    // late binding
+			'$columns' => static::listColumns( $this->columns ), // late binding
+			'$from' => static::from( $this->tables, $this->joins ), // late binding
 			'$where' => $this->conditions ? "\nWHERE {$this->conditions}" : '',
 			'$group' => $this->sqlOptions['GROUP BY'] ? "\nGROUP BY {$this->sqlOptions['GROUP BY']}" : '',
 			'$having' => $this->sqlOptions['HAVING'] ? "\nHAVING {$this->sqlOptions['HAVING']}" : '',
