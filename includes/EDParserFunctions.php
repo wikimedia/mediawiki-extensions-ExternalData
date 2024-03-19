@@ -201,7 +201,7 @@ class EDParserFunctions {
 			// therefore, emulate {{#clear_external_data:}}.
 			self::actuallyClearExternalData( [] );
 			// Emulate {{#get_external_data:}}.
-			$result = self::fetch( $title, null, $args );
+			$result = self::fetch( $title, 'get_external_data', $args );
 			if ( $result !== null ) {
 				// There have been errors while fetching data.
 				return $result;

@@ -85,6 +85,10 @@ class EDConnectorLdap extends EDConnectorBase {
 			return false;
 		}
 		$external_values = $this->searchLDAP();
+		if ( !is_array( $external_values ) ) {
+			$this->error( 'externaldata-ldap-unable-to-connect', $this->domain );
+			return false;
+		}
 		$result = [];
 		foreach ( $external_values as $i => $row ) {
 			if ( !is_array( $row ) ) {
@@ -151,10 +155,17 @@ class EDConnectorLdap extends EDConnectorBase {
 	/**
 	 * Search LDAP.
 	 *
-	 * @return array Search results.
+	 * @return array|string Search results or error string.
 	 */
 	private function searchLDAP() {
-		$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings() ) );
+		self::throwWarnings();
+		try {
+			$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings() ) );
+		} catch ( MWException $e ) {
+			return $e->getMessage();
+		} finally {
+			self::stopThrowingWarnings();
+		}
 		$results = ldap_get_entries( $this->connection, $sr );
 		return $results;
 	}
