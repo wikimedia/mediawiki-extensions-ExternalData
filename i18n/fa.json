@@ -3,12 +3,13 @@
 		"authors": [
 			"Armin1392",
 			"Jeeputer",
-			"Mjbmr"
+			"Mjbmr",
+			"Ebraminio"
 		]
 	},
 	"getdata": "دریافت اطلاعات",
 	"externaldata-desc": "اجازه برای بازیابی اطلاعات ساخته شده از یوآرال‌های خارجی، پایگاه‌های اطلاعاتی و دیگر منابع",
-	"externaldata-no-param-specified": "خطا: هیچ پارامتر \"$1\" تعیین نشده‌است.",
+	"externaldata-no-param-specified": "خطا: هیچ پارامتر \"$1\" تعیین نشده است.",
 	"externaldata-ldap-unable-to-connect": "قادر نبودن اتصال به $1",
 	"externaldata-xml-error": "خطای ایکس‌ام‌ال: $1 در خط $2",
 	"externaldata-web-invalid-format": "فرمت نامعتبر: \"$1\".",
