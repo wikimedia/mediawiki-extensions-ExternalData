@@ -87,7 +87,8 @@ class ExternalDataHooks {
 	 * @return void
 	 */
 	public static function onLoadExtensionSchemaUpdates( DatabaseUpdater $updater ) {
+		$dbType = $updater->getDB()->getType();
 		// Create ed_url_cache table. The obsolete setting $edgCacheTable is ignored.
-		$updater->addExtensionTable( 'ed_url_cache', __DIR__ . '/../sql/ExternalData.sql' );
+		$updater->addExtensionTable( 'ed_url_cache', __DIR__ . "/../sql/$dbType/ExternalData.sql" );
 	}
 }
