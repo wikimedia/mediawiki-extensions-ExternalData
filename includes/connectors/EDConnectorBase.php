@@ -655,9 +655,10 @@ abstract class EDConnectorBase {
 			'edgehref', 'edgeURL', 'headhref', 'headURL', 'labelhref', 'labelURL', 'tailhref', 'tailURL', 'href', 'URL'
 		] );
 		$dewikified = preg_replace_callback(
-			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[(?<url>[^|<>\]"]+)]]"/',
-			static function ( array $m ) {
-				return $m['attr'] . ' = "' . (string)CoreParserFunctions::localurl( null, $m['url'] ) . '"';
+			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[(?<page>[^|<>\]"]+)]]"/',
+			static function ( array $m ): string {
+				$url = CoreParserFunctions::localurl( null, $m['page'] );
+				return $m['attr'] . '="' . ( is_string( $url ) ? $url : CoreParserFunctions::localurl( null ) ) . '"';
 			},
 			$dot
 		);
@@ -667,9 +668,9 @@ abstract class EDConnectorBase {
 		] );
 		$repo = MediaWikiServices::getInstance()->getRepoGroup();
 		$dewikified = preg_replace_callback(
-			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[[^:|\]]+:(?<url>[^<>\]"]+)]]"/i',
+			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[[^:|\]]+:(?<image>[^<>\]"]+)]]"/i',
 			static function ( array $m ) use ( $repo ) {
-				$args = array_map( 'trim', explode( '|', $m['url'] ) );
+				$args = array_map( 'trim', explode( '|', $m['image'] ) );
 				$name = array_shift( $args );
 				$file = $repo->findFile( $name );
 				$path = false;
@@ -700,16 +701,23 @@ abstract class EDConnectorBase {
 				// @phan-suppress-next-line PhanPluginDuplicateExpressionAssignmentOperation Until dropping PHP 7.3.
 				self::$communicate['urls'] = self::$communicate['urls'] ?? [];
 				self::$communicate['urls'][$path] = $url;
-				return $m['attr'] . ' = "' . $path . '"';
+				return $m['attr'] . '="' . $path . '"';
 			},
 			$dewikified
 		);
 		// Process [[wikilink]] in nodes.
-		$dewikified = preg_replace_callback( '/\[\[([^|<>\]]+)]]\s*(?:\[([^][]+)])?/', static function ( array $m ) {
-			$props = isset( $m[2] ) ? $m[2] : '';
-			return '"' . $m[1]
-				. '"[URL = "' . (string)CoreParserFunctions::localurl( null, $m[1] ) . '"; ' . $props . ']';
-		}, $dewikified );
+		$dewikified = preg_replace_callback(
+			'/\[\[(?<page>[^|<>\]]+)]]\s*(?:\[(?<props>[^][]+)])?/',
+			static function ( array $m ) {
+				$props = $m['props'] ?? '';
+				$url = CoreParserFunctions::localurl( null, $m['page'] );
+				return '"' . $m['page'] . '"[URL="' . ( is_string( $url )
+						? $url
+						: CoreParserFunctions::localurl( null )
+				) . '"; ' . $props . ']';
+			},
+			$dewikified
+		);
 		return $dewikified;
 	}
 
