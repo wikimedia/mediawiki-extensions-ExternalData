@@ -10,7 +10,7 @@ class EDParserCSV extends EDParserBase {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'CSV';
 	/** @const array EXT The usual file extensions of this format. */
-	protected const EXT = [ 'csv' ];
+	protected const EXT = [ 'csv', 'tsv' ];
 	/** @const int GENERICITY The greater, the more this format is likely to succeed on a random input. */
 	public const GENERICITY = 15;
 
