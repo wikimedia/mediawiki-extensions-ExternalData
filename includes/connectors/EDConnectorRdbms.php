@@ -21,8 +21,8 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 	 */
 	protected function setCredentials( array $params ) {
 		parent::setCredentials( $params );
-		$this->credentials['flags'] = isset( $params['flags'] ) ? $params['flags'] : DBO_DEFAULT;
-		$this->credentials['prefix'] = isset( $params['prefix'] ) ? $params['prefix'] : '';
+		$this->credentials['flags'] = $params['flags'] ?? DBO_DEFAULT;
+		$this->credentials['prefix'] = $params['prefix'] ?? '';
 	}
 
 	/**

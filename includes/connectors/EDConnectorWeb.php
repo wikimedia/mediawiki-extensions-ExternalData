@@ -16,9 +16,7 @@ class EDConnectorWeb extends EDConnectorHttp {
 	public function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
-		$this->options['postData']
-			= isset( $args['post data'] ) ? $args['post data']
-			: ( isset( $this->options['postData'] ) ? $this->options['postData'] : null );
+		$this->options['postData'] = $args['post data'] ?? ( $this->options['postData'] ?? null );
 
 		self::$method = $this->options['postData'] ? 'POST' : 'GET';
 	}

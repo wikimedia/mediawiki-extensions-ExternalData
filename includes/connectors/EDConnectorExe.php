@@ -48,7 +48,7 @@ class EDConnectorExe extends EDConnectorBase {
 
 		parent::__construct( $args, $title );
 
-		$this->program = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		$this->program = $args[self::ID_PARAM] ?? null;
 
 		$this->params = $args;
 
@@ -109,8 +109,8 @@ class EDConnectorExe extends EDConnectorBase {
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 
 		// Throttle.
-		$key = isset( $args['throttle key'] ) ? $args['throttle key'] : null;
-		$interval = isset( $args['throttle interval'] ) ? $args['throttle interval'] : null;
+		$key = $args['throttle key'] ?? null;
+		$interval = $args['throttle interval'] ?? null;
 		if ( $key && $interval ) {
 			$this->setupThrottle( $title, $key, $interval );
 		}

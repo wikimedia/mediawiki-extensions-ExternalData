@@ -28,7 +28,7 @@ class EDConnectorInline extends EDConnectorBase {
 		parent::__construct( $args, $title );
 
 		// Text to parse.
-		$this->text = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		$this->text = $args[self::ID_PARAM] ?? null;
 	}
 
 	/**

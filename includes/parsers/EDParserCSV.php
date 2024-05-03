@@ -129,9 +129,8 @@ class EDParserCSV extends EDParserBase {
 		}
 
 		// Get header values, if this is 'csv with header'
-		$header = $this->header === self::HEADER ||
-				$this->header === self::DETECT_HEADER &&
-				self::headerDetected( $table[0], isset( $table[1] ) ? $table[1] : null );
+		$header = $this->header === self::HEADER
+			|| $this->header === self::DETECT_HEADER && self::headerDetected( $table[0], $table[1] ?? null );
 		$header_vals = null;
 		if ( $header ) {
 			$header_vals = array_shift( $table );

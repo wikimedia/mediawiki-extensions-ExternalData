@@ -74,8 +74,8 @@ trait EDConnectorParsable {
 	 *      also contains 'start' and 'end' fields].
 	 */
 	private function ranges( $total ): array {
-		$start = $this->startAbsolute !== null ? $this->startAbsolute : (int)round( $this->startPercent * $total );
-		$end = $this->endAbsolute !== null ? $this->endAbsolute : (int)round( $this->endPercent * $total );
+		$start = $this->startAbsolute ?? (int)round( $this->startPercent * $total );
+		$end = $this->endAbsolute ?? (int)round( $this->endPercent * $total );
 		if ( $start < 0 ) {
 			$start = $total + $start;
 		}

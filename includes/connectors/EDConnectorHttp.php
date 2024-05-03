@@ -50,23 +50,15 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		parent::__construct( $args, $title );
 
 		// HTTP options.
-		$this->options = isset( $args['options'] ) ? $args['options'] : [];
+		$this->options = $args['options'] ?? [];
 		// @TODO inject into data sources.
 		global $wgHTTPTimeout;
-		$this->options['HTTPTimeout'] = isset( $this->options['HTTPTimeout'] )
-			? $this->options['HTTPTimeout']
-			: $wgHTTPTimeout;
+		$this->options['HTTPTimeout'] = $this->options['HTTPTimeout'] ?? $wgHTTPTimeout;
 		global $wgHTTPConnectTimeout;
-		$this->options['HTTPConnectTimeout'] = isset( $this->options['HTTPConnectTimeout'] )
-			? $this->options['HTTPConnectTimeout']
-			: $wgHTTPConnectTimeout;
+		$this->options['HTTPConnectTimeout'] = $this->options['HTTPConnectTimeout'] ?? $wgHTTPConnectTimeout;
 		if ( isset( $args['allow ssl'] ) ) {
-			$this->options['sslVerifyCert'] = isset( $this->options['sslVerifyCert'] )
-				? $this->options['sslVerifyCert']
-				: false;
-			$this->options['followRedirects'] = isset( $this->options['followRedirects'] )
-				? $this->options['followRedirects']
-				: false;
+			$this->options['sslVerifyCert'] = $this->options['sslVerifyCert'] ?? false;
+			$this->options['followRedirects'] = $this->options['followRedirects'] ?? false;
 		}
 
 		// Throttling.
@@ -76,8 +68,8 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 
 		// Cache.
 		// Cache expiration.
-		$cache_expires_local = array_key_exists( 'cache seconds', $args ) ? $args['cache seconds'] : 0;
-		$cache_expires_global = array_key_exists( 'min cache seconds', $args ) ? $args['min cache seconds'] : 0;
+		$cache_expires_local = $args['cache seconds'] ?? 0;
+		$cache_expires_global = $args['min cache seconds'] ?? 0;
 		$cache_expires = max( $cache_expires_local, $cache_expires_global );
 		// Allow using stale cache.
 		$allow_stale_cache = array_key_exists( 'use stale cache', $args )
@@ -85,15 +77,14 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$this->setupCache( $cache_expires, $allow_stale_cache );
 
 		// Form URL.
-		if ( isset( $args[self::ID_PARAM] ) ) {
-			$url = $args[self::ID_PARAM];
-		} else {
+		$url = $args[self::ID_PARAM] ?? null;
+		if ( !$url ) {
 			return; // further work is impossible without a URL.
 		}
 		$url = str_replace( ' ', '%20', $url ); // -- do some minor URL-encoding.
 		$this->originalUrl = $url;
 		// If the URL isn't allowed (based on a whitelist), exit.
-		$allowed_urls = isset( $args['allowed urls'] ) ? $args['allowed urls'] : null;
+		$allowed_urls = $args['allowed urls'] ?? null;
 		if ( self::isURLAllowed( $url, $allowed_urls ) ) {
 			// Do any special variable replacements in the URLs, for secret API keys and the like.
 			if ( isset( $args['replacements'] ) ) {

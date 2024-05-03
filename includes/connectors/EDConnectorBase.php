@@ -209,7 +209,7 @@ abstract class EDConnectorBase {
 	public static function getConnectors(): array {
 		$connectors = [];
 		foreach ( self::connectors() as $connector ) {
-			$parser_function = isset( $connector[0]['__pf'] ) ? $connector[0]['__pf'] : null;
+			$parser_function = $connector[0]['__pf'] ?? null;
 			if ( is_string( $parser_function ) && !isset( $connectors[$parser_function] ) ) {
 				// 'get_some_data' => 'getSomeData'.
 				$connectors[$parser_function] = preg_replace_callback( '/_(\w)/', static function ( array $captures ) {
@@ -618,7 +618,7 @@ abstract class EDConnectorBase {
 			$params = $attributes;
 			$params[$config['input']] = $inner;
 			$params['source'] = $config['source'];
-			$id = isset( $params['id'] ) ? $params['id'] : 'output';
+			$id = $params['id'] ?? 'output';
 			$params['data'] = "$id=__text";
 			$params['format'] = 'text';
 			$params = self::supplementParams( $params );
@@ -730,7 +730,7 @@ abstract class EDConnectorBase {
 	public static function wikilinks4uml( string $uml ): string {
 		// Process [[wikilink]] in nodes.
 		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
-			$alias = isset( $m[2] ) ? $m[2] : $m[1];
+			$alias = $m[2] ?? $m[1];
 			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
 		}, $uml );
 	}

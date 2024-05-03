@@ -144,7 +144,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 */
 	protected function setCredentials( array $params ) {
 		parent::setCredentials( $params );
-		$this->credentials['host'] = isset( $params['server'] ) ? $params['server'] : 'localhost:27017';
+		$this->credentials['host'] = $params['server'] ?? 'localhost:27017';
 
 		// MongoDB login is done using a single string.
 		// When specifying extra connect string options (e.g. replicasets,timeout, etc.),
@@ -241,7 +241,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 * Arrange values returned by MongoDB in a column-based array.
 	 *
 	 * @param array $rows Results from MongoDB.
-	 * @param array $aliases Stub.
+	 * @param array $aliases An optional associative array of column aliases.
 	 *
 	 * @return array Column-based array of values.
 	 */
@@ -250,19 +250,21 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 		foreach ( $rows as $doc ) {
 			$cast_doc = (array)$doc;
 			foreach ( $this->columns as $column ) {
-				if ( strstr( $column, "." ) ) {
+				$external = array_search( $column, $aliases ) ?: $column;
+				$values[$column] = $values[$column] ?? [];
+				if ( strstr( $external, "." ) ) {
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.
-					$values[$column][] = self::getValueFromJSONArray( $cast_doc, $column );
-				} elseif ( isset( $cast_doc[$column] )
-						&& ( ( is_array( $cast_doc[$column] )
-							|| is_a( $cast_doc[$column], 'MongoDB\Model\BSONArray' )
-							|| is_a( $cast_doc[$column], 'MongoDB\Model\BSONDocument' ) ) ) ) {
+					$values[$column][] = self::getValueFromJSONArray( $cast_doc, $external );
+				} elseif ( isset( $cast_doc[$external] )
+						&& ( ( is_array( $cast_doc[$external] )
+							|| is_a( $cast_doc[$external], 'MongoDB\Model\BSONArray' )
+							|| is_a( $cast_doc[$external], 'MongoDB\Model\BSONDocument' ) ) ) ) {
 					// If MongoDB returns an array for a column,
 					// but the exact location of the value wasn't specified,
 					// do some extra processing.
-					if ( $column === 'geometry' && array_key_exists( 'coordinates', $cast_doc['geometry'] ) ) {
+					if ( $external === 'geometry' && array_key_exists( 'coordinates', $cast_doc['geometry'] ) ) {
 						// Check if it's GeoJSON geometry.
 						// http://www.geojson.org/geojson-spec.html#geometry-objects
 						// If so, return it in a format that
@@ -276,11 +278,11 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 					} else {
 						// Just return it as JSON, the
 						// lingua franca of MongoDB.
-						$values[$column][] = json_encode( $cast_doc[$column] );
+						$values[$column][] = json_encode( $cast_doc[$external] );
 					}
 				} else {
 					// It's a simple literal.
-					$values[$column][] = ( isset( $cast_doc[$column] ) ? (string)$cast_doc[$column] : null );
+					$values[$column][] = (string)( $cast_doc[$external] ?? '' );
 				}
 			}
 		}

@@ -23,7 +23,7 @@ class EDConnectorFile extends EDConnectorPath {
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
-		$this->file = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		$this->file = $args[self::ID_PARAM] ?? null;
 		if ( isset( $args['path'] ) ) {
 			$this->realPath = $args['path'];
 		} else {

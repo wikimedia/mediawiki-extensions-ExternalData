@@ -28,7 +28,7 @@ class EDConnectorDirectory extends EDConnectorPath {
 		parent::__construct( $args, $title );
 
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
-		$this->directory = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		$this->directory = $args[self::ID_PARAM] ?? null;
 		if ( isset( $args['path'] ) ) {
 			if ( is_dir( $args['path'] ) || substr( $args['path'], 0, 7 ) === 'phar://' ) {
 				$this->real_directory = $args['path'];

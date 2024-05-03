@@ -56,16 +56,21 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		} else {
 			$this->columns = array_values( $mappings );
 		}
-		// Column aliases: the correspondence $external_variable => $column_name_in_query_result.
-		foreach ( $this->columns as $column ) {
-			// Deal with AS in external names.
-			$chunks = preg_split( '/\bas\s+/i', $column, 2 );
-			$alias = isset( $chunks[1] ) ? trim( $chunks[1] ) : $column;
+		// Column aliases: the correspondence $column_name_in_query_result => $external_variable.
+		foreach ( $this->columns as $external ) {
+			$column = $external;
+			if ( preg_match( '/^(?<column>.+)\s+as\s+(?<alias>.+)$/i', $column, $matches ) ) {
+				// Deal with AS in external names.
+				$alias = $matches['alias'];
+				$column = $matches['column'];
+			} else {
+				$alias = $column;
+			}
 			// Deal with table prefixes in column names (internal_var=tbl1.col1).
-			if ( preg_match( self::IDENTIFIER, $alias, $matches ) ) {
+			if ( $alias === $column && preg_match( self::IDENTIFIER, $column, $matches ) ) {
 				$alias = $matches['identifier'];
 			}
-			$this->aliases[$column] = $alias;
+			$this->aliases[trim( $alias )] = $external;
 		}
 		if ( !$this->dbId ) {
 			return; // further checks and initialisations are impossible.
@@ -86,8 +91,8 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	 * @param array $params Supplemented parameters.
 	 */
 	protected function setCredentials( array $params ) {
-		$this->credentials['user'] = isset( $params['user' ] ) ? $params['user' ] : null;
-		$this->credentials['password'] = isset( $params['password' ] ) ? $params['password' ] : null;
+		$this->credentials['user'] = $params['user' ] ?? null;
+		$this->credentials['password'] = $params['password' ] ?? null;
 		if ( isset( $params[ 'name' ] ) ) {
 			$this->credentials['dbname'] = $params['name'];
 		} else {
@@ -111,7 +116,6 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			return false;
 		}
 		$this->add( $this->processRows( $rows, $this->aliases ) );
-		// $this->values = $this->processRows( $rows ); // late binding.
 		$this->disconnect(); // late binding.
 		return true;
 	}
@@ -143,12 +147,10 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		$result = [];
 		foreach ( $rows as $row ) {
 			foreach ( $row as $column => $_ ) {
-				$alias = isset( $aliases[$column] ) ? $aliases[$column] : $column;
-				if ( !isset( $result[$column] ) ) {
-					$result[$column] = [];
-				}
+				$external = $aliases[$column] ?? $column;
+				$result[$external] = $result[$external] ?? [];
 				// Can be both array and object.
-				$result[$column][] = self::processField( ( (array)$row )[$alias] );
+				$result[$external][] = self::processField( ( (array)$row )[$column] );
 			}
 		}
 		return $result;

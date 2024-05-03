@@ -36,7 +36,7 @@ class EDConnectorLdap extends EDConnectorBase {
 	protected function __construct( array &$args, Title $title ) {
 		parent::__construct( $args, $title );
 
-		$this->domain = isset( $args[self::ID_PARAM] ) ? $args[self::ID_PARAM] : null;
+		$this->domain = $args[self::ID_PARAM] ?? null;
 
 		// This connector needs an explicit set of fields.
 		if ( !array_key_exists( 'data', $args ) ) {
@@ -62,14 +62,13 @@ class EDConnectorLdap extends EDConnectorBase {
 		} else {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}
-		$this->user = isset( $args['user'] ) ? $args['user'] : null;
-		$this->password = isset( $args['password'] ) ? $args['password'] : null;
-		if ( isset( $args['base dn'] ) ) {
-			$this->baseDn = $args['base dn'];
-		} else {
+		$this->user = $args['user'] ?? null;
+		$this->password = $args['password'] ?? null;
+		$this->baseDn = $args['base dn'] ?? null;
+		if ( !$this->baseDn ) {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}
-		$this->all = array_key_exists( 'all', $args ) && $args['all'] !== false;
+		$this->all = $args['all'] ?? false;
 	}
 
 	/**
