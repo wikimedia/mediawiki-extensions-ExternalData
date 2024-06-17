@@ -136,17 +136,16 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}, $this->realUrl, $this->options );
 
 		if ( $contents ) {
-			$this->add( [
-							'__time' => [ $this->time ],
-							'__cached' => [ $this->cached ],
-							'__stale' => [ !$this->cacheFresh ],
-							'__tries' => [ $this->tries ]
-			] );
+			$this->add( $this->parse( $contents, parse_url( $this->realUrl, PHP_URL_PATH ) ) );
+			// Fill standard external variables.
+			$this->addSpecial( '__time', $this->time );
+			$this->addSpecial( '__cached', $this->cached );
+			$this->addSpecial( '__stale', !$this->cacheFresh );
+			$this->addSpecial( '__tries', $this->tries );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
+				$this->addSpecial( '__throttled_till', $this->waitTill );
 			}
-			$this->add( $this->parse( $contents, parse_url( $this->realUrl, PHP_URL_PATH ) ) );
 			$this->error( $this->parseErrors );
 			return !$this->errors();
 		} else {

@@ -46,12 +46,10 @@ abstract class EDConnectorPath extends EDConnectorBase {
 			$this->error( 'externaldata-empty-file', $alias );
 			return null;
 		}
-		$this->add( [
-			'__file' => [ $alias ],
-			'__time' => [ time() ]
-		] );
 		$file_contents = $this->toUTF8( $file_contents, $this->encoding );
 		$values = $this->parse( $file_contents, $path );
+		$values['__file'] = [ $alias ];
+		$values['__time'] = [ time() ];
 		$this->error( $this->parseErrors );
 		return $values;
 	}

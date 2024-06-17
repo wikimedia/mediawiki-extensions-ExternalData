@@ -181,17 +181,14 @@ class EDConnectorExe extends EDConnectorBase {
 		}, $this->command, $this->input, $this->environment );
 
 		if ( $output ) {
+			$this->add( $this->parse( $output ) );
 			// Fill standard external variables.
-			$this->add( [ '__time' => [ $this->time ], '__stale' => [ !$this->cacheFresh ] ] );
+			$this->addSpecial( '__time', $this->time );
+			$this->addSpecial( '__stale', !$this->cacheFresh );
 			if ( $this->waitTill ) {
 				// Throttled, but there was a cached value.
-				$this->add( [ '__throttled_till' => [ $this->waitTill ] ] );
+				$this->addSpecial( '__throttled_till', $this->waitTill );
 			}
-			if ( $error ) {
-				// Let's save the ignored warning.
-				$this->add( [ '__warning' => [ $error ] ] );
-			}
-			$this->add( $this->parse( $output ) );
 			$this->error( $this->parseErrors );
 			return true;
 		} else {

@@ -188,6 +188,19 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * Add a special variable.
+	 *
+	 * @param string $variable Special variable's name.
+	 * @param mixed $value Special variable's value.
+	 */
+	protected function addSpecial( string $variable, $value ) {
+		if ( !isset( $this->values[$variable] ) ) {
+			$this->values[$variable] = [];
+		}
+		$this->values[$variable][] = $value;
+	}
+
+	/**
 	 * A list of available connectors.
 	 * @return array
 	 */
