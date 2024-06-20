@@ -70,5 +70,5 @@
 	"externaldata-no-local-variable": "Erro: não foi definida nenhuma variável local \"$1\".",
 	"externaldata-no-template": "Erro: não foi especificada nenhuma predefinição.",
 	"externaldata-no-loop-body": "Erro: não é definido nenhum corpo de ciclo como primeiro ou segundo parâmetro.",
-	"externaldata-getdata-badurl": "Tem de especificar um nome de página no URL. O URL deve ser parecido com \"{{#Special:GetData}}/Nome_de_página\"."
+	"externaldata-getdata-badurl": "Tem de especificar um nome de página no URL. O URL deve ter a forma \"{{#Special:GetData}}/Nome_da_página\"."
 }
