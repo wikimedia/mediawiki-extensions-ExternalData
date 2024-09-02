@@ -16,7 +16,7 @@ class EDConnectorOdbcMssql extends EDConnectorOdbc {
 	 * @param int $limit The number of rows to return.
 	 * @return string The TOP clause.
 	 */
-	protected static function limit( $limit ) {
+	protected static function limit( int $limit ): string {
 		return $limit ? 'TOP ' . (string)$limit : '';
 	}
 }

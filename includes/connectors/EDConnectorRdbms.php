@@ -35,7 +35,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 			if ( class_exists( 'Wikimedia\Rdbms\DatabaseFactory' ) ) {
 				// MW 1.39+
 				// @phan-suppress-next-line PhanUndeclaredClass, PhanUndeclaredClassMethod Different MW versions.
-				$factory = new Wikimedia\Rdbms\DatabaseFactory( [] );
+				$factory = new Wikimedia\Rdbms\DatabaseFactory();
 				// @phan-suppress-next-line PhanUndeclaredClassMethod Different MW versions.
 				$this->database = $factory->create( $this->type, $this->credentials );
 			} else {
@@ -63,7 +63,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 	 * Get query text.
 	 * @return string
 	 */
-	protected function getQuery() {
+	protected function getQuery(): string {
 		return $this->database->selectSQLText(
 			$this->tables,
 			$this->columns,
@@ -78,7 +78,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 	 * Get query result as a two-dimensional array.
 	 * @return \Wikimedia\Rdbms\IResultWrapper|null
 	 */
-	protected function fetch() {
+	protected function fetch(): ?\Wikimedia\Rdbms\IResultWrapper {
 		try {
 			$rows = $this->database->select(
 				$this->tables,
@@ -97,9 +97,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 			);
 			return null;
 		}
-		if ( $rows ) {
-			return $rows;
-		} else {
+		if ( !$rows ) {
 			// No result.
 			$this->error(
 				'externaldata-db-invalid-query',
@@ -108,6 +106,7 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 			);
 			return null;
 		}
+		return $rows;
 	}
 
 	/**

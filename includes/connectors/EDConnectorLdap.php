@@ -62,8 +62,14 @@ class EDConnectorLdap extends EDConnectorBase {
 		} else {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );
 		}
-		$this->user = $args['user'] ?? null;
-		$this->password = $args['password'] ?? null;
+
+		$this->user = isset( $args['user file'] ) && file_exists( $args['user file'] )
+			? trim( file_get_contents( $args['user file'] ) )
+			: $args['user' ] ?? null;
+		$this->password = isset( $args['password file'] ) && file_exists( $args['password file'] )
+			? trim( file_get_contents( $args['password file'] ) )
+			: $args['password' ] ?? null;
+
 		$this->baseDn = $args['base dn'] ?? null;
 		if ( !$this->baseDn ) {
 			$this->error( 'externaldata-ldap-domain-not-defined', $this->domain );

@@ -12,6 +12,22 @@ abstract class EDParserXML extends EDParserBase {
 	protected const EXT = [ 'xml' ];
 
 	/**
+	 * @var int $errorLevel LibXML error level causing parsing to fail:
+	 *      LIBXML_ERR_WARNING, LIBXML_ERR_ERROR or LIBXML_ERR_FATAL.
+	 */
+	protected $errorLevel;
+
+	/**
+	 * Constructor.
+	 * @param array $params A named array of parameters passed from parser or Lua function.
+	 * @throws MWException
+	 */
+	public function __construct( array $params ) {
+		parent::__construct( $params );
+		$this->errorLevel = $params['xml error level'] ?? LIBXML_ERR_FATAL;
+	}
+
+	/**
 	 * Add newlines before closing tags and after opening ones to facilitate cutting out fragments, if ordered.
 	 *
 	 * @param string $xml XML to add newlines to.

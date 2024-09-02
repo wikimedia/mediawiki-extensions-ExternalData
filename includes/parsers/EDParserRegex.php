@@ -34,7 +34,7 @@ class EDParserRegex extends EDParserBase {
 		// Run regular expression against null and compare results with false.
 		// @see https://stackoverflow.com/a/12941133.
 		// @phan-suppress-next-line PhanTypeMismatchArgumentInternalReal, PhanTypeMismatchArgumentInternalProbablyReal
-		if ( preg_match( $regex, null ) !== false ) {
+		if ( preg_match( $regex, '' ) !== false ) {
 			// A valid regular expression.
 			$this->regex = $regex;
 		} else {

@@ -1,0 +1,809 @@
+# This is not a valid Docker Compose file. It contains examples for containers
+# to be used with presets from MediaWiki extension External Data.
+
+services:
+
+  # MediaWiki installation.
+  php:
+    # ...
+    secrets:
+      # ...
+      # Secrets storing credentials needed to connect to test databases:
+      - source: mssqlserver_user
+        target: mssqlserver_user
+      - source: mssqlserver_password
+        target: mssqlserver_password
+      - source: postgresql_user
+        target: postgresql_user
+      - source: postgresql_password
+        target: postgresql_password
+      - source: mongodb_password
+        target: mongodb_password
+    networks:
+      # ...
+      # Networks shared with containers:
+      mongodb:
+      mssqlserver:
+      postgresql:
+      man:
+      apk:
+      whois:
+      mmdblookup:
+      tzdata:
+      youtube-dl:
+      mathjax:
+      graphviz:
+      mscgen:
+      plantuml:
+      ploticus:
+      easytimeline:
+      gnuplot:
+      lilypond:
+      vega:
+      mermaid:
+      bpmn:
+      pdfminer:
+      echarts:
+      zint:
+
+  # Web frontend:
+  nginx:
+    # ...
+    volumes:
+      # ...
+      # Volumes shared with media containers mounted so that they are served
+      # by the path defined in $wgExternalDataSources['...']['scripts'];
+      - mathjax:/var/www/js/mathjax:ro
+      - ploticus:/var/www/js/ploticus:ro
+      - gnuplot:/var/www/js/gnuplot:ro
+      - vega:/var/www/js/vega:ro
+      - vega_uploads:/var/www/js/vega_uploads:ro
+      - mermaid:/var/www/js/mermaid:ro
+      - echarts:/var/www/js/echarts:ro
+
+
+  # Containers for testing ExternalData\Presets\Test
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/root_password
+      MONGO_INITDB_USERNAME: wikiuser
+      MONGO_INITDB_PASSWORD_FILE: /run/secrets/password
+      MONGO_INITDB_DATABASE: test
+    volumes:
+      - mongodb:/var/lib/mongodb
+      - ./mongodb/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./mongodb/zips:/docker-entrypoint-initdb.d/zips:ro
+    secrets:
+      - source: mongodb_password
+        target: password
+      - source: mongodb_root_password
+        target: root_password
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mongodb']['url'] and
+    # $wgExternalDataSources['mongodb']['version url']
+    networks:
+      mongodb:
+    tmpfs:
+      - /tmp
+    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  # MS SQL Server:
+  mssqlserver:
+    container_name: mssqlserver
+    build:
+      context: ./mssqlserver
+      args:
+        VERSION: 2022-latest
+    restart: unless-stopped
+    volumes:
+      - mssqlserver:/var/opt/mssql
+    secrets:
+      - source: mssqlserver_sa_password
+        target: sa_password
+      - source: mssqlserver_user
+        target: user
+      - source: mssqlserver_password
+        target: password
+    tmpfs:
+      - /tmp
+      - /var/opt/mssql/tempdb
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mssqlserver']['url'] and
+    # $wgExternalDataSources['mssqlserver']['version url']
+    networks:
+      mssqlserver:
+    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  # PostgreSQL:
+  postgresql:
+    container_name: postgresql
+    build:
+      context: ./postgresql
+      args:
+        VERSION: 16.4
+    restart: unless-stopped
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+    secrets:
+      - source: postgresql_postgres_password
+        target: postgres_password
+      - source: postgresql_user
+        target: user
+      - source: postgresql_password
+        target: password
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['postgresql']['url'] and
+    # $wgExternalDataSources['postgresql']['version url']
+    networks:
+      postgresql:
+    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+
+  # Containers for testing ExternalData\Presets\Reference
+  man:
+    container_name: man
+    build:
+      context: ./cgi
+      args:
+        APK: docs mandoc-apropos
+        COMMAND: /usr/bin/man -c -T html $$key "$$topic"
+        CONTENT_TYPE: text/html
+        VERSION_COMMAND: apk info mandoc | head -5 | tail -4
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['man']['url'] and
+    # $wgExternalDataSources['man']['version url']
+    networks:
+      man:
+    cpu_shares: 256
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  apk:
+    container_name: apk
+    build:
+      context: ./cgi
+      args:
+        STARTUP: apk update
+        COMMAND: apk "$$subcommand" "$$key" "$$package"
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['apk']['url'] and
+    # $wgExternalDataSources['apk']['version url']
+    networks:
+      apk:
+    cpu_shares: 256
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  whois:
+    container_name: whois
+    build:
+      context: ./cgi
+      args:
+        APK: whois
+        COMMAND: /usr/bin/whois "$$domain"
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['whois']['url'] and
+    # $wgExternalDataSources['whois']['version url']
+    networks:
+      whois:
+    cpu_shares: 256
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+
+  mmdb:
+    container_name: mmdb
+    build:
+      context: ./cgi
+      args:
+        GO: github.com/maxmind/mmdbinspect/cmd/mmdbinspect@latest
+        WGET: >-
+          https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb
+          https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-City.mmdb
+          https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb
+        COMMAND: '"$$GOPATH/bin/mmdbinspect" -db "/usr/share/downloads/GeoLite2-$$db.mmdb" "$$ip"'
+        CONTENT_TYPE: text/json
+        VERSION_COMMAND: '"$$GOPATH/bin/mmdbinspect" --version'
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mmdb']['url'] and
+    # $wgExternalDataSources['mmdb']['version url']
+    networks:
+      mmdblookup:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  tzdata:
+    container_name: tzdata
+    build:
+      context: ./cgi
+      args:
+        APK: tzdata tzdata-utils
+        COMMAND: |
+          echo -e 'name,weekday,month,day,time,year,abbr' && \
+          ( for DIR in /usr/share/zoneinfo/*; do \
+              for FILE in $$DIR/*; do \
+                  if [ -f "$$FILE" ]; then \
+                      echo "$$( basename "$$DIR" )/$$( basename "$$FILE" )"; \
+                  fi; \
+              done; \
+          done; ) | xargs /usr/sbin/zdump | sed -E 's/\s+/,/g'
+        CONTENT_TYPE: text/css
+        VERSION_COMMAND: /usr/sbin/zdump --version
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['tzdata']['url'] and
+    # $wgExternalDataSources['tzdata']['version url']
+    networks:
+      tzdata:
+    cpu_shares: 256
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+
+  youtube-dl:
+    container_name: youtube-dl
+    build:
+      context: ./cgi
+      args:
+        APK: python3
+        BINARY: https://github.com/ytdl-org/ytdl-nightly/releases/download/2024.08.07/youtube-dl
+        COMMAND: /usr/local/bin/youtube-dl -j "$$url"
+        CONTENT_TYPE: text/json
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['youtube-dl']['url'] and
+    # $wgExternalDataSources['youtube-dl']['version url']
+    networks:
+      youtube-dl:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  #
+  # Multimedia containers, connected by testing ExternalData\Presets\Media:
+  #
+
+  # This service does not fully replace the MathJax extension (https://github.com/alex-mashin/MathJax).
+  mathjax:
+    container_name: mathjax
+    build:
+      context: ./cgi
+      args:
+        APK: coreutils
+        NODE_GLOBAL: esm
+        NODE: yargs mathjax-full
+        BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.js
+        WGET: https://raw.githubusercontent.com/alex-mashin/MathJax/master/assets/config.fixed.json
+        COMMAND: >-
+          node --stack-size=1024 --stack-trace-limit=1000 -r /usr/local/lib/node_modules/esm
+          /usr/local/bin/tex2mml.js - --conf=/usr/share/downloads/config.fixed.json --dist=1
+        VERSION_COMMAND: npm list -l --prefix /usr/local/bin mathjax-full | grep 'mathjax'
+        CONTENT_TYPE: text/mathml
+    environment:
+      ERRORS: FATAL
+    restart: unless-stopped
+    volumes:
+      - mathjax:/usr/local/bin/node_modules/mathjax-full/es5
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mathjax']['url'] and
+    # $wgExternalDataSources['mathjax']['version url']
+    networks:
+      mathjax:
+    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  lilypond:
+    container_name: lilypond
+    build:
+      context: ./cgi
+      args:
+        APK: lilypond
+        COMMAND: >-
+          TMP=$$(mktemp -u) && lilypond -s -dbackend=svg -dpaper-size=\"$$size\" -dcrop -o $$TMP - && cat "$$TMP.cropped.svg" &&
+          rm "$$TMP" && rm -f "$$TMP.*"
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: lilypond -v
+    restart: unless-stopped
+    environment:
+      ERRORS: FATAL
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['lilypond']['url'] and
+    # $wgExternalDataSources['lilypond']['version url']
+    networks:
+      lilypond:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  graphviz:
+    container_name: graphviz
+    build:
+      context: ./cgi
+      args:
+        APK: graphviz fontconfig ttf-freefont
+        COMMAND: /usr/bin/dot -K"$$layout" -Tsvg
+        CONTENT_TYPE: text/svg
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['graphviz']['url'] and
+    # $wgExternalDataSources['graphviz']['version url']
+    networks:
+      graphviz:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  mscgen:
+    container_name: mscgen
+    build:
+      context: ./cgi
+      args:
+        APK: gd-dev
+        SRC: https://www.mcternan.me.uk/mscgen/software/mscgen-src-0.20.tar.gz
+        COMMAND: /usr/local/bin/mscgen -Tsvg -o -
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: /usr/local/bin/mscgen -l | head -2
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mscgen']['url'] and
+    # $wgExternalDataSources['mscgen']['version url']
+    networks:
+      mscgen:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  plantuml:
+    container_name: plantuml
+    build:
+      context: ./cgi
+      args:
+        APK: graphviz fontconfig ttf-freefont
+        JAR: >-
+          https://downloads.sourceforge.net/project/plantuml/plantuml.jar
+          http://beta.plantuml.net/plantuml-jlatexmath.zip
+        COMMAND: java -jar /usr/share/java/plantuml.jar -tsvg -charset UTF-8 -p
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: java -jar /usr/share/java/plantuml.jar -version
+    environment:
+      LOG4J_FORMAT_MSG_NO_LOOKUPS: true
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['plantuml']['url'] and
+    # $wgExternalDataSources['plantuml']['version url']
+    networks:
+      plantuml:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  ploticus:
+    container_name: ploticus
+    build:
+      context: ./cgi
+      args:
+        APK: zlib-dev libpng-dev fontconfig ttf-freefont
+        SRC: https://altushost-swe.dl.sourceforge.net/project/ploticus/ploticus/2.42/ploticus242_src.tar.gz?viasf=1
+        WGET: https://ploticus.sourceforge.net/download/svg_mouseover_js.tar.gz
+        COMMAND: >-
+          /usr/local/bin/pl -stdin -outlabel "$$title" -tightcrop -scale "$$scale" -textsize "$$fontsize"
+          -font 'FreeSans'
+          -svg -omit_xml_declaration -xml_encoding utf-8 -noshell -o stdout
+        # -csmap
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: /usr/local/bin/pl -? 2>&1 | head -2
+    environment:
+      TDH_ERRMODE: cgi
+      ERRORS: FATAL
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    volumes:
+      - ploticus:/usr/share/downloads
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['ploticus']['url'] and
+    # $wgExternalDataSources['ploticus']['version url']
+    networks:
+      ploticus:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  easytimeline:
+    container_name: easytimeline
+    build:
+      context: ./cgi
+      args:
+        APK: zlib-dev libpng-dev fontconfig ttf-freefont perl
+        SRC: https://altushost-swe.dl.sourceforge.net/project/ploticus/ploticus/2.42/ploticus242_src.tar.gz?viasf=1
+        WGET: >-
+          https://ploticus.sourceforge.net/download/svg_mouseover_js.tar.gz
+          https://raw.githubusercontent.com/wikimedia/mediawiki-extensions-timeline/master/scripts/EasyTimeline.pl
+        COMMAND: >-
+          TMP=$$(mktemp -u) && cat > "$$TMP.tl" &&
+          perl /usr/share/downloads/EasyTimeline.pl -i "$$TMP.tl" -m -P "/usr/local/bin/pl" -T /tmp -A "$$path"
+          -f '/usr/share/fonts/freefont/FreeSans.otf' -s
+          1>/dev/null &&
+          cat "$$TMP.svg" && rm -f "$$TMP.tl" "$$TMP.png" "$$TMP.svg"
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: perl /usr/share/downloads/EasyTimeline.pl | head -3
+    environment:
+      TDH_ERRMODE: cgi
+      ERRORS: FATAL
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['easytimeline']['url'] and
+    # $wgExternalDataSources['easytimeline']['version url']
+    networks:
+      easytimeline:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  gnuplot:
+    container_name: gnuplot
+    build:
+      context: ./cgi
+      args:
+        APK: gnuplot
+        WGET: https://raw.githubusercontent.com/alex-mashin/gnuplot_svg/master/gnuplot_svg.js
+        COMMAND: >-
+          /usr/bin/gnuplot -e "set terminal svg size $$width,$$height dynamic enhanced font 'arial,$$size' mousing jsdir '/js/gnuplot'
+          name '$$name' $$heads dashlength 1.0;" -
+        VERSION_COMMAND: /usr/bin/gnuplot -V
+        CONTENT_TYPE: text/svg
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    volumes:
+      - gnuplot:/usr/share/downloads
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['gnuplot']['url'] and
+    # $wgExternalDataSources['gnuplot']['version url']
+    networks:
+      gnuplot:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  vega:
+    container_name: vega
+    build:
+      context: ./cgi
+      args:
+        APK: python3 pkgconfig make g++ pixman-dev cairo-dev pango-dev
+        NODE: vega-cli vega-projection-extended vega-lite vega-embed
+        COMMAND: /usr/local/bin/node_modules/vega-cli/bin/vg2svg -b /var/lib/uploads
+        CONTENT_TYPE: text/svg
+    environment:
+      ERRORS: FATAL
+    restart: unless-stopped
+    volumes:
+      - vega:/usr/local/bin/node_modules
+      - vega_uploads:/var/lib/uploads
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['vega']['url'] and
+    # $wgExternalDataSources['vega']['version url']
+    networks:
+      vega:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  mermaid:
+    container_name: mermaid
+    build:
+      context: ./cgi
+      args:
+        APK: chromium
+        NODE: "puppeteer @mermaid-js/mermaid-cli"
+        COMMAND: >-
+          TMP=$$(mktemp -u) &&
+          /usr/local/bin/node_modules/.bin/mmdc -p /usr/local/bin/.puppeteerrc.json -q -I "$$id"
+          -s "$$scale" -w "$$width" -H "$$height"
+          -t "$$theme" -b "$$background" -i - -o "$$TMP.svg" &&
+          cat $$TMP.svg && rm -f $$TMP.svg
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: /usr/local/bin/node_modules/.bin/mmdc -V
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+    security_opt:
+      - seccomp:./cgi/chrome.json
+    restart: unless-stopped
+    volumes:
+      - mermaid:/usr/local/bin/node_modules/mermaid/dist
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['mermaid']['url'] and
+    # $wgExternalDataSources['mermaid']['version url']
+    networks:
+      mermaid:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  echarts:
+    container_name: echarts
+    build:
+      context: ./cgi
+      args:
+        APK: chromium
+        NODE: "puppeteer echarts"
+        SCRIPT: |
+          const echarts = require( 'echarts' );
+          process.stdin.on('data', ( data ) => {
+              // Parameters:
+              let theme = null;
+              let width = 400;
+              let height = 300;
+              let locale = 'EN';
+              // echarts.registerLocale (locale, localeCfg);
+              process.argv.forEach( ( val, index, array ) => {
+                  let matches = val.match( /(theme|width|height|locale)\s*=\s*"(.+)"/ );
+                  if ( matches ) {
+                      if ( matches[1] === 'theme' ) {
+                          theme = matches[2];
+                      } else if ( matches[1] === 'width' ) {
+                          width = parseInt( matches[2] );
+                      } else if ( matches[1] === 'height' ) {
+                          height = parseInt( matches[2] );
+                      } else if ( matches[1] === 'locale' ) {
+                          locale = matches[2];
+                      }
+                  }
+              });
+              // In SSR mode the first container parameter is not required:
+              let chart = echarts.init( null, theme, {
+                  renderer: 'svg', // must use SVG rendering mode
+                  ssr: true, // enable SSR
+                  width: width,
+                  height: height,
+                  locale: locale
+              });
+              // Use setOption as normal
+              chart.setOption( JSON.parse( data ) );
+              // Output a string
+              console.log( chart.renderToSVGString() );
+              // If chart is no longer useful, consider dispose it to release memory.
+              chart.dispose();
+              chart = null;
+          });
+        COMMAND: node /usr/local/bin/script width="$$width" height="$$height" theme="$$theme" locale="$$locale"
+        CONTENT_TYPE: text/svg
+        VERSION_COMMAND: npm view /usr/local/bin/node_modules/echarts | head -4 | tail -3
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+    security_opt:
+      - seccomp:./cgi/chrome.json
+    restart: unless-stopped
+    volumes:
+      - echarts:/usr/local/bin/node_modules/echarts
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['echarts']['url'] and
+    # $wgExternalDataSources['echarts']['version url']
+    networks:
+      echarts:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  bpmn:
+    container_name: bpmn
+    image: pierreschwang/bpmn2svg:development
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['bpmn']['url'] and
+    # $wgExternalDataSources['bpmn']['version url']
+    networks:
+      bpmn:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  pdfminer:
+    container_name: pdfminer
+    build:
+      context: ./cgi
+      args:
+        APK: py3-pdfminer
+        COMMAND: /usr/bin/pdf2txt.py "$$path"
+    restart: unless-stopped
+    volumes:
+      # Mount wiki uploads directory in to the container so that the path looks the same as in MW installation:
+      - uploads:/var/www/wiki/files
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['pdfminer']['url'] and
+    # $wgExternalDataSources['pdfminer']['version url']
+    networks:
+      pdfminer:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  zint:
+    container_name: zint
+    build:
+      context: ./cgi
+      args:
+        APK: 'zint --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/'
+        COMMAND: >-
+          /usr/bin/zint -b "BARCODE_$$type" -d "$$data" $$eci
+          --fg="$$fg" --bg="$$bg" --rotate="$$rotate" --scale="$$scale" --direct --filetype=SVG
+        CONTENT_TYPE: text/svg
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['zint']['url'] and
+    # $wgExternalDataSources['zint']['version url']
+    networks:
+      zint:
+    cpu_shares: 512
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+
+volumes:
+  # Databases:
+  mongodb:
+  mssqlserver:
+  postgresql:
+  # For interctive media JS:
+  mathjax:
+  ploticus:
+  gnuplot:
+  vega_uploads:
+  vega:
+  mermaid:
+  echarts:
+
+# Secrets should be mounted into data sources containers and MediaWiki one,
+# or otherwise be made available to MediaWiki, if it is not dockerised.
+# They are made known to MediaWiki by $wgExternalDataSources['...']['user file']
+# and $wgExternalDataSources['...']['password file'] settings.
+secrets:
+  # MongoDB:
+  mongodb_password:
+    file: ./secrets/mongodb/password
+  mongodb_root_password:
+    file: ./secrets/mongodb/root_password
+  # Microsoft SQL Server:
+  mssqlserver_sa_password:
+    file: ./secrets/mssqlserver/sa_password
+  mssqlserver_user:
+    file: ./secrets/mssqlserver/user
+  mssqlserver_password:
+    file: ./secrets/mssqlserver/password
+  # PostgreSQL:
+  postgresql_postgres_password:
+    file: ./secrets/postgresql/postgres_password
+  postgresql_user:
+    file: ./secrets/postgresql/user
+  postgresql_password:
+    file: ./secrets/postgresql/password
+
+# If MediaWiki is dockerised, a network per each pair (MW, external data service).
+# Otherwise, expose a port for each service container and insert it into
+# $wgExternalDataSource['...']['url'] and $wgExternalDataSource['...']['version url'].
+networks:
+  # ...
+  mongodb:
+  mssqlserver:
+  postgresql:
+  man:
+  apk:
+  pip:
+  whois:
+  mmdblookup:
+  tzdata:
+  youtube-dl:
+  mathjax:
+  graphviz:
+  mscgen:
+  plantuml:
+  ploticus:
+  easytimeline:
+  gnuplot:
+  lilypond:
+  vega:
+  mermaid:
+  bpmn:
+  pdfminer:
+  echarts:
+  zint:

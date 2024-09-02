@@ -38,26 +38,41 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 		$doc->recover = true;
 		$doc->strictErrorChecking = false;
 
+		// Give the log a rest. See https://stackoverflow.com/a/10482622.
+		$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 		// Try to parse HTML.
 		try {
-			// Give the log a rest. See https://stackoverflow.com/a/10482622.
-			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 			if ( !$doc->loadHTML( $html ) ) {
-				throw new EDParserException( 'externaldata-parsing-html-failed' );
+				$errors = libxml_get_errors();
+				throw new EDParserException(
+					'externaldata-parsing-html-failed',
+					$this->xmlParseErrors( $errors, $html )
+				);
 			}
-			libxml_clear_errors();
-			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-caught-exception-parsing-html', $e->getMessage() );
+		} finally {
+			libxml_clear_errors();
+			libxml_use_internal_errors( $internalErrors ); // -- restore.
 		}
 		$values = EDParserBase::__invoke( $text );
 		$domxpath = new DOMXPath( $doc );
 		$internalErrors = libxml_use_internal_errors( true ); // -- remember.
 		foreach ( $this->external as $xpath ) {
 			// Try to select nodes with XPath:
-			$nodesArray	= [];
+			$nodes_array = [];
 			try {
 				$entries = $domxpath->evaluate( $xpath );
+				$errors = $this->xmlParseErrors( libxml_get_errors(), $html );
+				libxml_clear_errors();
+				if ( $errors ) {
+					throw new EDParserException(
+						'externaldata-invalid-format-explicit',
+						$xpath,
+						'XPath',
+						$errors
+					);
+				}
 			} catch ( Exception $e ) {
 				throw new EDParserException(
 					'externaldata-invalid-format-explicit',
@@ -67,7 +82,10 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 				);
 			}
 			if ( $entries === false ) {
-				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath' );
+				$errors = $this->xmlParseErrors( libxml_get_errors(), $html );
+				libxml_clear_errors();
+				libxml_use_internal_errors( $internalErrors ); // -- restore.
+				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath', $errors );
 			}
 			if ( $entries instanceof DOMNodeList ) {
 				// It's a list of DOM nodes.
@@ -76,19 +94,19 @@ class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 					foreach ( $entry->childNodes as $node ) {
 						$child_nodes[] = $entry->ownerDocument->saveHTML( $node );
 					}
-					$nodesArray[] = implode( '', $child_nodes );
+					$nodes_array[] = implode( '', $child_nodes );
 				}
 			} else {
 				// It's some calculated value.
-				$nodesArray = is_array( $entries ) ? $entries : [ $entries ];
+				$nodes_array = is_array( $entries ) ? $entries : [ $entries ];
 			}
 			if ( array_key_exists( $xpath, $values ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
 				// $mappings will have been removed already.
-				$values[$xpath] = array_merge( $values[$xpath], $nodesArray );
+				$values[$xpath] = array_merge( $values[$xpath], $nodes_array );
 			} else {
-				$values[$xpath] = $nodesArray;
+				$values[$xpath] = $nodes_array;
 			}
 		}
 		libxml_clear_errors();

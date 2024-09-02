@@ -77,8 +77,7 @@ class EDParserIni extends EDParserBase {
 				# comment:
 				\s* ( $comment_start (?<comment>.+) )?
 				$/x
-REGEX;
-			// PHP 7.2 doesn't allow indented HEREDOC closing identifier, and MW still tests under PHP 7.2.
+			REGEX;
 
 			$assignments_found = 0;
 			$assignments = [];

@@ -37,8 +37,8 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 		$text = $this->removeTrailingComma( substr( $text, $this->prefixLength ) );
 		try {
 			$json = new EDJsonObject( $text );
-		} catch ( Exception $e ) {
-			throw new EDParserException( 'externaldata-invalid-format', self::NAME );
+		} catch ( EDParserException $e ) {
+			throw new EDParserException( $e->code(), ...$e->params() );
 		}
 		$values = $this->extractJsonPaths( $json );
 		// Save the whole JSON tree for Lua.

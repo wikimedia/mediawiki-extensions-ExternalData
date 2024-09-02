@@ -6,12 +6,12 @@
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-abstract class EDConnectorMongodb extends EDConnectorComposed {
+class EDConnectorMongodb extends EDConnectorComposed {
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
 
 	/** @var string $regexClass Class that stores MongoDB regular expressions. */
-	protected static $regexClass;
+	protected static $regexClass = 'MongoDB\BSON\Regex';
 
 	/** @var string MondoDB connection string. */
 	protected $connectString;
@@ -25,6 +25,9 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	private $cacheKey;
 	/** @var float $cacheSeconds Cache for so many seconds. */
 	private $cacheSeconds = 0;
+
+	/** @var ?MongoDB\Client $mongoClient MongoDB client. */
+	private $mongoClient;
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -158,34 +161,76 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	}
 
 	/**
+	 * Create a MongoDB connection.
+	 *
+	 * @return MongoDB\Client|null
+	 */
+	protected function connect(): ?MongoDB\Client {
+		// Use try/catch to suppress error messages, which would show
+		// the MongoDB connect string, which may have sensitive
+		// information.
+		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+			return new MongoDB\Client( $this->connectString );
+		} catch ( Exception $e ) {
+			return null;
+		}
+	}
+
+	/**
 	 * Get the MongoDB collection $name provided the connection is established.
 	 *
-	 * @return MongoCollection|MongoDB\Collection|null MongoDB collection.
+	 * @return MongoDB\Collection|null A MongoDB collection.
 	 */
-	abstract protected function fetch();
+	protected function fetch(): ?MongoDB\Collection {
+		$this->mongoClient = $this->connect();
+		if ( !$this->mongoClient ) {
+			$this->error( 'externaldata-db-could-not-connect' );
+			return null;
+		}
+		// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
+		return $this->mongoClient->selectCollection( $this->credentials['dbname'], $this->from );
+	}
 
 	/**
 	 * Run a query against MongoDB $collection.
 	 *
-	 * @param MongoCollection|MongoDB\Collection $collection
+	 * @param MongoDB\Collection $collection
 	 * @param array $filter
 	 * @param array $columns
 	 * @param array $sort
 	 * @param int $limit
 	 *
-	 * @return array MongoCursor|MongoDB\Driver\Cursor
+	 * @return array|null MongoDB\Driver\Cursor
 	 */
-	abstract protected function find( $collection, array $filter, array $columns, array $sort, int $limit );
+	protected function find( $collection, array $filter, array $columns, array $sort, int $limit ): ?array {
+		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
+			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
+		} catch ( Exception $e ) {
+			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
+			return null;
+		}
+		return $found;
+	}
 
 	/**
 	 * Run a aggregation query against MongoDB $collection.
 	 *
-	 * @param MongoCollection|MongoDB\Collection $collection
+	 * @param MongoDB\Collection $collection
 	 * @param array $aggregate
 	 *
-	 * @return array
+	 * @return array|null
 	 */
-	abstract protected function aggregate( $collection, array $aggregate );
+	protected function aggregate( $collection, array $aggregate ) {
+		try {
+			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
+			return $collection->aggregate( $aggregate, [ 'useCursor' => true ] )->toArray();
+		} catch ( Exception $e ) {
+			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
+			return null;
+		}
+	}
 
 	/**
 	 * Actually connect to the external data source.
@@ -194,7 +239,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return bool True on success, false if error were encountered.
 	 */
-	public function run() {
+	public function run(): bool {
 		// Use Memcached if configured to cache mongodb queries.
 		$cached = $this->cached();
 		if ( $cached ) {
@@ -317,7 +362,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return string
 	 */
-	protected function getQuery() {
+	protected function getQuery(): string {
 		return json_encode( $this->aggregate ) .
 			json_encode( $this->find ) .
 			json_encode( $this->sort ) .
@@ -331,7 +376,7 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return array|null Stored values or null, if no storage is configured.
 	 */
-	private function cached() {
+	private function cached(): ?array {
 		if ( $this->cacheKey ) {
 			// Check if cache entry exists.
 			return ObjectCache::getLocalClusterInstance()->get( $this->cacheKey );
@@ -349,5 +394,13 @@ abstract class EDConnectorMongodb extends EDConnectorComposed {
 		if ( $this->cacheKey ) {
 			ObjectCache::getLocalClusterInstance()->set( $this->cacheKey, $values, $this->cacheSeconds );
 		}
+	}
+
+	/**
+	 * Disconnect from MongoDB.
+	 */
+	protected function disconnect() {
+		// There is no method to close MongoDB connection in this driver.
+		// @see https://github.com/mongodb/mongo-php-driver/issues/393#issuecomment-245546480.
 	}
 }

@@ -16,6 +16,8 @@ class EDConnectorExe extends EDConnectorBase {
 
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
 	protected const ID_PARAM = 'program';
+	/** @const int VERSION_TTL Number of seconds that software version is to be cached. */
+	private const VERSION_TTL = 3600; // one hour.
 
 	/** @var string $program Program ID. */
 	private $program;
@@ -25,15 +27,10 @@ class EDConnectorExe extends EDConnectorBase {
 	private $limits;
 	/** @var array $command The expanded command, as an array. */
 	private $command;
-	/** @var array $params Parameters to $command. */
-	private $params;
 	/** @var ?string $tempFile The program will send its output to a temporary file rather than stdout. */
 	private $tempFile;
 	/** @var bool $ignoreWarnings Ignore program warnings in stderr if exit code is 0. */
 	private $ignoreWarnings = false;
-
-	/** @const int VERSION_TTL Number of seconds that software version is to be cached. */
-	private const VERSION_TTL = 3600; // one hour.
 
 	/**
 	 * Constructor. Analyse parameters and wiki settings; set $this->errors.
@@ -49,8 +46,6 @@ class EDConnectorExe extends EDConnectorBase {
 		parent::__construct( $args, $title );
 
 		$this->program = $args[self::ID_PARAM] ?? null;
-
-		$this->params = $args;
 
 		if ( Shell::isDisabled() ) {
 			$this->error( 'externaldata-exe-shell-disabled' );
@@ -96,7 +91,7 @@ class EDConnectorExe extends EDConnectorBase {
 			$command = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $command );
 		}
 
-		$this->command = is_array( $command ) ? $command : explode( ' ', $command );
+		$this->command = is_string( $command ) ? explode( ' ', $command ) : $command;
 
 		// Cache setting may be per PF call, program and the extension. More aggressive have the priority.
 		// Cache expiration.
@@ -144,7 +139,7 @@ class EDConnectorExe extends EDConnectorBase {
 			return $this->callThrottled( function ( array $command, ?string $input, array $environment )
 			use ( &$exit_code, &$error ) /* $this is bound. */ {
 				$prepared = Shell::command( $command ) // Shell class demands an array of words.
-				->environment( $environment )
+					->environment( $environment )
 					->limits( $this->limits );
 				if ( $input !== null ) {
 					$prepared = $prepared->input( $input );
@@ -205,15 +200,14 @@ class EDConnectorExe extends EDConnectorBase {
 	}
 
 	/**
-	 * Register used software for Special:Version.
-	 *
-	 * @param array &$software
+	 * Return name and version of the relevant software to be used at Special:Version.
+	 * @param array $config
+	 * @return array [ 'name', 'version' ]
 	 */
-	public static function addSoftware( array &$software ) {
-		foreach ( self::$sources as $key => $config ) {
-			if ( !isset( $config['command'] ) ) {
-				continue; // not a program.
-			}
+	public static function version( array $config ): array {
+		[ $name, $version ] = parent::version( $config );
+		if ( !( $name && $version ) && ( isset( $config['version command'] ) || isset( $config['command'] ) ) ) {
+			// Version will be reported by the program itself.
 			// Get path to the command.
 			preg_match(
 				'~^[\w/-]+~',
@@ -221,63 +215,43 @@ class EDConnectorExe extends EDConnectorBase {
 				$matches
 			);
 			$path = $matches[0];
-
-			// Get program name.
-			if ( isset( $config['name'] ) ) {
-				$name = $config['name'];
-			} else {
-				preg_match( '~[^/]+$~', $path, $matches );
-				$name = $matches[0];
+			if ( !$name ) {
+				$name = basename( $path );
 			}
-
-			// Program site.
-			if ( isset( $config['program url'] ) ) {
-				$name = "[{$config['program url']} $name]";
-			}
-
-			// Program version.
-			$version = null;
-			if ( isset( $config['version'] ) ) {
-				// Version is hard coded in LocalSettings.php.
-				$version = $config['version'];
+			if ( isset( $config['version command'] ) ) {
+				// The command key that reports the version is set in LocalSettings.php,
+				$commands_v = [ $config['version command'] ];
 			} else {
-				// Version will be reported by the program itself.
-				if ( isset( $config['version command'] ) ) {
-					// The command key that reports the version is set in LocalSettings.php,
-					$commands_v = [ $config['version command'] ];
-				} else {
-					// We will try several most common keys that print out version one by one.
-					$commands_v = [ "$path -V", "$path -v", "$path --version", "$path -version" ];
-				}
-				$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
-				$limits = self::defaultLimits();
-				if ( isset( $config['limits'] ) ) {
-					$limits += $config['limits'];
-				}
-				foreach ( $commands_v as $command_v ) {
-					$reported_version = $cache->getWithSetCallback(
-						$cache->makeGlobalKey( __CLASS__, $command_v ),
-						self::VERSION_TTL,
-						static function () use ( $command_v, $limits ) {
-							$prepared = Shell::command( explode( ' ', $command_v ) )
-								->includeStderr()
-								->restrict( Shell::RESTRICT_DEFAULT | Shell::NO_NETWORK )
-								->limits( $limits );
-							try {
-								$result = $prepared->execute();
-							} catch ( Exception $e ) {
-								return null;
-							}
-							return $result->getExitCode() === 0 ? $result->getStdout() : null;
+				// We will try several most common keys that print out version one by one.
+				preg_match( '~[^/]+$~', $path, $dir_matches );
+				$commands_v = [ "$path -V", "$path -v", "$path --version", "$path -version" ];
+			}
+			$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
+			$limits = self::defaultLimits();
+			if ( isset( $config['limits'] ) ) {
+				$limits += $config['limits'];
+			}
+			foreach ( $commands_v as $command_v ) {
+				$version = $cache->getWithSetCallback(
+					$cache->makeGlobalKey( __CLASS__, $command_v ),
+					self::VERSION_TTL,
+					static function () use ( $command_v, $limits ): ?string {
+						$prepared = Shell::command( explode( ' ', $command_v ) )
+							->includeStderr()->disableNetwork()->privateUserNamespace()->noNewPrivs()->privateDev()
+							->limits( $limits );
+						try {
+							$result = $prepared->execute();
+						} catch ( Exception $e ) {
+							return null;
 						}
-					);
-					if ( $reported_version ) {
-						$version = $reported_version;
-						break;
+						return $result->getExitCode() === 0 ? $result->getStdout() : null;
 					}
+				);
+				if ( $version ) {
+					return [ $name, $version ];
 				}
 			}
-			$software[$name] = $version ?: '(unknown)';
 		}
+		return [ $name, $version ];
 	}
 }

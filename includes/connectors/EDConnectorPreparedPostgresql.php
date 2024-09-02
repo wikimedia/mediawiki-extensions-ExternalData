@@ -7,8 +7,6 @@
  *
  */
 class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
-	/** @var string $connectionString PostgreSQL connection string. */
-	private $connectionString;
 	/** @var string|\pgsql\connection $pg Connection to PostrgreSQL server. */
 	private $pg;
 	/** @var resource|false $prepared The prepared query. */
@@ -32,25 +30,32 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 				'mw.ext.getExternalData.getDbData (type = postgres)'
 			);
 		}
+	}
 
+	/**
+	 * @param array $params
+	 * @return void
+	 */
+	protected function setCredentials( array $params ) {
+		parent::setCredentials( $params );
 		// Make connection string.
 		$str = '';
 		foreach ( $this->credentials as $name => $value ) {
-			$str .= "$name='" . str_replace( "'", "\\'", $value ) . "' ";
+			$str .= "$name='" . str_replace( "'", "\\'", $value ?? '' ) . "' ";
 		}
-		$this->connectionString = $str;
+		$this->credentials['connection string'] = $str;
 	}
 
 	/**
 	 * Establish connection the database server.
 	 * @return bool
 	 */
-	protected function connect() {
+	protected function connect(): bool {
 		// Throw exceptions instead of warnings.
 		self::throwWarnings();
 		try {
 			// @phan-suppress-next-line PhanUndeclaredConstant Optional extension
-			$this->pg = pg_connect( $this->connectionString, PGSQL_CONNECT_FORCE_NEW );
+			$this->pg = pg_connect( $this->credentials['connection string'] );
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			self::stopThrowingWarnings();
@@ -71,7 +76,7 @@ class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 	 * Get query result as a two-dimensional array.
 	 * @return string[][]|void
 	 */
-	protected function fetch() {
+	protected function fetch(): ?array {
 		// Prepared statement.
 		$this->prepared = pg_prepare( $this->pg, $this->name, $this->query );
 		if ( $this->prepared === false ) {

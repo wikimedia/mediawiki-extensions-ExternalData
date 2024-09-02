@@ -17,12 +17,14 @@ class EDConnectorSqlite extends EDConnectorRdbms {
 	 * @param array $params Supplemented parameters.
 	 */
 	protected function setCredentials( array $params ) {
+		$params['user'] ??= '';
+
 		parent::setCredentials( $params );
 
 		if ( isset( $params['directory'] ) ) {
 			$this->credentials['dbDirectory'] = $params['directory'];
 		} else {
-			$this->error( 'externaldata-db-incomplete-information', 'sqlite directory' );
+			$this->error( 'externaldata-db-incomplete-information', $params['db'], 'directory' );
 		}
 	}
 }

@@ -23,21 +23,23 @@ trait EDParsesParams {
 	 * Get a configuration setting.
 	 *
 	 * @param string $setting Setting's name.
-	 *
 	 * @return mixed Setting's value.
 	 */
 	protected static function setting( $setting ) {
-		if ( isset( $GLOBALS[self::$prefix . $setting ] ) ) {
-			return $GLOBALS[self::$prefix . $setting ];
+		$new_var = self::$prefix . $setting;
+		if ( isset( $GLOBALS[$new_var] ) ) {
+			return $GLOBALS[$new_var];
 		}
-		if ( isset( $GLOBALS[self::$oldPrefix . $setting ] ) ) {
-			return $GLOBALS[self::$oldPrefix . $setting ];
+		$old_var = self::$oldPrefix . $setting;
+		if ( isset( $GLOBALS[$old_var] ) ) {
+			return $GLOBALS[$old_var];
 		}
 		// Special case.
 		if ( $setting === 'Verbose' ) {
 			global $wgExternalValueVerbose;
 			return $wgExternalValueVerbose;
 		}
+		return null;
 	}
 
 	/**
@@ -73,62 +75,56 @@ trait EDParsesParams {
 			if ( $key === '__exists' ) { // this part of the 'pattern' is a dependency.
 				$dependencies = is_array( $value ) ? $value : [ $value ];
 				foreach ( $dependencies as $dependency ) {
-					if ( class_exists( $dependency ) || function_exists( $dependency ) ) { // and it is met.
-						continue 2; // continue with this 'pattern'.
-					} else {
-						return false; // dependency is not met, and the 'pattern' fails.
+					if ( !class_exists( $dependency ) && !function_exists( $dependency ) ) { // and it is met.
+						return false; // dependency not met.
 					}
+					continue 2; // continue with this 'pattern'.
 				}
 			}
 			$parameter_present = array_key_exists( $key, $params );
 			if ( $value === true ) { // parameter is required.
-				if ( $parameter_present ) { // and is present.
-					continue; // this parameter needs no further checks.
-				} else {
+				if ( !$parameter_present ) { // and is present.
 					return false; // parameter is absent, and the 'pattern' fails.
 				}
+				continue; // this parameter needs no further checks.
 			}
 			if ( $value === false ) { // parameter is forbidden.
-				if ( !$parameter_present ) { // and is absent.
-					continue; // this parameter needs no further checks.
-				} else {
+				if ( $parameter_present ) { // and is absent.
 					return false; // parameter is present, and the 'pattern' fails.
 				}
+				continue; // this parameter needs no further checks.
 			}
 			if ( !$parameter_present ) {
 				return false; // at this point, parameter ought to be set.
 			}
 			// This works only with integrated connectors.
 			if ( $value === null ) {
-				if ( !isset( $params[$key] ) || $params[$key] === null ) {
-					continue;
-				} else {
+				if ( $parameter_present && $params[$key] !== null ) {
 					return false;
 				}
+				continue;
 			}
 			if ( self::isRegex( $value ) ) { // parameter is a regular expression.
-				if ( preg_match( $value, $params[$key] ) ) { // and it matches.
-					continue; // this parameter needs no further checks.
-				} else {
+				if ( preg_match( $value, $params[$key] ) !== 1 ) {
 					return false; // does not match, and the 'pattern' fails.
 				}
+				continue; // matches and this parameter needs no further checks.
 			}
-			// At this point, only exact (case insensitive) match will do.
-			if ( strtolower( $params[$key] ) !== strtolower( $value ) ) {
+			// At this point, only exact case-insensitive match will do.
+			if ( !is_string( $params[$key] ) || strtolower( $params[$key] ?? '' ) !== strtolower( $value ) ) {
 				return false;
 			}
 		}
-		return true;
+		return true; // none of the checks failed.
 	}
 
 	/**
 	 * Returns true, if the passed string is a regular expression.
 	 *
 	 * @param string $str
-	 *
 	 * @return bool
 	 */
-	private static function isRegex( $str ) {
+	private static function isRegex( string $str ): bool {
 		if ( !preg_match( '/^(?:
 			# Same delimiter character at the start and the end
 			([^\s\w\\\\]).+\\1
@@ -162,7 +158,12 @@ trait EDParsesParams {
 	 *
 	 * @return array Parsed parameter.
 	 */
-	protected static function paramToArray( $arg, $lowercaseKeys = false, $lowercaseValues = false, $numeric = false ) {
+	protected static function paramToArray(
+		$arg,
+		bool $lowercaseKeys = false,
+		bool $lowercaseValues = false,
+		bool $numeric = false
+	): array {
 		if ( !is_array( $arg ) ) {
 			// Not an array. Splitting needed.
 			$arg = preg_replace( "/\s\s+/", ' ', $arg ); // whitespace
@@ -172,13 +173,13 @@ trait EDParsesParams {
 			// http://stackoverflow.com/questions/1373735/regexp-split-string-by-commas-and-spaces-but-ignore-the-inside-quotes-and-parent#1381895
 			// ...with modifications by Nick Lindridge, ionCube Ltd.
 			$pattern = <<<END
-			/
-			[,]
-			(?=(?:(?:[^"]*"){2})*[^"]*$)
-			(?=(?:(?:[^']*'){2})*[^']*$)
-			(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
-			/x
-END;
+				/
+				[,]
+				(?=(?:(?:[^"]*"){2})*[^"]*$)
+				(?=(?:(?:[^']*'){2})*[^']*$)
+				(?=(?:[^()]*+\([^()]*+\))*+[^()]*+$)
+				/x
+			END;
 			// " - fix for color highlighting in vi :)
 			$key_value_pairs = preg_split( $pattern, $arg );
 			$split_array = [];
@@ -220,7 +221,7 @@ END;
 	 *
 	 * @return array Associative array of parameters.
 	 */
-	protected static function parseParams( $params ) {
+	protected static function parseParams( array $params ): array {
 		$args = [];
 		foreach ( $params as $key => $param ) {
 			if ( is_int( $key ) ) {
@@ -238,6 +239,23 @@ END;
 			}
 		}
 		return $args;
+	}
+
+	/**
+	 * Serialise an associative array.
+	 * @param array $arr
+	 * @param string $delim Delimiter between key and value.
+	 * @param string $sep Separator between items.
+	 * @return string
+	 */
+	protected static function serialiseArray( array $arr, string $delim = '=', string $sep = ',' ): string {
+		$lines = [];
+		foreach ( $arr as $key => $value ) {
+			if ( $value !== null ) {
+				$lines[] = "$key$delim$value";
+			}
+		}
+		return implode( $sep, $lines );
 	}
 
 	/**

@@ -15,11 +15,8 @@ class EDParserXMLwithXPath extends EDParserXML {
 
 	/**
 	 * Constructor.
-	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
-	 *
 	 * @throws MWException
-	 *
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );
@@ -45,7 +42,14 @@ class EDParserXMLwithXPath extends EDParserXML {
 	public function __invoke( $text, $path = null ): array {
 		self::suppressWarnings();
 		try {
-			$xml = new SimpleXMLElement( $text );
+			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
+			$xml = new SimpleXMLElement( $text, LIBXML_BIGLINES | LIBXML_COMPACT );
+			$errors = $this->xmlParseErrors( libxml_get_errors(), $text );
+			libxml_clear_errors();
+			libxml_use_internal_errors( $internalErrors ); // -- restore.
+			if ( $errors ) {
+				throw new EDParserException( 'externaldata-invalid-format', self::NAME, $errors );
+			}
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
 		}
@@ -119,7 +123,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 	private static function xml2Array( SimpleXMLElement $xml ): array {
 		$converted = [];
 		foreach ( (array)$xml as $index => $node ) {
-			$converted[$index] = is_a( $node, 'SimpleXMLElement' ) ? self::xml2Array( $node ) : $node;
+			$converted[$index] = $node instanceof \SimpleXMLElement ? self::xml2Array( $node ) : $node;
 		}
 		return $converted;
 	}
@@ -139,5 +143,35 @@ class EDParserXMLwithXPath extends EDParserXML {
 		return array_filter( $nodes, static function ( $node ) {
 			return trim( $node[0] ) !== '';
 		} );
+	}
+
+	/**
+	 * Convert XML error to string to be passed to MediaWiki error message.
+	 * @see https://www.php.net/manual/en/function.libxml-get-errors.php.
+	 * @param LibXMLError[] $errors
+	 * @param string $xml
+	 * @return string
+	 */
+	protected function xmlParseErrors( array $errors, string $xml ): string {
+		$lines = explode( "\n", $xml );
+		$message = [];
+		static $levels = [
+			LIBXML_ERR_WARNING => 'Warning',
+			LIBXML_ERR_ERROR => 'Error',
+			LIBXML_ERR_FATAL => 'Fatal error'
+		];
+		foreach ( $errors as $error ) {
+			if ( $error->level >= $this->errorLevel ) {
+				$message[] = $lines[$error->line - 1];
+				$message[] = str_repeat( '-', $error->column ) . '^';
+				$message[] = $levels[$error->level] . $error->code . ': ' . trim( $error->message );
+				$message[] = "\tLine: $error->line";
+				$message[] = "\tColumn: $error->column";
+				if ( $error->file ) {
+					$message[] = "\tFile: $error->file";
+				}
+			}
+		}
+		return implode( "\n", $message );
 	}
 }

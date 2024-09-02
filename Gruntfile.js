@@ -14,7 +14,8 @@ module.exports = function ( grunt ) {
 			all: [
 				'**/*.{js,json}',
 				'!node_modules/**',
-				'!vendor/**'
+				'!vendor/**',
+				'!includes/presets'
 			]
 		}
 	} );

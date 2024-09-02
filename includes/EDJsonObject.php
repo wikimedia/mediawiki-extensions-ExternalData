@@ -97,7 +97,7 @@ class EDJsonObject {
 	 *
 	 * @return void
 	 *
-	 * @throws MWException
+	 * @throws EDParserException
 	 */
 	public function __construct( $json = null ) {
 		if ( $json === null ) {
@@ -105,14 +105,14 @@ class EDJsonObject {
 		} elseif ( is_string( $json ) ) {
 			$this->jsonObject = json_decode( $json, true );
 			if ( $this->jsonObject === null ) {
-				throw new MWException( wfMessage( 'externaldata-invalid-format', 'JSON' )->text() );
+				throw new EDParserException( 'externaldata-invalid-format', 'JSON', $json );
 			}
 		} elseif ( is_array( $json ) ) {
 			$this->jsonObject = $json;
 		} elseif ( is_object( $json ) ) {
 			$this->jsonObject = json_decode( json_encode( $json ), true );
 		} else {
-			throw new MWException( wfMessage( 'externaldata-invalid-format', 'JSON' )->text() );
+			throw new EDParserException( wfMessage( 'externaldata-invalid-format', 'JSON' )->text() );
 		}
 	}
 
@@ -138,8 +138,7 @@ class EDJsonObject {
 	 */
 	public function get( $jsonPath ) {
 		$this->hasDiverged = false;
-		$result = $this->getReal( $this->jsonObject, $jsonPath );
-		return $result;
+		return $this->getReal( $this->jsonObject, $jsonPath );
 	}
 
 	/**

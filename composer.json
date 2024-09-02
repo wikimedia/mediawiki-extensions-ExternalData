@@ -32,7 +32,8 @@
 		"test": [
 			"parallel-lint . --exclude node_modules --exclude vendor",
 			"@phpcs",
-			"minus-x check ."
+			"minus-x check .",
+			"@phan"
 		],
 		"cover": "phpunit --coverage-html coverage",
 		"fix": [
@@ -40,7 +41,7 @@
 			"phpcbf"
 		],
 		"phpcs": "phpcs -sp --cache",
-		"phan": "vendor/bin/phan -d . --allow-polyfill-parser"
+		"phan": "vendor/bin/phan -d . --long-progress-bar --color --require-config-exists --allow-polyfill-parser"
 	},
 	"config": {
 		"optimize-autoloader": true,

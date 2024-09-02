@@ -58,7 +58,8 @@ abstract class EDParserArchive extends EDParserBase {
 			$args_for_decompressed_parser['path']
 		);
 
-		$this->multiple = preg_match( '/[[\]?*]/', $this->mask ) === 1; // Parser for the files in the archive.
+		// Parser for the files in the archive.
+		$this->multiple = $this->mask && preg_match( '/[[\]?*]/', $this->mask ) === 1;
 		$this->prepareParser( $args_for_decompressed_parser ); // any possible exception will fall through.
 	}
 
@@ -74,7 +75,7 @@ abstract class EDParserArchive extends EDParserBase {
 	 */
 	public function __invoke( $text, $path = null ): array {
 		parent::__invoke( $text, $path );
-		if ( preg_match( '/\.(' . implode( '|', static::extensions() ) . ')$/', $path, $matches ) ) {
+		if ( $path && preg_match( '/\.(' . implode( '|', static::extensions() ) . ')$/', $path, $matches ) ) {
 			$this->type = $matches[1];
 		} else {
 			$this->type = static::extensions()[0];
@@ -88,10 +89,11 @@ abstract class EDParserArchive extends EDParserBase {
 
 		// Create archive object.
 		try {
-			$this->open( $temp_file_name, $path );
+			$this->open( $temp_file_name );
 		} catch ( EDParserException $e ) {
 			unlink( $temp_file_name );
-			throw $e;
+			// Rethrow with archive file name filled.
+			throw new EDParserException( $e->code(), $e->params()[0], $path ?? '(unknown)', $e->params()[2] );
 		}
 
 		$all_values = [];
@@ -129,25 +131,24 @@ abstract class EDParserArchive extends EDParserBase {
 	 * Create archive object from temporary file name.
 	 *
 	 * @param string $temp Temporary file name.
-	 * @param string $original Path or URL to the original archive
 	 * @return void
 	 * @throws EDParserException
 	 */
-	abstract protected function open( $temp, $original );
+	abstract protected function open( string $temp );
 
 	/**
 	 * Get file names with given name or fitting given mask from $this->archive.
 	 * @param string $mask File name or mask.
 	 * @return array File names.
 	 */
-	abstract protected function files( $mask ): array;
+	abstract protected function files( string $mask ): array;
 
 	/**
 	 * Read $file from the $this->archive.
 	 * @param string $file File name.
 	 * @return string|bool The file contents or false on error.
 	 */
-	abstract protected function read( $file );
+	abstract protected function read( string $file );
 
 	/** This function matches $path against the $this->mask,
 	 * taking into account $this->depth and whether $path is a directory.

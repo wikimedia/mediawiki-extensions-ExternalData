@@ -53,6 +53,13 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 		} else {
 			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'server' );
 		}
+		$this->credentials['trust server certificate'] = $params['trust server certificate'] ?? false;
+		$this->credentials['dsn'] = self::serialiseArray( [
+			'Driver' => '{' . $this->credentials['driver'] . '}',
+			'Server' => $this->credentials['host'],
+			'Database' => $this->credentials['dbname'],
+			'TrustServerCertificate' => $this->credentials['trust server certificate'] ? 'yes' : null,
+		], '=', ';' );
 	}
 
 	/**
@@ -61,14 +68,11 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 	 * @return bool
 	 */
 	protected function connect() {
-		$driver = $this->credentials['driver'];
-		$server = $this->credentials['host'];
-		$database = $this->credentials['dbname'];
 		// Throw exceptions instead of warnings.
 		self::throwWarnings();
 		try {
 			$this->odbcConnection = odbc_pconnect(
-				"Driver={$driver};Server=$server;Database=$database;",
+				$this->credentials['dsn'],
 				$this->credentials['user'],
 				$this->credentials['password']
 			);
@@ -87,9 +91,11 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 
 	/**
 	 * Get query result as a two-dimensional array.
-	 * @return string[][]|void
+	 *
+	 * @return ?array
+	 * @throws MWException
 	 */
-	protected function fetch() {
+	protected function fetch(): ?array {
 		// Prepared statement.
 		// Throw exceptions instead of warnings.
 		self::throwWarnings();

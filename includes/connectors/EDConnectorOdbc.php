@@ -109,6 +109,13 @@ class EDConnectorOdbc extends EDConnectorComposed {
 		} else {
 			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'server' );
 		}
+		$this->credentials['trust server certificate'] = $params['trust server certificate'] ?? false;
+		$this->credentials['dsn'] = self::serialiseArray( [
+			'Driver' => '{' . $this->credentials['driver'] . '}',
+			'Server' => $this->credentials['host'],
+			'Database' => $this->credentials['dbname'],
+			'TrustServerCertificate' => $this->credentials['trust server certificate'] ? 'yes' : null,
+		], '=', ';' );
 	}
 
 	/**
@@ -116,15 +123,12 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 *
 	 * @return bool
 	 */
-	protected function connect() {
-		$driver = $this->credentials['driver'];
-		$server = $this->credentials['host'];
-		$database = $this->credentials['dbname'];
+	protected function connect(): bool {
 		// Throw exceptions instead of warnings.
 		self::throwWarnings();
 		try {
 			$this->odbcConnection = odbc_pconnect(
-				"Driver={$driver};Server=$server;Database=$database;",
+				$this->credentials['dsn'],
 				$this->credentials['user'],
 				$this->credentials['password']
 			);
@@ -146,10 +150,11 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 * @param string $field The dot-separated field identifier. Table ID is penultimate.
 	 * @return ?string The field ID.
 	 */
-	private static function getTable( $field ) {
-		if ( preg_match( '/[^.]+(?=\.[^.]+$)/', $field, $matches ) ) {
+	private static function getTable( string $field ): ?string {
+		if ( preg_match( '/[^.]+(?=\.[^.]+$)/', trim( $field ), $matches ) ) {
 			return $matches[0];
 		}
+		return null;
 	}
 
 	/**
@@ -157,7 +162,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 * @param array $columns An array of columns.
 	 * @return string A list of columns.
 	 */
-	protected static function listColumns( array $columns ) {
+	protected static function listColumns( array $columns ): string {
 		return implode( ', ', $columns );
 	}
 
@@ -167,13 +172,14 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 * @param array $joins An associative array of JOIN conditions ['table1.field1' => 'table2.field2'].
 	 * @return string The FROM clause.
 	 */
-	protected static function from( array $tables, array $joins ) {
+	protected static function from( array $tables, array $joins ): string {
 		$from = '';
 		$listed = [];
 		$first = true;
-		foreach ( $joins as $field1 => $field2 ) {
-			$alias1 = static::getTable( $field1 );  // late binding.
-			$alias2 = static::getTable( $field2 );  // late binding.
+		foreach ( $joins as [ $type, $condition ] ) {
+			[ $left, $right ] = explode( '=', $condition );
+			$alias1 = self::getTable( $left );
+			$alias2 = self::getTable( $right );
 			// First table AS alias in the first join.
 			if ( $first && $alias1 ) {
 				$from .= "{$tables[$alias1]} AS $alias1";
@@ -181,7 +187,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 				$first = false;
 			}
 			if ( $alias2 ) {
-				$from .= " JOIN {$tables[$alias2]} ON $field1 = $field2";
+				$from .= " $type {$tables[$alias2]} ON $condition";
 				$listed[$alias2] = true;
 			}
 		}
@@ -205,7 +211,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 * @param int $limit The number of rows to return
 	 * @return string The TOP/LIMIT clause.
 	 */
-	protected static function limit( $limit ) {
+	protected static function limit( int $limit ): string {
 		// @todo: non-MS SQL (LIMIT ...).
 		return $limit ? 'LIMIT ' . (string)$limit : '';
 	}
@@ -214,7 +220,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	 * Get query text.
 	 * @return string
 	 */
-	protected function getQuery() {
+	protected function getQuery(): string {
 		return strtr( static::TEMPLATE /* late binding */, [
 			'$columns' => static::listColumns( $this->columns ), // late binding
 			'$from' => static::from( $this->tables, $this->joins ), // late binding

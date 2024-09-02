@@ -72,17 +72,20 @@ class EDParserFunctions {
 	/**
 	 * Actually get the external data.
 	 *
-	 * @param ?Title $title Page title.
+	 * @param Title $title Page title.
 	 * @param string|null $name Parser function name.
 	 * @param array $args Parser function parameters ($parser not included).
 	 *
 	 * @return string|array|null Return an array of values on success, an error message otherwise.
 	 */
-	private static function get( $title, $name, array $args ) {
+	private static function get( Title $title, ?string $name, array $args ) {
 		// Unset self::$values if the current page changed during this script run.
 		// Looks like it is relevant for maintenance scripts.
 		if ( $title ) {
 			self::clearValuesIfNecessary( $title->getText() );
+		} else {
+			// Hopefully, this code is never reached.
+			$title = Title::newMainPage();
 		}
 
 		$connector = EDConnectorBase::getConnector( $name, self::parseParams( $args ), $title );
@@ -105,13 +108,13 @@ class EDParserFunctions {
 	 * Also includes all the boilerplate code that processes parameters,
 	 * saves external values, etc.
 	 *
-	 * @param ?Title $title Parser object.
+	 * @param Title $title Parser object.
 	 * @param string|null $name Parser function name.
 	 * @param array $args Parser function parameters ($parser not included).
 	 *
 	 * @return string|null Return null on success, an error message otherwise.
 	 */
-	public static function fetch( $title, $name, array $args ) {
+	public static function fetch( Title $title, ?string $name, array $args ) {
 		$result = self::get( $title, $name, $args );
 		if ( is_array( $result ) ) {
 			// An array of values, not an error message.
@@ -187,16 +190,11 @@ class EDParserFunctions {
 	/**
 	 * Emulate {{#get_external_data:}} call.
 	 * @param array &$args
-	 * @param ?Title $title
+	 * @param Title $title
 	 * @return null|string
 	 */
 	private static function emulateGetExternalData( array &$args, $title ) {
-		if (
-			isset( $args['source'] ) ||
-			isset( $args['url'] ) ||
-			isset( $args['text'] ) ||
-			isset( $args['program'] )
-		) {
+		if ( EDConnectorBase::sourceSet( $args ) ) {
 			// If {{#for_external_table:}} is called in standalone mode, there is no shared context,
 			// therefore, emulate {{#clear_external_data:}}.
 			self::actuallyClearExternalData( [] );
@@ -226,7 +224,8 @@ class EDParserFunctions {
 			array_shift( $args );
 		}
 		$args['data'] ??= "$variable=$variable";
-		$fetched = self::emulateGetExternalData( $args, $parser->getTitle() );
+		$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+		$fetched = self::emulateGetExternalData( $args, $title );
 		if ( $fetched ) {
 			// There is an error.
 			return $fetched;
@@ -382,7 +381,8 @@ class EDParserFunctions {
 				$data_params['data'] = $variables;
 			}
 
-			$fetched = self::emulateGetExternalData( $data_params, $parser->getTitle() );
+			$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+			$fetched = self::emulateGetExternalData( $data_params, $title );
 			if ( $fetched ) {
 				// There is an error.
 				return $fetched;
@@ -420,7 +420,7 @@ class EDParserFunctions {
 	 * Actually display external table.
 	 *
 	 * @param array $args
-	 * @param ?Title $title
+	 * @param Title $title
 	 * @return array
 	 */
 	private static function actuallyDisplayExternalTable( array $args, $title ): array {
@@ -490,7 +490,8 @@ class EDParserFunctions {
 		$params = func_get_args();
 		array_shift( $params ); // we already know the $parser ...
 		$args = self::parseParams( $params ); // parse params into name-value pairs
-		$result = self::actuallyDisplayExternalTable( $args, $parser->getTitle() );
+		$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+		$result = self::actuallyDisplayExternalTable( $args, $title );
 		if ( isset( $result['error'] ) ) {
 			// Message is created here rather than in EDParserFunctions::actuallyDisplayExternalTable()
 			//      to clear that method from MediaWiki installation-dependent code and make it testable.
@@ -514,7 +515,8 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$args = self::parseParams( $params ); // parse params into name-value pairs
 
-		$fetched = self::emulateGetExternalData( $args, $parser->getTitle() );
+		$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+		$fetched = self::emulateGetExternalData( $args, $title );
 		if ( $fetched ) {
 			// There is an error.
 			return [ 'error' => $fetched ];

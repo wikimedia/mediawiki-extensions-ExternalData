@@ -101,7 +101,7 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 	 * Get query text.
 	 * @return string
 	 */
-	protected function getQuery() {
+	protected function getQuery(): string {
 		return $this->query;
 	}
 }

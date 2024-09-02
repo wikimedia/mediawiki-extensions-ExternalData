@@ -24,9 +24,8 @@ class EDConnectorBaseTest extends EDTestBase {
 		// This is simpler and more usable than standard restrictive means.
 		return new class ( $args, $keep_case ) extends EDConnectorBase {
 			public function __construct( array &$args, $keep_case ) {
-				$title = Title::makeTitle( 0, 'Dummy' );
 				$this->keepExternalVarsCase = $keep_case;
-				parent::__construct( $args, $title );
+				parent::__construct( $args, Title::makeTitle( 0, 'Dummy' ) );
 			}
 
 			public function run() {
@@ -36,8 +35,8 @@ class EDConnectorBaseTest extends EDTestBase {
 				return self::$sources;
 			}
 
-			public function supplement( array $params ): array {
-				return self::supplementParams( $params );
+			public function supplement( array $params, Title $title ): array {
+				return self::supplementParams( $params, $title );
 			}
 
 			public function connector( $name, array $params ) {
@@ -79,6 +78,10 @@ class EDConnectorBaseTest extends EDTestBase {
 		$old_prefix = 'edg';
 
 		$sources = $globals["{$prefix}Sources"];
+		// The same is done by EDConnectorBase::loadConfig():
+		foreach ( [ 'test', 'reference', 'media', 'all' ] as $group ) {
+			unset( $sources["load $group presets"] );
+		}
 
 		$cases = [];
 
@@ -91,14 +94,14 @@ class EDConnectorBaseTest extends EDTestBase {
 		$cases['Global'] = [ $globals, $sources ];
 
 		// Test a user-defined data source.
-		$globals["{$prefix}Sources"]['rfam'] = [
+		$globals["{$prefix}Sources"]['RFam'] = [
 			'server' => 'mysql-rfam-public.ebi.ac.uk:4497',
 			'type' => 'mysql',
 			'name' => 'Rfam',
 			'user' => 'rfamro',
 			'password' => ''
 		];
-		$sources['rfam'] = $globals["{$prefix}Sources"]['rfam'];
+		$sources['RFam'] = $globals["{$prefix}Sources"]['RFam'];
 		$cases['Data source'] = [ $globals, $sources ];
 
 		// Test old style global setting.
@@ -107,10 +110,10 @@ class EDConnectorBaseTest extends EDTestBase {
 		$cases['Old style global'] = [ $globals, $sources ];
 
 		// Test old style settings for data source.
-		$globals["{$old_prefix}ExeCommand"] = [ 'man' => 'man $topic$' ];
-		$globals["{$old_prefix}ExeParams"] = [ 'man' => [ 'topic' ] ];
-		$globals["{$old_prefix}ExeParamFilters"] = [ 'man' => [ 'topic' => '/^\w+$/' ] ];
-		$sources['man'] = [
+		$globals["{$old_prefix}ExeCommand"] = [ 'Man' => 'man $topic$' ];
+		$globals["{$old_prefix}ExeParams"] = [ 'Man' => [ 'topic' ] ];
+		$globals["{$old_prefix}ExeParamFilters"] = [ 'Man' => [ 'topic' => '/^\w+$/' ] ];
+		$sources['Man'] = [
 			'command' => 'man $topic$', 'params' => [ 'topic' ], 'param filters' => [ 'topic' => '/^\w+$/' ]
 		];
 		$cases['Old style data source'] = [ $globals, $sources ];
@@ -336,13 +339,6 @@ class EDConnectorBaseTest extends EDTestBase {
 	 * @return array
 	 */
 	public static function provideGetConnector(): array {
-		if ( class_exists( 'MongoDB\Client' ) ) {
-			$mongo = 'EDConnectorMongodb7';
-		} elseif ( class_exists( 'MongoClient' ) ) {
-			$mongo = 'EDConnectorMongodb5';
-		} else {
-			$mongo = 'EDConnectorSql';
-		}
 		return [
 			// Specific functions.
 			'{{#get_web_data:}}, POST' => [ 'get_web_data', [ 'post data' => 'postdata' ], 'EDConnectorWeb' ],
@@ -371,7 +367,7 @@ class EDConnectorBaseTest extends EDTestBase {
 				[ 'type' => 'odbc', 'driver' => 'ODBC Driver 17 for SQL Server' ],
 				'EDConnectorOdbcMssql'
 			],
-			'{{#get_db_data:}}, MongoDB' =>	[ 'get_db_data', [ 'type' => 'mongodb' ], $mongo ],
+			'{{#get_db_data:}}, MongoDB' =>	[ 'get_db_data', [ 'type' => 'mongodb' ], 'EDConnectorMongodb' ],
 			'{{#get_db_data:}}, PostgreSQL' => [ 'get_db_data', [ 'type' => 'postgres' ], 'EDConnectorPostgresql' ],
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
 			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
@@ -438,7 +434,7 @@ class EDConnectorBaseTest extends EDTestBase {
 				'EDConnectorOdbcMssql'
 			],
 			'{{#get_external_data:}}, MongoDB' =>
-				[ 'get_external_data', [ 'from' => 'MongoDB dataset', 'type' => 'mongodb' ], $mongo ],
+				[ 'get_external_data', [ 'from' => 'MongoDB dataset', 'type' => 'mongodb' ], 'EDConnectorMongodb' ],
 			'{{#get_external_data:}}, PostgreSQL' => [
 				'get_external_data',
 				[ 'type' => 'postgres' ], 'EDConnectorPostgresql'
@@ -531,7 +527,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		$args['data'] = 'text=__text';
 		self::restoreGlobals();
 		$mock = $this->mock( $args, true );
-		$supplemented = $mock->supplement( $args );
+		$supplemented = $mock->supplement( $args, Title::makeTitle( 0, 'Dummy' ) );
 		$connector = $mock->connector( $name, $supplemented );
 		$this->assertEquals(
 			$class,
@@ -757,7 +753,7 @@ class EDConnectorBaseTest extends EDTestBase {
 		$mock = $this->mock( $params, true );
 		$mock::loadConfig();
 
-		$supplemented = $mock->supplement( $params );
+		$supplemented = $mock->supplement( $params, Title::makeTitle( 0, 'Dummy' ) );
 		foreach ( $expected as $param => $value ) {
 			$this->assertArrayHasKey(
 				$param,

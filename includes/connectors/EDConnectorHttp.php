@@ -18,6 +18,10 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
 	protected const ID_PARAM = 'url';
 
+	/** @const string CONTENT_TYPE_REGEX Structure of Content-Type header. */
+	private const CONTENT_TYPE_REGEX
+		= '^(?<type>[^\s/]+)(?:/(?<subtype>[^\s;]+))?(?:;\s*charset\s*=\s*(?<charset>[^;\s]+))?';
+
 	/** @var string URL to fetch data from as provided by user. */
 	protected $originalUrl;
 	/** @var string URL to fetch data from after substitutions. */
@@ -51,7 +55,6 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 
 		// HTTP options.
 		$this->options = $args['options'] ?? [];
-		// @TODO inject into data sources.
 		global $wgHTTPTimeout;
 		$this->options['HTTPTimeout'] = $this->options['HTTPTimeout'] ?? $wgHTTPTimeout;
 		global $wgHTTPConnectTimeout;
@@ -87,16 +90,27 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$allowed_urls = $args['allowed urls'] ?? null;
 		if ( self::isURLAllowed( $url, $allowed_urls ) ) {
 			// Do any special variable replacements in the URLs, for secret API keys and the like.
-			if ( isset( $args['replacements'] ) ) {
-				foreach ( $args['replacements'] as $key => $value ) {
-					$url = str_replace( $key, $value, $url );
-				}
-			}
-			$this->realUrl = $url;
+			$this->realUrl = self::realUrl( $url, $args['replacements'] ?? null );
 		} else {
 			// URL not allowed.
 			$this->error( 'externaldata-url-not-allowed', $url );
 		}
+	}
+
+	/**
+	 * Convert visible URL to real one.
+	 * @param string $url
+	 * @param array|null $replacements
+	 * @return string
+	 */
+	protected static function realUrl( string $url, ?array $replacements ): string {
+		// Do any special variable replacements in the URLs, for secret API keys and the like.
+		if ( $replacements ) {
+			foreach ( $replacements as $key => $value ) {
+				$url = str_replace( $key, $value, $url );
+			}
+		}
+		return $url;
 	}
 
 	/**
@@ -131,11 +145,16 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 				// during text parsing, so that the converted text may be cached.
 				// HTTP headers are not cached, therefore, they are not available,
 				// if the text is fetched from the cache.
-				return $this->convert2Utf8( $contents );
+				return $contents ? $this->applyEncodingFromHeaders( $contents ) : $contents;
 			}, $url, $options );
 		}, $this->realUrl, $this->options );
 
 		if ( $contents ) {
+			$contents = $this->convert2Utf8( $contents );
+			$postprocessor = $this->postprocessor;
+			if ( $postprocessor ) {
+				$contents = $postprocessor( $contents, $this->params );
+			}
 			$this->add( $this->parse( $contents, parse_url( $this->realUrl, PHP_URL_PATH ) ) );
 			// Fill standard external variables.
 			$this->addSpecial( '__time', $this->time );
@@ -171,7 +190,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	 *
 	 * @todo Rethink.
 	 */
-	private static function isURLAllowed( $url, $allowed ) {
+	private static function isURLAllowed( string $url, $allowed ) {
 		// this code is based on Parser::maybeMakeExternalImage().
 		if ( !$allowed ) {
 			return true;
@@ -195,13 +214,20 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	 * @param string $method HTTP request method: 'GET' or 'POST'.
 	 * @param string $url URL to fetch.
 	 * @param array $options HTTP options.
+	 * @param bool $suppress Whether to suppress error details sent by server.
 	 * @param string $caller Calling function.
 	 *
 	 * @return array [ Fetched text, HTTP response headers, [ Errors ] ].
 	 *
 	 * @todo Also return error report.
 	 */
-	protected static function request( $method, $url, array $options, $caller = __METHOD__ ): array {
+	protected static function request(
+		string $method,
+		string $url,
+		array $options,
+		bool $suppress,
+		string $caller = __METHOD__
+	): array {
 		wfDebug( "HTTP: $method: $url\n" );
 
 		$options['method'] = strtoupper( $method );
@@ -228,6 +254,10 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			return [ $req->getContent(), $req->getResponseHeaders(), null ];
 		} else {
 			$errors = $status->getErrorsByType( 'error' );
+			if ( !$suppress && $req->getContent() ) {
+				// Add additional information about the error that the server may have provided.
+				$errors[] = '<pre>' . $req->getContent() . '</pre>';
+			}
 			$logger = LoggerFactory::getInstance( 'http' );
 			$logger->warning( Status::wrap( $status )->getWikiText( false, false, 'en' ),
 				[ 'error' => $errors, 'caller' => $caller, 'content' => $req->getContent() ] );
@@ -237,19 +267,15 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 
 	/**
 	 * Return content type, subtype and encoding based on HTTP headers.
-	 *
 	 * @param array $headers HTTP headers.
-	 *
-	 * @return array [ content type, encoding ].
+	 * @return array [ content type, subtype, encoding ].
 	 */
-	private static function fromHeaders( array $headers ): array {
+	private static function encodingFromHeaders( array $headers ): array {
 		if ( $headers && isset( $headers['content-type'] ) ) {
 			$header = strtolower( is_array( $headers['content-type'] )
 				? implode( ',', $headers['content-type'] )
 				: $headers['content-type'] );
-			$regex = '~^(?<type>[^\s/]+)(?:/(?<subtype>[^\s;]+))?(?:;\s*charset\s*=\s*(?<charset>[^;\s]+))?~';
-
-			if ( preg_match( $regex, $header, $match, PREG_UNMATCHED_AS_NULL ) ) {
+			if ( preg_match( '~' . self::CONTENT_TYPE_REGEX . '~', $header, $match, PREG_UNMATCHED_AS_NULL ) ) {
 				return [ $match['type'], $match['subtype'], $match['charset'] ];
 			}
 		}
@@ -257,19 +283,34 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	}
 
 	/**
-	 * Convert encoding to HTTP, using charset info from the HTTP header 'Content-type', but only if this is a text.
-	 *
+	 * Convert encoding to HTTP, using charset info from the HTTP header 'Content-type';
+	 * but only if there is no <meta> tag with charset, and if this is a text.
+	 * @param string $text Test to convert to UTF-8.
+	 * @return string Text converted to UTF-8.
+	 */
+	private function applyEncodingFromHeaders( string $text ): string {
+		[ $type, $subtype, $charset ] = self::encodingFromHeaders( $this->headers );
+		if ( // There is charset in the headers but not in the <html>.
+			$charset &&
+			!preg_match( '%<meta\s+charset\s*=\s*"(?<charset>[^"]+)"\s*/?>%i', $text ) &&
+			!preg_match(
+				'~<meta\s+http-equiv\s*=\s*"Content-Type"\s*content\s*=\s*"' . self::CONTENT_TYPE_REGEX . '"\s*/>~i',
+				$text
+			)
+		) {
+			// Recoding ought to be done now, for there will be no data for it in the cached value.
+			$text = mb_convert_encoding( $text, 'UTF-8', $charset );
+		}
+		return $text;
+	}
+
+	/**
+	 * Convert encoding to HTTP, using charset info from the text.
 	 * @param string $text Test to convert.
-	 *
 	 * @return string Converted text.
 	 */
-	protected function convert2Utf8( $text ) {
-		$type = 'text';
-		// Try HTTP headers.
-		if ( $text && !$this->encoding && $this->headers ) {
-			[ $type, $subtype, $this->encoding ] = self::fromHeaders( $this->headers );
-		}
-		return $text && $type === 'text' && $this->encoding
+	protected function convert2Utf8( $text ): string {
+		return $text && $this->encoding
 			? $this->toUTF8( $text, $this->encoding )
 			: $text;
 	}

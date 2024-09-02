@@ -34,11 +34,10 @@ class EDParserZip extends EDParserArchive {
 	 * Create archive object from temporary file name.
 	 *
 	 * @param string $temp Temporary file name.
-	 * @param string $original Path or URL to the original archive
 	 * @return void
 	 * @throws EDParserException
 	 */
-	protected function open( $temp, $original ) {
+	protected function open( string $temp ) {
 		$this->archive = new ZipArchive();
 		// @phan-suppress-next-line PhanUndeclaredConstantOfClass Class constant available only since PHP 7.4.
 		$flags = defined( 'ZipArchive::RDONLY' ) ? ZipArchive::RDONLY : 0;
@@ -47,7 +46,7 @@ class EDParserZip extends EDParserArchive {
 			throw new EDParserException(
 				'external-data-archive-could-not-read',
 				self::EXT[0],
-				$original,
+				'', // will be filled out by EDParserArchive::__invoke()
 				self::ERRORS[$result]
 			);
 		}
@@ -58,7 +57,7 @@ class EDParserZip extends EDParserArchive {
 	 * @param string $mask File name or mask.
 	 * @return array File names.
 	 */
-	protected function files( $mask ): array {
+	protected function files( string $mask ): array {
 		$files = [];
 		for ( $index = 0; $index < $this->archive->numFiles; $index++ ) {
 			$path = $this->archive->statIndex( $index )['name'];
@@ -75,7 +74,7 @@ class EDParserZip extends EDParserArchive {
 	 * @return string The file contents or false on error.
 	 * @throws EDParserException
 	 */
-	protected function read( $file ) {
+	protected function read( string $file ) {
 		$result = $this->archive->getFromName( $file );
 		if ( $result === false ) {
 			throw new EDParserException( 'external-data-archive-could-not-extract', self::EXT[0], $file, '' );

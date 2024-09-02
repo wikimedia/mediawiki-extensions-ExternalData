@@ -48,7 +48,7 @@ class EDConnectorPreparedMysql extends EDConnectorPrepared {
 	 * Get query result as a two-dimensional array.
 	 * @return string[][]|null
 	 */
-	protected function fetch() {
+	protected function fetch(): ?array {
 		// Prepared statement.
 		$this->prepared = $this->mysqli->prepare( $this->query );
 		if ( !$this->prepared ) {
