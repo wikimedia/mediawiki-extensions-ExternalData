@@ -45,7 +45,11 @@ class EDGetData extends SpecialPage {
 			// @phan-suppress-next-line PhanUndeclaredStaticMethod Not necessarily existing in the current version.
 			$wikiPage = WikiPage::factory( $title );
 		}
-		$page_text = ContentHandler::getContentText( $wikiPage->getContent() );
+		$content = $wikiPage->getContent();
+		if ( !$content instanceof TextContent ) {
+			return;
+		}
+		$page_text = $content->getText();
 		// Remove <noinclude> sections and <includeonly> tags from text
 		$page_text = StringUtils::delimiterReplace( '<noinclude>', '</noinclude>', '', $page_text );
 		$page_text = strtr( $page_text, [ '<includeonly>' => '', '</includeonly>' => '' ] );
