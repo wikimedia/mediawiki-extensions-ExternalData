@@ -4,7 +4,6 @@ namespace ExternalData\Presets;
 
 use CoreParserFunctions;
 use DOMDocument;
-use DOMXPath;
 use MediaWiki\Languages\Data\Names;
 use MediaWiki\MediaWikiServices;
 use MWException;
@@ -514,15 +513,13 @@ class Media extends Base {
 	 * @return string The stripped SVG.
 	 */
 	public static function innerHtml( string $html ): string {
-		$doc = new DOMDocument( '1.0', 'UTF-8' );
-		$doc->loadHTML( $html, LIBXML_NOERROR );
-		$domxpath = new DOMXPath( $doc );
-		$entry = $domxpath->evaluate( '/html/body' )->item( 0 );
-		$nodes_array = [];
-		foreach ( $entry->childNodes as $node ) {
-			$nodes_array[] = $entry->ownerDocument->saveHTML( $node );
+		// Resorting to the heinous art of parsing XML with regular expressions
+		// as DOMDocument::loadHTML breaks HTML5 in some cases.
+		// In particular, it dislikes minuses and primes in MathML.
+		if ( preg_match( '%<body[^>]*>(.+)</body>%s', $html, $matches ) ) {
+			return $matches[1];
 		}
-		return implode( '', $nodes_array );
+		return $html;
 	}
 
 	/**
@@ -678,7 +675,7 @@ class Media extends Base {
 		if ( $params['nomenu'] === false && !$math_jax_included ) {
 			$math_jax_included = true;
 			$script = "\n" . '<script type="text/javascript" async src="'
-					. "{$params['scripts']}/tex-mml-chtml.js" . '" />';
+					. "{$params['scripts']}/tex-mml-chtml.js" . '"></script>';
 		} else {
 			$script = '';
 		}

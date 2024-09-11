@@ -4,12 +4,12 @@ LABEL description="Universal image for dockerising applications as HTTP CGI serv
 LABEL version="0.1"
 
 # Get busybox httpd:
-RUN apk add busybox-extras bash
+RUN apk add --update --no-cache busybox-extras bash
 ARG APK
 RUN <<-APKADD
 	set -ex && \
 	if [ ! -z "$APK" ]; then
-		apk add --update --no-cache $APK
+		apk add --no-cache $APK
 	fi
 APKADD
 
@@ -18,7 +18,7 @@ ARG NODE_GLOBAL
 RUN <<-NODEJS
 	set -ex && \
 	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
-		apk add --update --no-cache npm && \
+		apk add --no-cache npm && \
 		cd /usr/local/bin && \
 		npm init --yes; \
 	fi && \
@@ -37,7 +37,7 @@ ARG PIP
 RUN <<-PIPINSTALL
 	set -ex && \
 	if [ ! -z "$PIP" ]; then \
-		apk add --update --no-cache py3-pip && \
+		apk add --no-cache py3-pip && \
 		python -m  pip install --break-system-packages $PIP; \
 	fi
 PIPINSTALL
@@ -47,7 +47,7 @@ ENV GOPATH=/usr/local/go
 RUN <<-GOINSTALL
 	set -ex && \
 	if [ ! -z "$GO" ]; then \
-		apk add --update --no-cache go && \
+		apk add --no-cache go && \
 		go install $GO && \
 		go clean && apk del go; \
 	fi
@@ -82,7 +82,7 @@ ARG JAR
 RUN <<-JAR
 	set -ex && \
 	if [ ! -z "$JAR" ]; then \
-		apk add --update --no-cache openjdk11 && mkdir -p /usr/share/java && \
+		apk add --no-cache openjdk11 && mkdir -p /usr/share/java && \
 		cd /usr/share/java && \
 		/usr/local/bin/get_all.sh "$JAR"; \
 	fi
@@ -123,7 +123,7 @@ RUN <<-SRC
 		if [ ! -z "$GIT" ]; then \
 			BUILD="$BUILD git"; \
 		fi && \
-		apk add --update --no-cache $BUILD && \
+		apk add --no-cache $BUILD && \
 		mkdir -p /usr/local/bin && mkdir -p /src && cd /src && \
 		if [ ! -z "$GIT" ]; then \
 			for URL in $GIT; do \
@@ -166,101 +166,106 @@ RUN <<-SCRIPT
 	fi
 SCRIPT
 
-COPY --chmod=777 <<-FUNC /usr/local/bin/cgi_functions.sh
+COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 	#!/bin/bash
 	function urldecode() {
-		httpd -d "\$@"
+		httpd -d "$@"
 	}
 
 	# Parse query strings, set variables:
 	function parse_query() {
-		QUERY_STRING="\$1"
+		QUERY_STRING="$1"
 
-		SAVE_IFS=\$IFS
+		SAVE_IFS=$IFS
 		IFS='&'
-		ASSIGNMENTS=(\$QUERY_STRING)
-		for (( i=0; i<\${#ASSIGNMENTS[@]}; i+=1 )); do
+		ASSIGNMENTS=($QUERY_STRING)
+		for (( i=0; i<${#ASSIGNMENTS[@]}; i+=1 )); do
 			IFS='='
-			PAIR=(\${ASSIGNMENTS[i]})
-			KEY=\${PAIR[0]}
-			VALUE=\${PAIR[1]}
-			for (( j=2; j<\${#PAIR[@]}; j+=1 )); do
-				VALUE="\$VALUE=\${PAIR[j]}"
+			PAIR=(${ASSIGNMENTS[i]})
+			KEY=${PAIR[0]}
+			VALUE=${PAIR[1]}
+			for (( j=2; j<${#PAIR[@]}; j+=1 )); do
+				VALUE="$VALUE=${PAIR[j]}"
 			done
-			declare -g "\$KEY"="\$( urldecode "\$VALUE" )"
+			declare -g "$KEY"="$( urldecode "$VALUE" )"
 		done
 		IFS=\$SAVE_IFS
 	}
 
 	function debug_info() {
-		COMMAND="\$1"
-		FILTER_COMMAND="\$2"
-		QUERY_STRING="\$3"
-		REQUEST_METHOD="\$4"
-		STDOUT="\$5"
-		STDERR="\$6"
+		COMMAND="$1"
+		FILTER_COMMAND="$2"
+		QUERY_STRING="$3"
+		REQUEST_METHOD="$4"
+		STDOUT="$5"
+		STDERR="$6"
+		STDIN="$7"
 
-		echo "Query was \$QUERY_STRING"; echo ''
-		echo 'Command is \$COMMAND'; echo ''
-		echo 'Filter command is \$FILTER_COMMAND'; echo ''
-		if [ "\$REQUEST_METHOD" == 'POST' ]; then
-			echo 'stdin: '; cat; echo '';
+		echo "Query was $QUERY_STRING"; echo ''
+		echo "Command is $COMMAND"; echo ''
+		echo "Filter command is $FILTER_COMMAND"; echo ''
+		if [ ! -z "$STDIN" ]; then
+			echo "stdin: $STDIN"
 		fi
-		echo 'stdout:'; cat "\$STDOUT"; echo ''
-		echo 'stderr:'; cat "\$STDERR"; echo ''
+		echo 'stdout:'; cat "$STDOUT"; echo ''
+		echo 'stderr:'; cat "$STDERR"; echo ''
 	}
 
 	# If parameters do not pass the filter or debug mode is on:
 	function filter_result() {
-		STDOUT="\$1"
-		STDERR="\$2"
-		DEBUG="\$3"
-		COMMAND="\$4"
-		FILTER_COMMAND="\$5"
-		QUERY_STRING="\$6"
-		REQUEST_METHOD="\$7"
+		STDOUT="$1"
+		STDERR="$2"
+		DEBUG="$3"
+		COMMAND="$4"
+		FILTER_COMMAND="$5"
+		QUERY_STRING="$6"
+		REQUEST_METHOD="$7"
 
-		if [ -s "\$STDERR" ]; then
+		if [ -s "$STDERR" ]; then
 			echo 'Status: 502 Bad Gateway'; echo '';
 			echo 'Wrong query arguments'; echo ''
-			if [ ! -z "\$DEBUG" ]; then
-				debug_info "$COMMAND" "$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDOUT" "\$STDERR"
+			if [ ! -z "$DEBUG" ]; then
+				debug_info "$COMMAND" "$FILTER_COMMAND" "$QUERY_STRING" "$REQUEST_METHOD" "$STDOUT" "$STDERR"
 			fi
 		else
-			if [ ! -z "\$DEBUG" ]; then
-				debug_info"$COMMAND" "$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDOUT" "\$STDERR"
+			if [ ! -z "$DEBUG" ]; then
+				echo 'Status: 502 Bad Gateway'; echo '';
+				debug_info "$COMMAND" "$FILTER_COMMAND" "$QUERY_STRING" "$REQUEST_METHOD" "$STDOUT" "$STDERR"
 			fi
 		fi
-		rm -f "\$STDOUT" "\$STDERR"
+		rm -f "$STDOUT" "$STDERR"
 	}
 
 	function command_result() {
-		CONTENT_TYPE="\$1"
-		STDOUT="\$2"
-		STDERR="\$3"
-		DEBUG="\$4"
-		ERRORS="\$5"
-		COMMAND="\$6"
-		FILTER_COMMAND="\$7"
-		QUERY_STRING="\$8"
-		REQUEST_METHOD="\$9"
+		CONTENT_TYPE="$1"
+		STDOUT="$2"
+		STDERR="$3"
+		DEBUG="$4"
+		ERRORS="$5"
+		COMMAND="$6"
+		FILTER_COMMAND="$7"
+		QUERY_STRING="$8"
+		REQUEST_METHOD="$9"
+		STDIN="${10}"
 
-		if [ -z "\$DEBUG" ]; then
-			if [ -s "\$STDOUT" ] && ( [ ! -s "\$STDERR" ] || [ "\$ERRORS" == 'FATAL' ] ) || [ "\$ERRORS" == 'IGNORE' ]; then
-				echo 'Content-type: \$CONTENT_TYPE; charset=UTF-8'
+		if [ -z "$DEBUG" ]; then
+			if [ -s "$STDOUT" ] && ( [ ! -s "$STDERR" ] || [ "$ERRORS" == 'FATAL' ] ) || [ "$ERRORS" == 'IGNORE' ]; then
+				echo "Content-type: $CONTENT_TYPE; charset=UTF-8"
 				echo 'Status: 200 OK';
 				echo '';
-				cat "\$STDOUT"
+				cat "$STDOUT"
 			else
 				echo 'Status: 502 Bad Gateway';
 				echo '';
-				cat "\$STDERR"
+				cat "$STDERR"
 			fi
 		else
-			debug_info "$COMMAND" "$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDOUT" "\$STDERR"
+			echo 'Status: 502 Bad Gateway'; echo '';
+			echo 'Debug mode'
+			debug_info "$COMMAND" "$FILTER_COMMAND" "$QUERY_STRING" "$REQUEST_METHOD" "$STDOUT" "$STDERR" "$STDIN"
 		fi
-		cat "\$STDERR" > /dev/stderr
-		rm -f "\$STDOUT" "\$STDERR"
+		cat "$STDERR" > /dev/stderr
+		rm -f "$STDOUT" "$STDERR"
 	}
 FUNC
 
@@ -293,28 +298,31 @@ COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 	FCMD
 	)
 
+	if [ "\${REQUEST_METHOD:-}" == 'GET' ]; then
+		# Close stdin:
+		exec 0<&-
+		STDIN=''
+	else
+		STDIN=\$( cat )
+	fi
+
 	# Apply FILTER_COMMAND to check variables:
 	if [ ! -z '$FILTER_COMMAND' ]; then
 		STDOUT=\$(mktemp -u)
 		STDERR=\$(mktemp -u)
-		( :; $FILTER_COMMAND ) 1>"\$STDOUT" 2>"\$STDERR"
+		( :; $FILTER_COMMAND ) <<< "$STDIN" 1>"\$STDOUT" 2>"\$STDERR"
 		filter_result "\$STDOUT" "\$STDERR" "\$DEBUG" \\
 			"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD"
-	fi
-
-	if [ "\${REQUEST_METHOD:-}" == 'GET' ]; then
-		# Close stdin:
-		exec 0<&-
 	fi
 
 	STDOUT=\$(mktemp -u)
 	STDERR=\$(mktemp -u)
 
 	# Actually run the command:
-	( $COMMAND ) 1>"\$STDOUT" 2>"\$STDERR"
+	( $COMMAND ) <<< "\$STDIN" 1>"\$STDOUT" 2>"\$STDERR"
 
 	command_result '$CONTENT_TYPE' "\$STDOUT" "\$STDERR" "\$DEBUG" "\$ERRORS" \\
-		"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD"
+		"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDIN"
 
 CGI
 
