@@ -45,7 +45,7 @@
 	"externaldata-url-unknown-error": "Error incognite durante le obtention de datos ab URL $1.",
 	"externaldata-url-not-allowed": "URL $1 non es permittite sur iste wiki.",
 	"externaldata-caught-exception-soap": "Interceptate le exception $1 durante le creation del cliente SOAP.",
-	"externaldata-parsing-html-failed": "Non poteva analysar le syntaxe del HTML.",
+	"externaldata-parsing-html-failed": "Non poteva processar le HTML:\n $1",
 	"externaldata-caught-exception-parsing-html": "Exception interceptate durante le analyse del syntaxe del HTML. Le message de error es &quot;$1&quot;.",
 	"externaldata-error-converting-css-to-xpath": "Exception interceptate durante le conversion del selector CSS $1 a XPath:\n$2",
 	"externaldata-jsonpath-error": "JSONpath non valide $1",

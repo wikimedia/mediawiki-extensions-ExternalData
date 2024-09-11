@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nemoralis"
+		]
+	},
+	"externaldata-parsing-html-failed": "HTML təhlil edilə bilmədi:\n $1"
+}
