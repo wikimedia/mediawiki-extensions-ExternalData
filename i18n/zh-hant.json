@@ -48,7 +48,7 @@
 	"externaldata-url-unknown-error": "在取得來自 URL $1 的資料時發生未知錯誤。",
 	"externaldata-url-not-allowed": "URL $1 在此 wiki 上不被允許。",
 	"externaldata-caught-exception-soap": "在建立 SOAP 客戶端時捕獲到異常 $1。",
-	"externaldata-parsing-html-failed": "無法解析 HTML。",
+	"externaldata-parsing-html-failed": "無法解析 HTML：\n$1",
 	"externaldata-caught-exception-parsing-html": "捕獲解析 HTML 時的例外狀況。錯誤訊息為 &quot;$1&quot;。",
 	"externaldata-error-converting-css-to-xpath": "捕獲轉換 CSS 選擇器 $1 成 XPath 時的例外狀況。錯誤訊息為：\n$2",
 	"externaldata-jsonpath-error": "違規的 JSONPath $1",
