@@ -68,13 +68,14 @@ class EDConnectorWeb extends EDConnectorHttp {
 		if ( !( $name && $version ) && isset( $config['version url'] ) ) {
 			// Version is supplied by the container.
 			$version_url = self::realUrl( $config['version url'], $config['replacements'] ?? null );
+			$fname = __METHOD__;
 			$cache = MediaWikiServices::getInstance()->getLocalServerObjectCache();
 			$version = $cache->getWithSetCallback(
 				$cache->makeGlobalKey( __CLASS__, $version_url ),
 				self::VERSION_TTL,
-				static function () use ( $version_url ): ?string {
+				static function () use ( $version_url, $fname ): ?string {
 					$factory = MediaWikiServices::getInstance()->getHttpRequestFactory();
-					$req = $factory->create( $version_url );
+					$req = $factory->create( $version_url, [], $fname );
 					return $req->execute()->isOK() ? trim( $req->getContent() ) : null;
 				}
 			);
