@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\MediaWikiServices;
+
 /**
  * A trait to be used by cached connectors.
  *
@@ -47,8 +50,9 @@ trait EDConnectorCached {
 		$this->cacheExpires = $seconds;
 		$this->allowStaleCache = $stale;
 		if ( self::$cacheIsUp ) {
-			self::$primaryDB = wfGetDB( DB_PRIMARY );
-			self::$replicaDB = wfGetDB( DB_REPLICA );
+			$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
+			self::$primaryDB = $lb->getConnection( DB_PRIMARY );
+			self::$replicaDB = $lb->getConnection( DB_REPLICA );
 			if ( !self::$replicaDB->tableExists( self::$cacheTable ) ) {
 				self::$cacheIsUp = false;
 			}
