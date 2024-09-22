@@ -306,7 +306,7 @@ trait EDParsesParams {
 	 */
 	protected static function throwWarnings() {
 		// @phan-suppress-next-line PhanTypeMismatchArgumentInternal, PhanPluginNeverReturnFunction
-		set_error_handler( static function ( $errno, $errstr ) {
+		set_error_handler( static function ( string $errno, string $errstr ) {
 			throw new MWException( $errstr );
 		} );
 	}

@@ -795,10 +795,11 @@ abstract class EDConnectorBase {
 	 * Convert [[wikilinks]] to dot links, including images and CSS.
 	 *
 	 * @param string $dot Text to add wikilinks in dot format.
+	 * @param array $params
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4dot( string $dot ): string {
-		return Media::wikilinks4dot( $dot );
+	public static function wikilinks4dot( string $dot, array $params ): string {
+		return Media::wikilinks4dot( $dot, $params );
 	}
 
 	/**

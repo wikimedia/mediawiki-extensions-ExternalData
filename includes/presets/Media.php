@@ -105,6 +105,13 @@ class Media extends Base {
 			'params' => [ 'layout' => 'dot' ],
 			'param filters' => [ 'layout' => '/^(dot|neato|twopi|circo|fdp|osage|patchwork|sfdp)$/' ],
 			'input' => 'dot',
+			// Set this parameter to the path at which all uploads ($wgUploadDirectory) are mounted
+			// to the graphviz container, assuming that the uploads for a single wiki are mounted
+			// as 'mounted farm uploads/$wgDbName'.
+			// If there is only one wiki in the farm, leave this parameter null and mount $wgUploadDirectory
+			//  to graphviz as $wgUploadDirectory.
+			// This is needed for the correct handling of locally uploaded images in graphviz diagrams.
+			'mounted farm uploads' => null,
 			'preprocess' => __CLASS__ . '::wikilinks4dot',
 			'postprocess' => [
 				__CLASS__ . '::innerXml',
@@ -402,9 +409,10 @@ class Media extends Base {
 	 * Convert [[wikilinks]] to dot links, including images and CSS.
 	 *
 	 * @param string $dot Text to add wikilinks in dot format.
+	 * @param array $params Tag params.
 	 * @return string dot with links.
 	 */
-	public static function wikilinks4dot( string $dot ): string {
+	public static function wikilinks4dot( string $dot, array $params ): string {
 		// Process URL = "[[wikilink]]" in properties.
 		$attrs = implode( '|', [
 			'edgehref', 'edgeURL', 'headhref', 'headURL', 'labelhref', 'labelURL', 'tailhref', 'tailURL', 'href', 'URL'
@@ -420,9 +428,10 @@ class Media extends Base {
 		// Process image or shapefile = "[[File:somefile.png|150px]]" in properties.
 		$attrs = implode( '|', [ 'image', 'shapefile', 'src' ] );
 		$repo = MediaWikiServices::getInstance()->getRepoGroup();
+		$farm = $params['mounted farm uploads'] ?? null;
 		$dewikified = preg_replace_callback(
 			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[[^:|\]]+:(?<image>[^<>\]"]+)]]"/i',
-			static function ( array $m ) use ( $repo ) {
+			static function ( array $m ) use ( $repo, $farm ) {
 				$args = array_map( 'trim', explode( '|', $m['image'] ) );
 				$name = array_shift( $args );
 				$file = $repo->findFile( $name );
@@ -444,6 +453,11 @@ class Media extends Base {
 					$options['width'] = $options['width'] ?? $wgThumbLimits[$wgDefaultUserOptions['thumbsize']];
 					$thumb = $file->transform( $options );
 					$path = $thumb->getLocalCopyPath();
+					// Handle graphviz container's serving several wikis.
+					global $wgUploadDirectory, $wgDBname;
+					if ( $farm ) {
+						$path = str_replace( $wgUploadDirectory, "$farm/$wgDBname", $path );
+					}
 					$url = $thumb->getUrl();
 				}
 				// If there is no local file, feed GraphViz something so that it does not break.
@@ -551,8 +565,16 @@ class Media extends Base {
 	 */
 	public static function wikilinksInSvg( string $svg ): string {
 		$dom = new DOMDocument();
-		if ( !$dom->loadXML( $svg, LIBXML_NOENT ) ) {
-			// SVG might be illegal and cannot be processed.
+		self::throwWarnings();
+		try {
+			$loaded = $dom->loadXML( $svg, LIBXML_NOENT );
+		} catch ( \Exception $e ) {
+			throw new \MWException( 'Cannot process wikilinks in SVG: invalid XML (' . $e->getMessage() . ').' );
+		} finally {
+			self::stopThrowingWarnings();
+		}
+		if ( !$loaded ) {
+			// SVG might be illegal and cannot be processed. Hopefully, this point is never reached.
 			throw new \MWException( 'Cannot process wikilinks in SVG: invalid XML.' );
 		}
 		foreach ( $dom->getElementsByTagName( 'text' ) as $node ) {
@@ -609,10 +631,22 @@ class Media extends Base {
 	 * Replace local image paths with URLs in SVG.
 	 * @param string $svg SVG to process
 	 * @return string Prcessed SVG
+	 * @throws \MWException
 	 */
 	public static function filepathToUrl( string $svg ): string {
 		$dom = new DOMDocument();
-		$dom->loadXML( preg_replace( '/(?<!<!)--(?!>)/', '—', html_entity_decode( $svg ) ) );
+		self::throwWarnings();
+		try {
+			$loaded = $dom->loadXML( preg_replace( '/(?<!<!)--(?!>)/', '—', $svg ) );
+		} catch ( \Exception $e ) {
+			throw new \MWException( 'Cannot process images in SVG: invalid XML (' . $e->getMessage() . ')' );
+		} finally {
+			self::stopThrowingWarnings();
+		}
+		if ( !$loaded ) {
+			// Hopefully, this code will never be reached.
+			throw new \MWException( 'Cannot process images in SVG: invalid XML).' );
+		}
 		$attr = 'xlink:href';
 		foreach ( $dom->getElementsByTagName( 'image' ) as $image ) {
 			$filepath = $image->getAttribute( $attr );

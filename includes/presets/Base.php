@@ -80,7 +80,7 @@ class Base {
 				$yaml_tree = yaml_parse( $text );
 			} catch ( \Exception $e ) {
 				// Hopefully, this will be prevented by the validator above.
-				throw new \EDParserException( 'externaldata-invalid-format', 'YAML' );
+				throw new \EDParserException( 'externaldata-invalid-format', 'YAML', $e->getMessage() );
 			} finally {
 				self::stopThrowingWarnings();
 			}

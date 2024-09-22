@@ -377,6 +377,15 @@ services:
         COMMAND: /usr/bin/dot -K"$$layout" -Tsvg
         CONTENT_TYPE: text/svg
     restart: unless-stopped
+    # This is only needed for graphs with images.
+    volumes:
+      # If this is a wiki farm:
+      # mount $wgUploadDirectory of each wiki in the farm as follows. It is assumed that $wgDbName = 'wiki'.
+      # Also, set $wgExternalDataSources['graphviz']['mounted farm uploads'] = '/var/images'.
+      - uploads_wiki:/var/images/wiki:ro
+      # If there is only one wiki:
+      # mount its $wgUploadDirectory as follows. It is assumed that $wgUploadDirectory = '/var/www/wiki/w/images'.
+      - uploads_wiki:/var/www/wiki/w/images:ro
     tmpfs:
       - /tmp
     # If MediaWiki installation is not dockerised, this container should expose a port,
@@ -575,16 +584,15 @@ services:
         APK: chromium
         NODE: "puppeteer @mermaid-js/mermaid-cli"
         COMMAND: >-
-          TMP=$$(mktemp -u) &&
           /usr/local/bin/node_modules/.bin/mmdc -p /usr/local/bin/.puppeteerrc.json -q -I "$$id"
           -s "$$scale" -w "$$width" -H "$$height"
-          -t "$$theme" -b "$$background" -i - -o "$$TMP.svg" &&
-          cat $$TMP.svg && rm -f $$TMP.svg
+          -t "$$theme" -b "$$background" -i - -e svg -o -
         CONTENT_TYPE: text/svg
         VERSION_COMMAND: /usr/local/bin/node_modules/.bin/mmdc -V
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+      ERRORS: FATAL # Shutting up [@zenuml/core] Store is a function and is not initiated in 1 second.
     security_opt:
       - seccomp:./cgi/chrome.json
     restart: unless-stopped
@@ -744,7 +752,11 @@ volumes:
   mongodb:
   mssqlserver:
   postgresql:
-  # For interctive media JS:
+  # Make upload directory (-ies) available to graphviz container. One per wiki in the farm.
+  # This volume has to be accessible to MediaWiki at the path $wgUploadDirectory.
+  upload_wiki:
+  # ... probably, a bind mount.
+  # For interactive media JS:
   mathjax:
   ploticus:
   gnuplot:

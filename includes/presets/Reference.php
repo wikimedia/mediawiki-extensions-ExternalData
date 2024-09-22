@@ -129,7 +129,7 @@ class Reference extends Base {
 			'program url' => 'https://www.iana.org/time-zones',
 			'url' => 'http://tzdata/cgi-bin/cgi.sh',
 			'version url' => 'http://tzdata/cgi-bin/version.sh',
-			'format' => 'csv with headers'
+			'format' => 'csv with header'
 		],
 
 		'flags' => [
