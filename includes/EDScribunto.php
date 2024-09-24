@@ -71,10 +71,11 @@ class EDScribunto extends Scribunto_LuaLibraryBase {
 	private static function flip( array $ar ) {
 		$flipped = [];
 		foreach ( $ar as $column => $values ) {
-			// If there is only one row of some variable,
-			// it may be "common" for the dataset.
-			// It makes sense to expose it as a named item of the return table.
-			if ( count( $values ) === 1 ) {
+			// If there is only one row of some variable, it may be "common" for the
+			// dataset, so we expose it as a named item of the return table.
+			// We don't do this, though, if the column name is an integer, since that
+			// will lead to array-related issues.
+			if ( count( $values ) === 1 && !is_int( $column ) ) {
 				$flipped[$column] = $values[0];
 			}
 			foreach ( $values as $row => $value ) {
