@@ -28,13 +28,12 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 
 	/**
 	 * @param string $name Method name.
-	 * @param array[] $values Saved values.
 	 * @param mixed $expected Expected return.
 	 * @param mixed ...$args Method arguments.
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	private function testPrivateMethod( $name, array $values, $expected, ...$args ) {
+	private function testPrivateMethod( $name, $expected, ...$args ) {
 		$class = new ReflectionClass( static::$class );
 
 		// Invoke the tested method.
@@ -94,6 +93,6 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 	 * @throws ReflectionException
 	 */
 	public function testFlip( $arg, $expected ) {
-		$this->testPrivateMethod( 'flip', [], $expected, $arg );
+		$this->testPrivateMethod( 'flip', $expected, $arg );
 	}
 }
