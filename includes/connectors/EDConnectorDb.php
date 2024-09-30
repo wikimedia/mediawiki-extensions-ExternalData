@@ -166,10 +166,13 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	/**
 	 * Process field value.
 	 *
-	 * @param string|DateTime $value
+	 * @param string|DateTime|null $value
 	 * @return string
 	 */
 	protected static function processField( $value ): string {
+		if ( $value === null ) {
+			return '';
+		}
 		// This can happen with MSSQL.
 		if ( $value instanceof DateTime ) {
 			$value = $value->format( 'Y-m-d H:i:s' );
