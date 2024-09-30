@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Vinoda mamatharai",
 			"Vishwanatha Badikana"
 		]
 	},
+	"externaldata-parsing-html-failed": "HTML:!N ನ್ ಪಾರ್ಸ್ ಮಲ್ಪೆರೆ ಸಾಧ್ಯ ಆಯಿಜಿ! $1",
 	"externaldata-jsonpath-error": "ಅಕ್ರಮ JSONpath $1"
 }
