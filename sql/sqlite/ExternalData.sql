@@ -4,8 +4,8 @@
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
 CREATE TABLE /*_*/ed_url_cache (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  url BLOB NOT NULL, post_vars CLOB NOT NULL,
-  req_time INTEGER NOT NULL, result CLOB NOT NULL
+  url BLOB NOT NULL, req_time INTEGER NOT NULL,
+  result CLOB NOT NULL
 );
 
 CREATE UNIQUE INDEX id ON /*_*/ed_url_cache (id);

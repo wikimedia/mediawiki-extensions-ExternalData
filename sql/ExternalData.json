@@ -21,11 +21,6 @@
 				}
 			},
 			{
-				"name": "post_vars",
-				"type": "text",
-				"options": {}
-			},
-			{
 				"name": "req_time",
 				"type": "integer",
 				"options": {

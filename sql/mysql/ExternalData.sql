@@ -5,7 +5,6 @@
 CREATE TABLE /*_*/ed_url_cache (
   id INT UNSIGNED AUTO_INCREMENT NOT NULL,
   url VARBINARY(255) NOT NULL,
-  post_vars LONGTEXT NOT NULL,
   req_time INT NOT NULL,
   result LONGTEXT NOT NULL,
   UNIQUE INDEX id (id),

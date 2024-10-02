@@ -1,0 +1,105 @@
+{
+	"before": {
+		"name": "ed_url_cache",
+		"columns": [
+			{
+				"name": "id",
+				"type": "integer",
+				"options": {
+					"length": 10,
+					"unsigned": true,
+					"notnull": true,
+					"autoincrement": true
+				}
+			},
+			{
+				"name": "url",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "post_vars",
+				"type": "text",
+				"options": {}
+			},
+			{
+				"name": "req_time",
+				"type": "integer",
+				"options": {
+					"length": 11,
+					"notnull": true
+				}
+			},
+			{
+				"name": "result",
+				"type": "text",
+				"options": {}
+			}
+		],
+		"indexes": [
+			{
+				"name": "id",
+				"columns": [ "id" ],
+				"unique": true
+			},
+			{
+				"name": "url",
+				"columns": [ "url" ],
+				"unique": false
+			}
+		],
+		"pk": []
+	},
+	"after": {
+		"name": "ed_url_cache",
+		"columns": [
+			{
+				"name": "id",
+				"type": "integer",
+				"options": {
+					"length": 10,
+					"unsigned": true,
+					"notnull": true,
+					"autoincrement": true
+				}
+			},
+			{
+				"name": "url",
+				"type": "binary",
+				"options": {
+					"length": 255,
+					"notnull": true
+				}
+			},
+			{
+				"name": "req_time",
+				"type": "integer",
+				"options": {
+					"length": 11,
+					"notnull": true
+				}
+			},
+			{
+				"name": "result",
+				"type": "text",
+				"options": {}
+			}
+		],
+		"indexes": [
+			{
+				"name": "id",
+				"columns": [ "id" ],
+				"unique": true
+			},
+			{
+				"name": "url",
+				"columns": [ "url" ],
+				"unique": false
+			}
+		],
+		"pk": []
+	}
+}
