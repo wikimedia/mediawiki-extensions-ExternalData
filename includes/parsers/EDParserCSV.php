@@ -48,7 +48,7 @@ class EDParserCSV extends EDParserBase {
 		if (
 			strtolower( $params['format'] ) === 'csv with header' ||
 			array_key_exists( 'with header', $params ) ||
-			array_key_exists( 'header', $params ) && $params['header'] === 'yes'
+			( array_key_exists( 'header', $params ) && $params['header'] === 'yes' )
 		) {
 			$this->header = self::HEADER;
 		} elseif ( array_key_exists( 'header', $params ) && (
@@ -130,7 +130,7 @@ class EDParserCSV extends EDParserBase {
 
 		// Get header values, if this is 'csv with header'
 		$header = $this->header === self::HEADER
-			|| $this->header === self::DETECT_HEADER && self::headerDetected( $table[0], $table[1] ?? null );
+			|| ( $this->header === self::DETECT_HEADER && self::headerDetected( $table[0], $table[1] ?? null ) );
 		$header_vals = null;
 		if ( $header ) {
 			$header_vals = array_shift( $table );
