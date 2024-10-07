@@ -9,6 +9,7 @@
 	"externaldata-desc": "Permitte recuperar datos structurate ab adresses URL, bases de datos e altere fontes externe",
 	"externaldata-no-param-specified": "Error: Nulle parametro \"$1\" specificate.",
 	"externaldata-param-type-error": "Error: Parametro $1 debe esser del typo $2.",
+	"externaldata-processing-exception": "Un error ha occurrite durante le execution del pre- o postprocessor: $1",
 	"externaldata-php-library-missing": "Error: Le bibliotheca PHP $1, necessari pro usar $2, manca.",
 	"external-data-no-suitable-connector": "Error: Nulle fonte de datos appropriate es definite pro iste requesta de datos externe",
 	"externaldata-throttled": "Appellos a $1 es limitate usque a {{#time:c|@$2}}.",
