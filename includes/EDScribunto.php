@@ -1,5 +1,6 @@
 <?php
 
+use MediaWiki\Extension\Scribunto\Engines\LuaCommon\LibraryBase;
 use MediaWiki\Title\Title;
 
 /**
@@ -8,7 +9,8 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin.
  */
-class EDScribunto extends Scribunto_LuaLibraryBase {
+
+class EDScribunto extends LibraryBase {
 	/**
 	 * A function that registers the exported functions with Lua.
 	 */
