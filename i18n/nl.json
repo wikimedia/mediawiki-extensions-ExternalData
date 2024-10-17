@@ -50,7 +50,7 @@
 	"externaldata-url-unknown-error": "Onbekende fout bij het ophalen van gegevens van URL $1.",
 	"externaldata-url-not-allowed": "URL $1 is niet toegestaan op deze wiki.",
 	"externaldata-caught-exception-soap": "Uitzondering $1 aangetroffen tijdens het aanmaken van SOAP-client.",
-	"externaldata-parsing-html-failed": "Kon de HTML niet verwerken.",
+	"externaldata-parsing-html-failed": "Kon de HTML niet verwerken:\n $1",
 	"externaldata-caught-exception-parsing-html": "Er is een fout opgetreden bij het verwerken van de HTML. De foutmelding is “$1”.",
 	"externaldata-error-converting-css-to-xpath": "Er is een fout opgetreden bij het omzetten van de CSS-selector $1 naar XPath:\n $2",
 	"externaldata-jsonpath-error": "Ongeldig JSON-pad $1",
