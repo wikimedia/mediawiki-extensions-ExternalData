@@ -236,15 +236,32 @@ class EDConnectorExe extends EDConnectorBase {
 					$cache->makeGlobalKey( __CLASS__, $command_v ),
 					self::VERSION_TTL,
 					static function () use ( $command_v, $limits ): ?string {
-						$prepared = Shell::command( explode( ' ', $command_v ) )
-							->includeStderr()->disableNetwork()->privateUserNamespace()->noNewPrivs()->privateDev()
-							->limits( $limits );
+						$prepared = Shell::command( explode( ' ', $command_v ) );
+						// Keeping backward compatibility with MW 1.35.
+						$restrictions = 0;
+						foreach ( [
+							'disableNetwork' => Shell::NO_NETWORK,
+							'privateUserNamespace' => Shell::NO_ROOT,
+							'noNewPrivs' => Shell::SECCOMP,
+							'privateDev' => Shell::PRIVATE_DEV
+						] as $method => $const ) {
+							if ( method_exists( $prepared, $method ) ) {
+								$prepared = $prepared->{$method}();
+							} else {
+								$restrictions |= $const;
+							}
+						}
+						if ( $restrictions !== 0 ) {
+							$prepared = $prepared->restrict( $restrictions );
+						}
+						$prepared = $prepared->limits( $limits );
 						try {
 							$result = $prepared->execute();
 						} catch ( Exception $e ) {
 							return null;
 						}
-						return $result->getExitCode() === 0 ? $result->getStdout() : null;
+						// Some programs report their version to stderr, out of pronciple.
+						return $result->getExitCode() === 0 ? ( $result->getStdout() ?: $result->getStderr() ) : null;
 					}
 				);
 				if ( $version ) {
