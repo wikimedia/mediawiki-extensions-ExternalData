@@ -19,7 +19,7 @@ abstract class EDParserBase {
 	/** @var bool $addNewlines Add newlines to facilitate cutting out fragments. */
 	protected $addNewlines;
 
-	/** @var array $mappings A a list of external variables, possibly converted to lowercase. */
+	/** @var array $mappings A list of external variables, possibly converted to lowercase. */
 	protected $external = [];
 
 	/**

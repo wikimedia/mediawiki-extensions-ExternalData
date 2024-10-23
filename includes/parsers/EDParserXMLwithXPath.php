@@ -21,9 +21,9 @@ class EDParserXMLwithXPath extends EDParserXML {
 	public function __construct( array $params ) {
 		parent::__construct( $params );
 
-		// This connector needs an explicit set of fields.
 		if ( !array_key_exists( 'data', $params ) ) {
-			throw new EDParserException( 'externaldata-no-param-specified', 'data' );
+			// At least, serve __xml.
+			$this->external['__xml'] = '__xml';
 		}
 
 		if ( array_key_exists( 'default xmlns prefix', $params ) ) {
@@ -52,8 +52,9 @@ class EDParserXMLwithXPath extends EDParserXML {
 			}
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
+		} finally {
+			self::restoreWarnings();
 		}
-		self::restoreWarnings();
 
 		$values = parent::__invoke( $text );
 
@@ -67,12 +68,11 @@ class EDParserXMLwithXPath extends EDParserXML {
 		}
 
 		foreach ( $this->external as $xpath ) {
-			if ( substr( $xpath, 0, 2 ) === '__' ) {
+			if ( strpos( $xpath, '__' ) === 0 ) {
 				// Special variables are not XPaths.
 				continue;
 			}
-			// Register any necessary XML namespaces, if not yet, to
-			// avoid "Undefined namespace prefix" errors.
+			// Register any necessary XML namespaces, if not yet, to avoid "Undefined namespace prefix" errors.
 			// It's just a dirty hack.
 			if ( preg_match_all( '/[\/@]([a-zA-Z0-9]*):/', $xpath, $matches ) ) {
 				foreach ( $matches[1] as $prefix ) {
@@ -84,64 +84,68 @@ class EDParserXMLwithXPath extends EDParserXML {
 			}
 
 			// Now, get all the matching values, and remove any empty results.
-			$nodes = $xml->xpath( $xpath );
-			if ( $nodes === false ) {
+			self::throwWarnings();
+			try {
+				$nodes = $xml->xpath( $xpath );
+			} catch ( Exception $e ) {
+				throw new EDParserException(
+					'externaldata-invalid-format-explicit',
+					$xpath,
+					'XPath',
+					$e->getMessage()
+				);
+			} finally {
+				self::stopThrowingWarnings();
+			}
+			if ( $nodes === false || $nodes === null ) {
+				// Perhaps, this code is never reached.
 				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath' );
 			}
 			$nodes = self::filterEmptyNodes( $nodes );
-			if ( !$nodes ) {
-				continue;
-			}
 
-			// Convert from SimpleXMLElement to string.
-			$nodesArray = [];
-			foreach ( $nodes as $xmlNode ) {
-				$nodesArray[] = (string)$xmlNode;
+			// Convert from SimpleXMLElement to string or array.
+			$nodes_array = [];
+			foreach ( $nodes as $node ) {
+				$converted = (string)$node;
+				if ( !$converted ) {
+					// No text content but there are children nodes and attributes, which Lua may need.
+					$converted = self::xml2Array( $node );
+				}
+				$nodes_array[] = $converted;
 			}
 
 			if ( array_key_exists( $xpath, $values ) ) {
 				// At the moment, this code will never get
 				// called, because duplicate values in
 				// $this->mappings will have been removed already.
-				$values[$xpath] = array_merge( $values[$xpath], $nodesArray );
+				$values[$xpath] = array_merge( $values[$xpath], $nodes_array );
 			} else {
-				$values[$xpath] = $nodesArray;
+				$values[$xpath] = $nodes_array;
 			}
 		}
 		// Save the whole XML tree for Lua.
 		$values['__xml'] = [ self::xml2Array( $xml ) ];
+
 		return $values;
 	}
 
 	/**
 	 * Convert SimpleXMLElement to a nested array.
-	 *
 	 * @param SimpleXMLElement $xml XML to convert.
-	 *
 	 * @return array
 	 */
 	private static function xml2Array( SimpleXMLElement $xml ): array {
-		$converted = [];
-		foreach ( (array)$xml as $index => $node ) {
-			$converted[$index] = $node instanceof \SimpleXMLElement ? self::xml2Array( $node ) : $node;
-		}
-		return $converted;
+		return json_decode( json_encode( $xml ), true );
 	}
 
 	/**
 	 * Filters out empty $nodes.
-	 *
-	 * @param mixed $nodes Nodes to filter. TODO: always array?
-	 *
-	 * @return mixed Filtered nodes, TODO: always array?
-	 *
+	 * @param array $nodes Nodes to filter.
+	 * @return array Filtered nodes,
 	 */
-	protected static function filterEmptyNodes( $nodes ) {
-		if ( !is_array( $nodes ) ) {
-			return $nodes;
-		}
+	private static function filterEmptyNodes( array $nodes ): array {
 		return array_filter( $nodes, static function ( $node ) {
-			return trim( $node[0] ) !== '';
+			return trim( $node[0] ) !== '' || count( $node->attributes() ) > 0;
 		} );
 	}
 
