@@ -60,7 +60,7 @@ abstract class EDConnectorPrepared extends EDConnectorDb {
 				return preg_replace( [ '/^"/', '/"$/' ], [], $quoted );
 			}, $this->parameters );
 		}
-		if ( !isset( $this->types ) ) {
+		if ( $this->types === null ) {
 			$paramCount = count( $this->parameters );
 			if ( isset( $args['types'] ) ) {
 				// We just set $this->types to $args['types'],
