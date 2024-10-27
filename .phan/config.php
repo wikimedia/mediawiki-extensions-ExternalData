@@ -10,4 +10,19 @@ $cfg['suppress_issue_types'] = array_merge( $cfg['suppress_issue_types'], [
 	// therefore PhanUndeclaredClassMethod is sometimes used and sometimes not.
 	'UnusedPluginSuppression'
 ] );
+
+$cfg['directory_list'] = array_merge(
+	$cfg['directory_list'],
+	[
+		'../../extensions/Scribunto',
+	]
+);
+
+$cfg['exclude_analysis_directory_list'] = array_merge(
+	$cfg['exclude_analysis_directory_list'],
+	[
+		'../../extensions/Scribunto',
+	]
+);
+
 return $cfg;

@@ -10,7 +10,9 @@ namespace ExternalData;
 
 use EDScribunto;
 
-class ScribuntoHooks {
+class ScribuntoHooks implements
+	\MediaWiki\Extension\Scribunto\Hooks\ScribuntoExternalLibrariesHook
+{
 	/**
 	 * @param string $engine
 	 * @param array &$extraLibraries
