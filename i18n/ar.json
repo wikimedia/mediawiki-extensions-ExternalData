@@ -53,7 +53,7 @@
 	"externaldata-caught-exception-soap": "تم اكتشاف استثناء $1 أثناء إنشاء عميل SOAP.",
 	"externaldata-parsing-html-failed": "تعذر تحليل HTML.",
 	"externaldata-caught-exception-parsing-html": "تم اكتشاف استثناء أثناء تحليل HTML. رسالة الخطأ هي \" $1 \".",
-	"externaldata-error-converting-css-to-xpath": "تم اكتشاف استثناء أثناء تحويل محدد CSS $1 إلى XPath:! N! $2",
+	"externaldata-error-converting-css-to-xpath": "استثناء مصاب تحويل اختيار CSS $1 إلى XPath: $2",
 	"externaldata-missing-library": "المكتبة $1 ، المطلوبة لاستخدام وظيفة المحلل اللغوي ' $2 ' أو وظيفة Lua <code>$3</code> ، مفقودة.",
 	"externaldata-undefined-file": "لم يتم تعريف الملف $1 .",
 	"externaldata-missing-file": "ملف $1 مفقود.",
