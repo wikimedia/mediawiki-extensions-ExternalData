@@ -19,6 +19,7 @@
 	"externaldata-desc": "允许从外部URL、数据库和其他来源检索结构化数据",
 	"externaldata-no-param-specified": "错误：未指定“$1”参数。",
 	"externaldata-param-type-error": "错误：参数$1必须是$2类型。",
+	"externaldata-processing-exception": "运行预处理器或后处理器时抛出异常：$1",
 	"externaldata-php-library-missing": "错误：缺少使用$2所需的PHP库$1。",
 	"external-data-no-suitable-connector": "错误：没有给该外部数据查询定义合适的数据来源",
 	"externaldata-throttled": "对$1调用在{{#time:c|@$2}}前受到速率限制。",
