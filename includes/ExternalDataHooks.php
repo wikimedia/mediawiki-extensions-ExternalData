@@ -8,9 +8,15 @@
  */
 class ExternalDataHooks implements
 	\MediaWiki\Hook\ParserFirstCallInitHook,
-	\MediaWiki\Hook\SoftwareInfoHook,
-	\MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
+	\MediaWiki\Hook\SoftwareInfoHook
 {
+	private Config $config;
+
+	public function __construct(
+		Config $config
+	) {
+		$this->config = $config;
+	}
 
 	/**
 	 * @param Parser $parser
@@ -18,8 +24,7 @@ class ExternalDataHooks implements
 	 */
 	public function onParserFirstCallInit( $parser ) {
 		// Add data retrieval parser functions as defined by $wgExternalDataConnectors.
-		global $wgExternalDataAllowGetters;
-		if ( $wgExternalDataAllowGetters ) {
+		if ( $this->config->get( 'ExternalDataAllowGetters' ) ) {
 			foreach ( EDConnectorBase::getConnectors() as $parser_function => $lua_function ) {
 				$parser->setFunctionHook(
 					$parser_function,
@@ -68,23 +73,5 @@ class ExternalDataHooks implements
 	public static function onRegistration() {
 		// Load configuration settings.
 		EDConnectorBase::loadConfig();
-	}
-
-	/**
-	 * For update.php. See also includes/connectors/traits/EDConnectorCached.php.
-	 *
-	 * @param DatabaseUpdater $updater
-	 * @return void
-	 */
-	public function onLoadExtensionSchemaUpdates( $updater ) {
-		$dbType = $updater->getDB()->getType();
-		// Create ed_url_cache table. The obsolete setting $edgCacheTable is ignored.
-		$updater->addExtensionTable( 'ed_url_cache', __DIR__ . "/../sql/$dbType/ExternalData.sql" );
-		// T376241: Drop the post_vars column since it is unused
-		$updater->dropExtensionField(
-			'ed_url_cache',
-			'post_vars',
-			__DIR__ . "/../maintenance/archives/$dbType/patch-ed_url_cache-drop-post_vars.sql",
-		);
 	}
 }

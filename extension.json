@@ -84,6 +84,7 @@
 		"EDParserRar": "includes/parsers/EDParserRar.php",
 		"EDParserAuto": "includes/parsers/EDParserAuto.php",
 		"EDParserException": "includes/parsers/EDParserException.php",
+		"ExternalData\\SchemaHooks": "includes/SchemaHooks.php",
 		"ExternalData\\ScribuntoHooks": "includes/ScribuntoHooks.php"
 	},
 	"AutoloadNamespaces": {
@@ -91,7 +92,13 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "ExternalDataHooks"
+			"class": "ExternalDataHooks",
+			"services": [
+				"MainConfig"
+			]
+		},
+		"schema": {
+			"class": "ExternalData\\SchemaHooks"
 		},
 		"scribunto": {
 			"class": "ExternalData\\ScribuntoHooks"
@@ -101,7 +108,7 @@
 		"ParserFirstCallInit": "main",
 		"ScribuntoExternalLibraries": "scribunto",
 		"SoftwareInfo": "main",
-		"LoadExtensionSchemaUpdates": "main"
+		"LoadExtensionSchemaUpdates": "schema"
 	},
 	"JobClasses": { "edReparse": "EDReparseJob" },
 	"callback": "ExternalDataHooks::onRegistration",
