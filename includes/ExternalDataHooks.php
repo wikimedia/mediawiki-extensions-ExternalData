@@ -6,13 +6,17 @@
  * @ingroup ExternalData
  * @author Yaron Koren
  */
-class ExternalDataHooks {
+class ExternalDataHooks implements
+	\MediaWiki\Hook\ParserFirstCallInitHook,
+	\MediaWiki\Hook\SoftwareInfoHook,
+	\MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook
+{
 
 	/**
 	 * @param Parser $parser
 	 * @return bool
 	 */
-	public static function registerParser( Parser $parser ): bool {
+	public function onParserFirstCallInit( $parser ) {
 		// Add data retrieval parser functions as defined by $wgExternalDataConnectors.
 		global $wgExternalDataAllowGetters;
 		if ( $wgExternalDataAllowGetters ) {
@@ -50,25 +54,11 @@ class ExternalDataHooks {
 	}
 
 	/**
-	 * @param string $engine
-	 * @param array &$extraLibraries
-	 * @return bool
-	 */
-	public static function registerLua( string $engine, array &$extraLibraries ): bool {
-		$class = 'EDScribunto';
-		// Autoload class here and not in extension.json, so that it is not loaded if Scribunto is not enabled.
-		global $wgAutoloadClasses;
-		$wgAutoloadClasses[$class] = __DIR__ . '/' . $class . '.php';
-		$extraLibraries['mw.ext.externalData'] = $class;
-		return true; // always return true, in order not to stop MW's hook processing!
-	}
-
-	/**
 	 * Register used software for Special:Version.
 	 *
 	 * @param array &$software
 	 */
-	public static function onSoftwareInfo( array &$software ) {
+	public function onSoftwareInfo( &$software ) {
 		EDConnectorBase::addSoftware( $software );
 	}
 
@@ -86,7 +76,7 @@ class ExternalDataHooks {
 	 * @param DatabaseUpdater $updater
 	 * @return void
 	 */
-	public static function onLoadExtensionSchemaUpdates( DatabaseUpdater $updater ) {
+	public function onLoadExtensionSchemaUpdates( $updater ) {
 		$dbType = $updater->getDB()->getType();
 		// Create ed_url_cache table. The obsolete setting $edgCacheTable is ignored.
 		$updater->addExtensionTable( 'ed_url_cache', __DIR__ . "/../sql/$dbType/ExternalData.sql" );
