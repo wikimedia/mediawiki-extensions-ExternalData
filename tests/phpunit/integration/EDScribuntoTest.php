@@ -22,8 +22,6 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 			$this->markTestSkipped( 'Extension:Scribunto is not loaded' );
 			return;
 		}
-
-		include_once __DIR__ . '/../../../includes/EDScribunto.php';
 	}
 
 	/**

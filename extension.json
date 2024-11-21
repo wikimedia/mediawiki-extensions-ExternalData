@@ -83,6 +83,7 @@
 		"EDParserRar": "includes/parsers/EDParserRar.php",
 		"EDParserAuto": "includes/parsers/EDParserAuto.php",
 		"EDParserException": "includes/parsers/EDParserException.php",
+		"EDScribunto": "includes/EDScribunto.php",
 		"ExternalData\\Hooks": "includes/Hooks.php",
 		"ExternalData\\SchemaHooks": "includes/SchemaHooks.php",
 		"ExternalData\\ScribuntoHooks": "includes/ScribuntoHooks.php"
