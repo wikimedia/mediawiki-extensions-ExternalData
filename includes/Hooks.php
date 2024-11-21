@@ -6,7 +6,14 @@
  * @ingroup ExternalData
  * @author Yaron Koren
  */
-class ExternalDataHooks implements
+namespace ExternalData;
+
+use Config;
+use EDConnectorBase;
+use EDParserFunctions;
+use Parser;
+
+class Hooks implements
 	\MediaWiki\Hook\ParserFirstCallInitHook,
 	\MediaWiki\Hook\SoftwareInfoHook
 {
@@ -29,24 +36,24 @@ class ExternalDataHooks implements
 				$parser->setFunctionHook(
 					$parser_function,
 					static function ( Parser $parser, ...$params ) use ( $parser_function ) {
-						$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+						$title = method_exists( Parser::class, 'getPage' ) ? $parser->getPage() : $parser->getTitle();
 						return EDParserFunctions::fetch( $title, $parser_function, $params );
 					}
 				);
 			}
-			$parser->setFunctionHook( 'clear_external_data', [ 'EDParserFunctions', 'doClearExternalData' ] );
+			$parser->setFunctionHook( 'clear_external_data', [ EDParserFunctions::class, 'doClearExternalData' ] );
 		}
 
 		// Data display functions.
-		$parser->setFunctionHook( 'external_value', [ 'EDParserFunctions', 'doExternalValue' ] );
+		$parser->setFunctionHook( 'external_value', [ EDParserFunctions::class, 'doExternalValue' ] );
 		$parser->setFunctionHook(
 			'for_external_table',
-			[ 'EDParserFunctions', 'doForExternalTable' ],
+			[ EDParserFunctions::class, 'doForExternalTable' ],
 			Parser::SFH_OBJECT_ARGS
 		);
-		$parser->setFunctionHook( 'display_external_table', [ 'EDParserFunctions', 'doDisplayExternalTable' ] );
+		$parser->setFunctionHook( 'display_external_table', [ EDParserFunctions::class, 'doDisplayExternalTable' ] );
 		if ( class_exists( 'CargoDisplayFormat' ) ) {
-			$parser->setFunctionHook( 'format_external_table', [ 'EDParserFunctions', 'doFormatExternalTable' ] );
+			$parser->setFunctionHook( 'format_external_table', [ EDParserFunctions::class, 'doFormatExternalTable' ] );
 		}
 
 		// Register tags for backward compatibility with other extensions.

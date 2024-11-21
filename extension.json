@@ -27,7 +27,6 @@
 		"ExternalDataAlias": "ExternalData.i18n.alias.php"
 	},
 	"AutoloadClasses": {
-		"ExternalDataHooks": "includes/ExternalDataHooks.php",
 		"EDParserFunctions": "includes/EDParserFunctions.php",
 		"EDGetData": "includes/EDGetData.php",
 		"EDJsonObject": "includes/EDJsonObject.php",
@@ -84,6 +83,7 @@
 		"EDParserRar": "includes/parsers/EDParserRar.php",
 		"EDParserAuto": "includes/parsers/EDParserAuto.php",
 		"EDParserException": "includes/parsers/EDParserException.php",
+		"ExternalData\\Hooks": "includes/Hooks.php",
 		"ExternalData\\SchemaHooks": "includes/SchemaHooks.php",
 		"ExternalData\\ScribuntoHooks": "includes/ScribuntoHooks.php"
 	},
@@ -92,7 +92,7 @@
 	},
 	"HookHandlers": {
 		"main": {
-			"class": "ExternalDataHooks",
+			"class": "ExternalData\\Hooks",
 			"services": [
 				"MainConfig"
 			]
@@ -111,7 +111,7 @@
 		"LoadExtensionSchemaUpdates": "schema"
 	},
 	"JobClasses": { "edReparse": "EDReparseJob" },
-	"callback": "ExternalDataHooks::onRegistration",
+	"callback": "ExternalData\\Hooks::onRegistration",
 	"config_prefix": "wgExternalData",
 	"config": {
 		"Sources": {
