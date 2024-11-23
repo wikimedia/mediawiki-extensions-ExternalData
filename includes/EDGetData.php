@@ -1,6 +1,7 @@
 <?php
 
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Permissions\PermissionManager;
 
 /**
  * A special page for retrieving selected rows of any wiki page that contains
@@ -10,11 +11,13 @@ use MediaWiki\MediaWikiServices;
  */
 
 class EDGetData extends SpecialPage {
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
+	private PermissionManager $permissionManager;
+
+	public function __construct(
+		PermissionManager $permissionManager
+	) {
 		parent::__construct( 'GetData' );
+		$this->permissionManager = $permissionManager;
 	}
 
 	/** @inheritDoc */
@@ -32,8 +35,7 @@ class EDGetData extends SpecialPage {
 
 		$this->getOutput()->disable();
 		$user = $this->getUser();
-		$permissionManager = MediaWikiServices::getInstance()->getPermissionManager();
-		if ( !$permissionManager->userCan( 'read', $user, $title ) ) {
+		if ( !$this->permissionManager->userCan( 'read', $user, $title ) ) {
 			return true;
 		}
 

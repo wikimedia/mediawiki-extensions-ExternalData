@@ -15,7 +15,12 @@
 	},
 	"load_composer_autoloader": true,
 	"SpecialPages": {
-		"GetData": "EDGetData"
+		"GetData": {
+			"class": "EDGetData",
+			"services": [
+				"PermissionManager"
+			]
+		}
 	},
 	"MessagesDirs": {
 		"ExternalData": [
