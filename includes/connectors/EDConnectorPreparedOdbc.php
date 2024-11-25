@@ -130,7 +130,7 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 			// Get values.
 			$result = [];
 			// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
-			while (	$row = odbc_fetch_object( $this->prepared ) ) {
+			while ( $row = odbc_fetch_object( $this->prepared ) ) {
 				$result[] = $row;
 			}
 		} else {

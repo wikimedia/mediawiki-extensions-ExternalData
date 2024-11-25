@@ -43,8 +43,8 @@ class EDConnectorSoap extends EDConnectorHttp {
 			$this->error( 'externaldata-no-param-specified', 'request' );
 		}
 		$this->requestData = array_key_exists( 'requestData', $args )
-							? self::paramToArray( $args['requestData'] )
-							: [];
+			? self::paramToArray( $args['requestData'] )
+			: [];
 		if ( array_key_exists( 'response', $args ) ) {
 			$this->responseName = $args['response'];
 		} else {
@@ -72,7 +72,7 @@ class EDConnectorSoap extends EDConnectorHttp {
 			if ( $log_errors_client ) {
 				$this->error( 'externaldata-caught-exception-soap', $e->getMessage() );
 			}
-			$log_errors_client = false;	// once is enough.
+			$log_errors_client = false; // once is enough.
 			return null;
 		} finally {
 			// Restore warnings.

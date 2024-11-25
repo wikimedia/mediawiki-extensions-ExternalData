@@ -194,14 +194,14 @@ class EDParserCSV extends EDParserBase {
 	private static function isNumeric( $str ) {
 		$regex = <<<REGEX
 /^-? ( # optional minus
-    \d{1,3} (, \d{3} )* # class separator is comma
-    ( \. \d+ )? # decimal separator is dot
+	\d{1,3} (, \d{3} )* # class separator is comma
+	( \. \d+ )? # decimal separator is dot
 |
-    \d{1,3} ( [.\s] \d{3} )* # class separator is dot or space
-    ( , \d+ )? # decimal separator is comma
+	\d{1,3} ( [.\s] \d{3} )* # class separator is dot or space
+	( , \d+ )? # decimal separator is comma
 |
-    \d+ # no class separator
-    ( [.,\s] \d+ )? # decimal separator is dot or comma
+	\d+ # no class separator
+	( [.,\s] \d+ )? # decimal separator is dot or comma
 )( \s? \D+ )? # optional unit of measurement
 $/x
 REGEX;

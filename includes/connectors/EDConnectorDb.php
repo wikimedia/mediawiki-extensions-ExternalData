@@ -11,7 +11,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	protected const ID_PARAM = 'db';
 
 	/** @var string|null Database ID. */
-	protected $dbId = null;	// Database ID.
+	protected $dbId = null; // Database ID.
 
 	/** @var string Database type. */
 	protected $type;
@@ -28,10 +28,10 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	private const IDENTIFIER = <<<'ID'
 		/(?<=\.|^)(?:
 			(?<identifier>[\w$\x{0080}-\x{FFFF}]+) #Unquoted
-		  | (?<quote>`|") (?<identifier> #Quoted
-		        (?:(?!(?P=quote)).
-			  | (?P=quote){2}
-			)+) (?P=quote)
+			| (?<quote>`|") (?<identifier> #Quoted
+				(?:(?!(?P=quote)).
+					| (?P=quote){2}
+				)+) (?P=quote)
 		)$/uJx
 	ID;
 
@@ -81,7 +81,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'type' );
 		}
 		// Database credentials.
-		$this->setCredentials( $args );	// late binding.
+		$this->setCredentials( $args ); // late binding.
 	}
 
 	/**

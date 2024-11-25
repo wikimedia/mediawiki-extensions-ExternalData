@@ -8,7 +8,7 @@
  *
  */
 class EDParserFunctions {
-	use EDParsesParams;	// Needs paramToArray().
+	use EDParsesParams; // Needs paramToArray().
 
 	/** @var array $values Values saved statically to be available form elsewhere on the page. */
 	private static $values = [];

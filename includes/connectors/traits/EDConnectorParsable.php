@@ -82,7 +82,7 @@ trait EDConnectorParsable {
 		if ( $end < 0 ) {
 			$end = $total + $end;
 		}
-		$ranges = [	[ 'start line' => $start, 'end line' => $end ] ]; // set the main range
+		$ranges = [ [ 'start line' => $start, 'end line' => $end ] ]; // set the main range
 
 		if ( $this->headerLines ) {
 			if ( $this->headerLines < $start ) {

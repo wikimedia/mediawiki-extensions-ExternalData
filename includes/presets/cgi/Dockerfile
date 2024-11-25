@@ -283,7 +283,7 @@ COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 	https://oldforum.puppylinux.com/viewtopic.php?t=115252
 	'
 
- 	source /usr/local/bin/cgi_functions.sh
+	source /usr/local/bin/cgi_functions.sh
 
 	# Parse query strings, set variables:
 	parse_query "\${QUERY_STRING:-}"

@@ -367,7 +367,7 @@ class EDConnectorBaseTest extends EDTestBase {
 				[ 'type' => 'odbc', 'driver' => 'ODBC Driver 17 for SQL Server' ],
 				'EDConnectorOdbcMssql'
 			],
-			'{{#get_db_data:}}, MongoDB' =>	[ 'get_db_data', [ 'type' => 'mongodb' ], 'EDConnectorMongodb' ],
+			'{{#get_db_data:}}, MongoDB' => [ 'get_db_data', [ 'type' => 'mongodb' ], 'EDConnectorMongodb' ],
 			'{{#get_db_data:}}, PostgreSQL' => [ 'get_db_data', [ 'type' => 'postgres' ], 'EDConnectorPostgresql' ],
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
 			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
@@ -404,7 +404,7 @@ class EDConnectorBaseTest extends EDTestBase {
 				[ 'get_external_data', [ 'post data' => 'postdata' ], 'EDConnectorWeb' ],
 			'{{#get_external_data:}}, URL' =>
 				[ 'get_external_data', [ 'url' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
-			'{{#get_external_data:}}, file mask' =>	[
+			'{{#get_external_data:}}, file mask' => [
 				'get_external_data',
 				[ 'directory' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
 			],
@@ -463,7 +463,7 @@ class EDConnectorBaseTest extends EDTestBase {
 			// Universal function.
 			'{{#get_external_data:}}, URL, source' =>
 				[ 'get_external_data', [ 'source' => 'https://mediawiki.org' ], 'EDConnectorWeb' ],
-			'{{#get_external_data:}}, file mask, source' =>	[
+			'{{#get_external_data:}}, file mask, source' => [
 				'get_external_data',
 				[ 'source' => '/etc', 'file name' => '*.conf' ], 'EDConnectorDirectoryWalker'
 			],
@@ -474,8 +474,8 @@ class EDConnectorBaseTest extends EDTestBase {
 			],
 			'{{#get_external_data:}}, LDAP, source' => [
 				'get_external_data',
-				 [ 'source' => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
-				 'EDConnectorLdap'
+				[ 'source' => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
+				'EDConnectorLdap'
 			],
 
 			// First parameter instead of a specific parameter.

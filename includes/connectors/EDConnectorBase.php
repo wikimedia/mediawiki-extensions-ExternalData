@@ -9,7 +9,7 @@ use ExternalData\Presets\Base;
 use ExternalData\Presets\Media;
 
 abstract class EDConnectorBase {
-	use EDParsesParams;	// Needs paramToArray().
+	use EDParsesParams; // Needs paramToArray().
 
 	/** @const string[] ID_PARAMS An array of name of params that will serve as data sources' names. */
 	private const ID_PARAMS = [ 'url', 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', '*' ];

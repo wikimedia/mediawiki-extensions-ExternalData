@@ -7,7 +7,7 @@
  *
  */
 abstract class EDParserBase {
-	use EDParsesParams;			// Needs paramToArray().
+	use EDParsesParams; // Needs paramToArray().
 
 	/** @const string NAME The name of this format. */
 	public const NAME = '';
@@ -83,7 +83,7 @@ abstract class EDParserBase {
 		}
 		$class = self::getMatch( $params, self::setting( 'Parsers' ) );
 		if ( $class ) {
-			return new $class( $params );	// let exception from EDParser* constructor fall through.
+			return new $class( $params ); // let exception from EDParser* constructor fall through.
 		}
 		// No fitting parser found.
 		throw new EDParserException( 'externaldata-web-invalid-format', $params['format'] );
