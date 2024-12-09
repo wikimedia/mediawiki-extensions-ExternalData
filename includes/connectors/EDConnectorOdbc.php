@@ -258,7 +258,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 		}
 		$result = [];
 		// phpcs:ignore MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures
-		while (	$row = odbc_fetch_object( $rowset ) ) {
+		while ( $row = odbc_fetch_object( $rowset ) ) {
 			$result[] = $row;
 		}
 		odbc_free_result( $rowset );

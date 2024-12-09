@@ -138,8 +138,8 @@ class EDConnectorLdap extends EDConnectorBase {
 			self::throwWarnings();
 			try {
 				$bound = $this->user
-					   ? ldap_bind( $this->connection, $this->user, $this->password )
-					   : ldap_bind( $this->connection ); // anonymously.
+					? ldap_bind( $this->connection, $this->user, $this->password )
+					: ldap_bind( $this->connection ); // anonymously.
 			} catch ( Exception $e ) {
 				$this->error( 'externaldata-ldap-unable-to-bind', $this->domain );
 				$this->connection = null;

@@ -178,15 +178,15 @@ class Test extends Base {
 					'external links' => <<<'EL'
 						SELECT domain, links
 						FROM (
-						        SELECT
-									SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(el_index_60,
-						    			'/', 3),
-						    			'://', -1),
-						    			'/', 1),
-						    			'?', 1
-						    		) AS domain, COUNT(el_id) AS links
-						        FROM externallinks
-						        GROUP BY domain
+							SELECT
+								SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(el_index_60,
+									'/', 3),
+									'://', -1),
+									'/', 1),
+									'?', 1
+								) AS domain, COUNT(el_id) AS links
+							FROM externallinks
+							GROUP BY domain
 						) AS grouped
 						ORDER BY links DESC
 						LIMIT ?
@@ -195,14 +195,14 @@ class Test extends Base {
 						'query' => <<<'IW'
 							SELECT domain AS Domain, links
 							FROM (
-							    SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(iw_url,
-							    	'/', 3),
-							    	'://', -1),
-							    	'/', 1),
-							    	'?', 1
-							    ) AS domain, COUNT(iwlinks.iwl_title) AS links
-							    FROM iwlinks INNER JOIN interwiki ON iwlinks.iwl_prefix = interwiki.iw_prefix
-							    GROUP by domain
+								SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(iw_url,
+									'/', 3),
+									'://', -1),
+									'/', 1),
+									'?', 1
+								) AS domain, COUNT(iwlinks.iwl_title) AS links
+								FROM iwlinks INNER JOIN interwiki ON iwlinks.iwl_prefix = interwiki.iw_prefix
+								GROUP by domain
 							) AS grouped
 							ORDER BY links DESC
 							LIMIT ?

@@ -735,22 +735,22 @@ class Media extends Base {
 					var waitForJQuery = setInterval( function() {
 						if ( typeof $!== 'undefined' ) { // do not insert space.
 							$.when(
-							    mw.loader.getScript( '$scripts/vega/build/vega.min.js' ),
-							    mw.loader.getScript( '$scripts/vega-lite/build/vega-lite.min.js' ),
-							    mw.loader.getScript( '$scripts/vega-embed/build/vega-embed.min.js' )
+								mw.loader.getScript( '$scripts/vega/build/vega.min.js' ),
+								mw.loader.getScript( '$scripts/vega-lite/build/vega-lite.min.js' ),
+								mw.loader.getScript( '$scripts/vega-embed/build/vega-embed.min.js' )
 							).then(
-							    function () {
+								function () {
 									vegaEmbed( '#$id', $json ).then(
 										function( result ) {
 											console.log( 'vegaEmbed result: ' + result );
 										} ).catch( function( error ) {
 											mw.log.error( error );
 										} );
-							    },
-							    function ( e ) {
-							        // A script failed, and is not available
-							        mw.log.error( e.message ); // => "Failed to load script"
-							    }
+								},
+								function ( e ) {
+									// A script failed, and is not available
+									mw.log.error( e.message ); // => "Failed to load script"
+								}
 							);
 							clearInterval( waitForJQuery );
 						}
@@ -860,10 +860,10 @@ class Media extends Base {
 									});
 									document.getElementById( '{$id}_svg' ).remove(); // remove SVG fallback.
 								},
-							    function ( e ) {
-							        // A script failed, and is not available
-							        mw.log.error( e.message ); // => "Failed to load script"
-							    }
+								function ( e ) {
+									// A script failed, and is not available
+									mw.log.error( e.message ); // => "Failed to load script"
+								}
 							);
 							clearInterval( waitForJQuery );
 						}
@@ -893,17 +893,17 @@ class Media extends Base {
 						if ( typeof $!== 'undefined' ) { // do not insert space.
 							$.when( mw.loader.getScript( '$scripts/dist/echarts.js' )
 							).then(
-							    function () {
+								function () {
 									echarts.init( document.getElementById( '$id' ), '$theme', {
 										width: {$params['width']},
 										height: {$params['height']},
 										locale: '{$params['locale']}'
 									}).setOption( $json );
-							    },
-							    function ( e ) {
-							        // A script failed, and is not available
-							        mw.log.error( e.message ); // => "Failed to load script"
-							    }
+								},
+								function ( e ) {
+									// A script failed, and is not available
+									mw.log.error( e.message ); // => "Failed to load script"
+								}
 							);
 							clearInterval( waitForJQuery );
 						}

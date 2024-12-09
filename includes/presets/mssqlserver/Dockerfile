@@ -12,10 +12,10 @@ LABEL version="0.2"
 # install zsh and oh-my-zsh
 USER root
 RUN apt update && apt install -y zsh wget git \
-  && sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh-O -)" \
-  && git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions \
-  && echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc \
-  && echo "ZSH_THEME=af-magic" >> ~/.zshrc
+	&& sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh-O -)" \
+	&& git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions \
+	&& echo "source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc \
+	&& echo "ZSH_THEME=af-magic" >> ~/.zshrc
 
 # install dev tools
 RUN apt install -y vim tmux
