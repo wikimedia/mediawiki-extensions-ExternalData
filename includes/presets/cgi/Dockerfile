@@ -111,6 +111,7 @@ WGET
 
 ARG SRC
 ARG GIT
+ARG BRANCH=master
 ARG SRC_LANG=C
 RUN <<-SRC
 	set -ex && \
@@ -127,7 +128,7 @@ RUN <<-SRC
 		mkdir -p /usr/local/bin && mkdir -p /src && cd /src && \
 		if [ ! -z "$GIT" ]; then \
 			for URL in $GIT; do \
-				git clone --single-branch --branch=master "$URL"; \
+				git clone --single-branch --branch="$BRANCH" "$URL"; \
 			done; \
 		else \
 			if [ ! -z "$SRC" ]; then \

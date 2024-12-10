@@ -34,7 +34,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	protected $headers;
 
 	/** @var int $maxTries How many times to try an HTTP request. */
-	private static $maxTries = 3;
+	private $maxTries = 3;
 	/** @var int $tries How many tries have actually happened. */
 	private $tries = 0;
 	/** @var int Timestamp of when the result was fetched. */
@@ -52,6 +52,10 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		$this->error( $this->parseErrors );
 
 		parent::__construct( $args, $title );
+
+		if ( isset( $args['max tries'] ) ) {
+			$this->maxTries = (int)$args['max tries'];
+		}
 
 		// HTTP options.
 		$this->options = $args['options'] ?? [];
@@ -140,7 +144,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 					// Actually send a request.
 					// Late binding; fetcher() is pure virtual. Also sets $this->headers.
 					$contents = $this->fetcher( $url, $options );
-				} while ( !$contents && ++$this->tries <= self::$maxTries );
+				} while ( !$contents && ++$this->tries <= $this->maxTries );
 				// Encoding needs to be detected from HTTP headers this early and not later,
 				// during text parsing, so that the converted text may be cached.
 				// HTTP headers are not cached, therefore, they are not available,
@@ -153,7 +157,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			$contents = $this->convert2Utf8( $contents );
 			$postprocessor = $this->postprocessor;
 			if ( $postprocessor ) {
-				$contents = $postprocessor( $contents, $this->params );
+				$contents = $postprocessor( $contents, $this->params, $this->options['postData'] );
 			}
 			$this->add( $this->parse( $contents, parse_url( $this->realUrl, PHP_URL_PATH ) ) );
 			// Fill standard external variables.
@@ -174,7 +178,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 				$this->error( 'externaldata-throttled', $this->originalUrl, (string)(int)ceil( $this->waitTill ) );
 			} else {
 				// It wasn't throttled; just could not get it.
-				$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, (string)self::$maxTries );
+				$this->error( 'externaldata-db-could-not-get-url', $this->originalUrl, (string)$this->maxTries );
 			}
 			return false;
 		}

@@ -96,6 +96,7 @@ in `/usr/local/bin` (`.zip` and `.tar.gz` archives will be inflated),
   `Makefile`s. `.zip` and `.tar.gz` archives will be inflated,
     - `GIT` — URLs of _Git_ repositories to download, build and
 install as above,
+    - `BRANCH` — _Git_ branch to use, `master` by default,
     - `SRC_LANG` — `C` (default) or `GO`, for the previous two
 arguments,
     - `STARTUP` — a Linux shell command to be run at the end of

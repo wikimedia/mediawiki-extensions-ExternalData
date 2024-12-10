@@ -147,9 +147,9 @@ abstract class EDConnectorBase {
 	private function processor( $param ): ?callable {
 		$func = null;
 		if ( is_callable( $param ) ) {
-			$func = function ( string $input, array $params ) use ( $param ) {
+			$func = function ( string $input, array $params, ?string $preprocessed = null ) use ( $param ) {
 				try {
-					$output = $param( $input, $params );
+					$output = $param( $input, $params, $preprocessed );
 				} catch ( Exception $e ) {
 					$this->error( 'externaldata-processing-exception', $e->getMessage() );
 					return false;
@@ -158,11 +158,11 @@ abstract class EDConnectorBase {
 			};
 		} elseif ( is_array( $param ) ) {
 			$callables = array_filter( $param, 'is_callable' );
-			$func = function ( string $input, array $params ) use ( $callables ) {
+			$func = function ( string $input, array $params, ?string $preprocessed = null ) use ( $callables ) {
 				$output = $input;
 				foreach ( $callables as $callable ) {
 					try {
-						$output = $callable( $output, $params );
+						$output = $callable( $output, $params, $preprocessed );
 					} catch ( Exception $e ) {
 						$this->error( 'externaldata-processing-exception', $e->getMessage() );
 						return false;
@@ -900,20 +900,22 @@ abstract class EDConnectorBase {
 	 * Make interactive Vega visualisation based on the original JSON, with SVG fallback.
 	 * @param string $svg Vega visualisation exported to SVG to be used as fallback.
 	 * @param array $params Parameters passed to Vega engine, including the source JSON.
+	 * @param string $json Vega JSON config.
 	 * @return string HTML code containing the animated Vega with SVG fallback.
 	 */
-	public static function animateVega( string $svg, array $params ): string {
-		return Media::animateVega( $svg, $params );
+	public static function animateVega( string $svg, array $params, string $json ): string {
+		return Media::animateChart( $svg, $params, $json );
 	}
 
 	/**
 	 * Make interactive ECharts visualisation based on the original JSON, with SVG fallback.
 	 * @param string $svg ECharts visualisation exported to SVG to be used as fallback.
 	 * @param array $params Parameters passed to ECharts engine, including the source JSON.
+	 * @param string $json ECharts JSON config.
 	 * @return string HTML code containing the animated ECharts with SVG fallback.
 	 */
-	public static function animateEcharts( string $svg, array $params ): string {
-		return Media::animateEcharts( $svg, $params );
+	public static function animateEcharts( string $svg, array $params, string $json ): string {
+		return Media::animateEcharts( $svg, $params, $json );
 	}
 
 	/**
@@ -938,9 +940,10 @@ abstract class EDConnectorBase {
 	 * Make interactive Mermaid diagram based on the source code, with SVG fallback.
 	 * @param string $svg Mermaid diagram converted to SVG server-side to be used as fallback.
 	 * @param array $params Parameters to <mermaid> tag including the Mermaid source code.
+	 * @param string $mmd Mermaid source code.
 	 * @return string The original SVG plus Mermaid source code with scripts to activate it.
 	 */
-	public static function animateMermaid( string $svg, array $params ): string {
-		return Media::animateMermaid( $svg, $params );
+	public static function animateMermaid( string $svg, array $params, string $mmd ): string {
+		return Media::animateChart( $svg, $params, $mmd );
 	}
 }

@@ -319,9 +319,11 @@ services:
         BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.js
         WGET: https://raw.githubusercontent.com/alex-mashin/MathJax/master/assets/config.fixed.json
         COMMAND: >-
-          node --stack-size=1024 --stack-trace-limit=1000 -r /usr/local/lib/node_modules/esm
+          /usr/bin/node --stack-size=1024 --stack-trace-limit=1000 -r /usr/local/lib/node_modules/esm
           /usr/local/bin/tex2mml.js - --conf=/usr/share/downloads/config.fixed.json --dist=1
-        VERSION_COMMAND: npm list -l --prefix /usr/local/bin mathjax-full | grep 'mathjax'
+        VERSION_COMMAND: >-
+          VERSION=$$( /usr/bin/npm list -lp --prefix /usr/local/bin mathjax-full ) &&
+          echo $${VERSION#*:}
         CONTENT_TYPE: text/mathml
     environment:
       ERRORS: FATAL
@@ -457,15 +459,16 @@ services:
       context: ./cgi
       args:
         APK: zlib-dev libpng-dev fontconfig ttf-freefont
-        SRC: https://altushost-swe.dl.sourceforge.net/project/ploticus/ploticus/2.42/ploticus242_src.tar.gz?viasf=1
-        WGET: https://ploticus.sourceforge.net/download/svg_mouseover_js.tar.gz
+        GIT: https://salsa.debian.org/debian/ploticus
+        BRANCH: debian/latest
+        WGET: https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
         COMMAND: >-
-          /usr/local/bin/pl -stdin -outlabel "$$title" -tightcrop -scale "$$scale" -textsize "$$fontsize"
+          /usr/bin/ploticus -stdin -outlabel "$$title" -tightcrop -textsize "$$fontsize"
           -font 'FreeSans'
           -svg -omit_xml_declaration -xml_encoding utf-8 -noshell -o stdout
         # -csmap
         CONTENT_TYPE: text/svg
-        VERSION_COMMAND: /usr/local/bin/pl -? 2>&1 | head -2
+        VERSION_COMMAND: /usr/bin/ploticus -? 2>&1 | head -2
     environment:
       TDH_ERRMODE: cgi
       ERRORS: FATAL
@@ -491,16 +494,22 @@ services:
       context: ./cgi
       args:
         APK: zlib-dev libpng-dev fontconfig ttf-freefont perl
-        SRC: https://altushost-swe.dl.sourceforge.net/project/ploticus/ploticus/2.42/ploticus242_src.tar.gz?viasf=1
+        GIT: https://salsa.debian.org/debian/ploticus
+        BRANCH: debian/latest
         WGET: >-
-          https://ploticus.sourceforge.net/download/svg_mouseover_js.tar.gz
+          https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
           https://raw.githubusercontent.com/wikimedia/mediawiki-extensions-timeline/master/scripts/EasyTimeline.pl
         COMMAND: >-
           TMP=$$(mktemp -u) && cat > "$$TMP.tl" &&
-          perl /usr/share/downloads/EasyTimeline.pl -i "$$TMP.tl" -m -P "/usr/local/bin/pl" -T /tmp -A "$$path"
-          -f '/usr/share/fonts/freefont/FreeSans.otf' -s
-          1>/dev/null &&
-          cat "$$TMP.svg" && rm -f "$$TMP.tl" "$$TMP.png" "$$TMP.svg"
+          perl /usr/share/downloads/EasyTimeline.pl -i "$$TMP.tl" -m -P "/usr/bin/ploticus" -T /tmp -A "$$path"
+          -f '/usr/share/fonts/freefont/FreeSans.otf' -s -b
+          1>/dev/null && (
+          if [ ! -f "$$TMP.err" ]; then
+              cat "$$TMP.svg";
+          else
+              cat "$$TMP.err" >&2;
+          fi ) &&
+          rm -f "$$TMP.tl" "$$TMP.png" "$$TMP.svg" "$$TMP.err"
         CONTENT_TYPE: text/svg
         VERSION_COMMAND: perl /usr/share/downloads/EasyTimeline.pl | head -3
     environment:
@@ -584,7 +593,7 @@ services:
         APK: chromium
         NODE: "puppeteer @mermaid-js/mermaid-cli"
         COMMAND: >-
-          /usr/local/bin/node_modules/.bin/mmdc -p /usr/local/bin/.puppeteerrc.json -q -I "$$id"
+          /usr/local/bin/node_modules/.bin/mmdc -p /usr/local/bin/.puppeteerrc.json -q -I "$${id}_svg"
           -s "$$scale" -w "$$width" -H "$$height"
           -t "$$theme" -b "$$background" -i - -e svg -o -
         CONTENT_TYPE: text/svg

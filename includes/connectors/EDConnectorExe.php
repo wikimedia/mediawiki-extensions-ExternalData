@@ -165,7 +165,7 @@ class EDConnectorExe extends EDConnectorBase {
 				if ( $exit_code === 0 && !( $error && !$this->ignoreWarnings ) ) {
 					$postprocessor = $this->postprocessor;
 					if ( $output && $postprocessor ) {
-						$output = $postprocessor( $output, $this->params );
+						$output = $postprocessor( $output, $this->params, $input );
 					}
 					return $output;
 				} else {

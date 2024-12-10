@@ -8,6 +8,7 @@ use MediaWiki\Languages\Data\Names;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use NumberFormatter;
+use function sprintf;
 
 /**
  * Class wrapping the constant containing multimedia software data source presets purposes for autoloading.
@@ -15,7 +16,6 @@ use NumberFormatter;
  * @author Alexander Mashin
  *
  */
-
 class Media extends Base {
 	/**
 	 * @const array SOURCES Connections to Docker containers for testing purposes with useful multimedia programs.
@@ -34,6 +34,7 @@ class Media extends Base {
 			'param filters' => [ 'display' => '/^(block|inline)$/' ],
 			'input' => 'tex',
 			'preprocess' => __CLASS__ . '::encloseTex',
+			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'postprocess' => [
 				__CLASS__ . '::innerHtml',
@@ -53,6 +54,7 @@ class Media extends Base {
 			'params' => [ 'size' => 'a4' ],
 			'param filters' => [ 'size' => '/^\w+$/' ],
 			'input' => 'score',
+			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'score'
 		],
@@ -129,7 +131,6 @@ class Media extends Base {
 			'version url' => 'http://mscgen/cgi-bin/version.sh',
 			'name' => 'mscgen',
 			'program url' => 'https://www.mcternan.me.uk/mscgen/',
-			'command' => 'mscgen -Tsvg -o -',
 			'input' => 'dot',
 			'preprocess' => __CLASS__ . '::wikilinks4dot',
 			'postprocess' => __CLASS__ . '::innerXml',
@@ -153,14 +154,14 @@ class Media extends Base {
 		],
 
 		'ploticus' => [
-			'url' => 'http://ploticus/cgi-bin/cgi.sh?title=$title$&scale=$scale$&fontsize=$fontsize$',
+			'url' => 'http://ploticus/cgi-bin/cgi.sh?title=$title$&fontsize=$fontsize$',
 			'options' => [ 'sslVerifyCert' => false ],
 			'format' => 'text',
 			'version url' => 'http://ploticus/cgi-bin/version.sh',
 			'name' => 'ploticus',
 			'program url' => 'http://ploticus.sourceforge.net/doc/welcome.html',
-			'params' => [ 'scale' => 1, 'fontsize' => 4, 'title' => null ],
-			'param filters' => [ 'scale' => '/^\d+(\.\d+)?(,\d+(\.\d+)?)?$/', 'fontsize' => '/^\d+(\.\d+)?$/' ],
+			'params' => [ 'fontsize' => 8, 'title' => null ],
+			'param filters' => [ 'fontsize' => '/^\d+(\.\d+)?$/' ],
 			'input' => 'script',
 			'postprocess' => [
 				__CLASS__ . '::unmaskWikilinks',
@@ -169,6 +170,7 @@ class Media extends Base {
 			],
 			'scripts' => '/js/ploticus',
 			'min cache seconds' => 30 * 24 * 60 * 60,
+			'tries' => 1,
 			'tag' => 'ploticus'
 		],
 
@@ -188,7 +190,10 @@ class Media extends Base {
 				'heads' => '/^(rounded|butt|square)$/'
 			],
 			'input' => 'script',
-			'postprocess' => [ __CLASS__ . '::innerXml', __CLASS__ . '::sizeSvg' ],
+			'postprocess' => [
+				__CLASS__ . '::innerXml',
+				__CLASS__ . '::sizeSvg'
+			],
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'gnuplot'
 		],
@@ -200,7 +205,14 @@ class Media extends Base {
 			'version url' => 'http://vega/cgi-bin/version.sh',
 			'name' => 'Vega',
 			'program url' => 'https://vega.github.io',
-			'params' => [ 'json', 'width' => 600, 'height' => 600, 'currency' => '₽', 'yaml' => false ],
+			'params' => [
+				'json',
+				'width' => 600,
+				'height' => 600,
+				'currency' => '₽',
+				'yaml' => false,
+				'id' => __CLASS__ . '::chartId'
+			],
 			'param filters' => [
 				'json' => __CLASS__ . '::validateJsonOrYaml',
 				'width' => '/^\d+$/', 'height' => '/^\d+$/',
@@ -209,10 +221,29 @@ class Media extends Base {
 			'input' => 'json',
 			'preprocess' => [
 				__CLASS__ . '::yamlToJson',
-				__CLASS__ . '::inject3d'
+				__CLASS__ . '::inject3d',
+				__CLASS__ . '::remove160'
 			],
-			'postprocess' => __CLASS__ . '::animateVega',
-			'scripts' => '/js/vega',
+			'postprocess' => __CLASS__ . '::animateChart',
+			'scripts' => [
+				'/js/vega/vega/build/vega.min.js',
+				'/js/vega/vega-lite/build/vega-lite.min.js',
+				'/js/vega/vega-embed/build/vega-embed.min.js'
+			],
+			'class' => 'vega',
+			'html' => <<<'HTML'
+				<div class="%1$s" id="%2$s">%4$s</div>
+				%5$s
+				HTML,
+			'javascript' => <<<'JS'
+				vegaEmbed( '#%1$s', %2$s ).then(
+					function( result ) {
+						console.log( 'vegaEmbed result: ' + result );
+					} ).catch( function( error ) {
+						mw.log.error( error );
+					} );
+			JS,
+			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'graph'
 		],
@@ -233,7 +264,7 @@ class Media extends Base {
 				'theme' => 'default',
 				'look' => 'classic',
 				'background' => 'white',
-				'id' => __CLASS__ . '::mermaidId'
+				'id' => __CLASS__ . '::chartId'
 			],
 			'param filters' => [
 				'scale' => '/^\d+(\.\d+)?$/',
@@ -244,15 +275,33 @@ class Media extends Base {
 				'background' => '/^(\w+|\#[0-9A-F]{6})$/i'
 			],
 			'input' => 'mmd',
+			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'mermaid',
-			'preprocess' => [ __CLASS__ . '::screenColons' ],
+			'preprocess' => [
+				__CLASS__ . '::screenColons',
+				__CLASS__ . '::wikilinks4mermaid',
+				__CLASS__ . '::injectMermaidParams'
+			],
 			'postprocess' => [
 				__CLASS__ . '::onlySvg',
 				__CLASS__ . '::wikiLinksInXml',
-				__CLASS__ . '::animateMermaid'
+				__CLASS__ . '::animateChart'
 			],
-			'scripts' => '/js/mermaid'
+			'class' => 'mermaid',
+			'html' => <<<'HTML'
+				<div class="%1$s" id="%2$s" style="display: none;">%3$s</div>
+				%4$s
+				%5$s
+				HTML,
+			'javascript' => <<<'JS'
+				mermaid.initialize({ startOnLoad: false, securityLevel: 'antiscript' });
+				let source = document.getElementById( '%1$s' );
+				source.style.display = 'block';
+				mermaid.run({ nodes: [ source ] }); // convert Mermaid to diagram.
+				document.getElementById( '%1$s_svg' ).remove(); // remove SVG fallback.
+			JS,
+			'scripts' => '/js/mermaid/mermaid.min.js'
 		],
 
 		'bpmn' => [
@@ -277,6 +326,7 @@ class Media extends Base {
 
 	/**
 	 * Return External Data sources, some of which cannot be constants.
+	 *
 	 * @return array[]
 	 */
 	public static function sources(): array {
@@ -300,6 +350,7 @@ class Media extends Base {
 					__CLASS__ . '::wikilinksInSvg'
 				],
 				'min cache seconds' => 30 * 24 * 60 * 60,
+				'max tries' => 1,
 				'tag' => 'timeline'
 			],
 
@@ -315,7 +366,8 @@ class Media extends Base {
 					'width' => 400,
 					'height' => 300,
 					'locale' => $wgLanguageCode,
-					'theme' => 'macarons'
+					'theme' => 'macarons',
+					'id' => __CLASS__ . '::chartId'
 				],
 				'param filters' => [
 					'json' => __CLASS__ . '::validateJsonOrYaml',
@@ -328,11 +380,18 @@ class Media extends Base {
 						. 'royal|sakura|shine|tech-blue|vintage)$/'
 				],
 				'input' => 'json',
-				'preprocess' => [
-					__CLASS__ . '::yamlToJson'
-				],
+				'preprocess' => __CLASS__ . '::yamlToJson',
 				'postprocess' => __CLASS__ . '::animateEcharts',
-				'scripts' => '/js/echarts',
+				'class' => 'echarts',
+				'html' => <<<'HTML'
+					<div class="%1$s" id="%2$s">%4$s</div>%5$s
+					HTML,
+				'javascript' => <<<'JS'
+					const init = %3$s;
+					echarts.init( document.getElementById( '%1$s' ), init.theme, init ).setOption( %2$s );
+				JS,
+				'scripts' => '/js/echarts/dist/echarts.js',
+				'max tries' => 1,
 				'min cache seconds' => 30 * 24 * 60 * 60,
 				'tag' => 'echarts'
 			]
@@ -345,6 +404,7 @@ class Media extends Base {
 
 	/**
 	 * Surround TeX with \(…\) or $$…$$ for MathJax.
+	 *
 	 * @param string $tex
 	 * @param array $params
 	 * @return string
@@ -353,7 +413,7 @@ class Media extends Base {
 		return $params['display'] === 'block' ? '$$' . $tex . '$$' : "\($tex\)";
 	}
 
-	/** @const string[] ECI_AWARE ECI-aware types of bar/QR codes. */
+	/** @const string[] ECI_AWARE ECI-aware types of bar / QR codes. */
 	private const ECI_AWARE = [
 		'AZTEC', 'DOTCODE', 'MAXICODE', 'QRCODE', 'CODEONE', 'GRIDMATRIX', 'MICROPDF417',
 		'RMQR', 'DATAMATRIX', 'HANXIN', 'PDF417', 'ULTRA'
@@ -365,11 +425,22 @@ class Media extends Base {
 
 	/**
 	 * Return true if $scale is numeric and between 0 and 100.
+	 *
 	 * @param mixed $scale
 	 * @return bool
 	 */
 	public static function isBetween0and100( $scale ): bool {
 		return is_numeric( $scale ) && (float)$scale > 0 && (float)$scale <= 100;
+	}
+
+	/**
+	 * A sevice function converting page title into its local URL.
+	 * @param string $page
+	 * @return string
+	 */
+	private static function localurl( string $page ): string {
+		$url = CoreParserFunctions::localurl( null, $page );
+		return is_string( $url ) ? $url : '/';
 	}
 
 	/**
@@ -379,11 +450,58 @@ class Media extends Base {
 	 * @return string dot with links.
 	 */
 	public static function wikilinks4uml( string $uml ): string {
-		// Process [[wikilink]] in nodes.
 		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
-			$alias = $m[2] ?? $m[1];
-			return '[[' . (string)CoreParserFunctions::localurl( null, $m[1] ) . ' ' . $alias . ']]';
+			return '[[' . self::localurl( $m[1] ) . ' ' . ( $m[2] ?? $m[1] ) . ']]';
 		}, $uml );
+	}
+
+	/**
+	 * Make an identifier for a <div> containing a Mermaid, ECharts or Vega diagram.
+	 *
+	 * @param array $params
+	 * @return string
+	 */
+	public static function chartId( array $params ): string {
+		return $params['source'] . '_' . hash( 'fnv1a64', var_export( $params, true ) );
+	}
+
+	/**
+	 * Combating MediaWiki injecting &#160; in some places.
+	 * @param string $json Vega config as JSON.
+	 * @return string
+	 */
+	public static function remove160( string $json ): string {
+		return preg_replace( '/(["\'}\w])\s+([:!?])/', '$1$2', $json );
+	}
+
+	/**
+	 * Convert [[wikilinks]] to links in mermaid.
+	 *
+	 * @param string $mmd Text to add wikilinks in mermaid format.
+	 * @return string dot with links.
+	 */
+	public static function wikilinks4mermaid( string $mmd ): string {
+		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ): string {
+			return sprintf( '<a href="%s">%s</a>', self::localurl( $m[1] ), $m[2] ?? $m[1] );
+		}, $mmd );
+	}
+
+	/**
+	 * Injects parameters for a Mermaid diagram.
+	 *
+	 * @param string $mmd Mermaid diagram code.
+	 * @param array $params Tag parameters.
+	 * @return string
+	 */
+	public static function injectMermaidParams( string $mmd, array $params ): string {
+		$init = [];
+		foreach ( [ 'width', 'height', 'theme', 'background', 'look' ] as $param ) {
+			if ( isset( $params[$param] ) ) {
+				$init[] = "'$param':'{$params[$param]}'";
+			}
+		}
+		return '%%{init: {' . implode( ',', $init ) . "}}%%\n"
+			. preg_replace( '/' . preg_quote( self::PLACEHOLDER, '/' ) . '/', urlencode( ':' ), $mmd );
 	}
 
 	/**
@@ -420,8 +538,7 @@ class Media extends Base {
 		$dewikified = preg_replace_callback(
 			'/(?<attr>' . $attrs . ')\s*=\s*"\[\[(?<page>[^|<>\]"]+)]]"/',
 			static function ( array $m ): string {
-				$url = CoreParserFunctions::localurl( null, $m['page'] );
-				return $m['attr'] . '="' . ( is_string( $url ) ? $url : CoreParserFunctions::localurl( null ) ) . '"';
+				return $m['attr'] . '="' . self::localurl( $m['page'] ) . '"';
 			},
 			$dot
 		);
@@ -477,9 +594,8 @@ class Media extends Base {
 			'/\[\[(?<page>[^|<>\]]+)(\|(?<alias>[^<>\]]+))?]]\s*(?:\[(?<props>[^][]+)])?/',
 			static function ( array $m ) {
 				$props = $m['props'] ?? '';
-				$url = CoreParserFunctions::localurl( null, $m['page'] );
 				return '{"' . $m['page'] . '"['
-					. 'URL="' . ( is_string( $url ) ? $url : CoreParserFunctions::localurl( null ) ) . '"; '
+					. 'URL="' . self::localurl( $m['page'] ) . '"; '
 					. ( isset( $m['alias'] ) ? 'label="' . $m['alias'] . '";' : '' )
 					. $props
 					. ']}';
@@ -491,6 +607,7 @@ class Media extends Base {
 
 	/**
 	 * Return true, if file $name exists and its extension is '.pdf'.
+	 *
 	 * @param string $name
 	 * @return bool
 	 */
@@ -501,6 +618,7 @@ class Media extends Base {
 
 	/**
 	 * Convert HTML entities, that are unknown to XML, to characters.
+	 *
 	 * @param string $xml
 	 * @return string
 	 */
@@ -538,6 +656,7 @@ class Media extends Base {
 
 	/**
 	 * Set SVG size, if not set.
+	 *
 	 * @param string $svg
 	 * @param array $params
 	 * @return string
@@ -559,6 +678,7 @@ class Media extends Base {
 
 	/**
 	 * Convert [[…]] in SVG <text> into <a>.
+	 *
 	 * @param string $svg
 	 * @return string
 	 * @throws \MWException
@@ -579,7 +699,8 @@ class Media extends Base {
 		}
 		foreach ( $dom->getElementsByTagName( 'text' ) as $node ) {
 			$text = $node->nodeValue;
-			if ( preg_match_all( '/\[\[(?<page>[^]|]+)(?:\|(?<alias>[^]]+))?]]/u',
+			if ( preg_match_all(
+				'/\[\[(?<page>[^]|]+)(?:\|(?<alias>[^]]+))?]]/u',
 				$text,
 				$matches,
 				PREG_SET_ORDER | PREG_OFFSET_CAPTURE | PREG_UNMATCHED_AS_NULL
@@ -595,7 +716,7 @@ class Media extends Base {
 					}
 					// The hyperlink itself.
 					$a = $dom->createElement( 'a', $set['alias'][0] ?? $set['page'][0] );
-					$a->setAttribute( 'xlink:href', (string)CoreParserFunctions::localurl( null, $set['page'][0] ) );
+					$a->setAttribute( 'xlink:href', self::localurl( $set['page'][0] ) );
 					$node->appendChild( $a );
 					$position += strlen( $set[0][0] ) + 1;
 				}
@@ -611,6 +732,7 @@ class Media extends Base {
 
 	/**
 	 * Alter links to JavaScripts in SVG.
+	 *
 	 * @param string $svg
 	 * @param array $params
 	 * @return string
@@ -629,6 +751,7 @@ class Media extends Base {
 
 	/**
 	 * Replace local image paths with URLs in SVG.
+	 *
 	 * @param string $svg SVG to process
 	 * @return string Prcessed SVG
 	 * @throws \MWException
@@ -658,6 +781,7 @@ class Media extends Base {
 
 	/**
 	 * Inject locale object for Vega.
+	 *
 	 * @param array|string $json
 	 * @param array $params
 	 * @return string
@@ -695,11 +819,12 @@ class Media extends Base {
 				$json[$param] = $params[$param];
 			}
 		}
-		return json_encode( $json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
+		return json_encode( $json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 	}
 
 	/**
 	 * Make MathJax formula interactive.
+	 *
 	 * @param string $html MathML code wrapped in HTML.
 	 * @param array $params Parameters passed to MathJax.
 	 * @return string HTML code containing the animated MathJax.
@@ -709,64 +834,11 @@ class Media extends Base {
 		if ( $params['nomenu'] === false && !$math_jax_included ) {
 			$math_jax_included = true;
 			$script = "\n" . '<script type="text/javascript" async src="'
-					. "{$params['scripts']}/tex-mml-chtml.js" . '"></script>';
+				. "{$params['scripts']}/tex-mml-chtml.js" . '"></script>';
 		} else {
 			$script = '';
 		}
 		return "$html$script";
-	}
-
-	/**
-	 * Make interactive Vega visualisation based on the original JSON, with SVG fallback.
-	 * @param string $svg Vega visualisation exported to SVG to be used as fallback.
-	 * @param array $params Parameters passed to Vega engine, including the source JSON.
-	 * @return string HTML code containing the animated Vega with SVG fallback.
-	 */
-	public static function animateVega( string $svg, array $params ): string {
-		// Combatting MediaWiki injecting &#160; in some places.
-		$json = self::yamlToJson( $params['json'], $params );
-		$json = preg_replace( '/(["\'}\w])\s+([:!?])/', '$1$2', $json );
-		$id = 'vega_' . hash( 'fnv1a64', $json );
-		$scripts = $params['scripts'];
-		return <<<HTML
-			<div class="vega" id="$id">$svg</div>
-			<script type="text/javascript">
-				(function () {
-					var waitForJQuery = setInterval( function() {
-						if ( typeof $!== 'undefined' ) { // do not insert space.
-							$.when(
-								mw.loader.getScript( '$scripts/vega/build/vega.min.js' ),
-								mw.loader.getScript( '$scripts/vega-lite/build/vega-lite.min.js' ),
-								mw.loader.getScript( '$scripts/vega-embed/build/vega-embed.min.js' )
-							).then(
-								function () {
-									vegaEmbed( '#$id', $json ).then(
-										function( result ) {
-											console.log( 'vegaEmbed result: ' + result );
-										} ).catch( function( error ) {
-											mw.log.error( error );
-										} );
-								},
-								function ( e ) {
-									// A script failed, and is not available
-									mw.log.error( e.message ); // => "Failed to load script"
-								}
-							);
-							clearInterval( waitForJQuery );
-						}
-					}, 10 );
-				} )();
-			</script>
-		HTML;
-	}
-
-	/**
-	 * Make an identifier for a <div> containing a Mermaid diagram.
-	 * @param array $params
-	 * @return string
-	 */
-	public static function mermaidId( array $params ): string {
-		return 'mmd_' . hash( 'fnv1a64', $params['mmd'] ) . '_svg';
 	}
 
 	/** @const string PLACEHOLDER Temporary replacement for colons in wikilinks in Mermaid diagrams. */
@@ -774,6 +846,7 @@ class Media extends Base {
 
 	/**
 	 * Screen colons in wikilinks in a Mermaid diagram.
+	 *
 	 * @param string $mmd
 	 * @return string
 	 */
@@ -789,6 +862,7 @@ class Media extends Base {
 
 	/**
 	 * Strips log messages before and after SVG that could not be stripped otherwise.
+	 *
 	 * @param string $input
 	 * @return string
 	 */
@@ -798,6 +872,7 @@ class Media extends Base {
 
 	/**
 	 * Convert wikilinks in XML to proper hyperlinks.
+	 *
 	 * @param string $xml
 	 * @return string
 	 */
@@ -811,7 +886,7 @@ class Media extends Base {
 				$attr = 'xlink:href';
 				$page = preg_replace( "/$colon/", ':', $matches['page'] );
 				$alias = preg_replace( "/$colon/", ':', $matches['alias'] ?? $page );
-				return '<a ' . $attr . '="' . $page . '">' . $alias . '</a>';
+				return '<a ' . $attr . '="' . self::localurl( $page ) . '">' . $alias . '</a>';
 			},
 			$xml
 		);
@@ -823,93 +898,68 @@ class Media extends Base {
 	}
 
 	/**
-	 * Make interactive Mermaid diagram based on the source code, with SVG fallback.
-	 * @param string $svg Mermaid diagram converted to SVG server-side to be used as fallback.
-	 * @param array $params Parameters to <mermaid> tag including the Mermaid source code.
-	 * @return string The original SVG plus Mermaid source code with scripts to activate it.
+	 * Animate a chart, making it interactive.
+	 * @param string $svg Chart converted to SVG server-side.
+	 * @param array $params Data source parameters.
+	 * @param string $source Chart source code.
+	 * @param string $init A string of chart parameters to be injected into JavaScript.
+	 * @return string The resulting HTML code to inject.
 	 */
-	public static function animateMermaid( string $svg, array $params ): string {
-		$id = self::mermaidId( $params );
-		if ( preg_match( '/id="(mmd_.+?)_svg"/', $svg, $matches ) ) {
-			$id = $matches[1];
-		}
-		$scripts = $params['scripts'];
-		$init = [];
-		foreach ( [ 'width', 'height', 'theme', 'background', 'look' ] as $param ) {
-			if ( isset( $params[$param] ) ) {
-				$init[] = "'$param':'{$params[$param]}'";
-			}
-		}
-		return "<pre class=\"mermaid\" id=\"$id\">"
-			. '%%{init: {' . implode( ',', $init ) . '}}%%'
-			. htmlspecialchars( $params['mmd'] )
-			. '</pre>' . $svg . "\n"
-			. <<<HTML
+	public static function animateChart(
+		string $svg,
+		array $params,
+		string $source,
+		string $init = ''
+	): string {
+		$promise = is_array( $params['scripts'] )
+			? "$.when(\n" . implode( ",\n", array_map( static function ( string $script ): string {
+				return "\tmw.loader.getScript( '$script' )";
+			}, $params['scripts'] ) ) . "\n)"
+			: "mw.loader.getScript( '{$params['scripts']}' )";
+		$func = sprintf( $params['javascript'], $params['id'], $source, $init );
+		$script = <<<SCRIPT
 			<script type="text/javascript">
 				(function () {
-					var waitForJQuery = setInterval( function() {
+					let waitForJQuery = setInterval( function() {
 						if ( typeof $!== 'undefined' ) { // do not insert space.
-							$.when( mw.loader.getScript( '$scripts/mermaid.min.js' ) ).then(
-								function () {
-									mermaid.initialize({
-										startOnLoad: false,
-										securityLevel: 'antiscript'
-									});
-									mermaid.run({
-										nodes: [ document.getElementById( '$id' ) ], // convert Mermaid to diagram.
-									});
-									document.getElementById( '{$id}_svg' ).remove(); // remove SVG fallback.
-								},
-								function ( e ) {
-									// A script failed, and is not available
-									mw.log.error( e.message ); // => "Failed to load script"
-								}
-							);
-							clearInterval( waitForJQuery );
+							if ( typeof mw.loader.getScript !== 'undefined' ) {
+								$promise.then(
+									function () {
+										$func
+									},
+									function ( e ) {
+										mw.log.error( e.message ); // => "Failed to load script"
+									}
+								);
+								clearInterval( waitForJQuery );
+							}
 						}
 					}, 10 );
 				} )();
 			</script>
-			HTML;
+			SCRIPT;
+		return sprintf( $params['html'], $params['class'], $params['id'], $source, $svg, $script );
 	}
 
 	/**
 	 * Make interactive ECharts visualisation based on the original JSON, with SVG fallback.
+	 *
 	 * @param string $svg ECharts visualisation exported to SVG to be used as fallback.
 	 * @param array $params Parameters passed to ECharts engine, including the source JSON.
+	 * @param string $json Preprocessed JSON for ECharts.
 	 * @return string HTML code containing the animated ECharts with SVG fallback.
 	 */
-	public static function animateEcharts( string $svg, array $params ): string {
-		$json = self::yamlToJson( $params['json'], $params );
-		$json = preg_replace( '/(["\'}\w])\s+([:!?])/', '$1$2', $json );
-		$id = 'echarts_' . hash( 'fnv1a64', $json );
-		$scripts = $params['scripts'];
-		$theme = $params['theme'] ?? '';
-		return <<<HTML
-			<div id="$id">$svg</div>
-			<script type="text/javascript">
-				( function () {
-					var waitForJQuery = setInterval( function() {
-						if ( typeof $!== 'undefined' ) { // do not insert space.
-							$.when( mw.loader.getScript( '$scripts/dist/echarts.js' )
-							).then(
-								function () {
-									echarts.init( document.getElementById( '$id' ), '$theme', {
-										width: {$params['width']},
-										height: {$params['height']},
-										locale: '{$params['locale']}'
-									}).setOption( $json );
-								},
-								function ( e ) {
-									// A script failed, and is not available
-									mw.log.error( e.message ); // => "Failed to load script"
-								}
-							);
-							clearInterval( waitForJQuery );
-						}
-					}, 10 );
-				} )();
-			</script>
-		HTML;
+	public static function animateEcharts( string $svg, array $params, string $json ): string {
+		return self::animateChart(
+			$svg,
+			$params,
+			$json,
+			json_encode( [
+				'width' => $params['width'],
+				'height' => $params['height'],
+				'locale' => $params['locale'],
+				'theme' => $params['theme'] ?? ''
+			] )
+		);
 	}
 }
