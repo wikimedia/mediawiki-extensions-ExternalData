@@ -57,7 +57,7 @@ class EDGetData extends SpecialPage {
 		// ignore lines that are either blank or start with a semicolon
 		$page_lines = [];
 		foreach ( $orig_lines as $i => $line ) {
-			if ( $line != '' && $line[0] != ';' ) {
+			if ( $line !== '' && $line[0] !== ';' ) {
 				$page_lines[] = $line;
 			}
 		}
@@ -67,7 +67,7 @@ class EDGetData extends SpecialPage {
 		foreach ( $queryStringValues as $key => $value ) {
 			foreach ( $headers as $header_index => $header_value ) {
 				$header_value = str_replace( ' ', '_', $header_value );
-				if ( $key == $header_value ) {
+				if ( $key === $header_value ) {
 					$queried_headers[$header_index] = $value;
 				}
 			}
@@ -75,14 +75,14 @@ class EDGetData extends SpecialPage {
 		// include header in output
 		$text = $page_lines[0];
 		foreach ( $page_lines as $i => $line ) {
-			if ( $i == 0 ) {
+			if ( $i === 0 ) {
 				continue;
 			}
 			$row_values = self::getValuesFromCSVLine( $line );
 			$found_match = true;
 			foreach ( $queried_headers as $j => $query_value ) {
 				$single_value = str_replace( ' ', '_', $row_values[$j] );
-				if ( $single_value != $query_value ) {
+				if ( $single_value !== $query_value ) {
 					$found_match = false;
 				}
 			}

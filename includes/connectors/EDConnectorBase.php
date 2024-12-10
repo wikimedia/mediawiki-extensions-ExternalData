@@ -584,7 +584,7 @@ abstract class EDConnectorBase {
 				} else {
 					// if we have only one row of values, and the filter doesn't match,
 					// just keep the results array blank and return
-					if ( $external_values[$filter_var] != $filter_value ) {
+					if ( $external_values[$filter_var] !== $filter_value ) {
 						return [];
 					}
 				}

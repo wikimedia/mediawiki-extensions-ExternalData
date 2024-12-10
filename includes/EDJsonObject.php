@@ -297,7 +297,7 @@ class EDJsonObject {
 	 * @return array|null
 	 */
 	private function matchValidExpression( $json_path, $offset = 0 ) {
-		if ( $json_path[$offset] != self::TOK_SELECTOR_BEGIN ) {
+		if ( $json_path[$offset] !== self::TOK_SELECTOR_BEGIN ) {
 			return null;
 		}
 		$initial_offset = $offset;
@@ -323,7 +323,7 @@ class EDJsonObject {
 				break;
 			}
 		}
-		if ( $braces_count == 0 && $parent_count == 0 ) {
+		if ( $braces_count === 0 && $parent_count === 0 ) {
 			return [
 				substr( $json_path, $initial_offset + 1, $offset - $initial_offset - 2 ),
 				substr( $json_path, $offset - $initial_offset )
@@ -372,7 +372,7 @@ class EDJsonObject {
 	 * @throws MWException
 	 */
 	private function opChildSelector( &$json_object, $contents, &$result, $create_nonexistent = false ) {
-		if ( $contents == '' ) {
+		if ( $contents === '' ) {
 			throw new MWException( 'empty selector' );
 		}
 		if ( is_array( $json_object ) ) {
@@ -531,7 +531,7 @@ class EDJsonObject {
 						foreach ( $selection as $item ) {
 							$new_selection[] = is_array( $item ) ? count( $item ) : strlen( $item );
 						}
-					} elseif ( count( $selection ) == 1 ) {
+					} elseif ( count( $selection ) === 1 ) {
 						if ( is_array( $selection[0] ) ) {
 							$new_selection = count( $selection[0] );
 						} else {
