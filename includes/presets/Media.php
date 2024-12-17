@@ -919,15 +919,15 @@ class Media extends Base {
 		$func = sprintf( $params['javascript'], $params['id'], $source, $init );
 		$script = <<<SCRIPT
 			<script type="text/javascript">
-				(function () {
+				(function() {
 					let waitForJQuery = setInterval( function() {
 						if ( typeof $!== 'undefined' ) { // do not insert space.
-							if ( typeof mw.loader.getScript !== 'undefined' ) {
+							if ( typeof mw.loader.getScript!== 'undefined' ) { // do not insert space.
 								$promise.then(
-									function () {
+									function() {
 										$func
 									},
-									function ( e ) {
+									function( e ) {
 										mw.log.error( e.message ); // => "Failed to load script"
 									}
 								);
