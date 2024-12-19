@@ -54,6 +54,7 @@
 	"externaldata-parsing-html-failed": "تعذر تحليل HTML.",
 	"externaldata-caught-exception-parsing-html": "تم اكتشاف استثناء أثناء تحليل HTML. رسالة الخطأ هي \" $1 \".",
 	"externaldata-error-converting-css-to-xpath": "استثناء مصاب تحويل اختيار CSS $1 إلى XPath: $2",
+	"externaldata-jsonpath-error": "JSONpath غير قانوني $1",
 	"externaldata-missing-library": "المكتبة $1 ، المطلوبة لاستخدام وظيفة المحلل اللغوي ' $2 ' أو وظيفة Lua <code>$3</code> ، مفقودة.",
 	"externaldata-undefined-file": "لم يتم تعريف الملف $1 .",
 	"externaldata-missing-file": "ملف $1 مفقود.",
