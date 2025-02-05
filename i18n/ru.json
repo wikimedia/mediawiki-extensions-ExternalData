@@ -52,7 +52,7 @@
 	"externaldata-url-unknown-error": "По неизвестной причине, данные по адресу $1 не получены.",
 	"externaldata-url-not-allowed": "URL $1 на этой вики не разрешён.",
 	"externaldata-caught-exception-soap": "При создании клиента SOAP выброшено исключение $1.",
-	"externaldata-parsing-html-failed": "HTML не был разобран:\n $1",
+	"externaldata-parsing-html-failed": "Не удалось проанализировать HTML:\n $1",
 	"externaldata-caught-exception-parsing-html": "При разборе HTML выброшено исключение. Текст ошибки: &laquo;$1&raquo;.",
 	"externaldata-error-converting-css-to-xpath": "При преобразовании селектора CSS $1 в XPath выброшено исключение:\n$2",
 	"externaldata-jsonpath-error": "Некорректный JSONpath $1",
