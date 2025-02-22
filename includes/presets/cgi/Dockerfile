@@ -49,7 +49,7 @@ RUN <<-GOINSTALL
 	if [ ! -z "$GO" ]; then \
 		apk add --no-cache go && \
 		go install $GO && \
-		go clean && apk del go; \
+		go clean && apk del go && rm -rf "$GOPATH/pkg"; \
 	fi
 GOINSTALL
 

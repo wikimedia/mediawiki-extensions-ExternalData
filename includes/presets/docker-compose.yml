@@ -234,7 +234,9 @@ services:
           https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb
         COMMAND: '"$$GOPATH/bin/mmdbinspect" -db "/usr/share/downloads/GeoLite2-$$db.mmdb" "$$ip"'
         CONTENT_TYPE: text/json
-        VERSION_COMMAND: '"$$GOPATH/bin/mmdbinspect" --version'
+        VERSION_COMMAND: |
+          echo "mmdbinspect. Copyright (c) 2019 - 2025 by MaxMind, Inc,
+          licensed under the Apache License, Version 2.0 or the MIT License, at your option"
     restart: unless-stopped
     tmpfs:
       - /tmp

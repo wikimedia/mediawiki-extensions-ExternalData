@@ -238,9 +238,15 @@ class EDParserFunctions {
 	 * @param string $body
 	 * @return array
 	 */
-	private static function getMacros( $body ): array {
+	private static function getMacros( string $body ): array {
 		$macros = [];
-		preg_match_all( '/{{{(?<var>[^}|]*)(?:\|(?<default>[^}]*))?}}}/', $body, $macros, PREG_SET_ORDER );
+		preg_match_all(
+		// This regular expression matches nested {{{…|…}}} returning only the outermost ones.
+			'/\{\{\{ (?<var> (?: [^{}|]+ | (?R) )*+ ) (?: \| (?<default> (?: [^{}|]+ | (?R) )*+ ) )? }}}/sx',
+			$body,
+			$macros,
+			PREG_SET_ORDER
+		);
 		return $macros;
 	}
 
@@ -285,10 +291,10 @@ class EDParserFunctions {
 	/**
 	 * Actually render the #for_external_table parser function. The "template" is passed as the first parameter.
 	 * @param string $body
+	 * @param array $macros
 	 * @return string
 	 */
-	private static function actuallyForExternalTableFirst( $body ): string {
-		$macros = self::getMacros( $body );
+	private static function actuallyForExternalTableFirst( string $body, array $macros ): string {
 		$num_loops = self::numLoops( array_map( static function ( $set ) {
 			return $set['var'];
 		}, $macros ) );
@@ -329,7 +335,7 @@ class EDParserFunctions {
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop, $defaults ){
-				return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ?? '' ) );
+					return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ?? '' ) );
 			}, $variables ) ) + $template_args;
 			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
 			$loops[] = $row_as_frame->expand( $tree ); // substitution of {{{var}}} happens here.
@@ -358,7 +364,19 @@ class EDParserFunctions {
 		}
 		$body = array_shift( $args );
 
+		// Template parameters in loop body with external variables are already expanded or won't be expanded correctly.
 		$macros = self::getMacros( $second ? $frame->expand( $body, PPFrame::NO_ARGS ) : $body );
+
+		// Substitute template parameters in external variable names and their default values now.
+		if ( $second ) {
+			foreach ( $macros as &$macro ) {
+				foreach ( [ 'var', 'default' ] as &$wikitext ) {
+					if ( isset( $macro[$wikitext] ) ) {
+						$macro[$wikitext] = $frame->expand( $parser->preprocessToDom( $macro[$wikitext] ) );
+					}
+				}
+			}
+		}
 
 		// Get default values:
 		$defaults = [];
@@ -391,7 +409,7 @@ class EDParserFunctions {
 
 		return $frame->expand( $second
 			? self::actuallyForExternalTableSecond( $parser, $body, $defaults, $frame->getArguments() )
-			: self::actuallyForExternalTableFirst( $body )
+			: self::actuallyForExternalTableFirst( $body, $macros )
 		);
 	}
 
