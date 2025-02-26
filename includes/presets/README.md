@@ -35,6 +35,7 @@ feature is provided by the program
 (add `$wgExternalDataSources['load media presets'] = true;`
 to `LocalSettings.php` to activate them all):
    - `<mathjax>` ([MathJax](https://www.mathjax.org/), partially emulating [MathJax MW extension](https://github.com/alex-mashin/MathJax)),
+   - `<maxima>` ([Maxima](https://en.wikipedia.org/wiki/Maxima_(software))),
    - `<barcode>` ([Zint](https://www.zint.org.uk)),
    - `<score>` ([LilyPond](http://lilypond.org/)),
    - `<graphviz>` ([GraphViz](https://graphviz.org/)),

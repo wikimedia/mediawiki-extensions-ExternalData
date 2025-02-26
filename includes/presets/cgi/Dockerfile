@@ -278,11 +278,9 @@ ENV ERRORS=ALL
 ENV DEBUG=''
 COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 	#!/bin/bash
-	: '
-	Do not set -eux.
-	$COMMAND will receive stdin from /www/cgi-bin/\$SCRIPT
-	https://oldforum.puppylinux.com/viewtopic.php?t=115252
-	'
+	# Do not set -eux.
+	# $COMMAND will receive stdin from /www/cgi-bin/$CGI
+	# https://oldforum.puppylinux.com/viewtopic.php?t=115252
 
 	source /usr/local/bin/cgi_functions.sh
 

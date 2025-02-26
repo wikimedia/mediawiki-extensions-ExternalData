@@ -32,6 +32,7 @@ services:
       tzdata:
       youtube-dl:
       mathjax:
+      maxima:
       graphviz:
       mscgen:
       plantuml:
@@ -344,6 +345,26 @@ services:
       resources:
         limits:
           memory: 256m
+
+  maxima:
+    container_name: maxima
+    build:
+      context: ./cgi
+      args:
+        APK: 'maxima maxima-doc maxima-doc-extra --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/'
+        COMMAND: /usr/bin/maxima --very-quiet | sed '/^;;;/d'
+        CONTENT_TYPE: text
+        VERSION_COMMAND: /usr/bin/maxima --version
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    networks:
+      maxima:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
 
   lilypond:
     container_name: lilypond
@@ -817,6 +838,7 @@ networks:
   tzdata:
   youtube-dl:
   mathjax:
+  maxima:
   graphviz:
   mscgen:
   plantuml:

@@ -44,6 +44,19 @@ class Media extends Base {
 			'tag' => 'mathjax',
 		],
 
+		'maxima' => [
+			'url' => 'http://maxima/cgi-bin/cgi.sh',
+			'format' => 'text',
+			'options' => [ 'sslVerifyCert' => false ],
+			'version url' => 'http://mathjax/cgi-bin/version.sh',
+			'name' => 'Maxima',
+			'program url' => 'https://maxima.sourceforge.io/',
+			'input' => 'code',
+			'max tries' => 1,
+			'min cache seconds' => 30 * 24 * 60 * 60,
+			'tag' => 'maxima',
+		],
+
 		'lilypond' => [
 			'url' => 'http://lilypond/cgi-bin/cgi.sh?size=$size$',
 			'options' => [ 'sslVerifyCert' => false ],
@@ -385,7 +398,7 @@ class Media extends Base {
 				'class' => 'echarts',
 				'html' => <<<'HTML'
 					<div class="%1$s" id="%2$s">%4$s</div>%5$s
-					HTML,
+				HTML,
 				'javascript' => <<<'JS'
 					const init = %3$s;
 					echarts.init( document.getElementById( '%1$s' ), init.theme, init ).setOption( %2$s );
@@ -937,7 +950,7 @@ class Media extends Base {
 					}, 10 );
 				} )();
 			</script>
-			SCRIPT;
+		SCRIPT;
 		return sprintf( $params['html'], $params['class'], $params['id'], $source, $svg, $script );
 	}
 
