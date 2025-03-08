@@ -7,6 +7,7 @@
  */
 use ExternalData\Presets\Base;
 use ExternalData\Presets\Media;
+use MediaWiki\Title\Title;
 
 abstract class EDConnectorBase {
 	use EDParsesParams; // Needs paramToArray().

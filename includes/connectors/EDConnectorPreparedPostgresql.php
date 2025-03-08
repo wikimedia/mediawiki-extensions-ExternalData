@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
  * for database connections to PostgreSQL servers with prepared statements.

@@ -1,4 +1,7 @@
 <?php
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_web_data:}} and mw.ext.externalData.getWebData.
  *
@@ -6,7 +9,6 @@
  * @author Yaron Koren
  *
  */
-use MediaWiki\MediaWikiServices;
 
 class EDConnectorWeb extends EDConnectorHttp {
 

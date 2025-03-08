@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Title\Title;
+
 /**
  * Class for handling the parser functions for External Data.
  *
@@ -23,7 +25,7 @@ class EDParserFunctions {
 	 * @param array $values Value to save.
 	 * @return array The saved values.
 	 */
-	private static function saveValues( array $values ) {
+	private static function saveValues( array $values ): array {
 		foreach ( $values as $key => $value ) {
 			self::$values[$key] = $value;
 		}
@@ -39,7 +41,7 @@ class EDParserFunctions {
 	 *
 	 * @return string Wrapped error message.
 	 */
-	public static function formatErrorMessages( array $errors ) {
+	public static function formatErrorMessages( array $errors ): string {
 		$messages = array_map( static function ( $error ) {
 			if ( is_array( $error ) && $error['code'] ) {
 				return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
@@ -56,7 +58,7 @@ class EDParserFunctions {
 	 *
 	 * @param string $page_name Page name.
 	 */
-	private static function clearValuesIfNecessary( $page_name ) {
+	private static function clearValuesIfNecessary( string $page_name ) {
 		// If we're handling multiple pages, reset self::$values
 		// when we move from one page to another.
 		if ( self::$currentPage !== $page_name ) {
@@ -72,13 +74,13 @@ class EDParserFunctions {
 	/**
 	 * Actually get the external data.
 	 *
-	 * @param Title $title Page title.
+	 * @param ?Title $title Page title.
 	 * @param string|null $name Parser function name.
 	 * @param array $args Parser function parameters ($parser not included).
 	 *
 	 * @return string|array|null Return an array of values on success, an error message otherwise.
 	 */
-	private static function get( Title $title, ?string $name, array $args ) {
+	private static function get( ?Title $title, ?string $name, array $args ) {
 		// Unset self::$values if the current page changed during this script run.
 		// Looks like it is relevant for maintenance scripts.
 		if ( $title ) {
@@ -114,7 +116,7 @@ class EDParserFunctions {
 	 *
 	 * @return string|null Return null on success, an error message otherwise.
 	 */
-	public static function fetch( Title $title, ?string $name, array $args ) {
+	public static function fetch( Title $title, ?string $name, array $args ): ?string {
 		$result = self::get( $title, $name, $args );
 		if ( is_array( $result ) ) {
 			// An array of values, not an error message.
@@ -135,7 +137,7 @@ class EDParserFunctions {
 	 * @param string $str
 	 * @return string
 	 */
-	private static function urlencode( $str ) {
+	private static function urlencode( string $str ): string {
 		return urlencode( $str );
 	}
 
@@ -144,7 +146,7 @@ class EDParserFunctions {
 	 * @param string $str
 	 * @return string
 	 */
-	private static function htmlencode( $str ) {
+	private static function htmlencode( string $str ): string {
 		return htmlentities( $str, ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE, 'UTF-8', false );
 	}
 
@@ -155,9 +157,9 @@ class EDParserFunctions {
 	 * @param string $var
 	 * @param int $i
 	 * @param string|false|null $default false to return an error message
-	 * @return string
+	 * @return ?string
 	 */
-	private static function getIndexedValue( $var, $i, $default ) {
+	private static function getIndexedValue( string $var, int $i, $default ): ?string {
 		$postprocess = null;
 		foreach ( self::COMMANDS as $command ) {
 			$command_length = -strlen( $command ) - 1;
@@ -181,7 +183,6 @@ class EDParserFunctions {
 			}
 		}
 		if ( $postprocess ) {
-			// $value = call_user_func( [ __CLASS__, $postprocess ], $value );
 			$value = self::$postprocess( $value );
 		}
 		return $value;
@@ -193,7 +194,7 @@ class EDParserFunctions {
 	 * @param Title $title
 	 * @return null|string
 	 */
-	private static function emulateGetExternalData( array &$args, $title ) {
+	private static function emulateGetExternalData( array &$args, Title $title ): ?string {
 		if ( EDConnectorBase::sourceSet( $args ) ) {
 			// If {{#for_external_table:}} is called in standalone mode, there is no shared context,
 			// therefore, emulate {{#clear_external_data:}}.
@@ -214,9 +215,9 @@ class EDParserFunctions {
 	 * @param Parser $parser
 	 * @param string|null $variable Local variable name
 	 * @param string ...$params Other parameters for fetching data
-	 * @return string
+	 * @return ?string
 	 */
-	public static function doExternalValue( Parser $parser, $variable, ...$params ) {
+	public static function doExternalValue( Parser $parser, ?string $variable, ...$params ): ?string {
 		$args = self::parseParams( $params );
 		$default = false;
 		if ( isset( $args[0] ) ) {
@@ -241,13 +242,16 @@ class EDParserFunctions {
 	private static function getMacros( string $body ): array {
 		$macros = [];
 		preg_match_all(
-		// This regular expression matches nested {{{…|…}}} returning only the outermost ones.
-			'/\{\{\{ (?<var> (?: [^{}|]+ | (?R) )*+ ) (?: \| (?<default> (?: [^{}|]+ | (?R) )*+ ) )? }}}/sx',
+			// This regular expression matches nested {{{…|…}}} returning only the outermost ones.
+			'/\{\{\{ (?<var> (?: [^{}|]+ | (?R) )*+ ) (?: \| (?<default> (?: [^{}|]+ | (?R) )*+ ) )? }}}/x',
 			$body,
 			$macros,
 			PREG_SET_ORDER
 		);
-		return $macros;
+		return array_map( static function ( array $match ): array {
+			$match['full'] = $match[0];
+			return array_filter( $match, 'is_string', ARRAY_FILTER_USE_KEY ); // only named captures.
+		}, $macros );
 	}
 
 	/**
@@ -256,7 +260,7 @@ class EDParserFunctions {
 	 * @param array $mappings
 	 * @return int
 	 */
-	private static function numLoops( array $mappings ) {
+	private static function numLoops( array $mappings ): int {
 		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
 		foreach ( $mappings as $local_variable ) {
 			// Ignore .urlencode, etc.
@@ -272,7 +276,7 @@ class EDParserFunctions {
 
 	/**
 	 * Cast an array or string to string in a meaningful way.
-	 * @param array|string $value
+	 * @param array|string|null $value
 	 * @return string
 	 */
 	private static function serialise( $value ): string {
@@ -309,7 +313,7 @@ class EDParserFunctions {
 					$loop,
 					$macro['default'] ?? null
 				) );
-				$current = str_replace( $macro[0], $value, $current );
+				$current = str_replace( $macro['full'], $value, $current );
 			}
 			$loops[] = $current;
 		}
@@ -318,11 +322,13 @@ class EDParserFunctions {
 
 	/**
 	 * Actually render the #for_external_table parser function. The "template" is passed as the second parameter.
+	 *
 	 * @param Parser $parser
 	 * @param PPNode_Hash_Tree $tree
 	 * @param array $defaults Default values of {{{…|def}}} ED variables.
 	 * @param array $template_args Arguments {{{…}}} that may have come from outer template.
 	 * @return string
+	 * @throws MWException
 	 */
 	private static function actuallyForExternalTableSecond(
 		Parser $parser,
@@ -345,10 +351,12 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #for_external_table parser function.
+	 *
 	 * @param Parser $parser
 	 * @param PPFrame $frame
 	 * @param array $args
 	 * @return string
+	 * @throws MWException
 	 */
 	public static function doForExternalTable( Parser $parser, PPFrame $frame, array $args ): string {
 		if ( !$args[0] ) {
@@ -369,16 +377,15 @@ class EDParserFunctions {
 
 		// Substitute template parameters in external variable names and their default values now.
 		if ( $second ) {
-			foreach ( $macros as &$macro ) {
-				foreach ( [ 'var', 'default' ] as &$wikitext ) {
-					if ( isset( $macro[$wikitext] ) ) {
-						$macro[$wikitext] = $frame->expand( $parser->preprocessToDom( $macro[$wikitext] ) );
-					}
+			$macros = array_map( static function ( array $macro ) use ( $frame, $parser ): array {
+				foreach ( $macro as &$wikitext ) {
+					$wikitext = $frame->expand( $parser->preprocessToDom( $wikitext ) );
 				}
-			}
+				return $macro;
+			}, $macros );
 		}
 
-		// Get default values:
+		// Set defaults.
 		$defaults = [];
 		foreach ( $macros as $macro ) {
 			$defaults[$macro['var']] = $macro['default'] ?? null;
@@ -441,7 +448,7 @@ class EDParserFunctions {
 	 * @param Title $title
 	 * @return array
 	 */
-	private static function actuallyDisplayExternalTable( array $args, $title ): array {
+	private static function actuallyDisplayExternalTable( array $args, Title $title ): array {
 		if ( array_key_exists( 'template', $args ) ) {
 			$template = $args['template'];
 		} else {
@@ -578,10 +585,10 @@ class EDParserFunctions {
 	/**
 	 * Render the #clear_external_data parser function.
 	 *
-	 * @param Parser $parser
+	 * @param Parser $_
 	 * @param string ...$variables Variables to clear; if [''], clear all.
 	 */
-	public static function doClearExternalData( Parser $parser, ...$variables ) {
+	public static function doClearExternalData( Parser $_, ...$variables ) {
 		self::actuallyClearExternalData( $variables );
 	}
 
@@ -590,7 +597,7 @@ class EDParserFunctions {
 	 *
 	 * @return array
 	 */
-	public static function getAllValues() {
+	public static function getAllValues(): array {
 		return self::$values;
 	}
 }

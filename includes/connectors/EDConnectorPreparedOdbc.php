@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
  * for ODBC connections with prepared statements.

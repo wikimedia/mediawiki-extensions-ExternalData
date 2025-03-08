@@ -1,6 +1,7 @@
 <?php
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
 
 /**
  * Base abstract class for external data connectors that work over HTTP/HTTPS.

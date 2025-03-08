@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_soap_data:}} and mw.ext.externalData.getSoapData.
  *

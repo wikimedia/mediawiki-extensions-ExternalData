@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Abstract base class implementing {{#get_file_data:}} and mw.ext.externalData.getFileData.
  *

@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_ldap_data:}} and mw.ext.externalData.getLdapData.
  *

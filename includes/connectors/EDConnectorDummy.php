@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * A connector, which is created when there are no candidate connectors for {{#get_external_data:}}..
  *

@@ -1,5 +1,6 @@
 <?php
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Title\Title;
 
 /**
  * A trait to be used by throttled connectors (all using EDConnectorCached plus EDConnectorPost).

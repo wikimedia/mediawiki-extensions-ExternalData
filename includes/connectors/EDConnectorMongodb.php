@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Abstract class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData
  * for MongoDB database type.

@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Base abstract class implementing {{#get_db_data:}} and mw.ext.externalData.getDbData.
  *

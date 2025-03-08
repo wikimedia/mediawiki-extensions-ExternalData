@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Class implementing {{#get_file_data:}} and mw.ext.externalData.getFileData
  * in directory / file name mode when file name is *.

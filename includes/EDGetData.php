@@ -2,6 +2,7 @@
 
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Title\Title;
 
 /**
  * A special page for retrieving selected rows of any wiki page that contains
@@ -28,7 +29,8 @@ class EDGetData extends SpecialPage {
 		$title = Title::newFromText( $page_name );
 		if ( $title === null ) {
 			$badURLText = $this->msg( 'externaldata-getdata-badurl' )->text();
-			$text = Html::element( 'p', [ 'class' => 'error' ], $badURLText ) . "\n";
+			$html = class_exists( 'MediaWiki\Html\Html' ) ? 'MediaWiki\Html\Html' : 'Html';
+			$text = $html::element( 'p', [ 'class' => 'error' ], $badURLText ) . "\n";
 			$this->getOutput()->addHTML( $text );
 			return;
 		}

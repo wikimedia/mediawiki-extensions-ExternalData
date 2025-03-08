@@ -1,6 +1,7 @@
 <?php
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Shell\Shell;
+use MediaWiki\Title\Title;
 
 /**
  * Class implementing {{#get_program_data:}} and mw.ext.externalData.getProgramData

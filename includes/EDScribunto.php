@@ -1,4 +1,7 @@
 <?php
+
+use MediaWiki\Title\Title;
+
 /**
  * Class for exposing the parser functions for External Data to Lua.
  * The functions are available via mw.ext.externalData Lua table.
