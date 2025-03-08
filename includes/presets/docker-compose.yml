@@ -359,7 +359,7 @@ services:
         APK: sbcl texinfo gnuplot
         COMMAND: /usr/local/bin/maxima --very-quiet | sed '/^;;;/d'
         CONTENT_TYPE: text
-        VERSION_COMMAND: /usr/local/bin/maxima --version | sed '/^;;;/d'
+        VERSION_COMMAND: /usr/local/bin/maxima --version
     restart: unless-stopped
     tmpfs:
       - /tmp

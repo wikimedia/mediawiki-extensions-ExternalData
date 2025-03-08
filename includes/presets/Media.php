@@ -48,13 +48,14 @@ class Media extends Base {
 			'url' => 'http://maxima/cgi-bin/cgi.sh',
 			'format' => 'text',
 			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
-			'version url' => 'http://mathjax/cgi-bin/version.sh',
+			'version url' => 'http://maxima/cgi-bin/version.sh',
 			'name' => 'Maxima',
 			'program url' => 'https://maxima.sourceforge.io/',
 			'input' => 'code',
 			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
-			'tag' => 'maxima',
+			'postprocess' => __CLASS__ . '::stripSlashedLineBreaks',
+			'tag' => 'maxima'
 		],
 
 		'lilypond' => [
@@ -508,6 +509,15 @@ class Media extends Base {
 	 */
 	public static function remove160( string $json ): string {
 		return preg_replace( '/(["\'}\w])\s+([:!?])/', '$1$2', $json );
+	}
+
+	/**
+	 * Strips TeX newline continuations with slashes, produced by Maxima and breaking operators.
+	 * @param string $tex
+	 * @return string
+	 */
+	public static function stripSlashedLineBreaks( string $tex ): string {
+		return strtr( $tex, [ '\\' . PHP_EOL => '' ] );
 	}
 
 	/**

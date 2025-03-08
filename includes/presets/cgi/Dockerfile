@@ -19,7 +19,7 @@ RUN <<-NODEJS
 	set -ex && \
 	NODE_BUILD='npm g++ make' && \
 	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
-		apk add --no-cache $NODE_BUILD && \
+		apk add --no-cache nodejs $NODE_BUILD && \
 		cd /usr/local/bin && \
 		npm init --yes; \
 	fi && \
