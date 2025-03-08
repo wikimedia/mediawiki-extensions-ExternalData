@@ -29,7 +29,7 @@ class Media extends Base {
 			'options' => [ 'sslVerifyCert' => false ],
 			'version url' => 'http://mathjax/cgi-bin/version.sh',
 			'name' => 'MathJax',
-			'program url' => 'https://mathjax.org/',
+			'program url' => 'https://www.mathjax.org/',
 			'params' => [ 'display' => 'inline', 'nomenu' => false ],
 			'param filters' => [ 'display' => '/^(block|inline)$/' ],
 			'input' => 'tex',
@@ -47,7 +47,7 @@ class Media extends Base {
 		'maxima' => [
 			'url' => 'http://maxima/cgi-bin/cgi.sh',
 			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false ],
+			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
 			'version url' => 'http://mathjax/cgi-bin/version.sh',
 			'name' => 'Maxima',
 			'program url' => 'https://maxima.sourceforge.io/',
@@ -209,6 +209,29 @@ class Media extends Base {
 			],
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'gnuplot'
+		],
+
+		'asymptote' => [
+			'url' =>
+				'http://asymptote/cgi-bin/cgi.sh?output=$output$',
+			'options' => [ 'sslVerifyCert' => false, 'timeout' => 60 ],
+			'format' => 'text',
+			'version url' => 'http://asymptote/cgi-bin/version.sh',
+			'name' => 'asymptote',
+			'program url' => 'https://asymptote.sourceforge.io/',
+			'params' => [ 'output' => 'svg', 'width' => 600, 'height' => 600 ],
+			'param filters' => [ 'output' => '/^(svg|html)$/', 'width' => '/^\d+$/', 'height' => '/^\d+$/' ],
+			'input' => 'script',
+			'postprocess' => [
+				__CLASS__ . '::innerXml',
+				__CLASS__ . '::sizeSvg',
+				__CLASS__ . '::wrapHtml'
+			],
+			'scripts' => '/js/asymptote/asygl-1.02.js',
+			'original script' => 'https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js',
+			'max tries' => 1,
+			'min cache seconds' => 30 * 24 * 60 * 60,
+			'tag' => 'asy'
 		],
 
 		'vega' => [
@@ -643,9 +666,13 @@ class Media extends Base {
 	 * Strip SVG from surrounding XML.
 	 *
 	 * @param string $xml XML to extract SVG from.
+	 * @param array $params
 	 * @return string The stripped SVG.
 	 */
-	public static function innerXml( string $xml ): string {
+	public static function innerXml( string $xml, array $params ): string {
+		if ( ( $params['output'] ?? '' ) === 'html' ) {
+			return $xml;
+		}
 		$dom = new DOMDocument();
 		$dom->loadXML( $xml, LIBXML_NOENT );
 		return $dom->saveHTML( $dom->documentElement );
@@ -668,6 +695,22 @@ class Media extends Base {
 	}
 
 	/**
+	 * If $htm contains <html> tag, wrap it with <iframe>.
+	 * @param string $html
+	 * @param array $params
+	 * @return string
+	 */
+	public static function wrapHtml( string $html, array $params ): string {
+		if ( !preg_match( '~<html\s.+</html>~si', $html, $matches ) ) {
+			return $html;
+		}
+		$html = str_replace( $params['original script'], $params['scripts'], $matches[0] );
+		return '<iframe width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" srcdoc="'
+			. strtr( $html, [ '&' => 'amp;', '"' => '&quot;' ] )
+			. '"></iframe>';
+	}
+
+	/**
 	 * Set SVG size, if not set.
 	 *
 	 * @param string $svg
@@ -675,6 +718,9 @@ class Media extends Base {
 	 * @return string
 	 */
 	public static function sizeSVG( string $svg, array $params ): string {
+		if ( ( $params['output'] ?? '' ) === 'html' ) {
+			return $svg;
+		}
 		$dom = new DOMDocument();
 		$dom->loadXML( $svg, LIBXML_NOENT );
 		$root = $dom->documentElement;
@@ -803,6 +849,8 @@ class Media extends Base {
 	public static function inject3d( $json, array $params ): string {
 		$language = MediaWikiServices::getInstance()->getContentLanguage();
 		$json = is_array( $json ) ? $json : json_decode( $json, true );
+		$months = $language->getMonthNamesArray();
+		$short_months = $language->getMonthAbbreviationsArray();
 		$json['config'] = array_merge_recursive( $json['config'] ?? [], [
 			'locale' => [
 				'number' => [
@@ -823,8 +871,8 @@ class Media extends Base {
 				'shortDays' => array_map( static function ( int $no ) use ( $language ): string {
 					return $language->getWeekdayAbbreviation( $no );
 				}, range( 1, 7 ) ),
-				'months' => $language->getMonthNamesArray(),
-				'shortMonths' => $language->getMonthAbbreviationsArray()
+				'months' => array_splice( $months, -12 ),
+				'shortMonths' => array_splice( $short_months, -12 )
 			]
 		] );
 		foreach ( [ 'width', 'height' ] as $param ) {

@@ -86,6 +86,7 @@ class Reference extends Base {
 			'name' => 'composer',
 			'program url' => 'https://getcomposer.org/',
 			'command' => '/usr/bin/composer show --available --format=json $package$',
+			'version command' => '/usr/bin/composer -V | head -2',
 			'params' => [ 'package' ],
 			'param filters' => [ 'package' => '%^[\w/-]+$%' ],
 			'format' => 'json with jsonpath',

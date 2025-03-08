@@ -44,6 +44,7 @@ to `LocalSettings.php` to activate them all):
    - `<ploticus>` ([ploticus](http://ploticus.sourceforge.net/doc/welcome.html)),
    - `<timeline>` ([EasyTimeline](http://infodisiac.com/Wikipedia/EasyTimeline/Introduction.htm)),
    - `<gnuplot>` ([gnuplot](http://www.gnuplot.info/)),
+   - `<asy>` ([Asymptote](https://asymptote.sourceforge.io/)),
    - `<graph>` ([Vega](https://vega.github.io)),
    - `<mermaid>` ([mermaid](https://mermaid-js.github.io)),
    - `<bpmn>` ([bpmn2svg by Pierre Schwang](https://github.com/PierreSchwang/bpmn2svg)),
@@ -68,7 +69,7 @@ containers and inserting them into
 `$wgExternalDataSource['…']['url']` and
 `$wgExternalDataSource['…']['version url']` settings.
 
-To make `<math>`, `<gnuplot>`, `<graph>`, `<mermaid>` and
+To make `<math>`, `<gnuplot>`, `<asy>`, `<graph>`, `<mermaid>` and
 `<echarts>` tags interactive in user's browser, their containers
 ought to share mounted volumes with the web server frontend,
 if it is containerised, or to have bind mounts available

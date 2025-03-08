@@ -17,19 +17,23 @@ ARG NODE
 ARG NODE_GLOBAL
 RUN <<-NODEJS
 	set -ex && \
+	NODE_BUILD='npm g++ make' && \
 	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
-		apk add --no-cache npm && \
+		apk add --no-cache $NODE_BUILD && \
 		cd /usr/local/bin && \
 		npm init --yes; \
 	fi && \
 	if [ ! -z "$NODE_GLOBAL" ]; then \
-		npm install -g $NODE_GLOBAL; \
+		npm install -g npm $NODE_GLOBAL; \
 	fi &&
 	if [ ! -z "$NODE" ]; then \
 		npm install $NODE; \
-	fi &&
+	fi && \
 	if [ -d /usr/local/bin/node_modules/puppeteer ]; then \
 		echo '{ "headless": 1, "timeout": 30000, "executablePath": "/usr/bin/chromium", "args": [ "--no-sandbox", "--disable-gpu" ] }' > /usr/local/bin/.puppeteerrc.json; \
+	fi && \
+	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
+		apk del $NODE_BUILD; \
 	fi
 NODEJS
 
@@ -38,7 +42,7 @@ RUN <<-PIPINSTALL
 	set -ex && \
 	if [ ! -z "$PIP" ]; then \
 		apk add --no-cache py3-pip && \
-		python -m  pip install --break-system-packages $PIP; \
+		python -m pip install --break-system-packages $PIP; \
 	fi
 PIPINSTALL
 
@@ -69,6 +73,11 @@ COPY --chmod=777 <<-'GET_ALL' /usr/local/bin/get_all.sh
 	for TAR_GZ in *.tar.gz; do \
 		if [ -f "$TAR_GZ" ]; then \
 			tar -xzf "$TAR_GZ" && rm "$TAR_GZ"; \
+		fi; \
+	done && \
+	for TGZ in *.tgz; do \
+		if [ -f "$TGZ" ]; then \
+			tar -xzf "$TGZ" && rm "$TGZ"; \
 		fi; \
 	done && \
 	for ZIP in *.zip; do \
@@ -119,7 +128,7 @@ RUN <<-SRC
 		if [ $SRC_LANG == 'go' ]; then \
 			BUILD='go make git'; \
 		elif [ $SRC_LANG == 'C' ]; then \
-			BUILD='flex bison gcc musl-dev make'; \
+			BUILD='coreutils flex bison cmake g++ gcc libtool musl-dev make automake autoconf pkgconf'; \
 		fi && \
 		if [ ! -z "$GIT" ]; then \
 			BUILD="$BUILD git"; \
@@ -130,14 +139,13 @@ RUN <<-SRC
 			for URL in $GIT; do \
 				git clone --single-branch --branch="$BRANCH" "$URL"; \
 			done; \
-		else \
-			if [ ! -z "$SRC" ]; then \
-				/usr/local/bin/get_all.sh "$SRC"; \
-			fi; \
+		fi && \
+		if [ ! -z "$SRC" ]; then \
+			/usr/local/bin/get_all.sh "$SRC"; \
 		fi && \
 		for DIR in ./*/; do \
-			DIR=${DIR%/*} && cd "$DIR" && \
-			if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.*' ]; then \
+			DIR=${DIR%/*} && cd "/src/$DIR" && \
+			if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.*' ] && [ -d ./src ]; then \
 				cd src; \
 			fi && \
 			if [ -f './configure' ]; then \
@@ -150,7 +158,7 @@ RUN <<-SRC
 						cp "$FILE" "/usr/bin/";
 					fi; \
 				done \
-			) && ls -la . && make clean; \
+			) && ( make clean ); \
 		done && \
 		apk del $BUILD && cd / && rm -r /src
 	fi

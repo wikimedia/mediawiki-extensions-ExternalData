@@ -833,10 +833,11 @@ abstract class EDConnectorBase {
 	 * Strip SVG from surrounding XML.
 	 *
 	 * @param string $xml XML to extract SVG from.
+	 * @param array $params
 	 * @return string The stripped SVG.
 	 */
-	public static function innerXML( string $xml ): string {
-		return Media::innerXml( $xml );
+	public static function innerXML( string $xml, array $params ): string {
+		return Media::innerXml( $xml, $params );
 	}
 
 	/**

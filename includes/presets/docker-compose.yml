@@ -39,6 +39,7 @@ services:
       ploticus:
       easytimeline:
       gnuplot:
+      asymptote:
       lilypond:
       vega:
       mermaid:
@@ -57,6 +58,7 @@ services:
       - mathjax:/var/www/js/mathjax:ro
       - ploticus:/var/www/js/ploticus:ro
       - gnuplot:/var/www/js/gnuplot:ro
+      - asymptote:/var/www/js/asymptote:ro
       - vega:/var/www/js/vega:ro
       - vega_uploads:/var/www/js/vega_uploads:ro
       - mermaid:/var/www/js/mermaid:ro
@@ -291,6 +293,7 @@ services:
         APK: python3
         BINARY: https://github.com/ytdl-org/ytdl-nightly/releases/download/2024.08.07/youtube-dl
         COMMAND: /usr/local/bin/youtube-dl -j "$$url"
+        VERSION_COMMAND: /usr/local/bin/youtube-dl --version
         CONTENT_TYPE: text/json
     restart: unless-stopped
     tmpfs:
@@ -317,13 +320,13 @@ services:
       context: ./cgi
       args:
         APK: coreutils
-        NODE_GLOBAL: esm
-        NODE: yargs mathjax-full
+        NODE: commander mathjax-full
         BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.js
         WGET: https://raw.githubusercontent.com/alex-mashin/MathJax/master/assets/config.fixed.json
         COMMAND: >-
-          /usr/bin/node --stack-size=1024 --stack-trace-limit=1000 -r /usr/local/lib/node_modules/esm
-          /usr/local/bin/tex2mml.js - --conf=/usr/share/downloads/config.fixed.json --dist=1
+          /usr/bin/node --experimental-default-type=module
+          --stack-size=1024 --stack-trace-limit=1000
+          /usr/local/bin/tex2mml.js - --dist=1
         VERSION_COMMAND: >-
           VERSION=$$( /usr/bin/npm list -lp --prefix /usr/local/bin mathjax-full ) &&
           echo $${VERSION#*:}
@@ -351,20 +354,23 @@ services:
     build:
       context: ./cgi
       args:
-        APK: 'maxima maxima-doc maxima-doc-extra --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/'
-        COMMAND: /usr/bin/maxima --very-quiet | sed '/^;;;/d'
+        SRC: >-
+          https://deac-riga.dl.sourceforge.net/project/maxima/Maxima-source/5.47.0-source/maxima-5.47.0.tar.gz?viasf=1
+        APK: sbcl texinfo gnuplot
+        COMMAND: /usr/local/bin/maxima --very-quiet | sed '/^;;;/d'
         CONTENT_TYPE: text
-        VERSION_COMMAND: /usr/bin/maxima --version
+        VERSION_COMMAND: /usr/local/bin/maxima --version | sed '/^;;;/d'
     restart: unless-stopped
     tmpfs:
       - /tmp
+      - /home/www-data/.maxima
     networks:
       maxima:
-    cpu_shares: 1024
+    cpu_shares: 4096
     deploy:
       resources:
         limits:
-          memory: 512m
+          memory: 1024m
 
   lilypond:
     container_name: lilypond
@@ -373,8 +379,8 @@ services:
       args:
         APK: lilypond
         COMMAND: >-
-          TMP=$$(mktemp -u) && lilypond -s -dbackend=svg -dpaper-size=\"$$size\" -dcrop -o $$TMP - && cat "$$TMP.cropped.svg" &&
-          rm "$$TMP" && rm -f "$$TMP.*"
+          TMP=$$(mktemp -u) && lilypond -s -dbackend=svg -dcrop -o $$TMP - && sleep 1 && cat "$$TMP.cropped.svg" &&
+          rm -f "$$TMP" && rm -f "$$TMP.*"
         CONTENT_TYPE: text/svg
         VERSION_COMMAND: lilypond -v
     restart: unless-stopped
@@ -579,6 +585,42 @@ services:
       resources:
         limits:
           memory: 512m
+
+  asymptote:
+    container_name: asymptote
+    build:
+      context: ./cgi
+      args:
+        APK: >-
+          ncurses-dev libtirpc-dev freeglut-dev glm-dev fftw-dev eigen-dev gsl-dev curl-dev zlib-dev
+          texlive-dev ghostscript-dev gettext-dev texmf-dist-latexextra freetype-dev woff2-dev imagemagick
+        SRC: >-
+          https://github.com/mgieseki/dvisvgm/releases/download/3.4.4/dvisvgm-3.4.4.tar.gz
+          https://unlimited.dl.sourceforge.net/project/asymptote/3.01/asymptote-3.01.src.tgz?viasf=1
+        WGET: https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js
+        COMMAND: >-
+          rm -f output.svg output.html &&
+          /usr/bin/asy -q -f "$$output" -o output - &&
+          cat output.svg output.html 2>/dev/null
+        VERSION_COMMAND: /usr/bin/asy -version
+        CONTENT_TYPE: text/svg
+    environment:
+      ASYMPTOTE_DVIPS: /usr/local/bin/dvisvgm
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    volumes:
+      - asymptote:/usr/share/downloads
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['asymptote']['url'] and
+    # $wgExternalDataSources['asymptote']['version url']
+    networks:
+      asymptote:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
 
   vega:
     container_name: vega
@@ -792,6 +834,7 @@ volumes:
   mathjax:
   ploticus:
   gnuplot:
+  asymptote:
   vega_uploads:
   vega:
   mermaid:
@@ -845,6 +888,7 @@ networks:
   ploticus:
   easytimeline:
   gnuplot:
+  asymptote:
   lilypond:
   vega:
   mermaid:
