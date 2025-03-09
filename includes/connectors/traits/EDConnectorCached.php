@@ -53,7 +53,7 @@ trait EDConnectorCached {
 			$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
 			self::$primaryDB = $lb->getConnection( DB_PRIMARY );
 			self::$replicaDB = $lb->getConnection( DB_REPLICA );
-			if ( !self::$replicaDB->tableExists( self::$cacheTable ) ) {
+			if ( !self::$replicaDB->tableExists( self::$cacheTable, __METHOD__ ) ) {
 				self::$cacheIsUp = false;
 			}
 		}
