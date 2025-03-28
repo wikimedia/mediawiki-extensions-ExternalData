@@ -157,9 +157,9 @@ class EDParserFunctions {
 	 * @param string $var
 	 * @param int $i
 	 * @param string|false|null $default false to return an error message
-	 * @return ?string
+	 * @return mixed
 	 */
-	private static function getIndexedValue( string $var, int $i, $default ): ?string {
+	private static function getIndexedValue( string $var, int $i, $default ) {
 		$postprocess = null;
 		foreach ( self::COMMANDS as $command ) {
 			$command_length = -strlen( $command ) - 1;
@@ -215,9 +215,9 @@ class EDParserFunctions {
 	 * @param Parser $parser
 	 * @param string|null $variable Local variable name
 	 * @param string ...$params Other parameters for fetching data
-	 * @return ?string
+	 * @return string
 	 */
-	public static function doExternalValue( Parser $parser, ?string $variable, ...$params ): ?string {
+	public static function doExternalValue( Parser $parser, ?string $variable, ...$params ): string {
 		$args = self::parseParams( $params );
 		$default = false;
 		if ( isset( $args[0] ) ) {
@@ -231,7 +231,12 @@ class EDParserFunctions {
 			// There is an error.
 			return $fetched;
 		}
-		return self::getIndexedValue( $variable, 0, $default );
+		$value = self::getIndexedValue( $variable, 0, $default );
+		if ( is_array( $value ) ) {
+			// An array can only be useful for Lua, and this is a plain parser function.
+			return 'array';
+		}
+		return (string)$value;
 	}
 
 	/**
