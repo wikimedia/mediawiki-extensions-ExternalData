@@ -13,6 +13,9 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
 	protected const ID_PARAM = 'db';
 
+	/** @const string the default encoding to be used for decoding autodetection. */
+	protected const DEFAULT_ENCODING = 'UTF-8';
+
 	/** @var string|null Database ID. */
 	protected $dbId = null; // Database ID.
 
@@ -181,7 +184,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 			$value = $value->format( 'Y-m-d H:i:s' );
 		}
 		// Convert the encoding to UTF-8 if necessary.
-		$encoding = mb_detect_encoding( $value, 'UTF-8', true ) ?: 'UTF-8';
+		$encoding = mb_detect_encoding( $value, static::DEFAULT_ENCODING, true ) ?: 'UTF-8';
 		return $encoding === 'UTF-8' ? $value : mb_convert_encoding( $value, 'UTF-8', $encoding );
 	}
 

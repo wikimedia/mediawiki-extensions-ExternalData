@@ -17,6 +17,9 @@ class EDConnectorOdbc extends EDConnectorComposed {
 	];
 	/** @const string TEMPLATE SQL query template. */
 	protected const TEMPLATE = 'SELECT $columns $from $where $group $having $order $limit;';
+	/** @const string the default encoding to be used for decoding autodetection. */
+	protected const DEFAULT_ENCODING = 'ISO-8859-15';
+
 	/** @var bool $keepExternalVarsCase Whether external variables' names are case-sensitive for this format. */
 	public $keepExternalVarsCase = true;
 	/** @var resource $odbcConnection The ODBC connection resource. */
