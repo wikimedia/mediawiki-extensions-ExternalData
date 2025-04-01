@@ -326,10 +326,10 @@ services:
         COMMAND: >-
           /usr/bin/node --experimental-default-type=module
           --stack-size=1024 --stack-trace-limit=1000
-          /usr/local/bin/tex2mml.js - --dist=1
+          /usr/local/bin/tex2mml.js -
         VERSION_COMMAND: >-
-          VERSION=$$( /usr/bin/npm list -lp --prefix /usr/local/bin mathjax-full ) &&
-          echo $${VERSION#*:}
+          /usr/bin/node --experimental-default-type=module
+          /usr/local/bin/tex2mml.js -V
         CONTENT_TYPE: text/mathml
     environment:
       ERRORS: FATAL
@@ -357,7 +357,10 @@ services:
         SRC: >-
           https://deac-riga.dl.sourceforge.net/project/maxima/Maxima-source/5.47.0-source/maxima-5.47.0.tar.gz?viasf=1
         APK: sbcl texinfo gnuplot
-        COMMAND: /usr/local/bin/maxima --very-quiet | sed '/^;;;/d'
+        COMMAND: >-
+          /usr/local/bin/maxima --very-quiet | sed '/^;;;/d' &&
+          find /tmp -type f -name '*.gnuplot' -delete &&
+          find /tmp -type f -name '*.svg' -delete
         CONTENT_TYPE: text
         VERSION_COMMAND: /usr/local/bin/maxima --version
     restart: unless-stopped
@@ -595,12 +598,12 @@ services:
           ncurses-dev libtirpc-dev freeglut-dev glm-dev fftw-dev eigen-dev gsl-dev curl-dev zlib-dev
           texlive-dev ghostscript-dev gettext-dev texmf-dist-latexextra freetype-dev woff2-dev imagemagick
         SRC: >-
-          https://github.com/mgieseki/dvisvgm/releases/download/3.4.4/dvisvgm-3.4.4.tar.gz
+          https://github.com/mgieseki/dvisvgm/releases/download/3.4.3/dvisvgm-3.4.3.tar.gz
           https://unlimited.dl.sourceforge.net/project/asymptote/3.01/asymptote-3.01.src.tgz?viasf=1
         WGET: https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js
         COMMAND: >-
-          rm -f output.svg output.html &&
-          /usr/bin/asy -q -f "$$output" -o output - &&
+          cd /home/www-data && rm -f output.svg output.html &&
+          /usr/bin/asy -q -cd /home/www-data -inlineimage -webgl2 -f "$$output" -o output - &&
           cat output.svg output.html 2>/dev/null
         VERSION_COMMAND: /usr/bin/asy -version
         CONTENT_TYPE: text/svg
@@ -609,6 +612,7 @@ services:
     restart: unless-stopped
     tmpfs:
       - /tmp
+      - /home/www-data:uid=1000
     volumes:
       - asymptote:/usr/share/downloads
     # If MediaWiki installation is not dockerised, this container should expose a port,

@@ -338,13 +338,21 @@ ARG VERSION_COMMAND
 COPY --chmod=777 <<-VERSION /www/cgi-bin/version.sh
 	#!/bin/sh
 	set -eu
+	# This is to reliably escape any quotes:
+	COMMAND=$( cat <<-'SCMD'
+		$COMMAND
+	SCMD
+	)
+	VERSION_COMMAND=$( cat <<-'VCMD'
+		$VERSION_COMMAND
+	VCMD
+	)
 	echo 'Content-type: text/plain; charset=UTF-8'
 	echo 'Status: 200 OK'
 	echo ''
-	if [ ! -z '$VERSION_COMMAND' ]; then
-		VC='$VERSION_COMMAND'
+	if [ ! -z "\$VERSION_COMMAND" ]; then
+		VC="\$VERSION_COMMAND"
 	else
-		COMMAND='$COMMAND'
 		VC="\${COMMAND%% *} --version || \${COMMAND%% *} -v || \${COMMAND%% *} -V"
 	fi
 	eval "\$VC" 2>&1 # Some programs, e.g., graphviz, print version info to stderr out of principle.

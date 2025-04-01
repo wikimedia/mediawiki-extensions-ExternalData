@@ -51,9 +51,11 @@ class Media extends Base {
 			'version url' => 'http://maxima/cgi-bin/version.sh',
 			'name' => 'Maxima',
 			'program url' => 'https://maxima.sourceforge.io/',
+			'params' => [ 'decorate' => false, 'showinput' => false ],
 			'input' => 'code',
 			'max tries' => 1,
 			'min cache seconds' => 30 * 24 * 60 * 60,
+			'preprocess' => __CLASS__ . '::decorateMaxima',
 			'postprocess' => __CLASS__ . '::stripSlashedLineBreaks',
 			'tag' => 'maxima'
 		],
@@ -196,7 +198,7 @@ class Media extends Base {
 			'version url' => 'http://gnuplot/cgi-bin/version.sh',
 			'name' => 'gnuplot',
 			'program url' => 'http://www.gnuplot.info/',
-			'params' => [ 'width' => 600, 'height' => 400, 'size' => 10, 'name' => 'gnuplot', 'heads' => 'butt' ],
+			'params' => [ 'width' => 800, 'height' => 600, 'size' => 10, 'name' => 'gnuplot', 'heads' => 'butt' ],
 			'param filters' => [
 				'width' => '/^\d+$/',
 				'height' => '/^\d+$/',
@@ -206,7 +208,7 @@ class Media extends Base {
 			'input' => 'script',
 			'postprocess' => [
 				__CLASS__ . '::innerXml',
-				__CLASS__ . '::sizeSvg'
+				__CLASS__ . '::sizeSVG'
 			],
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'gnuplot'
@@ -225,7 +227,7 @@ class Media extends Base {
 			'input' => 'script',
 			'postprocess' => [
 				__CLASS__ . '::innerXml',
-				__CLASS__ . '::sizeSvg',
+				__CLASS__ . '::sizeSVG',
 				__CLASS__ . '::wrapHtml'
 			],
 			'scripts' => '/js/asymptote/asygl-1.02.js',
@@ -512,6 +514,55 @@ class Media extends Base {
 	}
 
 	/**
+	 * Inject into Maxima commands sequence commands that cause formulae to be output as TeX and graphs, as SVG.
+	 * @param string $maxima
+	 * @param array $params
+	 * @return string
+	 */
+	public static function decorateMaxima( string $maxima, array $params ) {
+		if ( $params['decorate'] === false ) {
+			return $maxima;
+		}
+		$input = $params['showinput'] !== false ? ' grind(_)$' : '';
+
+		$inject = [
+			'draw' => '$1 ($2, terminal = svg, file_name = "$file")',
+			'draw2d' => '$1 ($2, terminal = svg, file_name = "$file")',
+			'draw3d' => '$1 ($2, terminal = svg, file_name = "$file")',
+			'plot2d' => '$1 ($2, [svg_file, "$file.svg"])',
+			'plot3d' => '$1 ($2, [svg_file, "$file.svg"])',
+			'julia' => '$1 ($2, [svg_file, "$file.svg"])',
+			'mandelbot' => '$1 ($2, [svg_file, "$file.svg"])',
+			'printfile' => '$0'
+		];
+		$notex_regex = '/(' . implode( '|', array_keys( $inject ) ) . ')\s*\((.+)\)\s*([$;]?)/s';
+
+		if ( preg_match_all( '/((?:"[^"]*"|.)+?)([;$])/s', $maxima, $matches, PREG_SET_ORDER ) ) {
+			$lines = [];
+			foreach ( $matches as [ $_, $command, $suffix ] ) {
+				$command = trim( $command );
+				if ( preg_match( $notex_regex, $command, $matches2 ) ) {
+					// We need to make it deterministic, in order not to kill the ED cache.
+					$file = '/tmp/of' . md5( $command );
+					$replace = str_replace( '$file', $file, $inject[$matches2[1]] );
+					$command = preg_replace( $notex_regex, $replace, $command );
+					$suffix = '$' . $input . ' ?sleep(1)$ printfile ("' . $file . '.svg")$';
+				} else {
+					if ( $suffix !== '$' ) {
+						$shift = $input ? 1 : 0;
+						$suffix = '$' . $input . ' '
+							. 'print (tex (%th(' . ( 1 + $shift ) . '), false))$ '
+							. '%th(' . ( 2 + $shift ) . ')$';
+					}
+				}
+				$lines[] = $command . $suffix;
+			}
+			return implode( PHP_EOL, $lines );
+		}
+		return $maxima;
+	}
+
+	/**
 	 * Strips TeX newline continuations with slashes, produced by Maxima and breaking operators.
 	 * @param string $tex
 	 * @return string
@@ -734,8 +785,11 @@ class Media extends Base {
 		$dom = new DOMDocument();
 		$dom->loadXML( $svg, LIBXML_NOENT );
 		$root = $dom->documentElement;
+		if ( !$root ) {
+			return $svg;
+		}
 		foreach ( [ 'width', 'height' ] as $attr ) {
-			if ( !$root->hasAttribute( $attr ) && isset( $params[$attr] ) ) {
+			if ( !$root->hasAttribute( $attr ) && ( $params[$attr] ?? 0 ) ) {
 				$root->setAttribute( $attr, $params[$attr] );
 			}
 		}
