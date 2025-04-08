@@ -489,7 +489,7 @@ class Media extends Base {
 	 * @return string dot with links.
 	 */
 	public static function wikilinks4uml( string $uml ): string {
-		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ) {
+		return preg_replace_callback( '/\[\[([^|\]]+)(?:\|([^]]*))?]]/', static function ( array $m ): string {
 			return '[[' . self::localurl( $m[1] ) . ' ' . ( $m[2] ?? $m[1] ) . ']]';
 		}, $uml );
 	}

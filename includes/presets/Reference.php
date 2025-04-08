@@ -94,6 +94,15 @@ class Reference extends Base {
 			'ignore warnings' => true
 		],
 
+		// Known MediaWiki extensions:
+		'mw extensions' => [
+			'name' => 'mw extensions',
+			'url' => 'https://extjsonuploader.toolforge.org/ExtensionJson.json',
+			'format' => 'json with jsonpath',
+			'throttle interval' => 30,
+			'min cache seconds' => 60 * 60
+		],
+
 		'youtube-dl' => [
 			'name' => 'youtube-dl',
 			'program url' => 'http://ytdl-org.github.io/youtube-dl/',
