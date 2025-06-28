@@ -94,7 +94,7 @@
 		"ExternalData\\ScribuntoHooks": "includes/ScribuntoHooks.php"
 	},
 	"AutoloadNamespaces": {
-		"ExternalData\\Presets\\": "includes/presets"
+		"ExternalData\\Presets\\": "includes/presets/"
 	},
 	"HookHandlers": {
 		"main": {
