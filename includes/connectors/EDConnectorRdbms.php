@@ -8,6 +8,7 @@
  *
  */
 use Wikimedia\Rdbms\Database;
+use Wikimedia\Rdbms\DatabaseFactory;
 
 abstract class EDConnectorRdbms extends EDConnectorComposed {
 	/** @var Database The database object. */
@@ -32,17 +33,8 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 	 */
 	protected function connect() {
 		try {
-			if ( class_exists( 'Wikimedia\Rdbms\DatabaseFactory' ) ) {
-				// MW 1.39+
-				// @phan-suppress-next-line PhanUndeclaredClass, PhanUndeclaredClassMethod Different MW versions.
-				$factory = new Wikimedia\Rdbms\DatabaseFactory();
-				// @phan-suppress-next-line PhanUndeclaredClassMethod Different MW versions.
-				$this->database = $factory->create( $this->type, $this->credentials );
-			} else {
-				// MW 1.38-
-				// @phan-suppress-next-line PhanUndeclaredStaticMethod Different MW versions.
-				$this->database = Database::factory( $this->type, $this->credentials );
-			}
+			$factory = new DatabaseFactory();
+			$this->database = $factory->create( $this->type, $this->credentials );
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
 			return false;

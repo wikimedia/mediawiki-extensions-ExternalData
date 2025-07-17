@@ -41,14 +41,7 @@ class EDGetData extends SpecialPage {
 			return true;
 		}
 
-		if ( method_exists( MediaWikiServices::class, 'getWikiPageFactory' ) ) {
-			// MW 1.36+
-			// @phan-suppress-next-line PhanUndeclaredMethod Not necessarily existing in the current version.
-			$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
-		} else {
-			// @phan-suppress-next-line PhanUndeclaredStaticMethod Not necessarily existing in the current version.
-			$wikiPage = WikiPage::factory( $title );
-		}
+		$wikiPage = MediaWikiServices::getInstance()->getWikiPageFactory()->newFromTitle( $title );
 		$content = $wikiPage->getContent();
 		if ( !$content instanceof TextContent ) {
 			return;
