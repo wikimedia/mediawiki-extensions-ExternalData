@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 3.4-alpha
+        Version 3.4
         Yaron Koren, Alexander Mashin and (many) others
 
 This is free software licensed under the GNU General Public License. Please
@@ -53,7 +53,7 @@ Additionally, the extension allows wiki admins to define their own tags for
 programs set up to run in tag  emulation mode, which handle both the
 retrieval and display of data.
 
-The extension defines a new special page, 'GetData', which exports selected
+The extension defines a special page, 'GetData', which exports selected
 rows from a wiki page that holds CSV data, in a format that is readable by
 #get_web_data.
 
