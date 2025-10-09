@@ -36,7 +36,6 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 
 		// Invoke the tested method.
 		$private = $class->getMethod( $name );
-		$private->setAccessible( true );
 		$actual = $private->invoke( null, ...$args );
 		$this->assertEquals( $expected, $actual );
 	}

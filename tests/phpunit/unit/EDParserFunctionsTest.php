@@ -44,17 +44,14 @@ class EDParserFunctionsTest extends EDTestBase {
 
 		// Clear existent data.
 		$clearer = $class->getMethod( 'actuallyClearExternalData' );
-		$clearer->setAccessible( true );
 		$clearer->invoke( null, [] );
 
 		// Save new data.
 		$setter = $class->getMethod( 'saveValues' );
-		$setter->setAccessible( true );
 		$setter->invoke( null, $values );
 
 		// Invoke the tested method.
 		$private = $class->getMethod( $name );
-		$private->setAccessible( true );
 		$actual = $private->invoke( null, ...$args );
 		$this->assertEquals( $expected, $actual );
 	}
@@ -251,7 +248,6 @@ class EDParserFunctionsTest extends EDTestBase {
 		$class = new ReflectionClass( static::$class );
 		// Make getMacros() accesible.
 		$method = $class->getMethod( 'getMacros' );
-		$method->setAccessible( true );
 		$macros = $method->invoke( null, $expression );
 		$this->testPrivateMethod( 'actuallyForExternalTableFirst', self::VALUES, $result, $expression, $macros );
 	}
