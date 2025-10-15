@@ -474,11 +474,12 @@ class Media extends Base {
 
 	/**
 	 * A sevice function converting page title into its local URL.
-	 * @param string $page
+	 * @param string|null $page
 	 * @return string
 	 */
-	private static function localurl( string $page ): string {
-		$url = CoreParserFunctions::localurl( null, $page );
+	private static function localurl( ?string $page ): string {
+		$parser = MediaWikiServices::getInstance()->getParser();
+		$url = CoreParserFunctions::localurl( $parser, $page );
 		return is_string( $url ) ? $url : '/';
 	}
 
