@@ -26,6 +26,7 @@ class EDParserGFF extends EDParserBase {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $path = null ): array {
+		/** @throws EDParserException */
 		$table = array_map( static function ( $line ) {
 			$cells = str_getcsv( $line, "\t" );
 			// Require at least eight columns.

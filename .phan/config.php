@@ -9,6 +9,7 @@ $cfg['suppress_issue_types'] = array_merge( $cfg['suppress_issue_types'], [
 	'PhanUndeclaredExtendedClass', // Extensions only suggested.
 	'PhanParamSuspiciousOrder', // Need this.
 	'PhanRedundantCondition', // Title object behaves differently in different MW versions.
-	'UnusedPluginSuppression' // Different versions of MediaWiki will need different suppressions.
+	'UnusedPluginSuppression', // Different versions of MediaWiki will need different suppressions.
+	'PhanUnusedVariableCaughtException', // requires pure php8+, MW 1.42
 ] );
 return $cfg;

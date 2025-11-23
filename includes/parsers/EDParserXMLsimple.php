@@ -71,7 +71,7 @@ class EDParserXMLsimple extends EDParserXML {
 	 * @param resource $parser XML parser created by xml_parser_create();
 	 * @param string $name
 	 * @param array $attrs
-	 *
+	 * @suppress PhanUnusedPrivateMethodParameter
 	 */
 	private static function startElement( $parser, $name, array $attrs ) {
 		// Set to all lowercase to avoid casing issues.
@@ -92,7 +92,7 @@ class EDParserXMLsimple extends EDParserXML {
 	 *
 	 * @param resource $parser XML parser created by xml_parser_create();
 	 * @param string $name
-	 *
+	 * @suppress PhanUnusedPrivateMethodParameter
 	 */
 	private static function endElement( $parser, $name ) {
 		if ( !array_key_exists( self::$currentXMLTag, self::$xmlValues ) ) {
@@ -112,6 +112,7 @@ class EDParserXMLsimple extends EDParserXML {
 	 *
 	 * @param resource $parser XML parser created by xml_parser_create();
 	 * @param string $content A chunk of XML tag inner content.
+	 * @suppress PhanUnusedPrivateMethodParameter
 	 */
 	private static function getContent( $parser, $content ) {
 		// Replace ampersands, to avoid the XML getting split up
