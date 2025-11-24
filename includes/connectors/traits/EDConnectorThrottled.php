@@ -9,7 +9,6 @@ use MediaWiki\Title\Title;
  * and can call functions wrapped in $this->callThrottled().
  *
  * @author Alexander Mashin
- *
  */
 trait EDConnectorThrottled {
 	/** @var Title $title Title object for the page that calls a throttled service. */

@@ -9,7 +9,6 @@ use MediaWiki\MediaWikiServices;
  * Class wrapping various filtering, preprocessing and postprocessing functions for data sources.
  *
  * @author Alexander Mashin
- *
  */
 class Base {
 	use \EDParsesParams;

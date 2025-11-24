@@ -4,7 +4,6 @@
  * for database connections to mySQL servers with prepared statements.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorPreparedMysql extends EDConnectorPrepared {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */

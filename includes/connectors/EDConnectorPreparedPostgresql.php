@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  * for database connections to PostgreSQL servers with prepared statements.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorPreparedPostgresql extends EDConnectorPrepared {
 	/** @var string|\pgsql\connection $pg Connection to PostrgreSQL server. */

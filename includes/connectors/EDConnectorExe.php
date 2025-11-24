@@ -8,7 +8,6 @@ use MediaWiki\Title\Title;
  * for executing programs server-side.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorExe extends EDConnectorBase {
 	use EDConnectorCached; // uses cache.

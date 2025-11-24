@@ -4,7 +4,6 @@
  * for an ODBC connection to MS SQL Server.
  *
  * @author Alexander Mashin
- *
  */
 
 class EDConnectorOdbcMssql extends EDConnectorOdbc {

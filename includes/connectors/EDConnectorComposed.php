@@ -8,7 +8,6 @@ use MediaWiki\Title\Title;
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 abstract class EDConnectorComposed extends EDConnectorDb {
 	// SQL query components.

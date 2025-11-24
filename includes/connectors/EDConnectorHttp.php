@@ -9,7 +9,6 @@ use MediaWiki\Title\Title;
  * @author Alexander Mashin
  * @author Yaron Koren
  * @author Zoran Dori (kizule)
- *
  */
 abstract class EDConnectorHttp extends EDConnectorBase {
 	use EDConnectorParsable; // needs parser.

@@ -14,7 +14,6 @@ use function sprintf;
  * Class wrapping the constant containing multimedia software data source presets purposes for autoloading.
  *
  * @author Alexander Mashin
- *
  */
 class Media extends Base {
 	/**

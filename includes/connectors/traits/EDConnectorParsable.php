@@ -1,7 +1,6 @@
 <?php
 /**
  * A trait used by connectors that receive external data as text need to parse it.
- *
  */
 trait EDConnectorParsable {
 	/** @var EDParserBase A Parser. */

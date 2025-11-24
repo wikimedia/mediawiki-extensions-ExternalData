@@ -3,7 +3,6 @@
  * Base abstract class for archive parsers.
  *
  * @author Alexander Mashin
- *
  */
 abstract class EDParserArchive extends EDParserBase {
 	use EDConnectorParsable;

@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  * in directory / file name mode when file name is *.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorDirectoryWalker extends EDConnectorDirectory {
 	/** @var int $depth Maximum iteration depth. */

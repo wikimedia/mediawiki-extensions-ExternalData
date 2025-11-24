@@ -748,7 +748,6 @@ class EDConnectorBaseTest extends EDTestBase {
 	 * @param array $params User-supplied params.
 	 * @param array $sources $wgExternalDataSources.
 	 * @param array $expected Expected supplemented params (only the relevant ones).
-	 *
 	 */
 	public function testSupplementParams( array $params, array $sources, array $expected ) {
 		self::setGlobals( array_merge( self::$backup, [ 'wgExternalDataSources' => $sources ] ) );

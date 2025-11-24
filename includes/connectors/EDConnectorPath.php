@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 abstract class EDConnectorPath extends EDConnectorBase {
 	use EDConnectorParsable; // needs parser.
@@ -36,7 +35,6 @@ abstract class EDConnectorPath extends EDConnectorBase {
 	 * @param string $alias An alias for real file path to show in error messages.
 	 *
 	 * @return array|null An array of values on success, null if error were encountered.
-	 *
 	 */
 	protected function getDataFromPath( $path, $alias ) {
 		if ( !file_exists( $path ) ) {

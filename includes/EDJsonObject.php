@@ -361,7 +361,6 @@ class EDJsonObject {
 	}
 
 	/**
-	 *
 	 * @param mixed &$json_object
 	 * @param string $contents
 	 * @param array &$result An enumerated array of child JSON objects
@@ -477,8 +476,6 @@ class EDJsonObject {
 	}
 
 	/**
-	 *
-	 *
 	 * @param mixed &$jsonObject
 	 * @param string $childName Name of JSON child object
 	 * @param array &$result An enumerated array of child JSON objects

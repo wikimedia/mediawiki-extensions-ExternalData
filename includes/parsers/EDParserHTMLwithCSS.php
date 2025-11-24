@@ -5,7 +5,6 @@ use Symfony\Component\CssSelector\CssSelectorConverter;
  * Class for HTML parser extracting data using CSS selectors with slightly extended syntax.
  *
  * @author Alexander Mashin
- *
  */
 class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	/** @const array EXT The usual file extensions of this format. */
@@ -20,7 +19,6 @@ class EDParserHTMLwithCSS extends EDParserHTMLwithXPath {
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
 	 * @throws EDParserException
-	 *
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );

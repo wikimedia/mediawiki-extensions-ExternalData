@@ -3,7 +3,6 @@
  * Text parser that auto-detects real text format and invokes the necessary parser.
  *
  * @author Alexander Mashin
- *
  */
 class EDParserAuto extends EDParserBase {
 	use EDConnectorParsable;

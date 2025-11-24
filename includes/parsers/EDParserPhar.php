@@ -3,7 +3,6 @@
  * Class for parsing archives handled by PHAR: tar, tar.gz, tar.bz2.
  *
  * @author Alexander Mashin
- *
  */
 class EDParserPhar extends EDParserArchive {
 	/** @const array EXTENSIONS An array of possible archive extensions. */

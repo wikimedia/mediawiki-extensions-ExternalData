@@ -5,7 +5,6 @@ use MediaWiki\MediaWikiServices;
  * A job that reparses a wiki page, if time is come.
  *
  * @author Alexander Mashin
- *
  */
 class EDReparseJob extends Job {
 	/**

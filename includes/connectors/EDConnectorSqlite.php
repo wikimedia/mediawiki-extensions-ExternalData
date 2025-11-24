@@ -5,7 +5,6 @@
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 class EDConnectorSqlite extends EDConnectorRdbms {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */

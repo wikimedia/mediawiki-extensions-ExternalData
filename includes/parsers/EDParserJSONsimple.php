@@ -52,7 +52,6 @@ class EDParserJSONsimple extends EDParserJSON {
 	 * @param array $tree Parsed JSON as returned by FormatJson::decode().
 	 *
 	 * @param array &$retrieved_values An array with retrieved values.
-	 *
 	 */
 	protected static function parseTree( array $tree, array &$retrieved_values ) {
 		foreach ( $tree as $key => $val ) {

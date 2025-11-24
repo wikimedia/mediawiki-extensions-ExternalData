@@ -4,7 +4,6 @@
  * for databases managed by RDBMS except SQLite and PostgreSQL.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorSql extends EDConnectorRdbms {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */

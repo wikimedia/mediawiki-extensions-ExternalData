@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  * for ODBC connections with prepared statements.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 	/** @var resource $odbcConnection The ODBC connection resource. */

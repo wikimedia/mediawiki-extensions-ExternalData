@@ -3,7 +3,6 @@
  * Class for parsing ZIP archives.
  *
  * @author Alexander Mashin
- *
  */
 class EDParserZip extends EDParserArchive {
 	/** @const array EXT An array of possible archive extensions. */

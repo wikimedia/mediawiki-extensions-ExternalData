@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 class EDConnectorSoap extends EDConnectorHttp {
 	/** @var bool $keepExternalVarsCase External variables' case ought to be preserved. */

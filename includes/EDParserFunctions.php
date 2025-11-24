@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 class EDParserFunctions {
 	use EDParsesParams; // Needs paramToArray().

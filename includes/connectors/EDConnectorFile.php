@@ -8,7 +8,6 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin
  * @author Yaron Koren
- *
  */
 class EDConnectorFile extends EDConnectorPath {
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */

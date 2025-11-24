@@ -3,7 +3,6 @@
  * Class for parsing RAR archives.
  *
  * @author Alexander Mashin
- *
  */
 class EDParserRar extends EDParserArchive {
 	/** @const array EXT An array of possible archive extensions. */

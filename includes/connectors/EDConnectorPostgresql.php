@@ -4,7 +4,6 @@
  * for databases managed by RDBMS if database type is PostgreSQL.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorPostgresql extends EDConnectorRdbms {
 	/** @var bool $keepExternalVarsCase External variables' case need not be preserved. */

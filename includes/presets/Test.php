@@ -6,7 +6,6 @@ namespace ExternalData\Presets;
  * Class wrapping the constant containing data source presets for testing purposes for autoloading.
  *
  * @author Alexander Mashin
- *
  */
 
 class Test extends Base {

@@ -6,7 +6,6 @@ use MediaWiki\Title\Title;
  * A dummy connector used only to parse text passed to it.
  *
  * @author Alexander Mashin
- *
  */
 class EDConnectorInline extends EDConnectorBase {
 	use EDConnectorParsable; // needs parser.

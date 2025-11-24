@@ -18,7 +18,6 @@ class EDParserYAMLsimple extends EDParserJSONsimple {
 	 * @param array $params A named array of parameters passed from parser or Lua function.
 	 *
 	 * @throws EDParserException
-	 *
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );

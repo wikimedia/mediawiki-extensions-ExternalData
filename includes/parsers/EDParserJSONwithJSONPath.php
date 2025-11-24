@@ -14,7 +14,6 @@ class EDParserJSONwithJSONPath extends EDParserJSON {
 	 * Constructor.
 	 *
 	 * @param array $params A named array of parameters passed from parser or Lua function.
-	 *
 	 */
 	public function __construct( array $params ) {
 		parent::__construct( $params );

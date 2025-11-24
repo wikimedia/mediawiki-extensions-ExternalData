@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  * for an ODBC connection.
  *
  * @author Alexander Mashin
- *
  */
 
 class EDConnectorOdbc extends EDConnectorComposed {

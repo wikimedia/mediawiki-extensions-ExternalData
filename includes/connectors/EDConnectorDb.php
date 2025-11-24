@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
 abstract class EDConnectorDb extends EDConnectorBase {
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */

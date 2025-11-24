@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  * for database connections with prepared statements.
  *
  * @author Alexander Mashin
- *
  */
 abstract class EDConnectorPrepared extends EDConnectorDb {
 	/** @var string $name Name of the prepared statement. */

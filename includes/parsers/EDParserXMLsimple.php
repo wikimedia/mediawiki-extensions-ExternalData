@@ -89,7 +89,6 @@ class EDParserXMLsimple extends EDParserXML {
 	}
 
 	/**
-	 *
 	 * @param resource $parser XML parser created by xml_parser_create();
 	 * @param string $name
 	 * @suppress PhanUnusedPrivateMethodParameter

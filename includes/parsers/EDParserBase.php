@@ -4,7 +4,6 @@
  * Includes a factory method that analyses parameters and instantiates needed descendant class.
  *
  * @author Alexander Mashin
- *
  */
 abstract class EDParserBase {
 	use EDParsesParams; // Needs paramToArray().

@@ -10,7 +10,6 @@ use MediaWiki\MediaWikiServices;
  *
  * @author Alexander Mashin
  * @author Yaron Koren
- *
  */
 trait EDConnectorCached {
 	use EDParsesParams;

@@ -7,7 +7,6 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin
  * @author Yaron Koren
- *
  */
 
 class EDConnectorWeb extends EDConnectorHttp {
