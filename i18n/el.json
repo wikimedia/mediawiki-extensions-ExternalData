@@ -14,6 +14,7 @@
 	"getdata": "Λήψη δεδομένων",
 	"externaldata-desc": "Επιτρέπει την ανάκτηση δομημένων δεδομένων από εξωτερικά URL, βάσεις δεδομένων και άλλες πηγές",
 	"externaldata-no-param-specified": "Σφάλμα: Δεν καθορίστηκε παράμετρος «$1».",
+	"externaldata-param-type-error": "Σφάλμα: Η παράμετρος $1 πρέπει να είναι τύπου $2.",
 	"externaldata-ldap-domain-not-defined": "Ο τομέας $1 LDAP δεν έχει καθοριστεί.",
 	"externaldata-ldap-unable-to-connect": "Δεν είναι δυνατή η σύνδεση με $1.",
 	"externaldata-xml-error": "Σφάλμα XML: $1 στη γραμμή $2",
