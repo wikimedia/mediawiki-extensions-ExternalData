@@ -14,8 +14,8 @@
 	"externaldata-db-incomplete-information": "Erro: Información incompleta para o ID de base de datos $1 ($2).",
 	"externaldata-db-could-not-get-url": "Non se puido obter o enderezo URL $1 despois de $2 {{PLURAL:$2|intento|intentos}}.",
 	"externaldata-db-unknown-type": "Erro: Tipo de base de datos $1 descoñecido.",
-	"externaldata-db-could-not-connect": "Erro: Non se puido conectar coa base de datos.",
+	"externaldata-db-could-not-connect": "Erro: Non se puido conectar coa base de datos ($1).",
 	"externaldata-db-no-return-values": "Erro: Non se especificou ningún valor de retorno.",
-	"externaldata-db-invalid-query": "A consulta $1 non é válida.",
+	"externaldata-db-invalid-query": "A consulta «$1» non é válida ($2).",
 	"externaldata-mongodb-unknown-collection": "Erro: Colección MongoDB $1 descoñecida."
 }
