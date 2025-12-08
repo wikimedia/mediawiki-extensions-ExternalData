@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 3.4
+        Version 3.5
         Yaron Koren, Alexander Mashin and (many) others
 
 This is free software licensed under the GNU General Public License. Please
@@ -62,7 +62,7 @@ https://www.mediawiki.org/wiki/Extension:External_Data
 
 == Requirements ==
 
-This version of the External Data extension requires MediaWiki 1.39.4 or
+This version of the External Data extension requires MediaWiki 1.40 or
 higher.
 
 == Installation ==
@@ -113,6 +113,3 @@ Most comments, questions, suggestions and bug reports should be sent to
 the main MediaWiki mailing list:
 
      https://lists.wikimedia.org/mailman/listinfo/mediawiki-l
-
-If possible, please add "[ED]" at the beginning of the subject line, to
-clarify the subject matter.
