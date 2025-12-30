@@ -194,6 +194,23 @@ abstract class EDConnectorBase {
 	}
 
 	/**
+	 * Override user-supplied settings with wiki-wide.
+	 * @param array $wiki_wide
+	 * @param array $supplemented
+	 * @return array
+	 */
+	protected static function applyWikiWideSettings( array $wiki_wide, array $supplemented ): array {
+		foreach ( $wiki_wide as $param => $value ) {
+			if ( $value !== null ) {
+				$supplemented[$param] = $value;
+			} else {
+				unset( $supplemented[$param] );
+			}
+		}
+		return $supplemented;
+	}
+
+	/**
 	 * Add new values.
 	 *
 	 * @param array|null $values A new set of columns.
@@ -521,8 +538,8 @@ abstract class EDConnectorBase {
 		foreach ( $fields as $field ) {
 			if ( isset( $supplemented[$field] ) ) {
 				$id = $supplemented[$field];
-				if ( isset( self::$sources[$id] ) ) {
-					foreach ( self::$sources[$id] as $param => $value ) {
+				if ( isset( static::$sources[$id] ) ) {
+					foreach ( static::$sources[$id] as $param => $value ) {
 						if ( !isset( $wiki_wide[$param] ) ) { // more specific setting override less specific.
 							$wiki_wide[$param] = $value;
 						}
@@ -540,9 +557,7 @@ abstract class EDConnectorBase {
 		$wiki_wide = self::substitute( $wiki_wide, self::forStrtr( $supplemented ) );
 
 		// Apply wiki-wide settings. They override user-provided ones.
-		foreach ( $wiki_wide as $param => $value ) {
-			$supplemented[$param] = $value;
-		}
+		$supplemented = self::applyWikiWideSettings( $wiki_wide, $supplemented );
 
 		return $supplemented;
 	}

@@ -22,10 +22,10 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return EDConnectorBase
 	 */
-	private function mock( array $args, $keep_case ): EDConnectorBase {
+	private function mock( array $args, bool $keep_case ): EDConnectorBase {
 		// This is simpler and more usable than standard restrictive means.
 		return new class ( $args, $keep_case ) extends EDConnectorBase {
-			public function __construct( array &$args, $keep_case ) {
+			public function __construct( array &$args, bool $keep_case ) {
 				$this->keepExternalVarsCase = $keep_case;
 				parent::__construct( $args, Title::makeTitle( 0, 'Dummy' ) );
 			}
@@ -41,7 +41,11 @@ class EDConnectorBaseTest extends EDTestBase {
 				return self::supplementParams( $params, $title );
 			}
 
-			public function connector( $name, array $params ) {
+			public function applyWikiWide( array $wiki_wide, array $supplemented ): array {
+				return self::applyWikiWideSettings( $wiki_wide, $supplemented );
+			}
+
+			public function connector( string $name, array $params ) {
 				return self::getConnectorClass( $name, $params );
 			}
 
@@ -340,7 +344,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	public static function provideGetConnector(): array {
+	public static function provideGetConnectorClass(): array {
 		return [
 			// Specific functions.
 			'{{#get_web_data:}}, POST' => [ 'get_web_data', [ 'post data' => 'postdata' ], 'EDConnectorWeb' ],
@@ -354,9 +358,9 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_db_data:}}, mySQL, prepared' =>
 				[ 'get_db_data', [ 'type' => 'mysql', 'prepared' => 'statement 1' ], 'EDConnectorPreparedMysql' ],
 			'{{#get_db_data:}}, PostgreSQL, prepared' => [
-					'get_db_data',
-					[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
-					'EDConnectorPreparedPostgresql'
+				'get_db_data',
+				[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
+				'EDConnectorPreparedPostgresql'
 			],
 			'{{#get_db_data:}}, sqlite' => [ 'get_db_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
 			'{{#get_db_data:}}, ODBC prepared' => [
@@ -372,7 +376,7 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_db_data:}}, MongoDB' => [ 'get_db_data', [ 'type' => 'mongodb' ], 'EDConnectorMongodb' ],
 			'{{#get_db_data:}}, PostgreSQL' => [ 'get_db_data', [ 'type' => 'postgres' ], 'EDConnectorPostgresql' ],
 			'{{#get_db_data:}}, mySQL, etc.' => [ 'get_db_data', [], 'EDConnectorSql' ],
-			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe' ],
+			'{{#get_program_data:}}' => [ 'get_program_data', [], 'EDConnectorExe', [ 'command' => 'sudo' ] ],
 
 			'{{#get_db_data:}}, source instead of db' => [
 				'get_db_data',
@@ -420,9 +424,9 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_external_data:}}, mySQL, prepared' =>
 				[ 'get_external_data', [ 'type' => 'mysql', 'prepared' => true ], 'EDConnectorPreparedMysql' ],
 			'{{#get_external_data:}}, PostgreSQL, prepared' => [
-					'get_external_data',
-					[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
-					'EDConnectorPreparedPostgresql'
+				'get_external_data',
+				[ 'type' => 'postgres', 'prepared' => 'statement 1' ],
+				'EDConnectorPreparedPostgresql'
 			],
 			'{{#get_external_data:}}, sqlite' => [ 'get_external_data', [ 'type' => 'sqlite' ], 'EDConnectorSqlite' ],
 			'{{#get_external_data:}}, ODBC prepared' => [
@@ -472,12 +476,13 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_external_data:}}, directory, source' =>
 				[ 'get_external_data', [ 'source' => '/etc', 'file name' => 'hosts' ], 'EDConnectorDirectory' ],
 			'{{#get_external_data:}}, file, source' => [
-				'get_external_data', [ 'source' => 'file example', 'path' => '/etc' ], 'EDConnectorFile'
+				'get_external_data', [ 'source' => 'file example' ], 'EDConnectorFile', [ 'path' => '/etc' ]
 			],
 			'{{#get_external_data:}}, LDAP, source' => [
 				'get_external_data',
-				[ 'source' => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
-				'EDConnectorLdap'
+				[ 'source' => 'ldap domain' ],
+				'EDConnectorLdap',
+				[ 'base dn' => 'dc=example,dc=com' ]
 			],
 
 			// First parameter instead of a specific parameter.
@@ -504,12 +509,13 @@ class EDConnectorBaseTest extends EDTestBase {
 			'{{#get_external_data:}}, directory, anonymous' =>
 				[ 'get_external_data', [ 0 => '/etc', 'file name' => 'hosts' ], 'EDConnectorDirectory' ],
 			'{{#get_external_data:}}, file, anonymous' => [
-				'get_external_data', [ 0 => 'file example', 'path' => '/etc' ], 'EDConnectorFile'
+				'get_external_data', [ 0 => 'file example' ], 'EDConnectorFile', [ 'path' => '/etc' ]
 			],
 			'{{#get_external_data:}}, LDAP, anonymous' => [
 				'get_external_data',
-				[ 0 => 'ldap domain', 'base dn' => 'dc=example,dc=com' ],
-				'EDConnectorLdap'
+				[ 0 => 'ldap domain' ],
+				'EDConnectorLdap',
+				[ 'base dn' => 'dc=example,dc=com' ]
 			],
 
 		];
@@ -518,18 +524,20 @@ class EDConnectorBaseTest extends EDTestBase {
 	/**
 	 * Test EDConnectorBase::getConnector().
 	 *
-	 * @dataProvider provideGetConnector
+	 * @dataProvider provideGetConnectorClass
 	 *
 	 * @param string $name Parser function name.
 	 * @param array $args Arguments to parser function.
 	 * @param string $class Expected class name of the EDConnector... object.
+	 * @param ?array $source Additional data source.
 	 */
-	public function testGetConnector( $name, array $args, $class ) {
+	public function testGetConnectorClass( $name, array $args, string $class, ?array $source = null ) {
 		$args['format'] = 'text';
 		$args['data'] = 'text=__text';
 		self::restoreGlobals();
 		$mock = $this->mock( $args, true );
 		$supplemented = $mock->supplement( $args, Title::makeTitle( 0, 'Dummy' ) );
+		$supplemented = $mock->applyWikiWide( $source ?? [], $supplemented );
 		$connector = $mock->connector( $name, $supplemented );
 		$this->assertEquals(
 			$class,

@@ -105,7 +105,7 @@ trait EDParsesParams {
 				continue;
 			}
 			if ( self::isRegex( $value ) ) { // parameter is a regular expression.
-				if ( preg_match( $value, $params[$key] ) !== 1 ) {
+				if ( $params[$key] !== null && preg_match( $value, $params[$key] ) !== 1 ) {
 					return false; // does not match, and the 'pattern' fails.
 				}
 				continue; // matches and this parameter needs no further checks.
