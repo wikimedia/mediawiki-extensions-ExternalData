@@ -4,7 +4,6 @@
 			"Yaron Koren"
 		]
 	},
-	"getdata": "Get data",
 	"externaldata-desc": "Allows for retrieving structured data from external URLs, databases and other sources",
 	"externaldata-no-param-specified": "Error: No \"$1\" parameter specified.",
 	"externaldata-param-type-error": "Error: Parameter $1 must be of the type $2.",
@@ -65,6 +64,5 @@
 	"external-data-archive-could-not-extract": "Error: could not extract file <code>$2</code> from $1 archive ($3)",
 	"externaldata-no-local-variable": "Error: no local variable \"$1\" has been set.",
 	"externaldata-no-template": "Error: no template specified.",
-	"externaldata-no-loop-body": "Error: no loop body set as the first or the second parameter.",
-	"externaldata-getdata-badurl": "You must specify a page name in the URL. The URL should look like \"{{#Special:GetData}}/Page_name\"."
+	"externaldata-no-loop-body": "Error: no loop body set as the first or the second parameter."
 }

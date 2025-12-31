@@ -14,14 +14,6 @@
 		"MediaWiki": ">= 1.40"
 	},
 	"load_composer_autoloader": true,
-	"SpecialPages": {
-		"GetData": {
-			"class": "EDGetData",
-			"services": [
-				"PermissionManager"
-			]
-		}
-	},
 	"MessagesDirs": {
 		"ExternalData": [
 			"i18n"
@@ -33,7 +25,6 @@
 	},
 	"AutoloadClasses": {
 		"EDParserFunctions": "includes/EDParserFunctions.php",
-		"EDGetData": "includes/EDGetData.php",
 		"EDJsonObject": "includes/EDJsonObject.php",
 		"EDArraySlice": "includes/EDArraySlice.php",
 		"EDReparseJob": "includes/EDReparseJob.php",
