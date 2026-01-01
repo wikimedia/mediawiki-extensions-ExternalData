@@ -8,7 +8,6 @@
 			"XenoPheX"
 		]
 	},
-	"getdata": "Získat data",
 	"externaldata-desc": "Umožňuje získávání strukturovaných dat z externích webových stránek, databází a jiných zdrojů",
 	"externaldata-no-param-specified": "Chyba: Nebyl zadán parametr „$1“.",
 	"externaldata-ldap-unable-to-connect": "Nepodařilo se spojit s $1",

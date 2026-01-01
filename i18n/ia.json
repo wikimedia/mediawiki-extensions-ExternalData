@@ -4,7 +4,6 @@
 			"McDutchie"
 		]
 	},
-	"getdata": "Obtener datos",
 	"externaldata-desc": "Permitte recuperar datos structurate ab adresses URL, bases de datos e altere fontes externe",
 	"externaldata-no-param-specified": "Error: Nulle parametro \"$1\" specificate.",
 	"externaldata-param-type-error": "Error: Parametro $1 debe esser del typo $2.",
@@ -65,6 +64,5 @@
 	"external-data-archive-could-not-extract": "Error: non poteva extraher le file <code>$2</code> del archivo $1 ($3)",
 	"externaldata-no-local-variable": "Error: nulle variabile local \"$1\" ha essite definite.",
 	"externaldata-no-template": "Error: nulle patrono specificate.",
-	"externaldata-no-loop-body": "Error: nulle corpore de bucla es definite como prime o secunde parametro.",
-	"externaldata-getdata-badurl": "Es necessari specificar le nomine de un pagina in le URL. Le URL debe esser in le forma “{{#Special:GetData}}/Nomine_del_pagina”."
+	"externaldata-no-loop-body": "Error: nulle corpore de bucla es definite como prime o secunde parametro."
 }

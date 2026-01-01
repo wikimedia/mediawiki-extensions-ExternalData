@@ -9,7 +9,6 @@
 			"Siebrand"
 		]
 	},
-	"getdata": "Gegevens ophalen",
 	"externaldata-desc": "Maakt het mogelijk gegevens van externe URL's, database en andere externe bronnen op te halen",
 	"externaldata-no-param-specified": "Fout: er is geen parameter \"$1\" opgegeven.",
 	"externaldata-param-type-error": "Fout: Parameter $1 moet van het type $2 zijn.",
@@ -70,6 +69,5 @@
 	"external-data-archive-could-not-extract": "Fout: kon het bestand <code>$2</code> niet uitpakken uit het $1-archief ($3)",
 	"externaldata-no-local-variable": "Fout: er is geen lokale variabele “$1” ingesteld.",
 	"externaldata-no-template": "Fout: geen sjabloon opgegeven.",
-	"externaldata-no-loop-body": "Fout: er is geen ‘loop body’ ingesteld als eerste of tweede parameter.",
-	"externaldata-getdata-badurl": "U moet een paginanaam in de URL vermelden. De URL moet eruit zien als “{{#Special:GetData}}/Paginanaam”."
+	"externaldata-no-loop-body": "Fout: er is geen ‘loop body’ ingesteld als eerste of tweede parameter."
 }

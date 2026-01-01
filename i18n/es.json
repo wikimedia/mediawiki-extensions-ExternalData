@@ -20,7 +20,6 @@
 			"Translationista"
 		]
 	},
-	"getdata": "Obtener datos",
 	"externaldata-desc": "Permite la recuperación de datos estructurados a partir de direcciones URL externas, bases de datos y otras fuentes",
 	"externaldata-no-param-specified": "Error: No se ha especificado el parámetro «$1».",
 	"externaldata-throttled": "Las llamadas a $1 están limitadas hasta las {{#time:c|@$2}}.",

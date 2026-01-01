@@ -13,7 +13,6 @@
 			"Syman51"
 		]
 	},
-	"getdata": "Dapatkan data",
 	"externaldata-desc": "Memungkinkan pengambilan data terstruktur dari URL luar, pangkalan data dan sumber lainnya",
 	"externaldata-no-param-specified": "Galat: Parameter \"$1\" tidak ditentukan.",
 	"externaldata-param-type-error": "Galat: Parameter $1 harus berjenis $2.",
@@ -74,6 +73,5 @@
 	"external-data-archive-could-not-extract": "Galat: tidak dapat mengekstrak berkas <code>$2</code> dari arsip $1 ($3)",
 	"externaldata-no-local-variable": "Galat: tiada peubah lokal \"$1\" diatur.",
 	"externaldata-no-template": "Galat: tiada templat ditentukan",
-	"externaldata-no-loop-body": "Galat: tiada tubuh gelung diatur sebagai parameter pertama atau kedua.",
-	"externaldata-getdata-badurl": "Anda harus menentukan nama halaman di URL. URL harus tampak macam \"{{#Special:GetData}}/Page_name\"."
+	"externaldata-no-loop-body": "Galat: tiada tubuh gelung diatur sebagai parameter pertama atau kedua."
 }

@@ -6,7 +6,6 @@
 			"Njardarlogar"
 		]
 	},
-	"getdata": "Hent data",
 	"externaldata-desc": "Gjev høve til å henta strukturerte data frå eksterne URL-ar, databasar og andre kjelder",
 	"externaldata-ldap-unable-to-connect": "Kunne ikkje kopla til $1",
 	"externaldata-xml-error": "XML-feil: $1 på line $2",

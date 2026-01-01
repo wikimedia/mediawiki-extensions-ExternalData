@@ -4,7 +4,6 @@
 			"Bjankuloski06"
 		]
 	},
-	"getdata": "Земи податоци",
 	"externaldata-desc": "Овозможува добивање структурирани податоци од надворешни URL-адреси, бази на податоци и други извори",
 	"externaldata-no-param-specified": "Грешка: Го немате укажано параметарот „$1“.",
 	"externaldata-param-type-error": "Грешка: Параметарот $1 мора да биде од видот $2.",
@@ -65,6 +64,5 @@
 	"external-data-archive-could-not-extract": "Грешка: не можев да ја извлечам податотеката <code>$2</code> од $1-архивот ($3)",
 	"externaldata-no-local-variable": "Грешка: нема укажано месна променлива „$1“.",
 	"externaldata-no-template": "Грешка: нема укажано параметар.",
-	"externaldata-no-loop-body": "Грешка: нема зададено тело на јамката како прв или втор параметар.",
-	"externaldata-getdata-badurl": "Мора да укажете име на страница во URL-адресата. URL-адресата треба да гласи нешто како „{{#Special:GetData}}/Page_name“."
+	"externaldata-no-loop-body": "Грешка: нема зададено тело на јамката како прв или втор параметар."
 }

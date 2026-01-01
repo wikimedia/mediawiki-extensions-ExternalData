@@ -5,7 +5,6 @@
 			"Pietrodn"
 		]
 	},
-	"getdata": "Ottieni dati",
 	"externaldata-desc": "Consente di recuperare dati strutturati da URL esterni, database o altre sorgenti",
 	"externaldata-no-param-specified": "Errore: nessun parametro \"$1\" specificato.",
 	"externaldata-ldap-unable-to-connect": "Impossibile connettersi a $1",

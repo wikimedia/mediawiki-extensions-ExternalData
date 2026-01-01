@@ -4,7 +4,6 @@
 			"Michawiki"
 		]
 	},
-	"getdata": "Daty wobstarać",
 	"externaldata-desc": "Zmóžnja wotwołowanje strukturowanych datow z eksternych URL, datowych bankow a druhich žórłow",
 	"externaldata-no-param-specified": "Zmylk: Žadyn parameter \"$1\" podaty.",
 	"externaldata-ldap-unable-to-connect": "Njemóžno z $1 zwjazać",

@@ -4,7 +4,6 @@
 			"AmaryllisGardener"
 		]
 	},
-	"getdata": "Get data",
 	"externaldata-desc": "Allaes for retrievin structurt data frae freemit URLs, databases an ither soorces",
 	"externaldata-no-param-specified": "Error: No \"$1\" parameter specified.",
 	"externaldata-ldap-unable-to-connect": "Unable tae connect tae $1.",

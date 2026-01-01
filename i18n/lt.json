@@ -6,7 +6,6 @@
 			"Pavel1513"
 		]
 	},
-	"getdata": "Gauti duomenys",
 	"externaldata-desc": "Leidžia gauti strukturizuotus duomenis iš išorinių URL, duomenų bazių ir kitų šaltinių",
 	"externaldata-no-param-specified": "Klaida\" Nenurodytas joks „$1“ parametras.",
 	"externaldata-param-type-error": "Klaida: parametras $1 turi būti $2 tipo.",

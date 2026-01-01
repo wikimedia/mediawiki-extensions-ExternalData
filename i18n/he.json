@@ -9,7 +9,6 @@
 			"מקף"
 		]
 	},
-	"getdata": "קבלת נתונים",
 	"externaldata-desc": "אפשרות לקבלת נתונים מבניים מכתובות חיצוניות, מסדי נתונים ומקורות אחרים",
 	"externaldata-no-param-specified": "שגיאה: לא הוגדר פרמטר \"$1\".",
 	"externaldata-param-type-error": "שגיאה: פרמטר $1 צריך להיות מסוג $2.",
@@ -70,6 +69,5 @@
 	"external-data-archive-could-not-extract": "שגיאה: לא היה ניתן לחלץ את הקובץ <code>$2</code> מארכיון מסוג $1 (מידע נוסף: $3)",
 	"externaldata-no-local-variable": "שגיאה: המשתנה המקומי \"$1\" לא הוגדר.",
 	"externaldata-no-template": "שגיאה: לא הוגדרה תבנית.",
-	"externaldata-no-loop-body": "שגיאה: אין גוף לולאה שהוגדר כפרמטר הראשון או השני.",
-	"externaldata-getdata-badurl": "חובה לציין את שם הדף בכתובת;\nעל הכתובת להיות מהצורה \"{{#Special:GetData}}/שם_הדף\"."
+	"externaldata-no-loop-body": "שגיאה: אין גוף לולאה שהוגדר כפרמטר הראשון או השני."
 }

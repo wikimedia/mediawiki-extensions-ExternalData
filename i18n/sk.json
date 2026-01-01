@@ -4,7 +4,6 @@
 			"Helix84"
 		]
 	},
-	"getdata": "Získať dáta",
 	"externaldata-desc": "Umožňuje získavanie štrukturovaných údajov z externých URL, databáz a iných zdrojov",
 	"externaldata-ldap-unable-to-connect": "Nepodarilo sa pripojiť k $1",
 	"externaldata-xml-error": "Chyba XML: $1 na riadku $2",

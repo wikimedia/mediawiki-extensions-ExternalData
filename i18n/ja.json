@@ -10,7 +10,6 @@
 			"青子守歌"
 		]
 	},
-	"getdata": "データ取得",
 	"externaldata-desc": "外部 URL やデータベース、その他のソースからデータを取得できるようにする",
 	"externaldata-no-param-specified": "エラー: パラメーター「$1」が指定されていません。",
 	"externaldata-ldap-unable-to-connect": "$1 に接続できません。",

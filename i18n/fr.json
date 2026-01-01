@@ -18,7 +18,6 @@
 			"Wladek92"
 		]
 	},
-	"getdata": "Obtenir des données",
 	"externaldata-desc": "Permet de récupérer des données structurées à partir d’URL externes, de bases de données et d’autres sources",
 	"externaldata-no-param-specified": "Erreur : aucun paramètre « $1 » spécifié.",
 	"externaldata-param-type-error": "Erreur : le paramètre $1 doit être de type $2.",
@@ -79,6 +78,5 @@
 	"external-data-archive-could-not-extract": "Erreur : impossible d’extraire le fichier <code>$2</code> de l’archive $1 ($3)",
 	"externaldata-no-local-variable": "Erreur : aucune variable locale « $1 » n’a été définie.",
 	"externaldata-no-template": "Erreur : aucun modèle spécifié.",
-	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre.",
-	"externaldata-getdata-badurl": "Vous devez spécifier un nom de page dans l’URL. L’URL doit être de la forme « {{#Special:GetData}}/Nom_de_page »."
+	"externaldata-no-loop-body": "Erreur : aucun corps de boucle défini comme premier ou deuxième paramètre."
 }

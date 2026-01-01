@@ -8,7 +8,6 @@
 			"Njardarlogar"
 		]
 	},
-	"getdata": "Hent data",
 	"externaldata-desc": "Gir mulighet til å hente strukturerte data fra eksterne internettadresser, databaser og andre kilder",
 	"externaldata-no-param-specified": "Feil: Ingen parameter «$1» oppgitt.",
 	"externaldata-param-type-error": "Feil: Parameteren $1 må være av typen $2.",
@@ -51,6 +50,5 @@
 	"externaldata-no-file-in-directory": "Mappa $1 har ikke fila $2.",
 	"externaldata-no-directory": "Mappa $1 er ikke definert.",
 	"externaldata-no-local-variable": "Feil: ingen lokal variabel «$1» har blitt satt.",
-	"externaldata-no-template": "Feil: ingen mal angitt.",
-	"externaldata-getdata-badurl": "Du må angi et sidenavn i URL-en. URL-en bør se ut som «{{#Special:GetData}}/Sidenavn»."
+	"externaldata-no-template": "Feil: ingen mal angitt."
 }

@@ -4,7 +4,6 @@
 			"Robby"
 		]
 	},
-	"getdata": "Donnéeë kréien",
 	"externaldata-desc": "Erlaabt et Donnéeën vun externen URLen, Datebanken an anere Quellen ze verschaffen",
 	"externaldata-no-param-specified": "Feeler: Keen \"$1\"-Parameter spezifizéiert.",
 	"externaldata-ldap-unable-to-connect": "Onméiglech sech op $1 ze connectéieren",

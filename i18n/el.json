@@ -11,7 +11,6 @@
 			"ZaDiak"
 		]
 	},
-	"getdata": "Λήψη δεδομένων",
 	"externaldata-desc": "Επιτρέπει την ανάκτηση δομημένων δεδομένων από εξωτερικά URL, βάσεις δεδομένων και άλλες πηγές",
 	"externaldata-no-param-specified": "Σφάλμα: Δεν καθορίστηκε παράμετρος «$1».",
 	"externaldata-param-type-error": "Σφάλμα: Η παράμετρος $1 πρέπει να είναι τύπου $2.",
@@ -30,6 +29,5 @@
 	"externaldata-missing-file": "Το αρχείο $1 απουσιάζει.",
 	"externaldata-empty-file": "Δεν δύναται να ληφθεί το περιεχόμενο του αρχείου $1.",
 	"externaldata-no-file-in-directory": "Το αρχείο $1 δεν υπάρχει στον κατάλογο $1.",
-	"externaldata-no-directory": "Ο κατάλογος $1 δεν έχει καθοριστεί.",
-	"externaldata-getdata-badurl": "Πρέπει να ορίσετε ένα όνομα σελίδας μέσα στο σύνδεσμο URL. Η μορφή του URL θα πρέπει να έχει την παρακάτω μορφή: \"{{#Special:GetData}}/Page_name\"."
+	"externaldata-no-directory": "Ο κατάλογος $1 δεν έχει καθοριστεί."
 }

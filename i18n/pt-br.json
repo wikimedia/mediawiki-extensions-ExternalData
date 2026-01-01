@@ -10,7 +10,6 @@
 			"YuriNikolai"
 		]
 	},
-	"getdata": "Obter dados",
 	"externaldata-desc": "Permite a obtenção de dados em CSV, JSON e XML a partir de URLs externos, banco de dados e outras fontes",
 	"externaldata-no-param-specified": "Erro: nenhum parâmetro \"$1\" especificado.",
 	"externaldata-param-type-error": "Erro: o parâmetro $1 deve ser do tipo $2.",

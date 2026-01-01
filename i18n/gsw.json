@@ -5,7 +5,6 @@
 			"Als-Holder"
 		]
 	},
-	"getdata": "Date hole",
 	"externaldata-desc": "Erlaubt strukturierti Daten abzruefe vu extärne URL un andre Quälle",
 	"externaldata-ldap-unable-to-connect": "Cha kei Verbindig härstellen zue $1",
 	"externaldata-xml-error": "XML-Fähler: $1 in dr Zyyle $2",

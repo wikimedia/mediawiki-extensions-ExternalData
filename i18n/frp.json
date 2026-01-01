@@ -4,7 +4,6 @@
 			"ChrisPtDe"
 		]
 	},
-	"getdata": "Avêr des balyês",
 	"externaldata-ldap-unable-to-connect": "Empossiblo de sè branchiér a $1",
 	"externaldata-xml-error": "Èrror XML : $1 a la legne $2",
 	"externaldata-web-invalid-format": "Format envalido : « $1 »",

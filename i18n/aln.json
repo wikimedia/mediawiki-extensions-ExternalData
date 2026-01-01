@@ -4,7 +4,6 @@
 			"Mdupont"
 		]
 	},
-	"getdata": "Merr të dhëna",
 	"externaldata-desc": "Lejon retrieving të dhënat e strukturuar nga URL jashtme, bazat e të dhënave dhe burimet tjera",
 	"externaldata-ldap-unable-to-connect": "Në pamundësi për t'u lidhur tek $1",
 	"externaldata-xml-error": "XML error: $1 tek $2 linjë",

@@ -5,7 +5,6 @@
 			"Milicevic01"
 		]
 	},
-	"getdata": "Preuzmi podatke",
 	"externaldata-desc": "Omogućava preuzimanje podataka iz spoljašnjih adresa, bazi podataka i drugih izvora",
 	"externaldata-no-param-specified": "Greška: Nije naveden parametar „$1”.",
 	"externaldata-ldap-unable-to-connect": "Povezivanje na $1 nije uspelo",

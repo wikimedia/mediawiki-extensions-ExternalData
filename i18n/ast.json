@@ -5,7 +5,6 @@
 			"Xuacu"
 		]
 	},
-	"getdata": "Recuperar datos",
 	"externaldata-desc": "Permite recuperar datos estructuraos de direiciones URL, bases de datos y otres fontes esternes",
 	"externaldata-no-param-specified": "Error: Nun s'especificó dengún parámetru «$1».",
 	"externaldata-ldap-unable-to-connect": "Nun se pudo coneutar con $1",

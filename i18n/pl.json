@@ -11,7 +11,6 @@
 			"Woytecr"
 		]
 	},
-	"getdata": "Pobierz dane",
 	"externaldata-desc": "Umożliwia pobieranie strukturalnych danych z zewnętrznych adresów URL, baz danych i innych źródeł",
 	"externaldata-no-param-specified": "Błąd: Nie podano parametru „$1”.",
 	"externaldata-param-type-error": "Błąd: Parametr $1 musi mieć typ $2.",

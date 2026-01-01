@@ -5,7 +5,6 @@
 			"Chokixxcool"
 		]
 	},
-	"getdata": "Dapatkan data",
 	"externaldata-desc": "Membolehkan pengambilan data berstruktur dari URL luaran, pangkalan data atau sumber-sumber lain",
 	"externaldata-ldap-unable-to-connect": "Tidak dapat bersambung dengan $1",
 	"externaldata-xml-error": "Ralat XML: $1 di baris $2",

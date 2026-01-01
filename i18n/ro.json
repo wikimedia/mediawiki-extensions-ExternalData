@@ -9,7 +9,6 @@
 			"Stelistcristi"
 		]
 	},
-	"getdata": "Obține date",
 	"externaldata-desc": "Permite obținerea de date structurate din URL-uri externe, baze de date și alte surse",
 	"externaldata-ldap-unable-to-connect": "Nu se poate conecta la $1",
 	"externaldata-xml-error": "Eroare XML: $1 la linia $2",

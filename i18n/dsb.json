@@ -4,7 +4,6 @@
 			"Michawiki"
 		]
 	},
-	"getdata": "Daty wobstaraś",
 	"externaldata-desc": "Zmóžnja wótwołowanje strukturěrowanych datow z eksternych URL, datowych bankow a drugich žrědłow",
 	"externaldata-ldap-unable-to-connect": "Njemóžno z $1 zwězaś",
 	"externaldata-xml-error": "Zmólka XML: $1 na smužce $2",

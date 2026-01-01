@@ -5,7 +5,6 @@
 			"Dragonòt"
 		]
 	},
-	"getdata": "Oten dij dat",
 	"externaldata-desc": "A përmët d'arcuperé dat struturà da adrësse dl'aragnà esterne, base ëd dàit e d'àutre sorgiss",
 	"externaldata-ldap-unable-to-connect": "A peul pa coleghesse a $1",
 	"externaldata-xml-error": "Eror XML: $1 a la linia $2",

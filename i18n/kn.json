@@ -4,7 +4,6 @@
 			"VASANTH S.N."
 		]
 	},
-	"getdata": "ಮಾಹಿತಿಯನ್ನು ಪಡೆ",
 	"externaldata-ldap-unable-to-connect": "$1.ಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾದ್ಯವಾಗುತ್ತಿಲ್ಲ",
 	"externaldata-web-invalid-format": "ಅಸಿಂಧು ವಿನ್ಯಾಸ: \"$1\".",
 	"externaldata-db-incomplete-information": "ದೋಷ:ದತ್ತಾಂಶ ಐಡಿ ಬಗ್ಗೆ ಅಸಂಪೂರ್ಣ ಮಾಹಿತಿ.",

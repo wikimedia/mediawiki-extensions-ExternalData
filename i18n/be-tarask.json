@@ -8,7 +8,6 @@
 			"Wizardist"
 		]
 	},
-	"getdata": "Атрымаць зьвесткі",
 	"externaldata-desc": "Дазваляе атрымліваць структураваныя зьвесткі з вонкавых URL-адрасоў, базаў зьвестак і іншых крыніц",
 	"externaldata-no-param-specified": "Памылка: парамэтар «$1» ня вызначаны.",
 	"externaldata-ldap-unable-to-connect": "Немагчыма далучыцца да $1",

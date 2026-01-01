@@ -4,7 +4,6 @@
 			"Winston Sung"
 		]
 	},
-	"getdata": "Uzmi podatke",
 	"externaldata-desc": "Omogućuje preuzimanje strukturnih podataka iz vanjskih URL-adresa, baza podataka i drugih izvora",
 	"externaldata-ldap-unable-to-connect": "Ne može se spojiti sa  $1",
 	"externaldata-db-incomplete-information": "Greška: Nepotpune informacije za ovu bazu podataka s naznakom $1 ($2).",

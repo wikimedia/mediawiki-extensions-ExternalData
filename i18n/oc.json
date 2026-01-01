@@ -4,7 +4,6 @@
 			"Cedric31"
 		]
 	},
-	"getdata": "Obténer de donadas",
 	"externaldata-desc": "Permet de recuperar de donadas estructuradas a partir d'URL extèrnas, de basas de donadas e d'autras fonts",
 	"externaldata-ldap-unable-to-connect": "Impossible de se connectar a $1",
 	"externaldata-xml-error": "Error XML : $1 a la linha $2",

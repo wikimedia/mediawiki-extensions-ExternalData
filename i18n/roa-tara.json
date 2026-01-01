@@ -4,7 +4,6 @@
 			"Joetaras"
 		]
 	},
-	"getdata": "Pigghie le date",
 	"externaldata-desc": "Permette de repigghià data strutturate da URL fore a Uicchipèdie, database e otre sorgende",
 	"externaldata-no-param-specified": "Errore: Nisciune parametre \"$1\" specificate.",
 	"externaldata-param-type-error": "Errore: 'u parametre $1 adda essere d'u tipe $2.",

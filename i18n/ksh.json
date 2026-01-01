@@ -4,7 +4,6 @@
 			"Purodha"
 		]
 	},
-	"getdata": "Daate holle!",
 	"externaldata-desc": "Määt et müjjelich, Date en beshtemmpte Fomaate fun främbde <i lang=\"en\">URLs</i>, Daatebangke, un ander Quälle ze holle.",
 	"externaldata-no-param-specified": "Fähler: Dä Parramehter „$1“ es nit aanjejovve.",
 	"externaldata-ldap-unable-to-connect": "Kann nit noh $1 verbenge",

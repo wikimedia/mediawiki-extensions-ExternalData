@@ -4,7 +4,6 @@
 			"Eleassar"
 		]
 	},
-	"getdata": "Pridobi podatke",
 	"externaldata-desc": "Omogoča pridobitev strukturiranih podatkov iz zunanjih URL-jev, podatkovnih zbirk in drugih virov",
 	"externaldata-no-param-specified": "Napaka: Določeni ni noben parameter »$1«.",
 	"externaldata-param-type-error": "Napaka: Parameter $1 mora biti tipa $2.",
@@ -64,6 +63,5 @@
 	"external-data-archive-could-not-extract": "Napaka: Datoteke <code>$2</code> ni bilo mogoče ekstrahirati iz arhiva $1 ($3)",
 	"externaldata-no-local-variable": "Napaka: Nastavljena ni bila nobena lokalna spremenljivka »$1«.",
 	"externaldata-no-template": "Napaka: Določena ni bila nobena predloga.",
-	"externaldata-no-loop-body": "Napaka: nobeno telo zanke ni nastavljeno kot prvi ali drugi parameter.",
-	"externaldata-getdata-badurl": "V URL-ju morate določiti ime strani. URL bi moral biti videti kot »{{#Special:GetData}}/Page_name«."
+	"externaldata-no-loop-body": "Napaka: nobeno telo zanke ni nastavljeno kot prvi ali drugi parameter."
 }

@@ -4,7 +4,6 @@
 			"CERminator"
 		]
 	},
-	"getdata": "Uzmi podatke",
 	"externaldata-desc": "Omogućuje za preuzimanje strukturnih podataka iz vanjskih URLova, baza podataka i drugih izvora",
 	"externaldata-ldap-unable-to-connect": "Ne može se spojiti na $1",
 	"externaldata-xml-error": "XML greška: $1 na liniji $2",

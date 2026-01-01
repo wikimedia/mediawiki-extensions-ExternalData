@@ -11,7 +11,6 @@
 			"Vito Genovese"
 		]
 	},
-	"getdata": "Veri al",
 	"externaldata-desc": "Dış URL'lerden, veritabanlarından ve diğer kaynaklardan yapılandırılmış veri almaya izin verir",
 	"externaldata-no-param-specified": "Hata: \"$1\" parametresi belirtilmedi.",
 	"externaldata-param-type-error": "Hata: $1 parametresi $2 türünde olmalıdır.",
