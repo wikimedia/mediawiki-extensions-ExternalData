@@ -7,7 +7,8 @@
 			"Rail",
 			"SemanticPioneer",
 			"Sp5uhe",
-			"WaldiSt"
+			"WaldiSt",
+			"Woytecr"
 		]
 	},
 	"getdata": "Pobierz dane",
@@ -24,7 +25,7 @@
 	"externaldata-db-incomplete-information": "Błąd: Niepełne informacje o identyfikatorze serwera $1 ($2).",
 	"externaldata-db-could-not-get-url": "Nie można uzyskać adresu URL $1 po $2 {{PLURAL:$2|próbie|próbach}}.",
 	"externaldata-db-unknown-type": "Błąd: Nieznany typ bazy danych: $1.",
-	"externaldata-db-could-not-connect": "Błąd: Nie można połączyć się z bazą danych.",
+	"externaldata-db-could-not-connect": "Błąd: Nie można połączyć się z bazą danych ($1).",
 	"externaldata-db-unknown-database": "Błąd: Nie udało się wybrać bazy danych o ID $1.",
 	"externaldata-db-no-return-values": "Błąd – nie określono zwracanej wartości.",
 	"externaldata-db-invalid-query": "Zapytanie $1 jest nieprawidłowe ($2).",
@@ -42,7 +43,7 @@
 	"externaldata-parsing-html-failed": "Nie udało się sparsować kodu HTML.",
 	"externaldata-caught-exception-parsing-html": "Podczas parsowania kodu HTML wystąpił błąd. Komunikat błędu: „$1”.",
 	"externaldata-error-converting-css-to-xpath": "Podczas konwersji selektora CSS $1 na XPath wystąpił błąd:\n$2",
-	"externaldata-missing-library": "Brakuje biblioteki $1, wymaganej do wykorzystania funkcji parsera „$2” bądź funkcji Lua „$3”.",
+	"externaldata-missing-library": "Brakuje biblioteki $1, wymaganej do użycia funkcji parsera „$2” bądź funkcji Lua <code>$3</code>.",
 	"externaldata-undefined-file": "Plik $1 nie jest zdefiniowany.",
 	"externaldata-missing-file": "Brakujący plik $1.",
 	"externaldata-empty-file": "Nie udało się uzyskać zawartości pliku $1.",
