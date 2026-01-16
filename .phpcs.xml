@@ -12,6 +12,7 @@
 		</properties>
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 		<exclude name="MediaWiki.Commenting.CommentBeforeClass.SpacingAfter" />
+		<exclude name="MediaWiki.Usage.ForbiddenFunctions.xml_parser_free" />
 	</rule>
 	<!-- RedundantVarName is currently too sensitive, incompatible with default Doxygen. -->
 	<rule ref="MediaWiki.Commenting.RedundantVarName.Found">
