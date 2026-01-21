@@ -35,6 +35,8 @@ trait EDConnectorCached {
 	private $cacheFresh;
 	/** @var int Timestamp of when the result was fetched. */
 	private $time;
+	/** @var int $cacheSize Maximum cache size in bytes. 0 for no limit. */
+	private static $cacheSize = 0;
 
 	/**
 	 * Setup cache. Call from the constructor.
@@ -44,6 +46,7 @@ trait EDConnectorCached {
 	private function setupCache( $seconds, $stale ) {
 		// Take into account the obsolete setting $edgCacheTable.
 		$cache_table = self::setting( 'CacheTable' ) ?: 'ed_url_cache';
+		self::$cacheSize = self::setting( 'CacheSize' ) ?: 0;
 		self::$cacheIsUp = (bool)$cache_table;
 		self::$cacheTable = $cache_table;
 		$this->cacheExpires = $seconds;
@@ -131,8 +134,7 @@ trait EDConnectorCached {
 		$row = self::$replicaDB->selectRow(
 			self::$cacheTable,
 			'*',
-			[ 'url' => self::hash( $key ) ],
-			__METHOD__
+			[ 'url' => self::hash( $key ) ]
 		);
 		if ( $row ) {
 			$this->cachedTime = $row->req_time;
@@ -150,7 +152,7 @@ trait EDConnectorCached {
 	 * @param string $contents Text to be cached.
 	 * @param bool $old_cache True, if there was an old cache.
 	 */
-	private function cache( $key, $contents, $old_cache ) {
+	private function cache( string $key, string $contents, bool $old_cache ) {
 		// Update cache, if possible and required.
 		if ( self::$cacheIsUp && $this->cacheExpires !== 0 ) {
 			$hashed_key = self::hash( $key );
@@ -158,6 +160,26 @@ trait EDConnectorCached {
 			// @todo: Upsert?
 			if ( $old_cache ) {
 				self::$primaryDB->delete( self::$cacheTable, [ 'url' => $hashed_key ] );
+			}
+			// Purge old cache beyond size limit, if any:
+			if ( self::$cacheSize ) {
+
+				$row = self::$replicaDB->selectRow(
+					'information_schema.TABLES',
+					[ 'data_length', 'index_length', 'data_free', 'avg_row_length' ],
+					[ 'table_schema' => self::$replicaDB->getDBname(), 'table_name' => self::$cacheTable ]
+				);
+				if ( $row ) {
+					$excess = $row->data_length + $row->index_length - $row->data_free + strlen( $contents )
+							- self::$cacheSize;
+					if ( $excess > 0 ) {
+						self::$primaryDB->query( sprintf(
+							'DELETE FROM %s ORDER BY req_time ASC LIMIT %d;',
+							self::$cacheTable,
+							(int)( $row->avg_row_length > 0 ? $excess / $row->avg_row_length : 0 )
+						) );
+					}
+				}
 			}
 			// Insert contents into the cache table.
 			self::$primaryDB->insert(

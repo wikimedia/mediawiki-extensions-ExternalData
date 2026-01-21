@@ -285,6 +285,10 @@
 		"AllowGetters": {
 			"description": "Drop all {{#get_*_data:}} functions and all mw.ext.getExternalData.get*Data() except mw.ext.getExternalData.getExternalData()",
 			"value": true
+		},
+		"CacheSize": {
+			"description": "Maximum cache size in bytes. 0 means no limit.",
+			"value": 0
 		}
 	},
 	"TestAutoloadClasses": {
