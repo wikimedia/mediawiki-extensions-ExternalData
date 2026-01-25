@@ -1,22 +1,25 @@
 <?php
+namespace MediaWiki\Extension\ExternalData\Tests\Unit\Parsers;
+
+require_once 'ArchiveTestBase.php';
 
 /**
- * Test for the class EDParserRar.
+ * Test for the class EDParserZip.
  *
  * @group Standalone
- * @covers EDParserRar
+ * @covers EDParserZip
  *
  * @author Alexander Mashin
  */
-class EDParserRarTest extends EDParserArchiveTestBase {
+class ZipTest extends ArchiveTestBase {
 	/** @var string $class Name of the tested class. */
-	protected static $class = 'EDParserRar';
+	protected static $class = 'EDParserZip';
 
 	/** @const array DEPENDENCIES An associative array of 'extension' => 'dependency as class/function'. */
-	protected const DEPENDENCIES = [ 'rar' => 'RarArchive' ];
+	protected const DEPENDENCIES = [ 'zip' => 'ZipArchive' ];
 
 	/**
-	 * Data provider for EDParserRar::__invoke().
+	 * Data provider for EDParserZip::__invoke().
 	 *
 	 * @return array Test cases.
 	 */
@@ -25,9 +28,9 @@ class EDParserRarTest extends EDParserArchiveTestBase {
 	}
 
 	/**
-	 * Test EDParserRar::__invoke().
+	 * Test EDParserZip::__invoke().
 	 *
-	 * @covers EDParserRar::__invoke
+	 * @covers EDParserZip::__invoke
 	 * @dataProvider provideInvoke
 	 *
 	 * @param string $archive Archive file as a string variable.
@@ -35,12 +38,12 @@ class EDParserRarTest extends EDParserArchiveTestBase {
 	 * @param string $path Path to the parsed archive.
 	 * @param array $expected Necessary returned values.
 	 */
-	public function testInvoke( $archive, array $args, $path, array $expected ) {
+	public function testInvoke( string $archive, array $args, string $path, array $expected ) {
 		parent::testInvoke( $archive, $args, $path, $expected );
 	}
 
 	/**
-	 * Data provider for EDParserRar::__invoke() (exceptions).
+	 * Data provider for EDParserZip::__invoke() (exceptions).
 	 *
 	 * @return array Test cases.
 	 */
@@ -49,9 +52,9 @@ class EDParserRarTest extends EDParserArchiveTestBase {
 	}
 
 	/**
-	 * Test EDParserRar::__invoke() for parser exceptions.
+	 * Test EDParserZip::__invoke() for parser exceptions.
 	 *
-	 * @covers EDParserRar::__invoke
+	 * @covers EDParserZip::__invoke
 	 * @dataProvider provideInvokeExceptions
 	 *
 	 * @param string $archive File to parse as a string.
@@ -60,7 +63,7 @@ class EDParserRarTest extends EDParserArchiveTestBase {
 	 * @param string $code Exception parameter: message code.
 	 * @param array $params Exception parameter: message parameters.
 	 */
-	public function testInvokeExceptions( $archive, array $args, $path, $code, array $params ) {
+	public function testInvokeExceptions( string $archive, array $args, string $path, string $code, array $params ) {
 		parent::testInvokeExceptions( $archive, $args, $path, $code, $params );
 	}
 }

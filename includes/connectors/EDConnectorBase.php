@@ -13,7 +13,8 @@ abstract class EDConnectorBase {
 	use EDParsesParams; // Needs paramToArray().
 
 	/** @const string[] ID_PARAMS An array of name of params that will serve as data sources' names. */
-	private const ID_PARAMS = [ 'url', 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', '*' ];
+	private const ID_PARAMS
+		= [ 'url', 'db', 'server', 'domain', 'program', 'file', 'directory', 'source', 'text', '*' ];
 	/** @const string ID_PARAM What the specific parameter identifying the connection is called. */
 	protected const ID_PARAM = 'source';
 	/** @const string[] URL_PARAMS An array of name of params that will serve as data sources' names for URLs. */

@@ -37,7 +37,10 @@ class Hooks implements
 					$parser_function,
 					static function ( Parser $parser, ...$params ) use ( $parser_function ) {
 						$title = method_exists( Parser::class, 'getPage' ) ? $parser->getPage() : $parser->getTitle();
-						return EDParserFunctions::fetch( $title, $parser_function, $params );
+						$result = EDParserFunctions::fetch( $title, $parser_function, $params );
+						// On success, return null (the real result is a side effect),
+						// on failure return the error message.
+						return is_array( $result ) ? null : $result;
 					}
 				);
 			}

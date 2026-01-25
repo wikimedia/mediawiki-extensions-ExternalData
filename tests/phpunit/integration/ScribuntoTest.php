@@ -1,5 +1,12 @@
 <?php
 
+namespace MediaWiki\Extension\ExternalData\Tests\Integration;
+
+use ExtensionRegistry;
+use MediaWikiIntegrationTestCase;
+use ReflectionClass;
+use ReflectionException;
+
 /**
  * Test for the class EDScribunto.
  *
@@ -8,7 +15,7 @@
  * @author Alexander Mashin
  * @author Claire
  */
-class EDScribuntoTest extends MediaWikiIntegrationTestCase {
+class ScribuntoTest extends MediaWikiIntegrationTestCase {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDScribunto';
 
@@ -20,7 +27,6 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 
 		if ( !ExtensionRegistry::getInstance()->isLoaded( 'Scribunto' ) ) {
 			$this->markTestSkipped( 'Extension:Scribunto is not loaded' );
-			return;
 		}
 	}
 
@@ -31,7 +37,7 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	private function testPrivateMethod( $name, $expected, ...$args ) {
+	private function testPrivateMethod( string $name, $expected, ...$args ) {
 		$class = new ReflectionClass( static::$class );
 
 		// Invoke the tested method.
@@ -89,7 +95,7 @@ class EDScribuntoTest extends MediaWikiIntegrationTestCase {
 	 * @param array $expected
 	 * @throws ReflectionException
 	 */
-	public function testFlip( $arg, $expected ) {
+	public function testFlip( array $arg, array $expected ) {
 		$this->testPrivateMethod( 'flip', $expected, $arg );
 	}
 }

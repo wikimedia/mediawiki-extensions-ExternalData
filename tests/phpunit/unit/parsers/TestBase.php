@@ -1,5 +1,10 @@
 <?php
 
+namespace MediaWiki\Extension\ExternalData\Tests\Unit\Parsers;
+
+use EDParserException;
+use MediaWiki\Extension\ExternalData\Tests\Unit\Base;
+
 /**
  * Base class for the tests of EDParser*.
  *
@@ -8,7 +13,7 @@
  *
  * @author Alexander Mashin
  */
-abstract class EDParserTestBase extends EDTestBase {
+abstract class TestBase extends Base {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserBase';
 
@@ -22,7 +27,7 @@ abstract class EDParserTestBase extends EDTestBase {
 	 * @param string $path Path to the parsed text.
 	 * @param array $expected Necessary returned values.
 	 */
-	protected function testInvoke( $text, array $args, $path, array $expected ) {
+	protected function testInvoke( string $text, array $args, string $path, array $expected ) {
 		$class = static::$class;
 		self::restoreGlobals();
 		$parser = new $class( $args );
@@ -49,7 +54,7 @@ abstract class EDParserTestBase extends EDTestBase {
 	 * @param string $code Exception parameter: message code.
 	 * @param array $params Exception parameter: message parameters.
 	 */
-	protected function testInvokeExceptions( $text, array $args, $path, $code, array $params ) {
+	protected function testInvokeExceptions( string $text, array $args, string $path, string $code, array $params ) {
 		$class = static::$class;
 		self::restoreGlobals();
 		$parser = new $class( $args );
@@ -64,7 +69,7 @@ abstract class EDParserTestBase extends EDTestBase {
 				$this->assertArrayHasKey(
 					$index,
 					$real_params,
-					'No message parameter ' . (string)$index . ' in EDParserException'
+					'No message parameter ' . $index . ' in EDParserException'
 				);
 				$this->assertEquals( $param, $real_params[$index], 'Wrong message parameter in EDParserException' );
 			}

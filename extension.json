@@ -291,10 +291,10 @@
 			"value": 0
 		}
 	},
-	"TestAutoloadClasses": {
-		"EDTestBase": "tests/phpunit/unit/EDTestBase.php",
-		"EDParserTestBase": "tests/phpunit/unit/parsers/EDParserTestBase.php",
-		"EDParserArchiveTestBase": "tests/phpunit/unit/parsers/EDParserArchiveTestBase.php"
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\ExternalData\\Tests\\Unit\\": "tests/phpunit/unit/",
+		"MediaWiki\\Extension\\ExternalData\\Tests\\Unit\\Parser\\": "tests/phpunit/unit/parsers/",
+		"MediaWiki\\Extension\\ExternalData\\Tests\\Integration\\": "tests/phpunit/integration/"
 	},
 	"manifest_version": 2
 }

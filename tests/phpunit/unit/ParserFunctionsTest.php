@@ -1,6 +1,11 @@
 <?php
 
-use MediaWiki\Title\Title;
+namespace MediaWiki\Extension\ExternalData\Tests\Unit;
+
+use ReflectionClass;
+use ReflectionException;
+
+require_once 'Base.php';
 
 /**
  * Test for the class EDParserFunctions.
@@ -11,7 +16,7 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin
  */
-class EDParserFunctionsTest extends EDTestBase {
+class ParserFunctionsTest extends Base {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserFunctions';
 
@@ -39,7 +44,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	private function testPrivateMethod( $name, array $values, $expected, ...$args ) {
+	private function testPrivateMethod( string $name, array $values, $expected, ...$args ) {
 		$class = new ReflectionClass( static::$class );
 
 		// Clear existent data.
@@ -77,7 +82,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * @param string $expected
 	 * @throws ReflectionException
 	 */
-	public function testUrlencode( $arg, $expected ) {
+	public function testUrlencode( string $arg, string $expected ) {
 		$this->testPrivateMethod( 'urlencode', [], $expected, $arg );
 	}
 
@@ -103,7 +108,7 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * @param string $expected
 	 * @throws ReflectionException
 	 */
-	public function testHtmlencode( $arg, $expected ) {
+	public function testHtmlencode( string $arg, string $expected ) {
 		$this->testPrivateMethod( 'htmlencode', [], $expected, $arg );
 	}
 
@@ -170,15 +175,15 @@ class EDParserFunctionsTest extends EDTestBase {
 	/**
 	 * Test EDParserFunctions::getIndexedValue().
 	 * @dataProvider getIndexedValueProvider
-	 * @param string $var
+	 * @param ?string $var
 	 * @param int $i
 	 * @param string $default
-	 * @param string $expected
+	 * @param ?string $expected
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	public function testGetIndexedValue( $var, $i, $default, $expected ) {
-		$this->testPrivateMethod( 'getIndexedValue', self::VALUES, $expected, $var, $i, $default );
+	public function testGetIndexedValue( string $var, int $i, ?string $default, ?string $expected ) {
+		$this->testPrivateMethod( 'getIndexedValue', self::VALUES, $expected, self::VALUES, $var, $i, $default );
 	}
 
 	/**
@@ -205,8 +210,8 @@ class EDParserFunctionsTest extends EDTestBase {
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	public function testNumLoops( array $mappings, $number ) {
-		$this->testPrivateMethod( 'numLoops', self::VALUES, $number, $mappings );
+	public function testNumLoops( array $mappings, int $number ) {
+		$this->testPrivateMethod( 'numLoops', self::VALUES, $number, self::VALUES, $mappings );
 	}
 
 	/**
@@ -249,7 +254,13 @@ class EDParserFunctionsTest extends EDTestBase {
 		// Make getMacros() accesible.
 		$method = $class->getMethod( 'getMacros' );
 		$macros = $method->invoke( null, $expression );
-		$this->testPrivateMethod( 'actuallyForExternalTableFirst', self::VALUES, $result, $expression, $macros );
+		$this->testPrivateMethod(
+			'actuallyForExternalTableFirst',
+			self::VALUES, $result,
+			self::VALUES,
+			$expression,
+			$macros
+		);
 	}
 
 	/**
@@ -271,73 +282,12 @@ class EDParserFunctionsTest extends EDTestBase {
 	/**
 	 * Test EDParserFunctions::getMappings().
 	 * @dataProvider getMappingsProvider
-	 * @param string $args
-	 * @param string $mappings
-	 * @return void
-	 * @throws ReflectionException
-	 */
-	public function testGetMappings( $args, $mappings ) {
-		$this->testPrivateMethod( 'getMappings', self::VALUES, $mappings, $args );
-	}
-
-	/**
-	 * Data provider for EDParserFunctions::actuallyDisplayExternalTable().
-	 * @return array
-	 */
-	public static function actuallyDisplayExternalTableProvider(): array {
-		return [
-			'one var' => [
-				[ 'template' => 'Template', 'data' => 'Title = title' ],
-				[ "{{Template|Title=External Data}}\n{{Template|Title=Cargo}}", 'noparse' => false ]
-			],
-			'two vars' => [
-				[ 'template' => 'Template', 'data' => 'Title = title, URL = url' ],
-				[
-					"{{Template|Title=External Data|URL=https://www.mediawiki.org/wiki/Extension:External_Data}}\n" .
-					"{{Template|Title=Cargo|URL=https://www.mediawiki.org/wiki/Extension:Cargo}}",
-					'noparse' => false
-				]
-			],
-			'all vars' => [
-				[ 'template' => 'Template' ],
-				[
-					'{{Template|empty=|html=text|one=One value|title=External Data|' .
-					"url=https://www.mediawiki.org/wiki/Extension:External_Data}}\n" .
-					'{{Template|empty=|html=<b class="strong">strong</b>|one=|title=Cargo|' .
-					'url=https://www.mediawiki.org/wiki/Extension:Cargo}}',
-					'noparse' => false
-				]
-			],
-			'delimiter' => [
-				[ 'template' => 'Template', 'data' => 'Title = title', 'delimiter' => '\n<br />' ],
-				[ "{{Template|Title=External Data}}\n<br />{{Template|Title=Cargo}}", 'noparse' => false ]
-			],
-			'intro & outro' => [
-				[
-					'template' => 'Template',
-					'data' => 'Title = title',
-					'intro template' => 'Intro',
-					'outro template' => 'Outro'
-				],
-				[
-					"{{Intro}}\n{{Template|Title=External Data}}\n{{Template|Title=Cargo}}\n{{Outro}}",
-					'noparse' => false
-				]
-			],
-			'no template' => [ [], [ 'error' => 'externaldata-no-template' ] ],
-		];
-	}
-
-	/**
-	 * Test EDParserFunctions::actuallyDisplayExternalTable().
-	 * @dataProvider actuallyDisplayExternalTableProvider
 	 * @param array $args
-	 * @param array|string $result
+	 * @param array $mappings
 	 * @return void
 	 * @throws ReflectionException
 	 */
-	public function testActuallyDisplayExternalTable( array $args, $result ) {
-		$title = Title::makeTitle( 0, 'Dummy' );
-		$this->testPrivateMethod( 'actuallyDisplayExternalTable', self::VALUES, $result, $args, $title );
+	public function testGetMappings( array $args, array $mappings ) {
+		$this->testPrivateMethod( 'getMappings', self::VALUES, $mappings, $args );
 	}
 }

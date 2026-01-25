@@ -1,5 +1,9 @@
 <?php
 
+namespace MediaWiki\Extension\ExternalData\Tests\Unit\Connectors;
+
+use EDConnectorBase;
+use MediaWiki\Extension\ExternalData\Tests\Unit\Base;
 use MediaWiki\Title\Title;
 
 /**
@@ -10,7 +14,7 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin
  */
-class EDConnectorBaseTest extends EDTestBase {
+class BaseTest extends Base {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDConnectorBase';
 
@@ -246,7 +250,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 * @param array $expected Expected values of attributes.
 	 * @param bool $keep_case Whether the mocked class keeps external variables' case.
 	 */
-	public function testConstruct( array $params, array $expected, $keep_case ) {
+	public function testConstruct( array $params, array $expected, bool $keep_case ) {
 		self::restoreGlobals();
 		$mock = $this->mock( $params, $keep_case );
 		$actual = $mock->attributes();
@@ -531,7 +535,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 * @param string $class Expected class name of the EDConnector... object.
 	 * @param ?array $source Additional data source.
 	 */
-	public function testGetConnectorClass( $name, array $args, string $class, ?array $source = null ) {
+	public function testGetConnectorClass( string $name, array $args, string $class, ?array $source = null ) {
 		$args['format'] = 'text';
 		$args['data'] = 'text=__text';
 		self::restoreGlobals();
@@ -553,7 +557,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	 *
 	 * @return array
 	 */
-	private static function parseUrl( $url ): array {
+	private static function parseUrl( string $url ): array {
 		$components = parse_url( $url );
 		// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
 		if ( preg_match( '/(?<=^|\.)\w+\.\w+$/', $components['host'], $matches ) ) {
@@ -579,9 +583,10 @@ class EDConnectorBaseTest extends EDTestBase {
 		$sources = self::config()['wgExternalDataSources'];
 		$cases = [];
 
-		// Simplest case.
 		$url = 'https://mediawiki.org/Extension:External_Data';
 		$components = self::parseUrl( $url );
+
+		// Simplest case.
 		$cases['Common URL'] = [
 			[ 'url' => $url ], $sources,
 			[
@@ -593,8 +598,6 @@ class EDConnectorBaseTest extends EDTestBase {
 		];
 
 		// Simplest case: 'source'.
-		$url = 'https://mediawiki.org/Extension:External_Data';
-		$components = self::parseUrl( $url );
 		$cases['Common URL passed in "source"'] = [
 			[ 'source' => $url ], $sources,
 			[
@@ -606,8 +609,6 @@ class EDConnectorBaseTest extends EDTestBase {
 		];
 
 		// Simplest case: anonymous.
-		$url = 'https://mediawiki.org/Extension:External_Data';
-		$components = self::parseUrl( $url );
 		$cases['Common URL passed anonymously'] = [
 			[ 0 => $url ], $sources,
 			[
@@ -712,7 +713,6 @@ class EDConnectorBaseTest extends EDTestBase {
 		$cases['Database parameters with "source"'] = [ [ 'db' => $id ], $sources, [ 'db' => $id ] + $sources[$id] ];
 
 		// Database parameters with unnamed source.
-		$id = 'rfam';
 		$sources[$id] = [
 			0 => 'mysql-rfam-public.ebi.ac.uk:4497',
 			'type' => 'mysql',
@@ -780,7 +780,7 @@ class EDConnectorBaseTest extends EDTestBase {
 	/**
 	 * Data provider for EDConnectorBase::filteredAndMappedValues().
 	 */
-	public static function provideFilteredAndMappedValues() {
+	public static function provideFilteredAndMappedValues(): array {
 		return [
 			// Simplest case.
 			'Simple' => [ [ '__text' => [ 'Text' ] ], 'text=__text', '', [ 'text' => [ 'Text' ] ] ],

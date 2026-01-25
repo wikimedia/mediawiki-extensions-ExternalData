@@ -43,7 +43,7 @@ class EDParserFunctions {
 	public static function formatErrorMessages( array $errors ): string {
 		$messages = array_map( static function ( $error ) {
 			if ( is_array( $error ) && $error['code'] ) {
-				return wfMessage( $error['code'], $error['params'] )->inContentLanguage()->text();
+				return wfMessage( $error['code'], $error['params'] ?? [] )->inContentLanguage()->text();
 			} else {
 				return $error;
 			}
@@ -113,15 +113,13 @@ class EDParserFunctions {
 	 * @param string|null $name Parser function name.
 	 * @param array $args Parser function parameters ($parser not included).
 	 *
-	 * @return string|null Return null on success, an error message otherwise.
+	 * @return string|array|null Return array of columns on success, an error message otherwise.
 	 */
-	public static function fetch( Title $title, ?string $name, array $args ): ?string {
+	public static function fetch( Title $title, ?string $name, array $args ) {
 		$result = self::get( $title, $name, $args );
 		if ( is_array( $result ) ) {
 			// An array of values, not an error message.
 			self::saveValues( $result );
-			// These functions are humble in their success.
-			return null;
 		}
 		// There have been errors.
 		return $result;
@@ -153,12 +151,13 @@ class EDParserFunctions {
 	 * Get the specified index of the array for the specified local
 	 * variable retrieved by one of the #get... parser functions.
 	 * Apply .suffix function (urlencode, htmlencode, etc), if any.
+	 * @param array $columns
 	 * @param string $var
 	 * @param int $i
 	 * @param string|false|null $default false to return an error message
 	 * @return mixed
 	 */
-	private static function getIndexedValue( string $var, int $i, $default ) {
+	private static function getIndexedValue( array $columns, string $var, int $i, $default ) {
 		$postprocess = null;
 		foreach ( self::COMMANDS as $command ) {
 			$command_length = -strlen( $command ) - 1;
@@ -168,8 +167,8 @@ class EDParserFunctions {
 				break;
 			}
 		}
-		if ( array_key_exists( $var, self::getAllValues() ) && array_key_exists( $i, self::getAllValues()[$var] ) ) {
-			$value = self::getAllValues()[$var][$i];
+		if ( array_key_exists( $var, $columns ) && array_key_exists( $i, $columns[$var] ) ) {
+			$value = $columns[$var][$i];
 		} else {
 			if ( $default !== false ) {
 				$value = $default;
@@ -191,22 +190,17 @@ class EDParserFunctions {
 	 * Emulate {{#get_external_data:}} call.
 	 * @param array &$args
 	 * @param Title $title
-	 * @return null|string
+	 * @return array|string|null An array of result columns, or an error message.
 	 */
-	private static function emulateGetExternalData( array &$args, Title $title ): ?string {
+	private static function emulateGetExternalData( array &$args, Title $title ) {
 		if ( EDConnectorBase::sourceSet( $args ) ) {
-			// If {{#for_external_table:}} is called in standalone mode, there is no shared context,
-			// therefore, emulate {{#clear_external_data:}}.
-			self::actuallyClearExternalData( [] );
 			// Emulate {{#get_external_data:}}.
 			$result = self::fetch( $title, 'get_external_data', $args );
-			if ( $result !== null ) {
-				// There have been errors while fetching data.
-				return $result;
-			}
 			unset( $args['data'] ); // mapping is not idempotent, and it has already been done. We need no second one.
+			return $result;
+		} else {
+			return self::formatErrorMessages( [ [ 'code' => 'external-data-no-suitable-connector' ] ] );
 		}
-		return null;
 	}
 
 	/**
@@ -223,14 +217,18 @@ class EDParserFunctions {
 			$default = $args[0];
 			array_shift( $args );
 		}
-		$args['data'] ??= "$variable=$variable";
-		$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
-		$fetched = self::emulateGetExternalData( $args, $title );
-		if ( $fetched ) {
-			// There is an error.
-			return $fetched;
+		$fetched = null;
+		if ( count( $args ) > 0 ) {
+			// Other parameters are passed; likely, the standalone mode:
+			$args['data'] ??= "$variable=$variable";
+			$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+			$fetched = self::emulateGetExternalData( $args, $title );
+			if ( is_string( $fetched ) ) {
+				// There is an error.
+				return $fetched;
+			}
 		}
-		$value = self::getIndexedValue( $variable, 0, $default );
+		$value = self::getIndexedValue( $fetched ?? self::getAllValues(), $variable, 0, $default );
 		if ( is_array( $value ) ) {
 			// An array can only be useful for Lua, and this is a plain parser function.
 			return 'array';
@@ -260,19 +258,19 @@ class EDParserFunctions {
 
 	/**
 	 * Count number of rows in #display/#format statements.
-	 *
+	 * @param array $columns
 	 * @param array $mappings
 	 * @return int
 	 */
-	private static function numLoops( array $mappings ): int {
+	private static function numLoops( array $columns, array $mappings ): int {
 		$num_loops = 0; // May differ when multiple '#get_'s are used in one page
 		foreach ( $mappings as $local_variable ) {
 			// Ignore .urlencode, etc.
 			foreach ( self::COMMANDS as $command ) {
 				$local_variable = str_replace( ".$command", '', $local_variable );
 			}
-			if ( array_key_exists( $local_variable, self::$values ) ) {
-				$num_loops = max( $num_loops, count( self::$values[$local_variable] ) );
+			if ( array_key_exists( $local_variable, $columns ) ) {
+				$num_loops = max( $num_loops, count( $columns[$local_variable] ) );
 			}
 		}
 		return $num_loops;
@@ -298,21 +296,22 @@ class EDParserFunctions {
 
 	/**
 	 * Actually render the #for_external_table parser function. The "template" is passed as the first parameter.
+	 * @param array $columns
 	 * @param string $body
 	 * @param array $macros
 	 * @return string
 	 */
-	private static function actuallyForExternalTableFirst( string $body, array $macros ): string {
-		$num_loops = self::numLoops( array_map( static function ( $set ) {
+	private static function actuallyForExternalTableFirst( array $columns, string $body, array $macros ): string {
+		$num_loops = self::numLoops( $columns, array_map( static function ( $set ) {
 			return $set['var'];
 		}, $macros ) );
 
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
 			$current = $body;
-
 			foreach ( $macros as $macro ) {
 				$value = self::serialise( self::getIndexedValue(
+					$columns,
 					$macro['var'],
 					$loop,
 					$macro['default'] ?? null
@@ -326,7 +325,7 @@ class EDParserFunctions {
 
 	/**
 	 * Actually render the #for_external_table parser function. The "template" is passed as the second parameter.
-	 *
+	 * @param array $columns
 	 * @param Parser $parser
 	 * @param PPNode_Hash_Tree $tree
 	 * @param array $defaults Default values of {{{…|def}}} ED variables.
@@ -335,17 +334,18 @@ class EDParserFunctions {
 	 * @throws MWException
 	 */
 	private static function actuallyForExternalTableSecond(
+		array $columns,
 		Parser $parser,
 		PPNode_Hash_Tree $tree,
 		array $defaults,
 		array $template_args
 	): string {
-		$variables = array_keys( self::getAllValues() );
-		$num_loops = self::numLoops( $variables );
+		$variables = array_keys( $columns );
+		$num_loops = self::numLoops( $columns, $variables );
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
-			$row = array_combine( $variables, array_map( static function ( $var ) use ( $loop, $defaults ){
-					return self::serialise( self::getIndexedValue( $var, $loop, $defaults[$var] ?? '' ) );
+			$row = array_combine( $variables, array_map( static function ( $var ) use ( $columns, $loop, $defaults ){
+					return self::serialise( self::getIndexedValue( $columns, $var, $loop, $defaults[$var] ?? '' ) );
 			}, $variables ) ) + $template_args;
 			$row_as_frame = $parser->getPreprocessor()->newCustomFrame( $row );
 			$loops[] = $row_as_frame->expand( $tree ); // substitution of {{{var}}} happens here.
@@ -355,7 +355,6 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #for_external_table parser function.
-	 *
 	 * @param Parser $parser
 	 * @param PPFrame $frame
 	 * @param array $args
@@ -395,7 +394,7 @@ class EDParserFunctions {
 			$defaults[$macro['var']] = $macro['default'] ?? null;
 		}
 
-		if ( count( $args ) > 0 ) {
+		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $args ) ) {
 			// There are other parameters, presumably, for data retrieval. Standalone mode.
 			$data_params = self::parseParams( array_map( static function ( PPNode_Hash_Tree $node ) use ( $frame ) {
 				return trim( $frame->expand( $node ) );
@@ -412,15 +411,20 @@ class EDParserFunctions {
 
 			$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
 			$fetched = self::emulateGetExternalData( $data_params, $title );
-			if ( $fetched ) {
+			if ( is_string( $fetched ) ) {
 				// There is an error.
 				return $fetched;
+			} else {
+				$fetched ??= [];
 			}
+		} else {
+			// No data is retrieved in this funciton call. We have to rely on previously retrieved data.
+			$fetched = self::getAllValues();
 		}
 
 		return $frame->expand( $second
-			? self::actuallyForExternalTableSecond( $parser, $body, $defaults, $frame->getArguments() )
-			: self::actuallyForExternalTableFirst( $body, $macros )
+			? self::actuallyForExternalTableSecond( $fetched, $parser, $body, $defaults, $frame->getArguments() )
+			: self::actuallyForExternalTableFirst( $fetched, $body, $macros )
 		);
 	}
 
@@ -460,10 +464,14 @@ class EDParserFunctions {
 			return [ 'error' => 'externaldata-no-template' ];
 		}
 
-		$fetched = self::emulateGetExternalData( $args, $title );
-		if ( $fetched ) {
-			// There is an error.
-			return [ 'error' => $fetched ];
+		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $args ) ) {
+			$fetched = self::emulateGetExternalData( $args, $title ) ?? [ [] ];
+			if ( is_string( $fetched ) ) {
+				// There is an error.
+				return [ 'error' => $fetched ];
+			}
+		} else {
+			$fetched = self::getAllValues();
 		}
 
 		$mappings = self::getMappings( $args );
@@ -472,13 +480,9 @@ class EDParserFunctions {
 
 		// The string placed in the wikitext between template calls -
 		// default is a newline.
-		if ( array_key_exists( 'delimiter', $args ) ) {
-			$delimiter = str_replace( '\n', "\n", $args['delimiter'] );
-		} else {
-			$delimiter = "\n";
-		}
+		$delimiter = str_replace( '\n', "\n", $args['delimiter'] ?? '\n' );
 
-		$num_loops = self::numLoops( $mappings );
+		$num_loops = self::numLoops( $fetched, $mappings );
 
 		$text = '';
 
@@ -492,10 +496,12 @@ class EDParserFunctions {
 		$values = array_values( $mappings );
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {
-			$loops[] = '{{' . $template . '|' . implode( '|', array_map( static function ( $param, $var ) use( $loop ) {
-					$value = self::serialise( self::getIndexedValue( $var, $loop, '' ) );
+			$loops[] = '{{' . $template . '|' . implode( '|', array_map(
+				static function ( $param, $var ) use( $fetched, $loop ) {
+					$value = self::serialise( self::getIndexedValue( $fetched, $var, $loop, '' ) );
 					return "$param=$value";
-			}, $variables, $values ) ) . '}}';
+				},
+			$variables, $values ) ) . '}}';
 		}
 		$text .= implode( $delimiter, $loops );
 
@@ -510,7 +516,6 @@ class EDParserFunctions {
 
 	/**
 	 * Render the #display_external_table parser function.
-	 *
 	 * @author Dan Bolser
 	 * @param Parser $parser
 	 * @return array
@@ -544,20 +549,24 @@ class EDParserFunctions {
 		array_shift( $params ); // we already know the $parser ...
 		$args = self::parseParams( $params ); // parse params into name-value pairs
 
-		$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
-		$fetched = self::emulateGetExternalData( $args, $title );
-		if ( $fetched ) {
-			// There is an error.
-			return [ 'error' => $fetched ];
+		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $args ) ) {
+			$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
+			$fetched = self::emulateGetExternalData( $args, $title );
+			if ( !is_array( $fetched ) ) {
+				// There is an error.
+				return [ 'error' => $fetched ];
+			}
+		} else {
+			$fetched = self::getAllValues();
 		}
 
 		$mappings = self::getMappings( $args );
-		$num_rows = self::numLoops( $mappings );
+		$num_rows = self::numLoops( $fetched, $mappings );
 		$values = [];
 		for ( $row = 0; $row < $num_rows; $row++ ) {
 			$values[$row] = [];
 			foreach ( $mappings as $cargo => $local ) {
-				$values[$row][$cargo] = self::getIndexedValue( $local, $row, '' );
+				$values[$row][$cargo] = self::getIndexedValue( $fetched, $local, $row, '' );
 			}
 		}
 

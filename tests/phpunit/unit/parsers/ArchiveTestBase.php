@@ -1,4 +1,7 @@
 <?php
+namespace MediaWiki\Extension\ExternalData\Tests\Unit\Parsers;
+
+require_once 'TestBase.php';
 
 /**
  * Class for the tests of EDParserArchive.
@@ -8,7 +11,7 @@
  *
  * @author Alexander Mashin
  */
-abstract class EDParserArchiveTestBase extends EDParserTestBase {
+abstract class ArchiveTestBase extends TestBase {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserArchive';
 	/** @const array DEPENDENCIES An associative array of 'extension' => 'dependency as class/function'. */
@@ -22,7 +25,7 @@ abstract class EDParserArchiveTestBase extends EDParserTestBase {
 	 * @param array $data
 	 * @param string $dataName
 	 */
-	public function __construct( $name = null, array $data = [], $dataName = '' ) {
+	public function __construct( ?string $name = null, array $data = [], string $dataName = '' ) {
 		parent::__construct( $name, $data, $dataName );
 
 		$extensions = call_user_func( [ static::$class, 'extensions' ] );

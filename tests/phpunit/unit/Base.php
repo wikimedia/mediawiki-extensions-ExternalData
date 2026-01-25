@@ -1,4 +1,7 @@
 <?php
+namespace MediaWiki\Extension\ExternalData\Tests\Unit;
+
+use MediaWikiUnitTestCase;
 
 /**
  * Base class for unit tests in External Data extension.
@@ -7,7 +10,7 @@
  *
  * @author Alexander Mashin
  */
-class EDTestBase extends MediaWikiUnitTestCase {
+class Base extends MediaWikiUnitTestCase {
 	/** @var string $class Name of the tested class. */
 	protected static $class;
 
