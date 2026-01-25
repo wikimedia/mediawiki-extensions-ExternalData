@@ -5,7 +5,6 @@
  *
  * @author Alexander Mashin
  */
-
 class EDParserRegex extends EDParserBase {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'TEXT';

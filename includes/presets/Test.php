@@ -7,7 +7,6 @@ namespace ExternalData\Presets;
  *
  * @author Alexander Mashin
  */
-
 class Test extends Base {
 	/**
 	 * @const array SOURCES Connections, mainly to Docker containers for testing purposes.

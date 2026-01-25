@@ -9,7 +9,6 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin.
  */
-
 class EDScribunto extends LibraryBase {
 	/**
 	 * A function that registers the exported functions with Lua.

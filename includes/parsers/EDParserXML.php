@@ -4,7 +4,6 @@
  *
  * @author Alexander Mashin
  */
-
 abstract class EDParserXML extends EDParserBase {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'XML';

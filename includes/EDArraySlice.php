@@ -16,7 +16,6 @@
 /**
  * Taken from https://github.com/Galbar/JsonPath-PHP/blob/master/src/Galbar/Utilities/ArraySlice.php
  */
-
 class EDArraySlice {
 	/**
 	 * Implements the Python slice behaviour

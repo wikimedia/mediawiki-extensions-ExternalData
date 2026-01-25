@@ -4,7 +4,6 @@
  *
  * @author Alexander Mashin
  */
-
 class EDParserHTMLwithXPath extends EDParserXMLwithXPath {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'HTML';

@@ -5,7 +5,6 @@
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-
 class EDParserXMLsimple extends EDParserXML {
 	/** @var array $xmlValues Stores XML values between calls. */
 	private static $xmlValues = [];
@@ -57,7 +56,10 @@ class EDParserXMLsimple extends EDParserXML {
 				(string)xml_get_current_line_number( $xml_parser )
 			);
 		}
-		xml_parser_free( $xml_parser );
+		if ( PHP_VERSION_ID < 80000 ) {
+			// phpcs:ignore MediaWiki.Usage.ForbiddenFunctions.xml_parser_free
+			xml_parser_free( $xml_parser );
+		}
 		// Save the whole XML tree for Lua.
 		self::$xmlValues['__xml'] = [ self::$xmlValues ];
 

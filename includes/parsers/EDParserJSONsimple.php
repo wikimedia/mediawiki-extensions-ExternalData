@@ -5,7 +5,6 @@
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-
 class EDParserJSONsimple extends EDParserJSON {
 	/**
 	 * Constructor.

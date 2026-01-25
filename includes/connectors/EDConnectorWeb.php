@@ -8,7 +8,6 @@ use MediaWiki\Title\Title;
  * @author Alexander Mashin
  * @author Yaron Koren
  */
-
 class EDConnectorWeb extends EDConnectorHttp {
 
 	/** @const int VERSION_TTL Number of seconds that software version is to be cached. */

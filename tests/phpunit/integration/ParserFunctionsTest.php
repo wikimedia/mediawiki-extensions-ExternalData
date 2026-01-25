@@ -15,7 +15,6 @@ use ReflectionException;
  *
  * @author Alexander Mashin
  */
-
 class ParserFunctionsTest extends MediaWikiLangTestCase {
 	/** @var string $class Name of the tested class. */
 	protected static $class = 'EDParserFunctions';

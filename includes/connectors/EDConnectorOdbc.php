@@ -8,7 +8,6 @@ use MediaWiki\Title\Title;
  *
  * @author Alexander Mashin
  */
-
 class EDConnectorOdbc extends EDConnectorComposed {
 	/** @const array ILLEGAL Strings disallowed anywhere in the query. */
 	protected const ILLEGAL = [

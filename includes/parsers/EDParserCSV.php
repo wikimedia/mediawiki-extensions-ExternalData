@@ -5,7 +5,6 @@
  * @author Yaron Koren
  * @author Alexander Mashin
  */
-
 class EDParserCSV extends EDParserBase {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'CSV';

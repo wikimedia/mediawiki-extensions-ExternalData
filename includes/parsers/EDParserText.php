@@ -4,7 +4,6 @@
  *
  * @author Alexander Mashin
  */
-
 class EDParserText extends EDParserBase {
 	/** @const string NAME The name of this format. */
 	public const NAME = 'TEXT';
