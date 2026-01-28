@@ -394,12 +394,12 @@ class EDParserFunctions {
 			$defaults[$macro['var']] = $macro['default'] ?? null;
 		}
 
-		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $args ) ) {
-			// There are other parameters, presumably, for data retrieval. Standalone mode.
-			$data_params = self::parseParams( array_map( static function ( PPNode_Hash_Tree $node ) use ( $frame ) {
+		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $data_params = self::parseParams( array_map(
+			static function ( PPNode_Hash_Tree $node ) use ( $frame ) {
 				return trim( $frame->expand( $node ) );
-			}, $args ) );
-
+			},
+		$args ) ) ) ) {
+			// There are other parameters, presumably, for data retrieval. Standalone mode.
 			// If there is no 'data', build one from {{{variables}}}.
 			if ( !isset( $data_params['data'] ) ) {
 				$variables = [];
