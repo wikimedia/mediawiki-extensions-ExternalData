@@ -1,61 +1,58 @@
 FROM alpine:latest
-MAINTAINER Alexander Mashin alex_mashin@list.ru
-LABEL description="Universal image for dockerising applications as HTTP CGI servers. To be used with MediaWiki extension External Data"
-LABEL version="0.1"
+LABEL maintainer="Alexander Mashin alex_mashin@list.ru"
+LABEL description="Universal image for dockerising applications as HTTP CGI servers. To be used with MediaWiki extensions External Data and Mathjax"
+LABEL version="0.2"
 
 # Get busybox httpd:
 RUN apk add --update --no-cache busybox-extras bash
-ARG APK
-RUN <<-APKADD
-	set -ex && \
-	if [ ! -z "$APK" ]; then
-		apk add --no-cache $APK
+ARG APK=
+RUN set -eux && \
+	for TAG in main community testing; do \
+		echo "@$TAG https://dl-cdn.alpinelinux.org/alpine/edge/$TAG" >> /etc/apk/repositories; \
+	done && \
+	apk update && \
+	if [ -n "$APK" ]; then \
+		apk add --no-cache $APK; \
 	fi
-APKADD
 
-ARG NODE
-ARG NODE_GLOBAL
-RUN <<-NODEJS
-	set -ex && \
+ARG NODE=
+ARG NODE_GLOBAL=
+RUN set -eux && \
 	NODE_BUILD='npm g++ make' && \
-	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
+	if [ -n "$NODE" ] || [ -n "$NODE_GLOBAL" ]; then \
 		apk add --no-cache nodejs $NODE_BUILD && \
 		cd /usr/local/bin && \
 		npm init --yes; \
 	fi && \
-	if [ ! -z "$NODE_GLOBAL" ]; then \
-		npm install -g npm $NODE_GLOBAL; \
-	fi &&
-	if [ ! -z "$NODE" ]; then \
-		npm install $NODE; \
+	if [ -n "$NODE_GLOBAL" ]; then \
+		npm install --omit=dev -g npm $NODE_GLOBAL; \
+	fi && \
+	if [ -n "$NODE" ]; then \
+		npm install --omit=dev $NODE; \
 	fi && \
 	if [ -d /usr/local/bin/node_modules/puppeteer ]; then \
 		echo '{ "headless": 1, "timeout": 30000, "executablePath": "/usr/bin/chromium", "args": [ "--no-sandbox", "--disable-gpu" ] }' > /usr/local/bin/.puppeteerrc.json; \
 	fi && \
-	if [ ! -z "$NODE" ] || [ ! -z "$NODE_GLOBAL" ]; then \
+	if [ -n "$NODE" ] || [ -n "$NODE_GLOBAL" ]; then \
+		npm cache clean --force && \
 		apk del $NODE_BUILD; \
 	fi
-NODEJS
 
-ARG PIP
-RUN <<-PIPINSTALL
-	set -ex && \
-	if [ ! -z "$PIP" ]; then \
+ARG PIP=
+RUN set -eux && \
+	if [ -n "$PIP" ]; then \
 		apk add --no-cache py3-pip && \
 		python -m pip install --break-system-packages $PIP; \
 	fi
-PIPINSTALL
 
-ARG GO
+ARG GO=
 ENV GOPATH=/usr/local/go
-RUN <<-GOINSTALL
-	set -ex && \
-	if [ ! -z "$GO" ]; then \
+RUN set -eux && \
+	if [ -n "$GO" ]; then \
 		apk add --no-cache go && \
 		go install $GO && \
 		go clean && apk del go && rm -rf "$GOPATH/pkg"; \
 	fi
-GOINSTALL
 
 # Downloads all URLS; then replaces all archives in current directory with their contents:
 COPY --chmod=777 <<-'GET_ALL' /usr/local/bin/get_all.sh
@@ -70,12 +67,7 @@ COPY --chmod=777 <<-'GET_ALL' /usr/local/bin/get_all.sh
 			mv "$FILE" "${FILE%\?*}"; \
 		fi; \
 	done && \
-	for TAR_GZ in *.tar.gz; do \
-		if [ -f "$TAR_GZ" ]; then \
-			tar -xzf "$TAR_GZ" && rm "$TAR_GZ"; \
-		fi; \
-	done && \
-	for TGZ in *.tgz; do \
+	for TGZ in *.tar.gz *.tgz; do \
 		if [ -f "$TGZ" ]; then \
 			tar -xzf "$TGZ" && rm "$TGZ"; \
 		fi; \
@@ -87,93 +79,94 @@ COPY --chmod=777 <<-'GET_ALL' /usr/local/bin/get_all.sh
 	done
 GET_ALL
 
-ARG JAR
-RUN <<-JAR
-	set -ex && \
-	if [ ! -z "$JAR" ]; then \
+ARG JAR=
+RUN set -eux && \
+	if [ -n "$JAR" ]; then \
 		apk add --no-cache openjdk11 && mkdir -p /usr/share/java && \
 		cd /usr/share/java && \
 		/usr/local/bin/get_all.sh "$JAR"; \
 	fi
-JAR
 
-ARG BINARY
-RUN <<-BINARY
-	set -ex && \
-	if [ ! -z "$BINARY" ]; then \
+ARG BINARY=
+RUN set -eux && \
+	if [ -n "$BINARY" ]; then \
 		cd /usr/local/bin && \
 		/usr/local/bin/get_all.sh "$BINARY" && \
 		for FILE in *; do \
 			chmod a+rx "$FILE"; \
 		done; \
 	fi
-BINARY
 
-ARG WGET
-RUN <<-WGET
-	set -ex && \
-	if [ ! -z "$WGET" ]; then \
+ARG WGET=
+RUN set -eux && \
+	if [ -n "$WGET" ]; then \
 		mkdir -p /usr/share/downloads && cd /usr/share/downloads && \
 		/usr/local/bin/get_all.sh "$WGET"; \
 	fi
-WGET
 
-ARG SRC
-ARG GIT
+ARG SRC=
+ARG GIT=
 ARG BRANCH=master
 ARG SRC_LANG=C
-RUN <<-SRC
-	set -ex && \
-	if [ ! -z "$SRC" ] || [ ! -z "$GIT" ]; then \
+ARG BUILD=
+ARG BUILDER=
+RUN set -eux && \
+	if [ -n "$SRC" ] || [ -n "$GIT" ]; then \
 		if [ $SRC_LANG == 'go' ]; then \
-			BUILD='go make git'; \
+			BUILDER='go make git'; \
 		elif [ $SRC_LANG == 'C' ]; then \
-			BUILD='coreutils flex bison cmake g++ gcc libtool musl-dev make automake autoconf pkgconf'; \
+			BUILDER='boost-dev coreutils flex bison cmake g++ gcc libtool musl-dev make automake autoconf pkgconf'; \
 		fi && \
-		if [ ! -z "$GIT" ]; then \
-			BUILD="$BUILD git"; \
+		if [ -n "$GIT" ]; then \
+			BUILDER="$BUILDER git"; \
 		fi && \
-		apk add --no-cache $BUILD && \
+		apk add --no-cache $BUILDER && \
 		mkdir -p /usr/local/bin && mkdir -p /src && cd /src && \
-		if [ ! -z "$GIT" ]; then \
+		if [ -n "$GIT" ]; then \
 			for URL in $GIT; do \
-				git clone --single-branch --branch="$BRANCH" "$URL"; \
+				git clone --depth=1 --single-branch --branch="$BRANCH" "$URL"; \
 			done; \
 		fi && \
-		if [ ! -z "$SRC" ]; then \
+		if [ -n "$SRC" ]; then \
 			/usr/local/bin/get_all.sh "$SRC"; \
 		fi && \
 		for DIR in ./*/; do \
+			if [ "$DIR" == './usr/' ]; then \
+				continue; \
+			fi && \
 			DIR=${DIR%/*} && cd "/src/$DIR" && \
-			if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.*' ] && [ -d ./src ]; then \
-				cd src; \
-			fi && \
-			if [ -f './configure' ]; then \
-				./configure; \
-			fi && \
-			make && ( \
-				make install || \
-				for FILE in ./*; do \
-					if [ -f "$FILE" ] && [ -x "$FILE" ]; then \
-						cp "$FILE" "/usr/bin/";
-					fi; \
-				done \
-			) && ( make clean ); \
+			if [ -z "$BUILD" ]; then \
+				if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.*' ] && [ -d ./src ]; then \
+					cd src; \
+				fi && \
+				if [ -f './configure' ]; then \
+					./configure; \
+				fi && \
+				make && ( \
+					make install || \
+					for FILE in ./*; do \
+						if [ -f "$FILE" ] && [ -x "$FILE" ]; then \
+							cp "$FILE" "/usr/bin/"; \
+						fi; \
+					done \
+				) && ( make clean || true ); \
+			else \
+				/bin/sh -c "$BUILD"; \
+			fi; \
 		done && \
-		apk del $BUILD && cd / && rm -r /src
+		apk del $BUILDER && cd / && rm -r /src; \
 	fi
-SRC
 
-ARG STARTUP
-RUN set -ex && ( : ; $STARTUP )
+ARG STARTUP=
+RUN set -eux && ( : ; $STARTUP )
 
-ARG SCRIPT
-RUN <<-SCRIPT
-	set -ex && \
-	if [ ! -z "$SCRIPT" ]; then \
+ARG SCRIPT=
+RUN set -eux && \
+	if [ -n "$SCRIPT" ]; then \
 		echo "$SCRIPT" > /usr/local/bin/script && chmod +x /usr/local/bin/script; \
 	fi
-SCRIPT
+
+RUN set -eux && apk cache clean
 
 COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 	#!/bin/bash
@@ -183,16 +176,16 @@ COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 
 	# Parse query strings, set variables:
 	function parse_query() {
-		QUERY_STRING="$1"
+		local QUERY_STRING="$1"
 
-		SAVE_IFS=$IFS
+		local SAVE_IFS=$IFS
 		IFS='&'
-		ASSIGNMENTS=($QUERY_STRING)
+		local ASSIGNMENTS=($QUERY_STRING)
 		for (( i=0; i<${#ASSIGNMENTS[@]}; i+=1 )); do
 			IFS='='
-			PAIR=(${ASSIGNMENTS[i]})
-			KEY=${PAIR[0]}
-			VALUE=${PAIR[1]}
+			local PAIR=(${ASSIGNMENTS[i]})
+			local KEY=${PAIR[0]}
+			local VALUE=${PAIR[1]}
 			for (( j=2; j<${#PAIR[@]}; j+=1 )); do
 				VALUE="$VALUE=${PAIR[j]}"
 			done
@@ -202,18 +195,18 @@ COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 	}
 
 	function debug_info() {
-		COMMAND="$1"
-		FILTER_COMMAND="$2"
-		QUERY_STRING="$3"
-		REQUEST_METHOD="$4"
-		STDOUT="$5"
-		STDERR="$6"
-		STDIN="$7"
+		local COMMAND="$1"
+		local FILTER_COMMAND="$2"
+		local QUERY_STRING="$3"
+		local REQUEST_METHOD="$4"
+		local STDOUT="$5"
+		local STDERR="$6"
+		local STDIN="$7"
 
 		echo "Query was $QUERY_STRING"; echo ''
 		echo "Command is $COMMAND"; echo ''
 		echo "Filter command is $FILTER_COMMAND"; echo ''
-		if [ ! -z "$STDIN" ]; then
+		if [ -n "$STDIN" ]; then
 			echo "stdin: $STDIN"
 		fi
 		echo 'stdout:'; cat "$STDOUT"; echo ''
@@ -222,22 +215,22 @@ COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 
 	# If parameters do not pass the filter or debug mode is on:
 	function filter_result() {
-		STDOUT="$1"
-		STDERR="$2"
-		DEBUG="$3"
-		COMMAND="$4"
-		FILTER_COMMAND="$5"
-		QUERY_STRING="$6"
-		REQUEST_METHOD="$7"
+		local STDOUT="$1"
+		local STDERR="$2"
+		local DEBUG="$3"
+		local COMMAND="$4"
+		local FILTER_COMMAND="$5"
+		local QUERY_STRING="$6"
+		local REQUEST_METHOD="$7"
 
 		if [ -s "$STDERR" ]; then
 			echo 'Status: 502 Bad Gateway'; echo '';
 			echo 'Wrong query arguments'; echo ''
-			if [ ! -z "$DEBUG" ]; then
+			if [ -n "$DEBUG" ]; then
 				debug_info "$COMMAND" "$FILTER_COMMAND" "$QUERY_STRING" "$REQUEST_METHOD" "$STDOUT" "$STDERR"
 			fi
 		else
-			if [ ! -z "$DEBUG" ]; then
+			if [ -n "$DEBUG" ]; then
 				echo 'Status: 502 Bad Gateway'; echo '';
 				debug_info "$COMMAND" "$FILTER_COMMAND" "$QUERY_STRING" "$REQUEST_METHOD" "$STDOUT" "$STDERR"
 			fi
@@ -245,17 +238,17 @@ COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 		rm -f "$STDOUT" "$STDERR"
 	}
 
-	function command_result() {
-		CONTENT_TYPE="$1"
-		STDOUT="$2"
-		STDERR="$3"
-		DEBUG="$4"
-		ERRORS="$5"
-		COMMAND="$6"
-		FILTER_COMMAND="$7"
-		QUERY_STRING="$8"
-		REQUEST_METHOD="$9"
-		STDIN="${10}"
+	function send_text() {
+		local CONTENT_TYPE="$1"
+		local STDOUT="$2"
+		local STDERR="$3"
+		local DEBUG="$4"
+		local ERRORS="$5"
+		local COMMAND="$6"
+		local FILTER_COMMAND="$7"
+		local QUERY_STRING="$8"
+		local REQUEST_METHOD="$9"
+		local STDIN="${10}"
 
 		if [ -z "$DEBUG" ]; then
 			if [ -s "$STDOUT" ] && ( [ ! -s "$STDERR" ] || [ "$ERRORS" == 'FATAL' ] ) || [ "$ERRORS" == 'IGNORE' ]; then
@@ -276,18 +269,29 @@ COPY --chmod=777 <<-'FUNC' /usr/local/bin/cgi_functions.sh
 		cat "$STDERR" > /dev/stderr
 		rm -f "$STDOUT" "$STDERR"
 	}
+
+	function send_headers_for_binary(){
+		local CONTENT_TYPE="$1"
+		echo "Content-type: $CONTENT_TYPE;"
+		echo 'Status: 200 OK';
+		echo '';
+	}
 FUNC
 
 ARG COMMAND="echo 'Environment variables:'; env; echo 'Standard input:'; cat"
 ARG FILTER_COMMAND=''
 ARG CONTENT_TYPE='text/plain'
 ARG CGI=cgi.sh
+ENV BINARY=
 ENV ERRORS=ALL
 ENV DEBUG=''
 COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 	#!/bin/bash
 	# Do not set -eux.
-	# $COMMAND will receive stdin from /www/cgi-bin/$CGI
+	# ${COMMAND//
+/
+# }
+	# will receive stdin from /www/cgi-bin/$CGI
 	# https://oldforum.puppylinux.com/viewtopic.php?t=115252
 
 	source /usr/local/bin/cgi_functions.sh
@@ -305,16 +309,16 @@ COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 	FCMD
 	)
 
+	STDIN=''
 	if [ "\${REQUEST_METHOD:-}" == 'GET' ]; then
 		# Close stdin:
 		exec 0<&-
-		STDIN=''
-	else
+	elif [ -z "\$BINARY" ]; then
 		STDIN=\$( cat )
 	fi
 
 	# Apply FILTER_COMMAND to check variables:
-	if [ ! -z '$FILTER_COMMAND' ]; then
+	if [ -n '$FILTER_COMMAND' ] && [ -z "\$BINARY" ]; then
 		STDOUT=\$(mktemp -u)
 		STDERR=\$(mktemp -u)
 		( :; $FILTER_COMMAND ) <<< "$STDIN" 1>"\$STDOUT" 2>"\$STDERR"
@@ -322,19 +326,28 @@ COPY --chmod=777 <<-CGI /www/cgi-bin/$CGI
 			"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD"
 	fi
 
-	STDOUT=\$(mktemp -u)
-	STDERR=\$(mktemp -u)
-
+	CONTENT_TYPE="$CONTENT_TYPE"
 	# Actually run the command:
-	( $COMMAND ) <<< "\$STDIN" 1>"\$STDOUT" 2>"\$STDERR"
+	if [ -z "\$BINARY" ]; then
+		STDOUT=\$(mktemp -u)
+		STDERR=\$(mktemp -u)
+		( $COMMAND ) <<< "\$STDIN" 1>"\$STDOUT" 2>"\$STDERR"
 
-	command_result '$CONTENT_TYPE' "\$STDOUT" "\$STDERR" "\$DEBUG" "\$ERRORS" \\
-		"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDIN"
+		send_text "\$CONTENT_TYPE" "\$STDOUT" "\$STDERR" "\$DEBUG" "\$ERRORS" \\
+			"\$COMMAND" "\$FILTER_COMMAND" "\$QUERY_STRING" "\$REQUEST_METHOD" "\$STDIN"
+	else
+		send_headers_for_binary "\$CONTENT_TYPE"
+		if [ -n "\$DEBUG" ] || [ "\$ERRORS" == 'ALL' ]; then
+			( $COMMAND ) 2>&1
+		else
+			( $COMMAND ) 2>/dev/null
+		fi
+	fi
 
 CGI
 
 ARG COMMAND="echo 'Environment variables:'; env; echo 'Standard input:'; cat"
-ARG VERSION_COMMAND
+ARG VERSION_COMMAND=
 COPY --chmod=777 <<-VERSION /www/cgi-bin/version.sh
 	#!/bin/sh
 	set -eu
@@ -350,7 +363,7 @@ COPY --chmod=777 <<-VERSION /www/cgi-bin/version.sh
 	echo 'Content-type: text/plain; charset=UTF-8'
 	echo 'Status: 200 OK'
 	echo ''
-	if [ ! -z "\$VERSION_COMMAND" ]; then
+	if [ -n "\$VERSION_COMMAND" ]; then
 		VC="\$VERSION_COMMAND"
 	else
 		VC="\${COMMAND%% *} --version || \${COMMAND%% *} -v || \${COMMAND%% *} -V"
@@ -365,6 +378,7 @@ COPY --chmod=777 <<-'START' /usr/local/bin/start.sh
 START
 
 EXPOSE 80
+# EXPOSE 443
 
 RUN adduser -D www-data -G www-data
 USER www-data

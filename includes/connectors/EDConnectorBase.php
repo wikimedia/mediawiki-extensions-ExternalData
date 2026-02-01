@@ -5,7 +5,7 @@
  * @author Alexander Mashin
  *
  */
-use ExternalData\Presets\Base;
+use ExternalData\Presets\Base as PresetBase;
 use ExternalData\Presets\Media;
 use MediaWiki\Title\Title;
 
@@ -290,9 +290,9 @@ abstract class EDConnectorBase {
 	 * @param array $args Its parameters.
 	 * @param Title $title A title object.
 	 *
-	 * @return EDConnectorBase An EDConnector* object.
+	 * @return self An EDConnector* object.
 	 */
-	public static function getConnector( ?string $name, array $args, Title $title ): EDConnectorBase {
+	public static function getConnector( ?string $name, array $args, Title $title ): self {
 		$supplemented = self::supplementParams( $args, $title );
 		$class = self::getConnectorClass( $name, $supplemented );
 		// Instantiate the connector. If $class is empty, either this extension or $wgExternalDataConnectors is broken.
@@ -344,7 +344,7 @@ abstract class EDConnectorBase {
 		}
 
 		// Load presets wholesale.
-		foreach ( [ 'test', 'reference', 'media' ] as $group ) {
+		foreach ( PresetBase::presetGroups() as $group ) {
 			if ( ( $sources["load $group presets"] ?? false ) || ( $sources['load all presets'] ?? false ) ) {
 				$presets = call_user_func( [ 'ExternalData\\Presets\\' . ucfirst( $group ), 'sources' ] );
 				$sources = array_replace_recursive( $presets, $sources );
@@ -795,7 +795,7 @@ abstract class EDConnectorBase {
 	 * @return bool
 	 */
 	public static function validateXml( string $xml ): bool {
-		return Base::validateXml( $xml );
+		return PresetBase::validateXml( $xml );
 	}
 
 	/**
@@ -805,7 +805,7 @@ abstract class EDConnectorBase {
 	 * @return bool
 	 */
 	public static function validateJson( $json, array $params ): bool {
-		return Base::validateJsonOrYaml( $json, $params );
+		return PresetBase::validateJsonOrYaml( $json, $params );
 	}
 
 	/**

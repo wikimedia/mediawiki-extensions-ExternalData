@@ -4,9 +4,9 @@ namespace ExternalData\Presets;
 
 use CoreParserFunctions;
 use DOMDocument;
+use Exception;
 use MediaWiki\Languages\Data\Names;
 use MediaWiki\MediaWikiServices;
-use MWException;
 use NumberFormatter;
 use function sprintf;
 
@@ -21,44 +21,6 @@ class Media extends Base {
 	 * Use $wgExternalDataSources = array_merge( $wgExternalDataSources, Presets::test ); to make all of them available.
 	 */
 	public const SOURCES = [
-		// This data source does not replace MathJax MW extension (https://github.com/alex-mashin/MathJax).
-		'mathjax' => [
-			'url' => 'http://mathjax/cgi-bin/cgi.sh?config=yes',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false ],
-			'version url' => 'http://mathjax/cgi-bin/version.sh',
-			'name' => 'MathJax',
-			'program url' => 'https://www.mathjax.org/',
-			'params' => [ 'display' => 'inline', 'nomenu' => false ],
-			'param filters' => [ 'display' => '/^(block|inline)$/' ],
-			'input' => 'tex',
-			'preprocess' => __CLASS__ . '::encloseTex',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
-			'postprocess' => [
-				__CLASS__ . '::innerHtml',
-				__CLASS__ . '::addMathJaxMenu'
-			],
-			'scripts' => '/js/mathjax',
-			'tag' => 'mathjax',
-		],
-
-		'maxima' => [
-			'url' => 'http://maxima/cgi-bin/cgi.sh',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
-			'version url' => 'http://maxima/cgi-bin/version.sh',
-			'name' => 'Maxima',
-			'program url' => 'https://maxima.sourceforge.io/',
-			'params' => [ 'decorate' => false, 'showinput' => false ],
-			'input' => 'code',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
-			'preprocess' => __CLASS__ . '::decorateMaxima',
-			'postprocess' => __CLASS__ . '::stripSlashedLineBreaks',
-			'tag' => 'maxima'
-		],
-
 		'lilypond' => [
 			'url' => 'http://lilypond/cgi-bin/cgi.sh?size=$size$',
 			'options' => [ 'sslVerifyCert' => false ],
@@ -211,29 +173,6 @@ class Media extends Base {
 			],
 			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'gnuplot'
-		],
-
-		'asymptote' => [
-			'url' =>
-				'http://asymptote/cgi-bin/cgi.sh?output=$output$',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 60 ],
-			'format' => 'text',
-			'version url' => 'http://asymptote/cgi-bin/version.sh',
-			'name' => 'asymptote',
-			'program url' => 'https://asymptote.sourceforge.io/',
-			'params' => [ 'output' => 'svg', 'width' => 600, 'height' => 600 ],
-			'param filters' => [ 'output' => '/^(svg|html)$/', 'width' => '/^\d+$/', 'height' => '/^\d+$/' ],
-			'input' => 'script',
-			'postprocess' => [
-				__CLASS__ . '::innerXml',
-				__CLASS__ . '::sizeSVG',
-				__CLASS__ . '::wrapHtml'
-			],
-			'scripts' => '/js/asymptote/asygl-1.02.js',
-			'original script' => 'https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
-			'tag' => 'asy'
 		],
 
 		'vega' => [
@@ -908,7 +847,7 @@ class Media extends Base {
 	 * @param array|string $json
 	 * @param array $params
 	 * @return string
-	 * @throws MWException
+	 * @throws Exception
 	 */
 	public static function inject3d( $json, array $params ): string {
 		$language = MediaWikiServices::getInstance()->getContentLanguage();
@@ -945,25 +884,6 @@ class Media extends Base {
 			}
 		}
 		return json_encode( $json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-	}
-
-	/**
-	 * Make MathJax formula interactive.
-	 *
-	 * @param string $html MathML code wrapped in HTML.
-	 * @param array $params Parameters passed to MathJax.
-	 * @return string HTML code containing the animated MathJax.
-	 */
-	public static function addMathJaxMenu( string $html, array $params ): string {
-		static $math_jax_included = false;
-		if ( $params['nomenu'] === false && !$math_jax_included ) {
-			$math_jax_included = true;
-			$script = "\n" . '<script type="text/javascript" async src="'
-				. "{$params['scripts']}/tex-mml-chtml.js" . '"></script>';
-		} else {
-			$script = '';
-		}
-		return "$html$script";
 	}
 
 	/** @const string PLACEHOLDER Temporary replacement for colons in wikilinks in Mermaid diagrams. */

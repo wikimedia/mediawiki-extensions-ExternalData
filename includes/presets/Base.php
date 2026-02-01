@@ -130,6 +130,23 @@ class Base {
 	}
 
 	/**
+	 * If $html contains <html> tag, return its <body>.
+	 * @param string $html
+	 * @param array $params
+	 * @return string
+	 */
+	public static function htmlBody( string $html, array $params ): string {
+		// HTML is analysed with regular expressions, because it can be malformed.
+		if ( !preg_match( '~<html.+</html>~si', $html, $matches ) ) {
+			return $html;
+		}
+		if ( !preg_match( '~<body[^>]*>(?<inner>.*)</body>~si', $html, $matches ) ) {
+			return $html;
+		}
+		return $matches['inner'] ?? '';
+	}
+
+	/**
 	 * Get filesystem path of $params['filename'].
 	 * @param array $params
 	 * @return string|null
@@ -159,5 +176,13 @@ class Base {
 	 */
 	public static function source( string $name ): array {
 		return static::sources()[$name];
+	}
+
+	/**
+	 * Return all preset groups.
+	 * @return string[]
+	 */
+	public static function presetGroups(): array {
+		return [ 'test', 'reference', 'media', 'math' ];
 	}
 }

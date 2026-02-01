@@ -33,13 +33,15 @@ services:
       youtube-dl:
       mathjax:
       maxima:
+      octave:
+      cadabra:
+      asymptote:
       graphviz:
       mscgen:
       plantuml:
       ploticus:
       easytimeline:
       gnuplot:
-      asymptote:
       lilypond:
       vega:
       mermaid:
@@ -310,7 +312,7 @@ services:
           memory: 256m
 
   #
-  # Multimedia containers, connected by testing ExternalData\Presets\Media:
+  # Multimedia containers, connected by testing ExternalData\Presets\Math:
   #
 
   # This service does not fully replace the MathJax extension (https://github.com/alex-mashin/MathJax).
@@ -324,12 +326,9 @@ services:
         BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.js
         WGET: https://raw.githubusercontent.com/alex-mashin/MathJax/master/assets/config.fixed.json
         COMMAND: >-
-          /usr/bin/node --experimental-default-type=module
-          --stack-size=1024 --stack-trace-limit=1000
+          /usr/bin/node --stack-size=1024 --stack-trace-limit=1000
           /usr/local/bin/tex2mml.js -
-        VERSION_COMMAND: >-
-          /usr/bin/node --experimental-default-type=module
-          /usr/local/bin/tex2mml.js -V
+        VERSION_COMMAND: /usr/bin/node /usr/local/bin/tex2mml.js -V
         CONTENT_TYPE: text/mathml
     environment:
       ERRORS: FATAL
@@ -375,6 +374,139 @@ services:
         limits:
           memory: 1024m
 
+  octave:
+    container_name: octave
+    build:
+      context: ./services/cgi
+      args:
+        # nlopt-octave
+        APK: sed gnuplot octave@testing
+        COMMAND: |-
+          TMP=$$(mktemp -u /home/www-data/octaveXXXXXX) && cat > "$$TMP.m" &&
+          /usr/bin/octave --silent -p '/home/www-data' \
+          --eval "warning('off', 'all'); publish ('$$TMP.m', struct ('format', 'html', 'outputDir', '/home/www-data', 'imageFormat', 'svg', 'showCode', $${code:-true}))"
+          > /dev/null &&
+          cat "$$TMP.html" |
+          sed -E 's/<img src="([^"]+\.svg)" alt="\1">/\1/' |
+          sed -E 's/([^"]+\.svg)/cat \/home\/www-data\/&/e' |
+          sed -E 's/<\?xml\s+version="1.0"\s+encoding="utf-8"\s+standalone="no"\?>//gi' |
+          sed -E 's/<h1>.*?<\/h1>//gi' &&
+          rm -f *.svg && rm -f "$$TMP.m" && rm -f "$$TMP.html"
+        CONTENT_TYPE: text/html
+        VERSION_COMMAND: /usr/bin/octave -v --silent
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+      - /home/www-data:uid=1000
+    networks:
+      maxima:
+    cpu_shares: 2048
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+
+  cadabra:
+    container_name: cadabra
+    build:
+      context: ./services/cgi
+      args:
+        APK: >-
+          boost1.84-dev python3-dev g++
+          gtkmm3-dev openssl-dev gmp-dev sqlite-dev ossp-uuid-dev readline-dev
+          py3-matplotlib py3-mpmath py3-sympy
+        GIT: https://github.com/kpeeters/cadabra2
+        BUILD: mkdir -p build && cd build && cmake .. && make && make install
+        COMMAND: |-
+          TMP=$$(mktemp -u /home/www-data/cdbXXXXXX) && cat > "$$TMP.cnb" &&
+          if [ -z "$$code" ]; then \
+              /usr/local/bin/cadabra2html --strip-code --hide-input-cells "$$TMP.cnb"; \
+          else \
+              /usr/local/bin/cadabra2html "$$TMP.cnb"; \
+          fi && rm -f "$$TMP.cnb"
+        CONTENT_TYPE: text/html
+        VERSION_COMMAND: /usr/local/bin/cadabra-cli --version
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+      - /home/www-data:uid=1000
+    networks:
+      cadabra_ed:
+    cpu_shares: 2048
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  gnuplot:
+    container_name: gnuplot
+    build:
+      context: ./cgi
+      args:
+        APK: gnuplot
+        WGET: https://raw.githubusercontent.com/alex-mashin/gnuplot_svg/master/gnuplot_svg.js
+        COMMAND: >-
+          /usr/bin/gnuplot -e "set terminal svg size $$width,$$height dynamic enhanced font 'arial,$$size' mousing jsdir '/js/gnuplot'
+          name '$$name' $$heads dashlength 1.0;" -
+        VERSION_COMMAND: /usr/bin/gnuplot -V
+        CONTENT_TYPE: text/svg
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    volumes:
+      - gnuplot:/usr/share/downloads
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['gnuplot']['url'] and
+    # $wgExternalDataSources['gnuplot']['version url']
+    networks:
+      gnuplot:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  asymptote:
+    container_name: asymptote
+    build:
+      context: ./cgi
+      args:
+        APK: >-
+          ncurses-dev libtirpc-dev freeglut-dev glm-dev fftw-dev eigen-dev gsl-dev curl-dev zlib-dev
+          texlive-dev ghostscript-dev gettext-dev texmf-dist-latexextra freetype-dev woff2-dev imagemagick
+        SRC: >-
+          https://github.com/mgieseki/dvisvgm/releases/download/3.4.3/dvisvgm-3.4.3.tar.gz
+          https://unlimited.dl.sourceforge.net/project/asymptote/3.01/asymptote-3.01.src.tgz?viasf=1
+        WGET: https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js
+        COMMAND: >-
+          cd /home/www-data && rm -f output.svg output.html &&
+          /usr/bin/asy -q -cd /home/www-data -inlineimage -webgl2 -f "$$output" -o output - &&
+          cat output.svg output.html 2>/dev/null
+        VERSION_COMMAND: /usr/bin/asy -version
+        CONTENT_TYPE: text/svg
+    environment:
+      ASYMPTOTE_DVIPS: /usr/local/bin/dvisvgm
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+      - /home/www-data:uid=1000
+    volumes:
+      - asymptote:/usr/share/downloads
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['asymptote']['url'] and
+    # $wgExternalDataSources['asymptote']['version url']
+    networks:
+      asymptote:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  #
+  # Multimedia containers, connected by testing ExternalData\Presets\Media:
+  #
   lilypond:
     container_name: lilypond
     build:
@@ -561,71 +693,6 @@ services:
         limits:
           memory: 512m
 
-  gnuplot:
-    container_name: gnuplot
-    build:
-      context: ./cgi
-      args:
-        APK: gnuplot
-        WGET: https://raw.githubusercontent.com/alex-mashin/gnuplot_svg/master/gnuplot_svg.js
-        COMMAND: >-
-          /usr/bin/gnuplot -e "set terminal svg size $$width,$$height dynamic enhanced font 'arial,$$size' mousing jsdir '/js/gnuplot'
-          name '$$name' $$heads dashlength 1.0;" -
-        VERSION_COMMAND: /usr/bin/gnuplot -V
-        CONTENT_TYPE: text/svg
-    restart: unless-stopped
-    tmpfs:
-      - /tmp
-    volumes:
-      - gnuplot:/usr/share/downloads
-    # If MediaWiki installation is not dockerised, this container should expose a port,
-    # which should be inserted into $wgExternalDataSources['gnuplot']['url'] and
-    # $wgExternalDataSources['gnuplot']['version url']
-    networks:
-      gnuplot:
-    cpu_shares: 1024
-    deploy:
-      resources:
-        limits:
-          memory: 512m
-
-  asymptote:
-    container_name: asymptote
-    build:
-      context: ./cgi
-      args:
-        APK: >-
-          ncurses-dev libtirpc-dev freeglut-dev glm-dev fftw-dev eigen-dev gsl-dev curl-dev zlib-dev
-          texlive-dev ghostscript-dev gettext-dev texmf-dist-latexextra freetype-dev woff2-dev imagemagick
-        SRC: >-
-          https://github.com/mgieseki/dvisvgm/releases/download/3.4.3/dvisvgm-3.4.3.tar.gz
-          https://unlimited.dl.sourceforge.net/project/asymptote/3.01/asymptote-3.01.src.tgz?viasf=1
-        WGET: https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js
-        COMMAND: >-
-          cd /home/www-data && rm -f output.svg output.html &&
-          /usr/bin/asy -q -cd /home/www-data -inlineimage -webgl2 -f "$$output" -o output - &&
-          cat output.svg output.html 2>/dev/null
-        VERSION_COMMAND: /usr/bin/asy -version
-        CONTENT_TYPE: text/svg
-    environment:
-      ASYMPTOTE_DVIPS: /usr/local/bin/dvisvgm
-    restart: unless-stopped
-    tmpfs:
-      - /tmp
-      - /home/www-data:uid=1000
-    volumes:
-      - asymptote:/usr/share/downloads
-    # If MediaWiki installation is not dockerised, this container should expose a port,
-    # which should be inserted into $wgExternalDataSources['asymptote']['url'] and
-    # $wgExternalDataSources['asymptote']['version url']
-    networks:
-      asymptote:
-    cpu_shares: 1024
-    deploy:
-      resources:
-        limits:
-          memory: 1024m
-
   vega:
     container_name: vega
     build:
@@ -805,7 +872,7 @@ services:
     build:
       context: ./cgi
       args:
-        APK: 'zint --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/'
+        APK: 'zint@community
         COMMAND: >-
           /usr/bin/zint -b "BARCODE_$$type" -d "$$data" $$eci
           --fg="$$fg" --bg="$$bg" --rotate="$$rotate" --scale="$$scale" --direct --filetype=SVG
@@ -886,13 +953,15 @@ networks:
   youtube-dl:
   mathjax:
   maxima:
+  octave:
+  cadabra:
+  gnuplot:
+  asymptote:
   graphviz:
   mscgen:
   plantuml:
   ploticus:
   easytimeline:
-  gnuplot:
-  asymptote:
   lilypond:
   vega:
   mermaid:

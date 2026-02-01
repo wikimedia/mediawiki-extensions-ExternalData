@@ -34,8 +34,6 @@ mostly supporting wikilinks and interactive, if this
 feature is provided by the program
 (add `$wgExternalDataSources['load media presets'] = true;`
 to `LocalSettings.php` to activate them all):
-   - `<mathjax>` ([MathJax](https://www.mathjax.org/), partially emulating [MathJax MW extension](https://github.com/alex-mashin/MathJax)),
-   - `<maxima>` ([Maxima](https://en.wikipedia.org/wiki/Maxima_(software))),
    - `<barcode>` ([Zint](https://www.zint.org.uk)),
    - `<score>` ([LilyPond](http://lilypond.org/)),
    - `<graphviz>` ([GraphViz](https://graphviz.org/)),
@@ -43,12 +41,23 @@ to `LocalSettings.php` to activate them all):
    - `<plantuml>` ([PlantUML](https://plantuml.com)),
    - `<ploticus>` ([ploticus](http://ploticus.sourceforge.net/doc/welcome.html)),
    - `<timeline>` ([EasyTimeline](http://infodisiac.com/Wikipedia/EasyTimeline/Introduction.htm)),
-   - `<gnuplot>` ([gnuplot](http://www.gnuplot.info/)),
-   - `<asy>` ([Asymptote](https://asymptote.sourceforge.io/)),
    - `<graph>` ([Vega](https://vega.github.io)),
    - `<mermaid>` ([mermaid](https://mermaid-js.github.io)),
    - `<bpmn>` ([bpmn2svg by Pierre Schwang](https://github.com/PierreSchwang/bpmn2svg)),
    - `<echarts>` ([Apache ECharts](https://echarts.apache.org)).
+- ExternalData\Presets\Math contains presets for some
+  Dockerised multimedia software, related to mathematics,
+  and computer algebra programs, invoked as MediaWiki tags,
+  mostly supporting wikilinks and interactive, if this
+  feature is provided by the program
+  (add `$wgExternalDataSources['load math presets'] = true;`
+  to `LocalSettings.php` to activate them all):
+  - `<mathjax>` ([MathJax](https://www.mathjax.org/), partially emulating [MathJax MW extension](https://github.com/alex-mashin/MathJax)),
+  - `<maxima>` ([Maxima](https://en.wikipedia.org/wiki/Maxima_(software))),
+  - `<gnuplot>` ([gnuplot](http://www.gnuplot.info/)),
+  - `<asy>` ([Asymptote](https://asymptote.sourceforge.io/)),
+  - `<octave>` ([Octave](https://octave.org/)),
+  - `<cadabra>` ([Cadabra](https://cadabra.science/)).
 
 A single data source can be connected like this:
 ```php
