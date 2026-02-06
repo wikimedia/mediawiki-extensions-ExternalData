@@ -57,7 +57,10 @@ to `LocalSettings.php` to activate them all):
   - `<gnuplot>` ([gnuplot](http://www.gnuplot.info/)),
   - `<asy>` ([Asymptote](https://asymptote.sourceforge.io/)),
   - `<octave>` ([Octave](https://octave.org/)),
-  - `<cadabra>` ([Cadabra](https://cadabra.science/)).
+  - `<cadabra>` ([Cadabra](https://cadabra.science/)),
+  - `<yacas>` ([Yacas](https://www.yacas.org/)),
+  - `<latex>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/)),
+  - `<latex giac>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/), enriched with [giac](https://xcas.univ-grenoble-alpes.fr/)).
 
 A single data source can be connected like this:
 ```php

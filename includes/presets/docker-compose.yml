@@ -35,6 +35,8 @@ services:
       maxima:
       octave:
       cadabra:
+      yacas:
+      hevea:
       asymptote:
       graphviz:
       mscgen:
@@ -61,11 +63,11 @@ services:
       - ploticus:/var/www/js/ploticus:ro
       - gnuplot:/var/www/js/gnuplot:ro
       - asymptote:/var/www/js/asymptote:ro
+      - hevea:/var/www/js/hevea:ro
       - vega:/var/www/js/vega:ro
       - vega_uploads:/var/www/js/vega_uploads:ro
       - mermaid:/var/www/js/mermaid:ro
       - echarts:/var/www/js/echarts:ro
-
 
   # Containers for testing ExternalData\Presets\Test
   mongodb:
@@ -87,13 +89,13 @@ services:
         target: password
       - source: mongodb_root_password
         target: root_password
+    tmpfs:
+      - /tmp
     # If MediaWiki installation is not dockerised, this container should expose a port,
     # which should be inserted into $wgExternalDataSources['mongodb']['url'] and
     # $wgExternalDataSources['mongodb']['version url']
     networks:
       mongodb:
-    tmpfs:
-      - /tmp
     cpu_shares: 512
     deploy:
       resources:
@@ -216,11 +218,11 @@ services:
     restart: unless-stopped
     tmpfs:
       - /tmp
+    networks:
+      whois:
     # If MediaWiki installation is not dockerised, this container should expose a port,
     # which should be inserted into $wgExternalDataSources['whois']['url'] and
     # $wgExternalDataSources['whois']['version url']
-    networks:
-      whois:
     cpu_shares: 256
     deploy:
       resources:
@@ -312,9 +314,8 @@ services:
           memory: 256m
 
   #
-  # Multimedia containers, connected by testing ExternalData\Presets\Math:
+  # Containers, connected by testing ExternalData\Presets\Math:
   #
-
   # This service does not fully replace the MathJax extension (https://github.com/alex-mashin/MathJax).
   mathjax:
     container_name: mathjax
@@ -323,12 +324,12 @@ services:
       args:
         APK: coreutils
         NODE: commander mathjax-full
-        BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.js
+        BINARY: https://raw.githubusercontent.com/alex-mashin/MathJax/master/src/tex2mml.mjs
         WGET: https://raw.githubusercontent.com/alex-mashin/MathJax/master/assets/config.fixed.json
         COMMAND: >-
           /usr/bin/node --stack-size=1024 --stack-trace-limit=1000
-          /usr/local/bin/tex2mml.js -
-        VERSION_COMMAND: /usr/bin/node /usr/local/bin/tex2mml.js -V
+          /usr/local/bin/tex2mml.mjs -
+        VERSION_COMMAND: /usr/bin/node /usr/local/bin/tex2mml.mjs -V
         CONTENT_TYPE: text/mathml
     environment:
       ERRORS: FATAL
@@ -354,10 +355,10 @@ services:
       context: ./cgi
       args:
         SRC: >-
-          https://deac-riga.dl.sourceforge.net/project/maxima/Maxima-source/5.47.0-source/maxima-5.47.0.tar.gz?viasf=1
+          https://altushost-swe.dl.sourceforge.net/project/maxima/Maxima-source/5.47.0-source/maxima-5.47.0.tar.gz?viasf=1
         APK: sbcl texinfo gnuplot
         COMMAND: >-
-          /usr/local/bin/maxima --very-quiet | sed '/^;;;/d' &&
+          /usr/local/bin/maxima --disable-readline --very-quiet | sed '/^;;;/d' &&
           find /tmp -type f -name '*.gnuplot' -delete &&
           find /tmp -type f -name '*.svg' -delete
         CONTENT_TYPE: text
@@ -366,6 +367,9 @@ services:
     tmpfs:
       - /tmp
       - /home/www-data/.maxima
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['maxima']['url'] and
+    # $wgExternalDataSources['maxima']['version url']
     networks:
       maxima:
     cpu_shares: 4096
@@ -377,27 +381,36 @@ services:
   octave:
     container_name: octave
     build:
-      context: ./services/cgi
+      context: ./cgi
       args:
-        # nlopt-octave
         APK: sed gnuplot octave@testing
         COMMAND: |-
           TMP=$$(mktemp -u /home/www-data/octaveXXXXXX) && cat > "$$TMP.m" &&
-          /usr/bin/octave --silent -p '/home/www-data' \
-          --eval "warning('off', 'all'); publish ('$$TMP.m', struct ('format', 'html', 'outputDir', '/home/www-data', 'imageFormat', 'svg', 'showCode', $${code:-true}))"
-          > /dev/null &&
+          /usr/bin/octave \
+          -p '/home/www-data' \
+          --eval "warning('off', 'all'); publish ('$$TMP.m', struct (
+              'format', 'html',
+              'outputDir', '/home/www-data',
+              'imageFormat', 'svg',
+              'showCode', $${code:-true}
+          ))" &&
           cat "$$TMP.html" |
-          sed -E 's/<img src="([^"]+\.svg)" alt="\1">/\1/' |
-          sed -E 's/([^"]+\.svg)/cat \/home\/www-data\/&/e' |
+          sed -E 's%<img src="([^"]+\.svg)"\s+alt="\1">%\n\1\n%g' |
+          sed -E 's%^(.+\.svg)$%cat /home/www-data/\1%eg' |
           sed -E 's/<\?xml\s+version="1.0"\s+encoding="utf-8"\s+standalone="no"\?>//gi' |
-          sed -E 's/<h1>.*?<\/h1>//gi' &&
-          rm -f *.svg && rm -f "$$TMP.m" && rm -f "$$TMP.html"
+          sed -E 's/<h1>.*?<\/h1>//i' &&
+          sleep 1 && rm -f /home/www-data/*.svg "$$TMP.m" "$$TMP.html"
         CONTENT_TYPE: text/html
         VERSION_COMMAND: /usr/bin/octave -v --silent
+    environment:
+      ERRORS: FATAL
     restart: unless-stopped
     tmpfs:
       - /tmp
       - /home/www-data:uid=1000
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['octave']['url'] and
+    # $wgExternalDataSources['octave']['version url']
     networks:
       maxima:
     cpu_shares: 2048
@@ -406,33 +419,129 @@ services:
         limits:
           memory: 1024m
 
-
   cadabra:
     container_name: cadabra
     build:
-      context: ./services/cgi
+      context: ./cgi
       args:
         APK: >-
-          boost1.84-dev python3-dev g++
+          boost1.84-dev python3-dev
           gtkmm3-dev openssl-dev gmp-dev sqlite-dev ossp-uuid-dev readline-dev
           py3-matplotlib py3-mpmath py3-sympy
         GIT: https://github.com/kpeeters/cadabra2
-        BUILD: mkdir -p build && cd build && cmake .. && make && make install
+        BUILD_COMMAND: mkdir -p build && cd build && cmake .. && make && make install
         COMMAND: |-
-          TMP=$$(mktemp -u /home/www-data/cdbXXXXXX) && cat > "$$TMP.cnb" &&
-          if [ -z "$$code" ]; then \
-              /usr/local/bin/cadabra2html --strip-code --hide-input-cells "$$TMP.cnb"; \
-          else \
-              /usr/local/bin/cadabra2html "$$TMP.cnb"; \
-          fi && rm -f "$$TMP.cnb"
+          TMP=$$(mktemp -u /home/www-data/cdbXXXXXX) && cat > "$$TMP.cnb" && \
+          PARAMS='' && \
+          if [ "$$code" = 'false' ]; then \
+              PARAMS="$$PARAMS --strip-code"; \
+          fi && \
+          if [ "$$cells" = 'false' ]; then \
+              PARAMS="$$PARAMS --hide-input-cells"; \
+          fi && \
+          /bin/sh -c "/usr/local/bin/cadabra2html $$PARAMS $$TMP.cnb" && rm -f "$$TMP.cnb"
         CONTENT_TYPE: text/html
         VERSION_COMMAND: /usr/local/bin/cadabra-cli --version
     restart: unless-stopped
     tmpfs:
       - /tmp
       - /home/www-data:uid=1000
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['cadabra']['url'] and
+    # $wgExternalDataSources['cadabra']['version url']
     networks:
-      cadabra_ed:
+      cadabra:
+    cpu_shares: 2048
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  yacas:
+    container_name: yacas
+    build:
+      context: ./cgi
+      args:
+        APK: py3-sphinx_rtd_theme gnuplot
+        PIP: sphinxcontrib-bibtex
+        # GIT: https://github.com/grzegorzmazur/yacas.git
+        GIT: https://github.com/alex-mashin/yacas.git
+        CMAKE_ARGS: -DCMAKE_BUILD_TYPE=Release -DENABLE_CYACAS_GUI=false -DENABLE_DOCS=true
+        COMMAND: /usr/local/bin/yacas -p -c /dev/stdin && rm -f /tmp/*.svg /tmp/yacas-*
+        CONTENT_TYPE: text/html
+        VERSION_COMMAND: /usr/local/bin/yacas -v
+    environment:
+      ERRORS: FATAL
+    restart: unless-stopped
+    tmpfs:
+      - /tmp
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['yacas']['url'] and
+    # $wgExternalDataSources['yacas']['version url']
+    networks:
+      yacas:
+    cpu_shares: 2048
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+
+  hevea:
+    container_name: hevea
+    build:
+      context: ./cgi
+      args:
+        APK: >-
+          gmp-dev mpfr-dev pari-dev libxext-dev libpng-dev jpeg-dev readline-dev
+          libx11-dev libxt-dev libxft-dev libao-dev fltk-dev mesa-dev gsl-dev ruby
+          libntl-dev@community micropython@community
+          libmpfi-dev@testing virtualgl-dev@testing
+        SRC: >-
+          https://www-fourier.univ-grenoble-alpes.fr/~parisse/giac/heveatomml.tgz
+          https://www-fourier.univ-grenoble-alpes.fr/~parisse/giac/giac_stable.tgz
+        CXXFLAGS: -std=c++17 -march=native -O2 -I/src/version2
+        GIT: |-
+          https://github.com/vectorclass/version2
+          https://github.com/YannickChevalier/hevea-mathjax
+        PRE_BUILD_COMMAND: |-
+          if [ -f src/mkjs.cc ]; then
+              g++ src/mkjs.cc -o src/mkjs;
+          fi
+        STARTUP: |-
+          GIAC_DIR='/usr/local/share/giac/doc' && \
+          mkdir -p /www/js && \
+          cp "$$GIAC_DIR/giac.js" /www/js/ && cp "$$GIAC_DIR/giacwasm.js" /www/js/ && \
+          if [ -n "$$MATHJAX" ]; then \
+              ORIGINAL='https://cdnjs\.cloudflare\.com/ajax/libs/mathjax/[0-9]+\.[0-9]+.[0-9]+/MathJax\.js\?config=TeX-AMS-MML_HTMLorMML' && \
+              sed -i "s!$$ORIGINAL!$$MATHJAX!g" "$$GIAC_DIR/giac.tex"; \
+          fi && \
+          OLD_HERE='\\loadgiacscript\[""\]' && NEW_HERE='\\loadgiacscript["/js/giac/"]' && \
+          sed -iE "s~$$OLD_HERE~$$NEW_HERE~g" "$$GIAC_DIR/giac.tex"
+        COMMAND: |-
+          TMP=$$( mktemp -u '/home/www-data/texXXXXXX' ) && \
+          cat > "$$TMP.tex" && \
+          if [ "$$giac" == 'false' ]; then \
+              /usr/local/bin/hevea -mathjax -o "$$TMP.html" "$$TMP.tex"; \
+          else \
+              GIAC_DIR='/usr/local/share/giac/doc' && \
+              /usr/local/bin/hevea -I "$$GIAC_DIR" -mathjax -o "$$TMP.html" "$$TMP.tex"; \
+          fi && \
+          /usr/local/bin/hevea2mml "$$TMP" && cat "$$TMP.html" && rm -f "$$TMP.*"
+        CONTENT_TYPE: text/html
+        VERSION_COMMAND: /usr/local/bin/hevea -version | head -1 && /usr/local/bin/giac -v | tail -n2
+    environment:
+      ERRORS: FATAL
+    restart: unless-stopped
+    volumes:
+      - hevea:/www/js
+    tmpfs:
+      - /tmp
+      - /home/www-data:uid=1000
+    # If MediaWiki installation is not dockerised, this container should expose a port,
+    # which should be inserted into $wgExternalDataSources['hevea']['url'] and
+    # $wgExternalDataSources['hevea']['version url']
+    networks:
+      hevea:
     cpu_shares: 2048
     deploy:
       resources:
@@ -445,17 +554,19 @@ services:
       context: ./cgi
       args:
         APK: gnuplot
-        WGET: https://raw.githubusercontent.com/alex-mashin/gnuplot_svg/master/gnuplot_svg.js
         COMMAND: >-
-          /usr/bin/gnuplot -e "set terminal svg size $$width,$$height dynamic enhanced font 'arial,$$size' mousing jsdir '/js/gnuplot'
-          name '$$name' $$heads dashlength 1.0;" -
+          /usr/bin/gnuplot -e "
+              set terminal svg size $$width,$$height dynamic
+              mouse jsdir '/js/gnuplot' name '$$name'
+              font 'arial,$$size' enhanced $$heads;
+          " - | sed "1d; s/^<svg/<svg width=\"$$width\" height=\"$$height\"/"
         VERSION_COMMAND: /usr/bin/gnuplot -V
         CONTENT_TYPE: text/svg
     restart: unless-stopped
     tmpfs:
       - /tmp
     volumes:
-      - gnuplot:/usr/share/downloads
+      - gnuplot:/usr/share/gnuplot/6.0/js
     # If MediaWiki installation is not dockerised, this container should expose a port,
     # which should be inserted into $wgExternalDataSources['gnuplot']['url'] and
     # $wgExternalDataSources['gnuplot']['version url']
@@ -472,27 +583,20 @@ services:
     build:
       context: ./cgi
       args:
-        APK: >-
-          ncurses-dev libtirpc-dev freeglut-dev glm-dev fftw-dev eigen-dev gsl-dev curl-dev zlib-dev
-          texlive-dev ghostscript-dev gettext-dev texmf-dist-latexextra freetype-dev woff2-dev imagemagick
-        SRC: >-
-          https://github.com/mgieseki/dvisvgm/releases/download/3.4.3/dvisvgm-3.4.3.tar.gz
-          https://unlimited.dl.sourceforge.net/project/asymptote/3.01/asymptote-3.01.src.tgz?viasf=1
-        WGET: https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js
+        APK: asymptote@community asymptote-doc@community imagemagick@community
         COMMAND: >-
-          cd /home/www-data && rm -f output.svg output.html &&
-          /usr/bin/asy -q -cd /home/www-data -inlineimage -webgl2 -f "$$output" -o output - &&
-          cat output.svg output.html 2>/dev/null
-        VERSION_COMMAND: /usr/bin/asy -version
+          TMP=$$( mktemp -u '/home/www-data/asyXXXXXX' ) &&
+          /usr/bin/asy -q -inlineimage -webgl2 -f "$$output" -o "$$TMP" - &&
+          cat "$$TMP.svg" "$$TMP.html" 2>/dev/null &&
+          rm -f "$$TMP.svg" "$$TMP.html"
+        VERSION_COMMAND: /usr/bin/asy -version | head -1
         CONTENT_TYPE: text/svg
-    environment:
-      ASYMPTOTE_DVIPS: /usr/local/bin/dvisvgm
     restart: unless-stopped
     tmpfs:
       - /tmp
       - /home/www-data:uid=1000
     volumes:
-      - asymptote:/usr/share/downloads
+      - asymptote:/usr/share/asymptote/webgl
     # If MediaWiki installation is not dockerised, this container should expose a port,
     # which should be inserted into $wgExternalDataSources['asymptote']['url'] and
     # $wgExternalDataSources['asymptote']['version url']
@@ -503,7 +607,6 @@ services:
       resources:
         limits:
           memory: 1024m
-
   #
   # Multimedia containers, connected by testing ExternalData\Presets\Media:
   #
@@ -906,6 +1009,7 @@ volumes:
   ploticus:
   gnuplot:
   asymptote:
+  hevea:
   vega_uploads:
   vega:
   mermaid:
@@ -955,6 +1059,8 @@ networks:
   maxima:
   octave:
   cadabra:
+  yacas:
+  hevea:
   gnuplot:
   asymptote:
   graphviz:

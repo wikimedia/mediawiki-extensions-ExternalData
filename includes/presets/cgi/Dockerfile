@@ -5,14 +5,17 @@ LABEL version="0.2"
 
 # Get busybox httpd:
 RUN apk add --update --no-cache busybox-extras bash
+ARG APK_BRANCH=edge
+ARG APK_CDN=https://dl-cdn.alpinelinux.org/alpine
+ARG APK_REPOS='main community testing'
 ARG APK=
 RUN set -eux && \
-	for TAG in main community testing; do \
-		echo "@$TAG https://dl-cdn.alpinelinux.org/alpine/edge/$TAG" >> /etc/apk/repositories; \
+	for TAG in $APK_REPOS; do \
+		echo "@$TAG $APK_CDN/$APK_BRANCH/$TAG" >> /etc/apk/repositories; \
 	done && \
 	apk update && \
 	if [ -n "$APK" ]; then \
-		apk add --no-cache $APK; \
+		apk add --no-cache $APK || exit 1; \
 	fi
 
 ARG NODE=
@@ -104,27 +107,34 @@ RUN set -eux && \
 		/usr/local/bin/get_all.sh "$WGET"; \
 	fi
 
-ARG SRC=
-ARG GIT=
-ARG BRANCH=master
-ARG SRC_LANG=C
-ARG BUILD=
-ARG BUILDER=
+ARG SRC='' \
+	GIT='' \
+	BRANCH=master \
+	SRC_LANG=C \
+	BUILD_VERBOSE='' \
+	CXXFLAGS='' \
+	PRE_BUILD_COMMAND='' \
+	BUILD_COMMAND='' \
+	BUILDER='' \
+	CMAKE_ARGS=''
 RUN set -eux && \
 	if [ -n "$SRC" ] || [ -n "$GIT" ]; then \
-		if [ $SRC_LANG == 'go' ]; then \
-			BUILDER='go make git'; \
-		elif [ $SRC_LANG == 'C' ]; then \
-			BUILDER='boost-dev coreutils flex bison cmake g++ gcc libtool musl-dev make automake autoconf pkgconf'; \
+		env && \
+		if [ -z "$BUILDER" ]; then \
+			if [ $SRC_LANG == 'go' ]; then \
+				BUILDER='go make'; \
+			elif [ $SRC_LANG == 'C' ]; then \
+				BUILDER='boost-dev coreutils flex g++ libtool musl-dev pkgconf bison ocaml ocamlbuild make'; \
+			fi; \
 		fi && \
-		if [ -n "$GIT" ]; then \
+		if [ -n "$GIT" ] || [ $SRC_LANG == 'go' ]; then \
 			BUILDER="$BUILDER git"; \
 		fi && \
 		apk add --no-cache $BUILDER && \
-		mkdir -p /usr/local/bin && mkdir -p /src && cd /src && \
+		mkdir -p /usr/local/bin /src && cd /src && \
 		if [ -n "$GIT" ]; then \
 			for URL in $GIT; do \
-				git clone --depth=1 --single-branch --branch="$BRANCH" "$URL"; \
+				git clone --depth=1 --single-branch --branch="$BRANCH" --recurse-submodules "$URL"; \
 			done; \
 		fi && \
 		if [ -n "$SRC" ]; then \
@@ -135,30 +145,55 @@ RUN set -eux && \
 				continue; \
 			fi && \
 			DIR=${DIR%/*} && cd "/src/$DIR" && \
-			if [ -z "$BUILD" ]; then \
-				if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.*' ] && [ -d ./src ]; then \
+			if [ -z "$BUILD_COMMAND" ]; then \
+				if [ ! -f './configure' ] && [ ! -f './Makefile' ] && [ ! -f './Makefile.am' ] && [ -d ./src ]; then \
 					cd src; \
 				fi && \
-				if [ -f './configure' ]; then \
-					./configure; \
+				if [ -f './configure.ac' ]; then \
+					apk add --no-cache autoconf automake && \
+					autoreconf; \
 				fi && \
-				make && ( \
-					make install || \
-					for FILE in ./*; do \
-						if [ -f "$FILE" ] && [ -x "$FILE" ]; then \
-							cp "$FILE" "/usr/bin/"; \
-						fi; \
-					done \
-				) && ( make clean || true ); \
+				if [ -f './configure' ]; then \
+					apk add --no-cache autoconf && \
+					./configure && \
+					apk del autoconf automake; \
+				elif [ -f CMakeLists.txt ]; then \
+					apk add --no-cache cmake && \
+					cmake $CMAKE_ARGS . ; \
+				fi && \
+				if [ -n "$PRE_BUILD_COMMAND" ]; then \
+					/bin/sh -c "$PRE_BUILD_COMMAND"; \
+				fi && \
+				if [ -f ./Makefile.am ]; then \
+					apk add --no-cache automake; \
+				fi && \
+				if [ -f './Makefile' ] || [ -f './Makefile.*' ]; then \
+					apk add --no-cache make && \
+					{ if [ -z "$BUILD_VERBOSE" ]; then \
+						make -j; \
+					else \
+						make -j1; \
+					fi || exit 126; } && ( \
+						make install || \
+						for FILE in ./*; do \
+							if [ -x "$FILE" ]; then \
+								cp "$FILE" "/usr/bin/"; \
+							fi; \
+						done \
+					) && ( make clean || true ); \
+				fi; \
 			else \
-				/bin/sh -c "$BUILD"; \
+				/bin/sh -c "$BUILD_COMMAND"; \
 			fi; \
 		done && \
-		apk del $BUILDER && cd / && rm -r /src; \
+		apk del $BUILDER automake cmake && cd / && rm -r /src; \
 	fi
 
 ARG STARTUP=
-RUN set -eux && ( : ; $STARTUP )
+RUN set -eux && \
+	if [ -n "$STARTUP" ]; then \
+		/bin/bash -c "$STARTUP"; \
+	fi
 
 ARG SCRIPT=
 RUN set -eux && \

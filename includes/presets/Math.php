@@ -14,13 +14,12 @@ class Math extends Base {
 	 */
 	public const SOURCES = [
 		/*
-		 * This data source does not replace MathJax MW extension (https://github.com/alex-mashin/MathJax),
+		 * This data source does not replace MathJax MW extension
+		 * (https://github.com/alex-mashin/MathJax),
 		 * not supporting automatic wikilinking and equation numbering.
 		 */
-		'mathjax' => [
+		'mathjax' => self::DOCKER + [
 			'url' => 'http://mathjax/cgi-bin/cgi.sh?config=yes',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false ],
 			'version url' => 'http://mathjax/cgi-bin/version.sh',
 			'name' => 'MathJax',
 			'program url' => 'https://www.mathjax.org/',
@@ -28,8 +27,6 @@ class Math extends Base {
 			'param filters' => [ 'display' => '/^(block|inline)$/' ],
 			'input' => 'tex',
 			'preprocess' => __CLASS__ . '::encloseTex',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
 			'postprocess' => [
 				__CLASS__ . '::innerHtml',
 				__CLASS__ . '::addMathJaxMenu'
@@ -38,63 +35,79 @@ class Math extends Base {
 			'tag' => 'mathjax',
 		],
 
-		'maxima' => [
+		'hevea' => self::DOCKER + [
+			'url' => 'http://hevea/cgi-bin/cgi.sh',
+			'version url' => 'http://hevea/cgi-bin/version.sh',
+			'name' => 'Hevea',
+			'program url' => 'http://hevea.inria.fr/',
+			'params' => [ 'giac' => 'false' ],
+			'input' => 'tex',
+			'postprocess' => __CLASS__ . '::htmlBody',
+			'scripts' => '/js/hevea',
+			'tag' => 'latex'
+		],
+
+		'maxima' => self::DOCKER + [
 			'url' => 'http://maxima/cgi-bin/cgi.sh',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
 			'version url' => 'http://maxima/cgi-bin/version.sh',
 			'name' => 'Maxima',
 			'program url' => 'https://maxima.sourceforge.io/',
 			'params' => [ 'decorate' => false, 'showinput' => false ],
 			'input' => 'code',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
-			'preprocess' => __CLASS__ . '::decorateMaxima',
-			'postprocess' => __CLASS__ . '::stripSlashedLineBreaks',
+			'preprocess' => [ __CLASS__ . '::stripComments', __CLASS__ . '::decorateMaxima' ],
+			'postprocess' => [ __CLASS__ . '::stripSlashedLineBreaks', __CLASS__ . '::doubleEol' ],
 			'tag' => 'maxima'
 		],
 
-		'octave' => [
+		'octave' => self::DOCKER + [
 			'url' => 'http://octave/cgi-bin/cgi.sh?code=$code$',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
 			'version url' => 'http://octave/cgi-bin/version.sh',
 			'name' => 'Octave',
 			'program url' => 'https://octave.org/',
 			'params' => [ 'code' => 'false' ],
 			'input' => 'script',
 			'postprocess' => __CLASS__ . '::htmlBody',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'octave'
 		],
 
-		'cadabra' => [
-			'url' => 'http://cadabra/cgi-bin/cgi.sh?code=$code$',
-			'format' => 'text',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 90 ],
-			'version url' => 'http://cadabra2/cgi-bin/version.sh',
+		'cadabra' => self::DOCKER + [
+			'url' => 'http://cadabra/cgi-bin/cgi.sh?code=$code$&cells=$cells$',
+			'version url' => 'http://cadabra/cgi-bin/version.sh',
 			'name' => 'Cadabra2',
 			'program url' => 'https://cadabra.science/',
-			'params' => [ 'json', 'yaml' => false, 'code' => 'false' ],
+			'params' => [ 'json', 'yaml' => false, 'code' => 'false', 'cells' => 'false' ],
 			'param filters' => [ 'json' => __CLASS__ . '::validateJsonOrYaml' ],
 			'input' => 'json',
 			'preprocess' => __CLASS__ . '::yamlToJson',
 			'postprocess' => __CLASS__ . '::htmlBody',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'cadabra'
 		],
 
-		'gnuplot' => [
+		'yacas' => self::DOCKER + [
+			'url' => 'http://yacas/cgi-bin/cgi.sh',
+			'version url' => 'http://yacas/cgi-bin/version.sh',
+			'name' => 'Yacas',
+			'program url' => 'https://yacas.org',
+			'params' => [ 'decorate' => false ],
+			'input' => 'script',
+			'preprocess' => __CLASS__ . '::decorateYacas',
+			'postprocess' => __CLASS__ . '::reWrapMaths',
+			'tag' => 'yacas'
+		],
+
+		'gnuplot' => self::DOCKER + [
 			'url' =>
-				'http://gnuplot/cgi-bin/cgi.sh?width=$width$&height=$height$&size=$size$&name=$name$&heads=$heads$',
-			'options' => [ 'sslVerifyCert' => false ],
-			'format' => 'text',
+				'http://gnuplot/cgi-bin/cgi.sh?&width=$width$&height=$height$&size=$size$&name=$name$&heads=$heads$',
 			'version url' => 'http://gnuplot/cgi-bin/version.sh',
 			'name' => 'gnuplot',
 			'program url' => 'http://www.gnuplot.info/',
-			'params' => [ 'width' => 800, 'height' => 600, 'size' => 10, 'name' => 'gnuplot', 'heads' => 'butt' ],
+			'params' => [
+				'width' => 800,
+				'height' => 600,
+				'size' => 10,
+				'id' => __CLASS__ . '::numbered',
+				'heads' => 'butt'
+			],
 			'param filters' => [
 				'width' => '/^\d+$/',
 				'height' => '/^\d+$/',
@@ -102,19 +115,11 @@ class Math extends Base {
 				'heads' => '/^(rounded|butt|square)$/'
 			],
 			'input' => 'script',
-			'postprocess' => [
-				__CLASS__ . '::onlySvg',
-				__CLASS__ . '::sizeSvg'
-			],
-			'min cache seconds' => 30 * 24 * 60 * 60,
 			'tag' => 'gnuplot'
 		],
 
-		'asymptote' => [
-			'url' =>
-				'http://asymptote/cgi-bin/cgi.sh?output=$output$',
-			'options' => [ 'sslVerifyCert' => false, 'timeout' => 60 ],
-			'format' => 'text',
+		'asymptote' => self::DOCKER + [
+			'url' => 'http://asymptote/cgi-bin/cgi.sh?output=$output$',
 			'version url' => 'http://asymptote/cgi-bin/version.sh',
 			'name' => 'asymptote',
 			'program url' => 'https://asymptote.sourceforge.io/',
@@ -126,13 +131,22 @@ class Math extends Base {
 				__CLASS__ . '::sizeSvg',
 				__CLASS__ . '::wrapHtml'
 			],
-			'scripts' => '/js/asymptote/asygl-1.02.js',
-			'original script' => 'https://vectorgraphics.github.io/asymptote/base/webgl/asygl-1.02.js',
-			'max tries' => 1,
-			'min cache seconds' => 30 * 24 * 60 * 60,
+			'scripts' => '/js/asymptote/asygl.js',
+			'original scripts' => '%https://vectorgraphics.github.io/asymptote/base/webgl/asygl-\d+\.\d+\.js%',
 			'tag' => 'asy'
 		],
 	];
+
+	/**
+	 * Surround TeX with \(…\) or $$…$$ for MathJax.
+	 *
+	 * @param string $tex
+	 * @param array $params
+	 * @return string
+	 */
+	public static function encloseTex( string $tex, array $params ): string {
+		return $params['display'] === 'block' ? '$$' . $tex . '$$' : "\($tex\)";
+	}
 
 	/**
 	 * Strip an HTML tag from surrounding <html> and <body>.
@@ -180,44 +194,119 @@ class Math extends Base {
 			return $maxima;
 		}
 		$input = $params['showinput'] !== false ? ' grind(_)$' : '';
+		$suffix = '[$;]';
+		$label = '[^:\s]+?:';
 
-		$inject = [
-			'draw' => '$1 ($2, terminal = svg, file_name = "$file")',
-			'draw2d' => '$1 ($2, terminal = svg, file_name = "$file")',
-			'draw3d' => '$1 ($2, terminal = svg, file_name = "$file")',
-			'gr2d' => '$1 ($2, [svg_file, "$file.svg"])',
-			'gr3d' => '$1 ($2, [svg_file, "$file.svg"])',
-			'plot2d' => '$1 ($2, [svg_file, "$file.svg"])',
-			'plot3d' => '$1 ($2, [svg_file, "$file.svg"])',
-			'julia' => '$1 ($2, [svg_file, "$file.svg"])',
-			'mandelbot' => '$1 ($2, [svg_file, "$file.svg"])',
-			'printfile' => '$0'
+		// Suppress access to filesystem:
+		$dangerous = [
+			'appendfile', 'batch', 'batchload', 'closefile', 'file_output_append', 'filename_merge',
+			'file_search', 'file_search_cache', 'file_search_maxima', 'file_search_lisp', 'file_search_demo',
+			'file_search_usage', 'file_search_tests', 'file_type', 'file_type_lisp', 'file_type_maxima',
+			'gnuplot_command', 'load', 'load_pathname', 'loadfile', 'loadprint',
+			'pathname_directory', 'pathname_name', 'pathname_type',
+			'printfile', 'save', 'stringout', 'with_stdout', 'writefile'
 		];
-		$notex_regex = '/(' . implode( '|', array_keys( $inject ) ) . ')\s*\((.+)\)\s*([$;]?)/s';
+		$regex = self::commandRegex( $dangerous, $label, '', $suffix );
+		$maxima = self::wrapCommands( $maxima, $regex, '' );
 
-		if ( preg_match_all( '/((?:"[^"]*"|.)+?)([;$])/s', $maxima, $matches, PREG_SET_ORDER ) ) {
-			$lines = [];
-			foreach ( $matches as [ $_, $command, $suffix ] ) {
-				$command = trim( $command );
-				if ( preg_match( $notex_regex, $command, $matches2 ) ) {
-					// We need to make it deterministic, in order not to kill the ED cache.
-					$file = '/tmp/of' . md5( $command );
-					$replace = str_replace( '$file', $file, $inject[$matches2[1]] );
-					$command = preg_replace( $notex_regex, $replace, $command );
-					$suffix = '$' . $input . ' ?sleep(1)$ printfile ("' . $file . '.svg")$';
-				} else {
-					if ( $suffix !== '$' ) {
-						$shift = $input ? 1 : 0;
-						$suffix = '$' . $input . ' '
-							. 'print (tex (%th(' . ( 1 + $shift ) . '), false))$ '
-							. '%th(' . ( 2 + $shift ) . ')$';
-					}
-				}
-				$lines[] = $command . $suffix;
-			}
-			return implode( PHP_EOL, $lines );
-		}
+		// Wrap plotting commands.
+		$drawers = [ 'draw', 'draw2d', 'draw3d' ];
+		$plotters = [ 'gr2d', 'gr3d', 'plot2d', 'plot3d', 'contour_plot', 'julia', 'mandelbrot' ];
+		// Wrap draw, draw2d, draw3d:
+		$regex = self::commandRegex( $drawers, $label, 'wx', $suffix );
+		$wrapper = '%1$s %2$s (%3$s, terminal = svg, file_name = "$file", '
+			. 'user_preamble="set terminal svg mouse jsdir \'/js/gnuplot\' butt")'
+			. '%4$s$' . $input . ' ?sleep(1)$ printfile ("$file.svg")$' . "\n";
+		$maxima = self::wrapCommands( $maxima, $regex, $wrapper );
+		// Wrap gr2d, gr3d, plot2d, plot3d, julia, mandelbrot:
+		$regex = self::commandRegex( $plotters, $label, 'wx', $suffix );
+		$wrapper = '%1$s %2$s (%3$s, [svg_file, "$file.svg"],'
+			. '[gnuplot_preamble, "set terminal svg mouse jsdir \'/js/gnuplot\' butt"]'
+			. ')%4$s$' . $input
+			. ' ?sleep(1)$ printfile ("$file.svg")$' . "\n";
+		$maxima = self::wrapCommands( $maxima, $regex, $wrapper );
+
+		// Wrap formulæ ending with ;:
+		$commands = self::commandRegex( array_merge( $drawers, $plotters ), $label, 'wx', ';', false );
+		$shift = $input ? 1 : 0;
+		$wrapper = '%1$s %2$s (%3$s)%4$s$' . $input . ' '
+			. 'print (tex (%%th(' . ( 1 + $shift ) . '), false))$ '
+			. '%%th(' . ( 2 + $shift ) . ')$' . "\n";
+		$maxima = self::wrapCommands( $maxima, $commands, $wrapper );
+		$maxima = preg_replace( '/\(\s*\)/su', '', $maxima );
+
 		return $maxima;
+	}
+
+	/**
+	 * Remove block comments.
+	 * @param string $code
+	 * @return string
+	 */
+	public static function stripComments( string $code ): string {
+		return preg_replace( '~/\*.*?\*/~su', '', $code );
+	}
+
+	/**
+	 * Generate a regular expression matching Maxima commands.
+	 * @param array $commands
+	 * @param string $label
+	 * @param string $prefix
+	 * @param string $suffix
+	 * @param bool $affirm True, if a command myst be one of $commands, false, if it shouldn't.
+	 * @param string $open
+	 * @param string $close
+	 * @return string
+	 */
+	private static function commandRegex(
+		array $commands,
+		string $label = '',
+		string $prefix = '',
+		string $suffix = ';',
+		bool $affirm = true,
+		string $open = '(',
+		string $close = ')'
+	) {
+		$open = preg_quote( $open, '/' );
+		$close = preg_quote( $close, '/' );
+		$list = implode( '|', $commands );
+		return "/(?<=^|$suffix)\s*(?<label>$label)?\s*"
+			. ( $affirm
+				? "(?<prefix>$prefix)?(?<command>$list)"
+				: "(?!(?:$prefix)?$list)(?<prefix>$prefix)?(?<command>[^$close$open$suffix,\\s[\\]]+)"
+			) . '\s*'
+			. "(?<params>(?<parentheses>{$open}[^$close$open]*+(?:(?&parentheses)[^$close$open]*)*+$close))?\s*"
+			. '(?<variables>(?:,\s*\w+\s*=.+?)+)?'
+			. "(?<suffix>$suffix)/su";
+	}
+
+	/**
+	 * Reformat commands using $format.
+	 * @param string $commands
+	 * @param string $command_regex
+	 * @param string $format
+	 * @return string
+	 */
+	private static function wrapCommands( string $commands, string $command_regex, string $format ): string {
+		return preg_replace_callback( $command_regex, static function ( array $captures ) use ( $format ): string {
+			$params = $captures['params'] ? substr( $captures['params'], 1, -1 ) : '<remove>';
+			$wrapped = sprintf(
+				$format,
+				$captures['label'],
+				$captures['command'],
+				$params,
+				$captures['variables'],
+				$captures['suffix']
+			);
+			// Remove empty parentheses just introduced.
+			$wrapped = preg_replace( '/\(\s*<remove>\s*\)/', '', $wrapped );
+			// Inject tmp file name for SVGs, etv.
+			if ( str_contains( $wrapped, '$file' ) ) {
+				$file = '/tmp/of' . md5( $wrapped );
+				$wrapped = str_replace( '$file', $file, $wrapped );
+			}
+			return $wrapped;
+		}, $commands );
 	}
 
 	/**
@@ -227,5 +316,44 @@ class Math extends Base {
 	 */
 	public static function stripSlashedLineBreaks( string $tex ): string {
 		return strtr( $tex, [ '\\' . PHP_EOL => '' ] );
+	}
+
+	/**
+	 * Wraps Yacas code, except plotting functions, with Secure().
+	 * @param string $yacas
+	 * @return string
+	 */
+	public static function decorateYacas( string $yacas ): string {
+		if ( !preg_match( '/;\s*$/su', $yacas ) ) {
+			$yacas = "$yacas;";
+		}
+		$plotters = [ 'Plot2D', 'Plot3DS' ];
+
+		// Remove potentially dangerous code.
+		$regex = self::commandRegex( $plotters, '', '', ';', false );
+		$yacas = self::wrapCommands( $yacas, $regex, 'Secure( %2$s( %3$s ) );' );
+
+		// Wrap plotting functions.
+		$regex = self::commandRegex( $plotters, '', '', ';' );
+		$wrapper = '%2$s( %3$s, output = "svg", filename = "$file.svg" ); SystemCall( "cat $file.svg" );' . "\n";
+		$yacas = self::wrapCommands( $yacas, $regex, $wrapper );
+
+		return $yacas;
+	}
+
+	/**
+	 * Double newlines.
+	 * @param string $text
+	 * @return string
+	 */
+	public static function doubleEol( string $text ): string {
+		return str_replace( PHP_EOL, PHP_EOL . PHP_EOL, $text );
+	}
+
+	/**
+	 * If you cannto afford wrapping inline maths with $...$, because it will interfere with Maxima, use this.
+	 */
+	public static function reWrapMaths( string $text ): string {
+		return preg_replace( '/\$\s*([^$]+)\s*\$/', '\( $1 \)', $text );
 	}
 }

@@ -13,6 +13,14 @@ use MediaWiki\MediaWikiServices;
 class Base {
 	use \EDParsesParams;
 
+	/** @const array Boilerplate parameters, common for all dockerised applications. */
+	protected const DOCKER = [
+		'format' => 'text',
+		'options' => [ 'sslVerifyCert' => false ],
+		'max tries' => 1,
+		'min cache seconds' => 30 * 24 * 60 * 60,
+	];
+
 	/**
 	 * @const array SOURCES Connections to Docker containers for testing purposes with useful multimedia programs.
 	 * Use $wgExternalDataSources = array_merge( $wgExternalDataSources, Presets::test ); to make all of them available.
@@ -129,6 +137,13 @@ class Base {
 		return $doc->saveHTML();
 	}
 
+	public static function numbered( array $params ): string {
+		static $counters = [];
+		$class = $params['source'] ?? '';
+		$counters[$class] ??= 0;
+		return $class . ++$counters[$class];
+	}
+
 	/**
 	 * If $html contains <html> tag, return its <body>.
 	 * @param string $html
@@ -144,6 +159,80 @@ class Base {
 			return $html;
 		}
 		return $matches['inner'] ?? '';
+	}
+
+	/**
+	 * Set SVG size, if not set.
+	 *
+	 * @param string $svg
+	 * @param array $params
+	 * @return string
+	 */
+	public static function sizeSVG( string $svg, array $params ): string {
+		if ( ( $params['output'] ?? '' ) === 'html' ) {
+			return $svg;
+		}
+		$dom = new DOMDocument();
+		$dom->loadXML( $svg, LIBXML_NOENT );
+		$root = $dom->documentElement;
+		if ( !$root ) {
+			return $svg;
+		}
+		foreach ( [ 'width', 'height' ] as $attr ) {
+			if ( !$root->hasAttribute( $attr ) && ( $params[$attr] ?? 0 ) ) {
+				$root->setAttribute( $attr, $params[$attr] );
+			}
+		}
+		if ( !$root->hasAttribute( 'viewport' ) && isset( $params['width'] ) && isset( $params['height'] ) ) {
+			$root->setAttribute( 'viewport', "0 0 {$params['width']} {$params['height']}" );
+		}
+		return $dom->saveHTML();
+	}
+
+	/**
+	 * Prepend scrips from 'scripts' field.
+	 * @param string $input
+	 * @param array $params
+	 * @return string
+	 */
+	public static function prependScripts( string $input, array $params ): string {
+		return implode( "\n", array_map( static function ( string $src ): string {
+			return '<script type="text/javascript" src="' . $src . '"></script>';
+		}, is_array( $params['scripts'] ) ? $params['scripts'] : [ $params['scripts'] ] ) ) . $input;
+	}
+
+	/**
+	 * Strips log messages before and after SVG that could not be stripped otherwise.
+	 * @param string $input
+	 * @return string
+	 */
+	public static function onlySvg( string $input ): string {
+		return preg_match( '%<svg.+</svg>%i', $input, $matches ) ? $matches[0] : $input;
+	}
+
+	/**
+	 * If $htm contains <html> tag, wrap it with <iframe>.
+	 * @param string $html
+	 * @param array $params
+	 * @return string
+	 */
+	public static function wrapHtml( string $html, array $params ): string {
+		if ( !preg_match( '~<html\s.+</html>~si', $html, $matches ) ) {
+			return $html;
+		}
+		$html = $matches[0];
+		if ( isset( $params['original scripts'] ) && isset( $params['scripts'] ) ) {
+			$original = is_array( $params['original scripts'] )
+				? $params['original scripts']
+				: [ $params['original scripts'] ];
+			$local = is_array( $params['scripts'] ) ? $params['scripts'] : [ $params['scripts'] ];
+			foreach ( $original as $i => $script ) {
+				$html = preg_replace( $script, $local[$i], $html );
+			}
+		}
+		return '<iframe width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" srcdoc="'
+			. strtr( $html, [ '&' => 'amp;', '"' => '&quot;' ] )
+			. '"></iframe>';
 	}
 
 	/**
