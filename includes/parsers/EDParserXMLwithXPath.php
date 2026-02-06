@@ -39,10 +39,10 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 * @throws EDParserException
 	 */
 	public function __invoke( $text, $path = null ): array {
-		self::suppressWarnings();
 		try {
 			$internalErrors = libxml_use_internal_errors( true ); // -- remember.
-			$xml = new SimpleXMLElement( $text, LIBXML_BIGLINES | LIBXML_COMPACT );
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+			$xml = @new SimpleXMLElement( $text, LIBXML_BIGLINES | LIBXML_COMPACT );
 			$errors = $this->xmlParseErrors( libxml_get_errors(), $text );
 			libxml_clear_errors();
 			libxml_use_internal_errors( $internalErrors ); // -- restore.
@@ -51,8 +51,6 @@ class EDParserXMLwithXPath extends EDParserXML {
 			}
 		} catch ( Exception $e ) {
 			throw new EDParserException( 'externaldata-invalid-format', self::NAME, $e->getMessage() );
-		} finally {
-			self::restoreWarnings();
 		}
 
 		$values = parent::__invoke( $text );

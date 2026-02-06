@@ -5,11 +5,7 @@
  *
  * @author Yaron Koren
  * @author Alexander Mashin
- *
  */
-
-use Wikimedia\AtEase\AtEase;
-
 trait EDParsesParams {
 	/** @var string PREFIX Prefix for the new configuration. */
 	public static $prefix = 'wgExternalData';
@@ -134,14 +130,11 @@ trait EDParsesParams {
 		)[imsxADSUXJu]*$/x', $str ) ) {
 			return false;
 		}
-		self::suppressWarnings(); // for preg_match() on regular strings.
 		try {
 			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 			$is_regex = @preg_match( $str, '' ) !== false;
 		} catch ( Exception $e ) {
 			return false;
-		} finally {
-			self::restoreWarnings();
 		}
 		return $is_regex;
 	}
@@ -285,20 +278,6 @@ trait EDParsesParams {
 			// Superimpose column from $upper on column from $lower.
 			$lower[$variable] = array_merge( $lower[$variable], $column );
 		}
-	}
-
-	/**
-	 * Suppress warnings absolutely.
-	 */
-	protected static function suppressWarnings() {
-		AtEase::suppressWarnings();
-	}
-
-	/**
-	 *  Restore warnings.
-	 */
-	protected static function restoreWarnings() {
-		AtEase::restoreWarnings();
 	}
 
 	/**
