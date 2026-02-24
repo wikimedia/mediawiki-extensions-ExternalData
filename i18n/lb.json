@@ -1,14 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Robby"
+			"Robby",
+			"Volvox"
 		]
 	},
 	"externaldata-desc": "Erlaabt et Donnéeën vun externen URLen, Datebanken an anere Quellen ze verschaffen",
 	"externaldata-no-param-specified": "Feeler: Keen \"$1\"-Parameter spezifizéiert.",
 	"externaldata-ldap-unable-to-connect": "Onméiglech sech op $1 ze connectéieren",
 	"externaldata-xml-error": "XML Feeler: $1 an der Linn $2",
-	"externaldata-web-invalid-format": "Net valabele Format: \"$1\"",
+	"externaldata-web-invalid-format": "Ongültegt Format: „$1“",
 	"externaldata-db-incomplete-information": "Feeler: Informatioun fir dës Server ID net komplett.",
 	"externaldata-db-could-not-get-url": "D'URL konnt no {{PLURAL:$1|enger Kéier|$1 Versich}} net opgemaach ginn.",
 	"externaldata-db-unknown-type": "Feeler: Onbekannten Datebank-Typ $1.",

@@ -5,6 +5,7 @@
 			"Jim-by",
 			"Red Winged Duck",
 			"Renessaince",
+			"Ucukor",
 			"Wizardist"
 		]
 	},
@@ -19,5 +20,6 @@
 	"externaldata-db-could-not-connect": "Памылка: Немагчыма далучыцца да базы зьвестак ($1).",
 	"externaldata-db-no-return-values": "Памылка: Не пазначаныя выніковыя значэньні.",
 	"externaldata-db-invalid-query": "Няслушны запыт $1 ($2).",
-	"externaldata-mongodb-unknown-collection": "Памылка: невядомая калецыя MongoDB."
+	"externaldata-mongodb-unknown-collection": "Памылка: невядомая калецыя MongoDB.",
+	"externaldata-missing-file": "Брак файлу $1."
 }
