@@ -152,7 +152,7 @@ class Reference extends Base {
 			],
 			'format' => 'text',
 			'tag' => 'flag',
-			'postprocess' => [ 'ExternalData\Presets\Media::sizeSVG' ]
+			'postprocess' => [ 'ExternalData\Presets\Media::sizeSvg' ]
 		],
 
 		'pdf2txt' => [

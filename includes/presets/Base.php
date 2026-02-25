@@ -16,10 +16,13 @@ class Base {
 	/** @const array Boilerplate parameters, common for all dockerised applications. */
 	protected const DOCKER = [
 		'format' => 'text',
-		'options' => [ 'sslVerifyCert' => false ],
+		'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/plain' ] ],
 		'max tries' => 1,
 		'min cache seconds' => 30 * 24 * 60 * 60,
 	];
+
+	/** @const string ANY A regular expression for any value, even empty, not containing &. */
+	protected const ANY = '/^[^&]*$/';
 
 	/**
 	 * @const array SOURCES Connections to Docker containers for testing purposes with useful multimedia programs.
@@ -33,6 +36,22 @@ class Base {
 	/*
 	 * Pre- and postprocessing utilities.
 	 */
+
+	/**
+	 * @param string $value
+	 * @return bool
+	 */
+	public static function isInt( string $value ): bool {
+		return filter_var( $value, FILTER_VALIDATE_INT );
+	}
+
+	/**
+	 * @param string $value
+	 * @return bool
+	 */
+	public static function isFloat( string $value ): bool {
+		return filter_var( $value, FILTER_VALIDATE_FLOAT );
+	}
 
 	/**
 	 * @param string $ip
@@ -168,7 +187,7 @@ class Base {
 	 * @param array $params
 	 * @return string
 	 */
-	public static function sizeSVG( string $svg, array $params ): string {
+	public static function sizeSvg( string $svg, array $params ): string {
 		if ( ( $params['output'] ?? '' ) === 'html' ) {
 			return $svg;
 		}
@@ -252,9 +271,10 @@ class Base {
 
 	/**
 	 * Return External Data sources, some of which cannot be constants.
+	 * @param null|bool|array $mode Additional information to configure presets.
 	 * @return array[]
 	 */
-	public static function sources(): array {
+	public static function sources( $mode = null ): array {
 		return static::SOURCES;
 	}
 
@@ -272,6 +292,7 @@ class Base {
 	 * @return string[]
 	 */
 	public static function presetGroups(): array {
-		return [ 'test', 'reference', 'media', 'math' ];
+		global $wgExternalDataPresetGroups;
+		return $wgExternalDataPresetGroups;
 	}
 }

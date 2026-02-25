@@ -37,6 +37,7 @@ class Math extends Base {
 
 		'hevea' => self::DOCKER + [
 			'url' => 'http://hevea/cgi-bin/cgi.sh',
+			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/latex' ] ],
 			'version url' => 'http://hevea/cgi-bin/version.sh',
 			'name' => 'Hevea',
 			'program url' => 'http://hevea.inria.fr/',
@@ -72,6 +73,7 @@ class Math extends Base {
 
 		'cadabra' => self::DOCKER + [
 			'url' => 'http://cadabra/cgi-bin/cgi.sh?code=$code$&cells=$cells$',
+			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/json' ] ],
 			'version url' => 'http://cadabra/cgi-bin/version.sh',
 			'name' => 'Cadabra2',
 			'program url' => 'https://cadabra.science/',
@@ -109,9 +111,9 @@ class Math extends Base {
 				'heads' => 'butt'
 			],
 			'param filters' => [
-				'width' => '/^\d+$/',
-				'height' => '/^\d+$/',
-				'size' => '/^\d+$/',
+				'width' => __CLASS__ . '::isInt',
+				'height' => __CLASS__ . '::isInt',
+				'size' => __CLASS__ . '::isInt',
 				'heads' => '/^(rounded|butt|square)$/'
 			],
 			'input' => 'script',
@@ -124,7 +126,11 @@ class Math extends Base {
 			'name' => 'asymptote',
 			'program url' => 'https://asymptote.sourceforge.io/',
 			'params' => [ 'output' => 'svg', 'width' => 600, 'height' => 600 ],
-			'param filters' => [ 'output' => '/^(svg|html)$/', 'width' => '/^\d+$/', 'height' => '/^\d+$/' ],
+			'param filters' => [
+				'output' => '/^(svg|html)$/',
+				'width' => __CLASS__ . '::isInt',
+				'height' => __CLASS__ . '::isInt'
+			],
 			'input' => 'script',
 			'postprocess' => [
 				__CLASS__ . '::onlySvg',

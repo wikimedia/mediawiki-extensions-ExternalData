@@ -325,9 +325,11 @@ abstract class EDConnectorBase {
 			}
 		}
 
+		$preset_groups = PresetBase::presetGroups();
 		// Load chosen presets and merge them with overrides.
 		foreach ( $sources as $source => &$settings ) {
 			if ( is_array( $settings ) ) {
+				// $wgExternalData['source'] = [ 'preset' => 'media', /* overrides */ ];
 				if ( isset( $settings['preset'] ) ) {
 					$settings = array_replace_recursive(
 						call_user_func(
@@ -338,15 +340,17 @@ abstract class EDConnectorBase {
 					);
 					unset( $settings['preset'] );
 				}
-			} elseif ( is_string( $settings ) && in_array( ucfirst( $settings ), [ 'Test', 'Reference', 'Media' ] ) ) {
+			} elseif ( is_string( $settings ) && in_array( ucfirst( $settings ), $preset_groups ) ) {
+				// $wgExternalData['source'] = 'media';
 				$settings = call_user_func( [ 'ExternalData\\Presets\\' . ucfirst( $settings ), 'source' ], $source );
 			}
 		}
 
 		// Load presets wholesale.
-		foreach ( PresetBase::presetGroups() as $group ) {
-			if ( ( $sources["load $group presets"] ?? false ) || ( $sources['load all presets'] ?? false ) ) {
-				$presets = call_user_func( [ 'ExternalData\\Presets\\' . ucfirst( $group ), 'sources' ] );
+		foreach ( $preset_groups as $group ) {
+			$mode = ( $sources["load $group presets"] ?? false ) ?: ( $sources['load all presets'] ?? false );
+			if ( $mode ) {
+				$presets = call_user_func( [ 'ExternalData\\Presets\\' . ucfirst( $group ), 'sources' ], $mode );
 				$sources = array_replace_recursive( $presets, $sources );
 			}
 			unset( $sources["load $group presets"] );
@@ -411,7 +415,7 @@ abstract class EDConnectorBase {
 	 */
 	private function validateParams( array $parameters, array $filters ): array {
 		// Validate parameters.
-		foreach ( $parameters as $key => $value ) {
+		foreach ( $parameters as $key => &$value ) {
 			if ( !isset( $filters[$key] ) ) {
 				continue;
 			}
@@ -712,7 +716,7 @@ abstract class EDConnectorBase {
 	 * Create a parser function implementing a tag.
 	 * @param array $config
 	 * @return callable
-	 * @throws Exception
+	 * @throws RuntimeException
 	 */
 	private static function tagFunction( array $config ): callable {
 		return static function (
@@ -731,22 +735,18 @@ abstract class EDConnectorBase {
 			$params['format'] = 'text';
 			$title = method_exists( $parser, 'getPage' ) ? $parser->getPage() : $parser->getTitle();
 			if ( !$title ) {
-				throw new MWException( 'No Title object.' ); // unreachable. Just to make the IDE shut up.
+				throw new RuntimeException( 'No Title object.' ); // unreachable. Just to make the IDE shut up.
 			}
-			$params = self::supplementParams( $params, $title );
-			if ( $title ) {
-				// @phan-suppress-next-line SecurityCheck-ReDoS
-				$connector = self::getConnector( 'get_external_data', $params, $title );
-				if ( !$connector->errors() ) {
-					if ( $connector->run() ) {
-						$values = $connector->result();
-						// @todo: other markerTypes?
-						return [ $values[$id][0], 'markerType' => 'nowiki' ];
-					}
+			// @phan-suppress-next-line SecurityCheck-ReDoS
+			$connector = self::getConnector( 'get_external_data', $params, $title );
+			if ( !$connector->errors() ) {
+				if ( $connector->run() ) {
+					$values = $connector->result();
+					// @todo: other markerTypes?
+					return [ $values[$id][0], 'markerType' => 'nowiki' ];
 				}
-				return EDParserFunctions::formatErrorMessages( $connector->errors() );
 			}
-			return false;
+			return EDParserFunctions::formatErrorMessages( $connector->errors() );
 		};
 	}
 
@@ -793,6 +793,7 @@ abstract class EDConnectorBase {
 	 * Validate XML.
 	 * @param string $xml
 	 * @return bool
+	 * @deprecated
 	 */
 	public static function validateXml( string $xml ): bool {
 		return PresetBase::validateXml( $xml );
@@ -803,6 +804,7 @@ abstract class EDConnectorBase {
 	 * @param string|array $json
 	 * @param array $params
 	 * @return bool
+	 * @deprecated
 	 */
 	public static function validateJson( $json, array $params ): bool {
 		return PresetBase::validateJsonOrYaml( $json, $params );
@@ -810,10 +812,10 @@ abstract class EDConnectorBase {
 
 	/**
 	 * Convert [[wikilinks]] to dot links, including images and CSS.
-	 *
 	 * @param string $dot Text to add wikilinks in dot format.
 	 * @param array $params
 	 * @return string dot with links.
+	 * @deprecated
 	 */
 	public static function wikilinks4dot( string $dot, array $params ): string {
 		return Media::wikilinks4dot( $dot, $params );
@@ -821,9 +823,9 @@ abstract class EDConnectorBase {
 
 	/**
 	 * Convert [[wikilinks]] to UML links.
-	 *
 	 * @param string $uml Text to add wikilinks in UML format.
 	 * @return string dot with links.
+	 * @deprecated
 	 */
 	public static function wikilinks4uml( string $uml ): string {
 		return Media::wikilinks4uml( $uml );
@@ -832,6 +834,7 @@ abstract class EDConnectorBase {
 	/**
 	 * @param string $script
 	 * @return string
+	 * @deprecated
 	 */
 	public static function maskWikilinks( string $script ): string {
 		return Media::maskWikilinks( $script );
@@ -840,6 +843,7 @@ abstract class EDConnectorBase {
 	/**
 	 * @param string $masked
 	 * @return string
+	 * @deprecated
 	 */
 	public static function unmaskWikilinks( string $masked ): string {
 		return Media::unmaskWikilinks( $masked );
@@ -851,6 +855,7 @@ abstract class EDConnectorBase {
 	 * @param string $xml XML to extract SVG from.
 	 * @param array $params
 	 * @return string The stripped SVG.
+	 * @deprecated
 	 */
 	public static function innerXML( string $xml, array $params ): string {
 		return Media::innerXml( $xml, $params );
@@ -860,6 +865,7 @@ abstract class EDConnectorBase {
 	 * Strips log messages before and after SVG that could not be stripped otherwise.
 	 * @param string $input
 	 * @return string
+	 * @deprecated
 	 */
 	public static function onlySvg( string $input ): string {
 		return Media::onlySvg( $input );
@@ -869,6 +875,7 @@ abstract class EDConnectorBase {
 	 * Replace local image paths with URLs in SVG.
 	 * @param string $svg SVG to process
 	 * @return string Prcessed SVG
+	 * @deprecated
 	 */
 	public static function filepathToUrl( string $svg ): string {
 		return Media::filepathToUrl( $svg );
@@ -879,6 +886,7 @@ abstract class EDConnectorBase {
 	 * @param string $svg
 	 * @param array $params
 	 * @return string
+	 * @deprecated
 	 */
 	public static function sizeSVG( string $svg, array $params ): string {
 		return Media::sizeSVG( $svg, $params );
@@ -888,6 +896,7 @@ abstract class EDConnectorBase {
 	 * Convert [[…]] in SVG <text> into <a>.
 	 * @param string $svg
 	 * @return string
+	 * @deprecated
 	 */
 	public static function wikilinksInSvg( string $svg ): string {
 		return Media::wikilinksInSvg( $svg );
@@ -898,6 +907,7 @@ abstract class EDConnectorBase {
 	 * @param string $svg
 	 * @param array $params
 	 * @return string
+	 * @deprecated
 	 */
 	public static function jsLinks( string $svg, array $params ): string {
 		return Media::jsLinksInSvg( $svg, $params );
@@ -908,7 +918,8 @@ abstract class EDConnectorBase {
 	 * @param array|string $json
 	 * @param array $params
 	 * @return string
-	 * @throws MWException
+	 * @throws RuntimeException
+	 * @deprecated
 	 */
 	public static function inject3d( $json, array $params ): string {
 		return Media::inject3d( $json, $params );
@@ -920,6 +931,7 @@ abstract class EDConnectorBase {
 	 * @param array $params Parameters passed to Vega engine, including the source JSON.
 	 * @param string $json Vega JSON config.
 	 * @return string HTML code containing the animated Vega with SVG fallback.
+	 * @deprecated
 	 */
 	public static function animateVega( string $svg, array $params, string $json ): string {
 		return Media::animateChart( $svg, $params, $json );
@@ -931,6 +943,7 @@ abstract class EDConnectorBase {
 	 * @param array $params Parameters passed to ECharts engine, including the source JSON.
 	 * @param string $json ECharts JSON config.
 	 * @return string HTML code containing the animated ECharts with SVG fallback.
+	 * @deprecated
 	 */
 	public static function animateEcharts( string $svg, array $params, string $json ): string {
 		return Media::animateEcharts( $svg, $params, $json );
@@ -940,6 +953,7 @@ abstract class EDConnectorBase {
 	 * Screen colons in wikilinks in a Mermaid diagram.
 	 * @param string $mmd
 	 * @return string
+	 * @deprecated
 	 */
 	public static function screenColons( string $mmd ): string {
 		return Media::screenColons( $mmd );
@@ -949,6 +963,7 @@ abstract class EDConnectorBase {
 	 * Convert wikilinks in XML to proper hyperlinks.
 	 * @param string $xml
 	 * @return string
+	 * @deprecated
 	 */
 	public static function wikiLinksInXml( string $xml ): string {
 		return Media::wikiLinksInXml( $xml );
@@ -960,6 +975,7 @@ abstract class EDConnectorBase {
 	 * @param array $params Parameters to <mermaid> tag including the Mermaid source code.
 	 * @param string $mmd Mermaid source code.
 	 * @return string The original SVG plus Mermaid source code with scripts to activate it.
+	 * @deprecated
 	 */
 	public static function animateMermaid( string $svg, array $params, string $mmd ): string {
 		return Media::animateChart( $svg, $params, $mmd );

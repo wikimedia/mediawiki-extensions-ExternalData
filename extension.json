@@ -144,6 +144,10 @@
 			},
 			"merge_strategy": "array_plus_2d"
 		},
+		"PresetGroups": {
+			"description": "Groups of data source presets shipped with the extension",
+			"value": [ "test", "reference", "media", "math" ]
+		},
 		"Verbose": {
 			"description": "Show an error message if there is no external value",
 			"value": true

@@ -41,8 +41,7 @@ class EDConnectorWeb extends EDConnectorHttp {
 			static::$method,
 			$url,
 			$options,
-			$this->suppressError(),
-			__METHOD__
+			$this->suppressError()
 		);
 		if ( $errors && $log_errors ) {
 			$this->error( 'externaldata-url-not-fetched', $this->originalUrl );

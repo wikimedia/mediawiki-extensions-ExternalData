@@ -48,6 +48,7 @@ services:
       vega:
       mermaid:
       bpmn:
+      kroki:
       pdfminer:
       echarts:
       zint:
@@ -401,7 +402,7 @@ services:
           sed -E 's/<h1>.*?<\/h1>//i' &&
           sleep 1 && rm -f /home/www-data/*.svg "$$TMP.m" "$$TMP.html"
         CONTENT_TYPE: text/html
-        VERSION_COMMAND: /usr/bin/octave -v --silent
+        VERSION_COMMAND: /usr/bin/octave -v --silent | head -3
     environment:
       ERRORS: FATAL
     restart: unless-stopped
@@ -441,7 +442,7 @@ services:
           fi && \
           /bin/sh -c "/usr/local/bin/cadabra2html $$PARAMS $$TMP.cnb" && rm -f "$$TMP.cnb"
         CONTENT_TYPE: text/html
-        VERSION_COMMAND: /usr/local/bin/cadabra-cli --version
+        VERSION_COMMAND: /usr/local/bin/cadabra2-cli --version
     restart: unless-stopped
     tmpfs:
       - /tmp
@@ -701,9 +702,9 @@ services:
         JAR: >-
           https://downloads.sourceforge.net/project/plantuml/plantuml.jar
           http://beta.plantuml.net/plantuml-jlatexmath.zip
-        COMMAND: java -jar /usr/share/java/plantuml.jar -tsvg -charset UTF-8 -p
+        COMMAND: java -jar /usr/share/java/plantuml.jar -tsvg -charset UTF-8 -p -theme "$$theme"
         CONTENT_TYPE: text/svg
-        VERSION_COMMAND: java -jar /usr/share/java/plantuml.jar -version
+        VERSION_COMMAND: java -jar /usr/share/java/plantuml.jar -version | sed '/^\s*$/d' | head -n-1
     environment:
       LOG4J_FORMAT_MSG_NO_LOOKUPS: true
     restart: unless-stopped
@@ -725,17 +726,20 @@ services:
     build:
       context: ./cgi
       args:
-        APK: zlib-dev libpng-dev fontconfig ttf-freefont
+        APK: freetype-dev fontconfig ttf-freefont
         GIT: https://salsa.debian.org/debian/ploticus
         BRANCH: debian/latest
+        BUILD_COMMAND: >-
+          cd src &&
+          sed -i 's/CC = gcc/CC = gcc -std=gnu17/' Makefile &&
+          make -j$(( $( nproc --all ) * 2 )) && make install
         WGET: https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
         COMMAND: >-
-          /usr/bin/ploticus -stdin -outlabel "$$title" -tightcrop -textsize "$$fontsize"
-          -font 'FreeSans'
-          -svg -omit_xml_declaration -xml_encoding utf-8 -noshell -o stdout
+          /usr/local/bin/pl -stdin -outlabel "$$title" -tightcrop -textsize "$$fontsize" -font 'FreeSans'
+          -svg -omit_xml_declaration -xml_encoding utf-8 -map -noshell -o stdout
         # -csmap
         CONTENT_TYPE: text/svg
-        VERSION_COMMAND: /usr/bin/ploticus -? 2>&1 | head -2
+        VERSION_COMMAND: /usr/local/bin/pl -? 2>&1 | head -2
     environment:
       TDH_ERRMODE: cgi
       ERRORS: FATAL
@@ -760,15 +764,19 @@ services:
     build:
       context: ./cgi
       args:
-        APK: zlib-dev libpng-dev fontconfig ttf-freefont perl
+        APK: fontconfig ttf-freefont perl
         GIT: https://salsa.debian.org/debian/ploticus
         BRANCH: debian/latest
+        BUILD_COMMAND: >-
+          cd src &&
+          sed -i 's/CC = gcc/CC = gcc -std=gnu17/' Makefile &&
+          make -j$(( $( nproc --all ) * 2 )) && make install
         WGET: >-
           https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
           https://raw.githubusercontent.com/wikimedia/mediawiki-extensions-timeline/master/scripts/EasyTimeline.pl
         COMMAND: >-
           TMP=$$(mktemp -u) && cat > "$$TMP.tl" &&
-          perl /usr/share/downloads/EasyTimeline.pl -i "$$TMP.tl" -m -P "/usr/bin/ploticus" -T /tmp -A "$$path"
+          perl /usr/share/downloads/EasyTimeline.pl -i "$$TMP.tl" -m -P "/usr/local/bin/pl" -T /tmp -A "$$path"
           -f '/usr/share/fonts/freefont/FreeSans.otf' -s -b
           1>/dev/null && (
           if [ ! -f "$$TMP.err" ]; then
@@ -907,7 +915,7 @@ services:
           });
         COMMAND: node /usr/local/bin/script width="$$width" height="$$height" theme="$$theme" locale="$$locale"
         CONTENT_TYPE: text/svg
-        VERSION_COMMAND: npm view /usr/local/bin/node_modules/echarts | head -4 | tail -3
+        VERSION_COMMAND: echo 'console.log( require( "/usr/local/bin/node_modules/echarts" ).version );' | node
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
@@ -940,6 +948,70 @@ services:
     # $wgExternalDataSources['bpmn']['version url']
     networks:
       bpmn:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  kroki:
+    container_name: kroki
+    image: yuzutech/kroki
+    depends_on:
+      - kroki_mermaid
+      - kroki_bpmn
+      - kroki_excalidraw
+    environment:
+      - KROKI_MERMAID_HOST=kroki_mermaid
+      - KROKI_BPMN_HOST=kroki_bpmn
+      - KROKI_EXCALIDRAW_HOST=kroki_excalidraw
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:exec
+    networks:
+      kroki:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  kroki_mermaid:
+    container_name: kroki_mermaid
+    image: yuzutech/kroki-mermaid
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:exec
+    networks:
+      kroki:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  kroki_bpmn:
+    container_name: kroki_bpmn
+    image: yuzutech/kroki-bpmn
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:exec
+    networks:
+      kroki:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  kroki_excalidraw:
+    container_name: kroki_excalidraw
+    image: yuzutech/kroki-excalidraw
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:exec
+    networks:
+      kroki:
     cpu_shares: 1024
     deploy:
       resources:
@@ -1071,6 +1143,7 @@ networks:
   lilypond:
   vega:
   mermaid:
+  kroki:
   bpmn:
   pdfminer:
   echarts:

@@ -160,9 +160,10 @@ class Test extends Base {
 
 	/**
 	 * Create External Data sources that cannot be constants.
+	 * @param null|bool|array $mode Additional information to configure presets.
 	 * @return array[]
 	 */
-	public static function sources(): array {
+	public static function sources( $mode = null ): array {
 		global $wgDBserver, $wgDBname, $wgDBuser, $wgDBpassword;
 		return self::SOURCES + [
 			// An example data source giving access to MW database with prepared statements.
