@@ -83,38 +83,65 @@ class Media extends Base {
 	private const KROKI_ONLY = [
 		'blockdiag' => [
 			'url' => 'http://kroki:8000/blockdiag/svg?size=$width$x$height$',
+			'name' => 'BlockDiag',
+			'program url' => 'https://github.com/blockdiag/blockdiag',
+			'version' => '3.1.0',
 			'tag' => 'blockdiag'
 		] + self::KROKI_BOILERPLATE,
 		'bytefield' => [
 			'url' => 'http://kroki:8000/bytefield/svg?size=$width$x$height$',
+			'name' => 'Bytefield',
+			'program url' => 'https://github.com/Deep-Symmetry/bytefield-svg/',
+			'version' => '1.11.0',
 			'tag' => 'bytefield',
 		] + self::KROKI_BOILERPLATE,
 		'seqdiag' => [
 			'url' => 'http://kroki:8000/seqdiag/svg?size=$width$x$height$',
+			'name' => 'SeqDiag',
+			'program url' => 'https://github.com/blockdiag/seqdiag',
+			'version' => '3.1.0',
 			'tag' => 'seqdiag'
 		] + self::KROKI_BOILERPLATE,
 		'actdiag' => [
 			'url' => 'http://kroki:8000/actdiag/svg?size=$width$x$height$',
+			'name' => 'ActDiag',
+			'program url' => 'https://github.com/blockdiag/actdiag',
+			'version' => '3.1.0',
 			'tag' => 'actdiag'
 		] + self::KROKI_BOILERPLATE,
 		'nwdiag' => [
 			'url' => 'http://kroki:8000/nwdiag/svg?size=$width$x$height$',
+			'name' => 'NwDiag',
+			'program url' => 'https://github.com/blockdiag/nwdiag',
+			'version' => '3.1.0',
 			'tag' => 'nwdiag'
 		] + self::KROKI_BOILERPLATE,
 		'packetdiag' => [
 			'url' => 'http://kroki:8000/packetdiag/svg?size=$width$x$height$',
+			'name' => 'PacketDiag',
+			'program url' => 'https://github.com/blockdiag/nwdiag',
+			'version' => '3.1.0',
 			'tag' => 'packetdiag'
 		] + self::KROKI_BOILERPLATE,
 		'rackdiag' => [
 			'url' => 'http://kroki:8000/rackdiag/svg?size=$width$x$height$',
+			'name' => 'RackDiag',
+			'program url' => 'https://github.com/blockdiag/nwdiag',
+			'version' => '3.1.0',
 			'tag' => 'rackdiag'
 		] + self::KROKI_BOILERPLATE,
 		'c4plantuml' => [
 			'url' => 'http://kroki:8000/c4plantuml/svg?size=$width$x$height$',
+			'name' => 'C4 with PlantUML',
+			'program url' => 'https://github.com/RicardoNiepel/C4-PlantUML',
+			'version' => '1.2025.2',
 			'tag' => 'c4plantuml'
 		] + self::KROKI_BOILERPLATE,
 		'd2' => [
 			'url' => 'http://kroki:8000/d2/svg?size=$width$x$height$&theme=$theme$&layout=$layout$',
+			'name' => 'D2',
+			'program url' => 'https://github.com/terrastruct/d2',
+			'version' => '0.7.0',
 			'params' => [
 				'diagram',
 				'width' => 800, 'height' => 600, 'scale' => 1.0,
@@ -138,11 +165,17 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'dbml' => [
 			'url' => 'http://kroki:8000/dbml/svg?size=$width$x$height$',
+			'name' => 'DBML',
+			'program url' => 'https://github.com/softwaretechnik-berlin/dbml-renderer',
+			'version' => '1.0.30',
 			'tag' => 'dbml'
 		] + self::KROKI_BOILERPLATE,
 		'ditaa' => [
 			'url' => 'http://kroki:8000/ditaa/svg'
 				. '?no-separation=$no-separation$&round-corners=$round-corners$&no-shadows=$no-shadows$',
+			'name' => 'Ditaa',
+			'program url' => 'https://ditaa.sourceforge.net/',
+			'version' => '1.0.3',
 			'tag' => 'ditaa',
 			'params' => [
 				'diagram',
@@ -165,10 +198,16 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'erd' => [
 			'url' => 'http://kroki:8000/erd/svg',
+			'name' => 'Erd',
+			'program url' => 'https://github.com/BurntSushi/erd',
+			'version' => '0.2.3',
 			'tag' => 'erd'
 		] + self::KROKI_BOILERPLATE,
 		'excalidraw' => [
 			'url' => 'http://kroki:8000/excalidraw/svg',
+			'name' => 'Excalidraw',
+			'program url' => 'https://github.com/excalidraw/excalidraw',
+			'version' => '0.18.0',
 			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/json' ] ],
 			'param filters' => [
 				'diagram' => __CLASS__ . '::validateJsonOrYaml',
@@ -179,14 +218,23 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'nomnoml' => [
 			'url' => 'http://kroki:8000/nomnoml/svg',
+			'name' => 'Nomnoml',
+			'program url' => 'https://github.com/skanaar/nomnoml',
+			'version' => '1.7.0',
 			'tag' => 'nomnoml'
 		] + self::KROKI_BOILERPLATE,
 		'pikchr' => [
 			'url' => 'http://kroki:8000/pikchr/svg',
+			'name' => 'Pikchr',
+			'program url' => 'https://github.com/drhsqlite/pikchr',
+			'version' => '7269f78c4a',
 			'tag' => 'pikchr'
 		] + self::KROKI_BOILERPLATE,
 		'structurizr' => [
 			'url' => 'http://kroki:8000/structurizr/svg?view-key=$view-key$&output=$output$',
+			'name' => 'Structurizr',
+			'program url' => 'https://github.com/structurizr/dsl',
+			'version' => '3.0.0',
 			'tag' => 'structurizr',
 			'params' => [
 				'view-key' => '',
@@ -200,6 +248,9 @@ class Media extends Base {
 		'svgbob' => [
 			'url' => 'http://kroki:8000/svgbob/svg'
 				. '?font-family=$font-family$&fill-color=$fill-color$',
+			'name' => 'Svgbob',
+			'program url' => 'https://github.com/ivanceras/svgbob',
+			'version' => '0.7.6',
 			'params' => [
 				'diagram',
 				'width' => 800, 'height' => 600, 'scale' => 1.0,
@@ -224,6 +275,9 @@ class Media extends Base {
 			'url' => 'http://kroki:8000/symbolator/svg'
 				. '?transparent=$transparent$&component=$component$&title=$title$&scale=$scale$'
 				. '&no-type=$no-type$&library-name=$library-name$',
+			'name' => 'Symbolator',
+			'program url' => 'https://github.com/kevinpt/symbolator',
+			'version' => '1.2.2',
 			'params' => [
 				'component' => '',
 				'transparent' => 'yes',
@@ -244,10 +298,16 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'tikz' => [
 			'url' => 'http://kroki:8000/tikz/svg',
+			'name' => 'TikZ',
+			'program url' => 'https://github.com/pgf-tikz/pgf',
+			'version' => '3.1.9a',
 			'tag' => 'tikz'
 		] + self::KROKI_BOILERPLATE,
 		'umlet' => [
 			'url' => 'http://kroki:8000/umlet/svg',
+			'name' => 'UMlet',
+			'program url' => 'https://github.com/umlet/umlet',
+			'version' => '15.1',
 			'tag' => 'umlet',
 			'param filters' => [
 				'width' => __CLASS__ . '::isInt',
@@ -258,11 +318,17 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'vegalite' => [
 			'url' => 'http://kroki:8000/vegalite/svg',
+			'name' => 'vegalite',
+			'program url' => 'https://github.com/vega/vega-lite',
+			'version' => '5.23.0',
 			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/json' ] ],
 			'tag' => 'vegalite'
 		] + self::VEGA + self::KROKI_BOILERPLATE,
 		'wavedrom' => [
 			'url' => 'http://kroki:8000/wavedrom/svg',
+			'name' => 'WaveDrom',
+			'program url' => 'https://github.com/wavedrom/wavedrom',
+			'version' => '3.5.0',
 			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/json' ] ],
 			'param filters' => [
 				'diagram' => __CLASS__ . '::validateJsonOrYaml',
@@ -273,6 +339,9 @@ class Media extends Base {
 		] + self::KROKI_BOILERPLATE,
 		'wireviz' => [
 			'url' => 'http://kroki:8000/wireviz/svg',
+			'name' => 'WireViz',
+			'program url' => 'https://github.com/formatc1702/WireViz',
+			'version' => '0.3.3',
 			'tag' => 'wireviz'
 		] + self::KROKI_BOILERPLATE
 	];
@@ -484,22 +553,37 @@ class Media extends Base {
 	private const KROKI_OR_STANDALONE = [
 		'bpmn' => [
 			'url' => 'http://kroki:8000/bpmn/svg',
+			'name' => 'bpmn2svg',
+			'program url' => 'https://github.com/PierreSchwang/bpmn2svg',
+			'version' => '18.6.1',
 			'tag' => 'bpmn'
 		] + self::SOURCES['bpmn'],
 		'graphviz' => [
 			'url' => 'http://kroki:8000/graphviz/svg',
+			'name' => 'GraphViz',
+			'program url' => 'https://graphviz.org/',
+			'version' => '9.0.0',
 			'tag' => 'graphviz'
 		] + self::SOURCES['graphviz'],
 		'mermaid' => [
 			'url' => 'http://kroki:8000/mermaid/svg?theme=$theme$',
+			'name' => 'mermaid',
+			'program url' => 'https://mermaid-js.github.io',
+			'version' => '11.6.0',
 			'tag' => 'mermaid'
 		] + self::SOURCES['mermaid'],
 		'plantuml' => [
 			'url' => 'http://kroki:8000/plantuml/svg',
+			'name' => 'PlantUML',
+			'program url' => 'https://plantuml.com',
+			'version' => '1.2025.2',
 			'tag' => 'plantuml'
 		] + self::SOURCES['plantuml'],
 		'vega' => [
 			'url' => 'http://kroki:8000/vega/svg',
+			'name' => 'Vega',
+			'program url' => 'https://vega.github.io',
+			'version' => '5.33.0',
 			'tag' => 'vega'
 		] + self::SOURCES['vega']
 	];

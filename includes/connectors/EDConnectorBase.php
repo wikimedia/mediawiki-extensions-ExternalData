@@ -734,9 +734,6 @@ abstract class EDConnectorBase {
 			$params['data'] ??= "$id=__text";
 			$params['format'] = 'text';
 			$title = method_exists( $parser, 'getPage' ) ? $parser->getPage() : $parser->getTitle();
-			if ( !$title ) {
-				throw new RuntimeException( 'No Title object.' ); // unreachable. Just to make the IDE shut up.
-			}
 			// @phan-suppress-next-line SecurityCheck-ReDoS
 			$connector = self::getConnector( 'get_external_data', $params, $title );
 			if ( !$connector->errors() ) {

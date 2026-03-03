@@ -85,8 +85,8 @@ add `$wgExternalDataSources['load media presets'] = [ 'prefer kroki' => true ];`
   - `<octave>` ([Octave](https://octave.org/)),
   - `<cadabra>` ([Cadabra](https://cadabra.science/)),
   - `<yacas>` ([Yacas](https://www.yacas.org/)),
-  - `<latex>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/)),
-  - `<latex giac>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/), enriched with [giac](https://xcas.univ-grenoble-alpes.fr/)).
+  - `<hevea>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/)),
+  - `<hevea giac>` (LaTeX, converted to HTML5 by [hevea](http://hevea.inria.fr/), enriched with [giac](https://xcas.univ-grenoble-alpes.fr/)).
 
 A single data source can be connected like this:
 ```php

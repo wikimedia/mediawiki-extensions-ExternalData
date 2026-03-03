@@ -45,7 +45,7 @@ class Math extends Base {
 			'input' => 'tex',
 			'postprocess' => __CLASS__ . '::htmlBody',
 			'scripts' => '/js/hevea',
-			'tag' => 'latex'
+			'tag' => 'hevea'
 		],
 
 		'maxima' => self::DOCKER + [
@@ -61,27 +61,30 @@ class Math extends Base {
 		],
 
 		'octave' => self::DOCKER + [
-			'url' => 'http://octave/cgi-bin/cgi.sh?code=$code$',
+			'url' => 'http://octave/cgi-bin/cgi.sh?code=$showinput$',
 			'version url' => 'http://octave/cgi-bin/version.sh',
 			'name' => 'Octave',
 			'program url' => 'https://octave.org/',
-			'params' => [ 'code' => 'false' ],
+			'params' => [ 'showinput' => 'false' ],
 			'input' => 'script',
 			'postprocess' => __CLASS__ . '::htmlBody',
 			'tag' => 'octave'
 		],
 
 		'cadabra' => self::DOCKER + [
-			'url' => 'http://cadabra/cgi-bin/cgi.sh?code=$code$&cells=$cells$',
+			'url' => 'http://cadabra/cgi-bin/cgi.sh?code=$code$&cells=$showinput$',
 			'options' => [ 'sslVerifyCert' => false, 'headers' => [ 'Content-Type' => 'text/json' ] ],
 			'version url' => 'http://cadabra/cgi-bin/version.sh',
 			'name' => 'Cadabra2',
 			'program url' => 'https://cadabra.science/',
-			'params' => [ 'json', 'yaml' => false, 'code' => 'false', 'cells' => 'false' ],
+			'params' => [ 'json', 'yaml' => false, 'code' => 'false', 'showinput' => 'false' ],
 			'param filters' => [ 'json' => __CLASS__ . '::validateJsonOrYaml' ],
 			'input' => 'json',
 			'preprocess' => __CLASS__ . '::yamlToJson',
-			'postprocess' => __CLASS__ . '::htmlBody',
+			'postprocess' => [
+				__CLASS__ . '::htmlBody',
+				__CLASS__ . '::reWrapMaths'
+			],
 			'tag' => 'cadabra'
 		],
 
