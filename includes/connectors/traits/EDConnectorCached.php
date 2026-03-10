@@ -17,9 +17,9 @@ trait EDConnectorCached {
 	// Cache variables.
 	/** @var bool $cacheIsUp Is the cache set up? */
 	private static $cacheIsUp;
-	/** @var \Wikimedia\Rdbms\Database $primaryDB Connection to primary database. */
+	/** @var \Wikimedia\Rdbms\IDatabase $primaryDB Connection to primary database. */
 	private static $primaryDB;
-	/** @var \Wikimedia\Rdbms\Database $replicaDB Connection to primary database. */
+	/** @var \Wikimedia\Rdbms\IDatabase $replicaDB Connection to primary database. */
 	private static $replicaDB;
 	/** @var string|null $cacheTable Cache table name. */
 	private static $cacheTable;
@@ -55,6 +55,7 @@ trait EDConnectorCached {
 			$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
 			self::$primaryDB = $lb->getConnection( DB_PRIMARY );
 			self::$replicaDB = $lb->getConnection( DB_REPLICA );
+			// @phan-suppress-next-line PhanUndeclaredMethod
 			if ( !self::$replicaDB->tableExists( self::$cacheTable, __METHOD__ ) ) {
 				self::$cacheIsUp = false;
 			}

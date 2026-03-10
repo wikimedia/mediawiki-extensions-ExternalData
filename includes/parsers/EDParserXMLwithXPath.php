@@ -94,6 +94,7 @@ class EDParserXMLwithXPath extends EDParserXML {
 			} finally {
 				self::stopThrowingWarnings();
 			}
+			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 			if ( $nodes === false || $nodes === null ) {
 				// Perhaps, this code is never reached.
 				throw new EDParserException( 'externaldata-invalid-format-explicit', $xpath, 'XPath' );

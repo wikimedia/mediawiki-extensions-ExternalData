@@ -252,6 +252,7 @@ class EDConnectorOdbc extends EDConnectorComposed {
 		} finally {
 			self::stopThrowingWarnings();
 		}
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( !$rowset ) {
 			$this->error( 'externaldata-db-invalid-query', $query );
 			return null;

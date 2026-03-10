@@ -173,6 +173,7 @@ class EDConnectorLdap extends EDConnectorBase {
 		} finally {
 			self::stopThrowingWarnings();
 		}
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		$results = ldap_get_entries( $this->connection, $sr );
 		return $results;
 	}

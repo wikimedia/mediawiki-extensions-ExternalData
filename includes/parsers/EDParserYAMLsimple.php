@@ -58,6 +58,7 @@ class EDParserYAMLsimple extends EDParserJSONsimple {
 		} finally {
 			self::stopThrowingWarnings();
 		}
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( $yaml_tree === null ) {
 			// It's probably invalid JSON.
 			throw new EDParserException( 'externaldata-invalid-format', self::NAME );

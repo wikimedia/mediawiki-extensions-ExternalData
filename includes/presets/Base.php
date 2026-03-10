@@ -85,6 +85,7 @@ class Base {
 			} finally {
 				self::stopThrowingWarnings();
 			}
+			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 			return (bool)$yaml_tree;
 		} else {
 			return is_array( $text ) || ( is_string( $text ) && json_decode( $text ) );
@@ -110,6 +111,7 @@ class Base {
 			} finally {
 				self::stopThrowingWarnings();
 			}
+			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 			if ( $yaml_tree === false ) {
 				// Hopefully, this will be prevented by the validator above.
 				throw new \EDParserException( 'externaldata-invalid-format', 'YAML' );

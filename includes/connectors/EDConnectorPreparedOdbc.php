@@ -128,6 +128,7 @@ class EDConnectorPreparedOdbc extends EDConnectorPrepared {
 			self::stopThrowingWarnings();
 		}
 
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( $success ) {
 			// Get values.
 			$result = [];

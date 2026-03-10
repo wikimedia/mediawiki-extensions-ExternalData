@@ -1044,6 +1044,7 @@ class Media extends Base {
 		} finally {
 			self::stopThrowingWarnings();
 		}
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( !$loaded ) {
 			// SVG might be illegal and cannot be processed. Hopefully, this point is never reached.
 			throw new \MWException( 'Cannot process wikilinks in SVG: invalid XML.' );
@@ -1117,6 +1118,7 @@ class Media extends Base {
 		} finally {
 			self::stopThrowingWarnings();
 		}
+		// @phan-suppress-next-line PhanPossiblyUndeclaredVariable
 		if ( !$loaded ) {
 			// Hopefully, this code will never be reached.
 			throw new \MWException( 'Cannot process images in SVG: invalid XML).' );
