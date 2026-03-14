@@ -134,7 +134,8 @@ trait EDConnectorCached {
 		$row = self::$replicaDB->selectRow(
 			self::$cacheTable,
 			'*',
-			[ 'url' => self::hash( $key ) ]
+			[ 'url' => self::hash( $key ) ],
+			__METHOD__
 		);
 		if ( $row ) {
 			$this->cachedTime = $row->req_time;
@@ -159,7 +160,7 @@ trait EDConnectorCached {
 			// Delete the old entry, if one exists.
 			// @todo: Upsert?
 			if ( $old_cache ) {
-				self::$primaryDB->delete( self::$cacheTable, [ 'url' => $hashed_key ] );
+				self::$primaryDB->delete( self::$cacheTable, [ 'url' => $hashed_key ], __METHOD__ );
 			}
 			// Purge old cache beyond size limit, if any:
 			if ( self::$cacheSize ) {
@@ -167,7 +168,8 @@ trait EDConnectorCached {
 				$row = self::$replicaDB->selectRow(
 					'information_schema.TABLES',
 					[ 'data_length', 'index_length', 'data_free', 'avg_row_length' ],
-					[ 'table_schema' => self::$replicaDB->getDBname(), 'table_name' => self::$cacheTable ]
+					[ 'table_schema' => self::$replicaDB->getDBname(), 'table_name' => self::$cacheTable ],
+					__METHOD__
 				);
 				if ( $row ) {
 					$excess = $row->data_length + $row->index_length - $row->data_free + strlen( $contents )
@@ -177,14 +179,15 @@ trait EDConnectorCached {
 							'DELETE FROM %s ORDER BY req_time ASC LIMIT %d;',
 							self::$cacheTable,
 							(int)( $row->avg_row_length > 0 ? $excess / $row->avg_row_length : 0 )
-						) );
+						), __METHOD__ );
 					}
 				}
 			}
 			// Insert contents into the cache table.
 			self::$primaryDB->insert(
 				self::$cacheTable,
-				[ 'url' => $hashed_key, 'result' => $contents, 'req_time' => time() ]
+				[ 'url' => $hashed_key, 'result' => $contents, 'req_time' => time() ],
+				__METHOD__
 			);
 		}
 	}

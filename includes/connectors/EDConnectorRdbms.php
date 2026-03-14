@@ -93,6 +93,6 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 	 * Disconnect from DB server.
 	 */
 	protected function disconnect() {
-		$this->database->close();
+		$this->database->close( __METHOD__ );
 	}
 }
