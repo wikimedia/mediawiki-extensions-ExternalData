@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Aca",
 			"Winston Sung"
 		]
 	},
-	"externaldata-desc": "Omogućuje preuzimanje strukturnih podataka iz vanjskih URL-adresa, baza podataka i drugih izvora",
+	"externaldata-desc": "Omogućuje preuzimanje strukturnih podataka iz vanjskih URL-ova, baza podataka i drugih izvora",
 	"externaldata-ldap-unable-to-connect": "Ne može se spojiti sa  $1",
 	"externaldata-db-incomplete-information": "Greška: Nepotpune informacije za ovu bazu podataka s naznakom $1 ($2).",
 	"externaldata-db-could-not-get-url": "Nije bilo moguće dohvaćanje URL-a $1 nakon $2 {{PLURAL:$2|pokušaj|pokušaja}}.",
