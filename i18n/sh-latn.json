@@ -7,7 +7,7 @@
 	},
 	"externaldata-desc": "Omogućuje preuzimanje strukturnih podataka iz vanjskih URL-ova, baza podataka i drugih izvora",
 	"externaldata-ldap-unable-to-connect": "Ne može se spojiti sa  $1",
-	"externaldata-db-incomplete-information": "Greška: Nepotpune informacije za ovu bazu podataka s naznakom $1 ($2).",
+	"externaldata-db-incomplete-information": "Greška: Nepotpune informacije za ovu bazu podataka s ID-jem $1 ($2).",
 	"externaldata-db-could-not-get-url": "Dohvaćanje URL-a $1 nakon $2 {{PLURAL:$2|pokušaj|pokušaja}} nije uspjelo.",
 	"externaldata-db-unknown-type": "Greška: Nepoznat tip baze podataka $1.",
 	"externaldata-db-could-not-connect": "Greška: Nije moguće povezati se s bazom podataka ($1).",
