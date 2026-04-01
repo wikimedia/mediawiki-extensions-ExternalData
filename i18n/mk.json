@@ -26,7 +26,7 @@
 	"externaldata-db-unknown-database": "Грешка: Не можев да ја изберам базата укажана со назнаката $1.",
 	"externaldata-db-no-return-values": "Грешка: Нема назначено повратни вредности.",
 	"externaldata-db-invalid-query": "Барањето $1 е неважечко ($2).",
-	"externaldata-db-too-many-joins": "Бројто на JOIN-услови (сега $1) не смее да го надминува бројот на табели ($2)",
+	"externaldata-db-too-many-joins": "Бројот на JOIN-услови (сега $1) не смее да го надминува бројот на табели ($2)",
 	"externaldata-db-invalid-join": "Неважечки JOIN-услов $1: секој дел мора да го содржи знакот „=“.",
 	"externaldata-db-empty-rowset": "Барањето $1 не даде ниеден ред.",
 	"externaldata-db-prepared-not-specified": "Укажете (query=), кој од подготвените искази да се користи за базата со назнака $1.",
