@@ -152,6 +152,11 @@
 			"args": null
 		},
 		{
+			"name": "epoll_wait2",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
 			"name": "epoll_wait_old",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
@@ -287,7 +292,27 @@
 			"args": null
 		},
 		{
+			"name": "fsconfig",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
 			"name": "fsetxattr",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "fsmount",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "fsopen",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "fspick",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
 		},
@@ -712,6 +737,11 @@
 			"args": null
 		},
 		{
+			"name": "movemount",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
 			"name": "mprotect",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
@@ -817,6 +847,11 @@
 			"args": null
 		},
 		{
+			"name": "openat2",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
 			"name": "open_by_handle_at",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
@@ -828,6 +863,21 @@
 		},
 		{
 			"name": "pause",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "pidfd_getfd",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "pidfd_open",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "pidfd_send_signal",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
 		},
@@ -1338,6 +1388,11 @@
 		},
 		{
 			"name": "statfs64",
+			"action": "SCMP_ACT_ALLOW",
+			"args": null
+		},
+		{
+			"name": "statx",
 			"action": "SCMP_ACT_ALLOW",
 			"args": null
 		},

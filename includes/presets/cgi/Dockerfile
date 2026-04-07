@@ -151,7 +151,7 @@ RUN set -eux && \
 				fi && \
 				if [ -f './configure.ac' ]; then \
 					apk add --no-cache autoconf automake && \
-					autoreconf; \
+					autoreconf -i; \
 				fi && \
 				if [ -f './configure' ]; then \
 					apk add --no-cache autoconf && \

@@ -98,10 +98,13 @@ class EDParserRar extends EDParserArchive {
 				$e->getMessage()
 			);
 		}
+		if ( !$entry ) {
+			throw new EDParserException( 'external-data-archive-could-not-extract', self::EXT[0], $file, '' );
+		}
 		if ( !$entry->isDirectory() ) {
 			$temp = "$this->tmp/$file";
 			$result = $entry->extract( '', $temp );
-			if ( $result === true ) {
+			if ( $result ) {
 				$contents = file_get_contents( $temp );
 				unlink( $temp );
 				return $contents;

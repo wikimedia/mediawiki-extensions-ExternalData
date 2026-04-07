@@ -55,6 +55,7 @@ services:
 
   # Web frontend:
   nginx:
+  # or angie.
     # ...
     volumes:
       # ...
@@ -72,7 +73,6 @@ services:
 
   # Containers for testing ExternalData\Presets\Test
   mongodb:
-    container_name: mongodb
     image: mongo:latest
     restart: unless-stopped
     environment:
@@ -105,7 +105,6 @@ services:
 
   # MS SQL Server:
   mssqlserver:
-    container_name: mssqlserver
     build:
       context: ./mssqlserver
       args:
@@ -136,7 +135,6 @@ services:
 
   # PostgreSQL:
   postgresql:
-    container_name: postgresql
     build:
       context: ./postgresql
       args:
@@ -166,7 +164,6 @@ services:
 
   # Containers for testing ExternalData\Presets\Reference
   man:
-    container_name: man
     build:
       context: ./cgi
       args:
@@ -189,7 +186,6 @@ services:
           memory: 128m
 
   apk:
-    container_name: apk
     build:
       context: ./cgi
       args:
@@ -210,7 +206,6 @@ services:
           memory: 128m
 
   whois:
-    container_name: whois
     build:
       context: ./cgi
       args:
@@ -231,7 +226,6 @@ services:
           memory: 64m
 
   mmdb:
-    container_name: mmdb
     build:
       context: ./cgi
       args:
@@ -260,7 +254,6 @@ services:
           memory: 128m
 
   tzdata:
-    container_name: tzdata
     build:
       context: ./cgi
       args:
@@ -291,7 +284,6 @@ services:
           memory: 64m
 
   youtube-dl:
-    container_name: youtube-dl
     build:
       context: ./cgi
       args:
@@ -319,7 +311,6 @@ services:
   #
   # This service does not fully replace the MathJax extension (https://github.com/alex-mashin/MathJax).
   mathjax:
-    container_name: mathjax
     build:
       context: ./cgi
       args:
@@ -351,7 +342,6 @@ services:
           memory: 256m
 
   maxima:
-    container_name: maxima
     build:
       context: ./cgi
       args:
@@ -380,7 +370,6 @@ services:
           memory: 1024m
 
   octave:
-    container_name: octave
     build:
       context: ./cgi
       args:
@@ -421,7 +410,6 @@ services:
           memory: 1024m
 
   cadabra:
-    container_name: cadabra
     build:
       context: ./cgi
       args:
@@ -430,7 +418,9 @@ services:
           gtkmm3-dev openssl-dev gmp-dev sqlite-dev ossp-uuid-dev readline-dev
           py3-matplotlib py3-mpmath py3-sympy
         GIT: https://github.com/kpeeters/cadabra2
-        BUILD_COMMAND: mkdir -p build && cd build && cmake .. && make && make install
+        BUILD_COMMAND: >-
+          apk add --no-cache cmake && mkdir -p build && cd build &&
+          cmake .. && make && make install && apk del cmake
         COMMAND: |-
           TMP=$$(mktemp -u /home/www-data/cdbXXXXXX) && cat > "$$TMP.cnb" && \
           PARAMS='' && \
@@ -459,7 +449,6 @@ services:
           memory: 1024m
 
   yacas:
-    container_name: yacas
     build:
       context: ./cgi
       args:
@@ -488,7 +477,6 @@ services:
           memory: 1024m
 
   hevea:
-    container_name: hevea
     build:
       context: ./cgi
       args:
@@ -504,12 +492,16 @@ services:
         GIT: |-
           https://github.com/vectorclass/version2
           https://github.com/YannickChevalier/hevea-mathjax
+        WGET: >-
+          https://raw.githubusercontent.com/alex-mashin/giac-hevea/refs/heads/master/giac.tex
+          https://raw.githubusercontent.com/alex-mashin/giac-hevea/refs/heads/master/giac.js
+          https://raw.githubusercontent.com/alex-mashin/giac-hevea/refs/heads/master/giacwasm.js
         PRE_BUILD_COMMAND: |-
           if [ -f src/mkjs.cc ]; then
               g++ src/mkjs.cc -o src/mkjs;
           fi
         STARTUP: |-
-          GIAC_DIR='/usr/local/share/giac/doc' && \
+          GIAC_DIR='/usr/share/downloads' && \
           mkdir -p /www/js && \
           cp "$$GIAC_DIR/giac.js" /www/js/ && cp "$$GIAC_DIR/giacwasm.js" /www/js/ && \
           if [ -n "$$MATHJAX" ]; then \
@@ -529,7 +521,7 @@ services:
           fi && \
           /usr/local/bin/hevea2mml "$$TMP" && cat "$$TMP.html" && rm -f "$$TMP.*"
         CONTENT_TYPE: text/html
-        VERSION_COMMAND: /usr/local/bin/hevea -version | head -1 && /usr/local/bin/giac -v | tail -n2
+        VERSION_COMMAND: /usr/local/bin/hevea -version | head -1 && /usr/local/bin/giac -v 2>/dev/null | tail -n2
     environment:
       ERRORS: FATAL
     restart: unless-stopped
@@ -550,7 +542,6 @@ services:
           memory: 1024m
 
   gnuplot:
-    container_name: gnuplot
     build:
       context: ./cgi
       args:
@@ -580,7 +571,6 @@ services:
           memory: 512m
 
   asymptote:
-    container_name: asymptote
     build:
       context: ./cgi
       args:
@@ -612,7 +602,6 @@ services:
   # Multimedia containers, connected by testing ExternalData\Presets\Media:
   #
   lilypond:
-    container_name: lilypond
     build:
       context: ./cgi
       args:
@@ -639,7 +628,6 @@ services:
           memory: 512m
 
   graphviz:
-    container_name: graphviz
     build:
       context: ./cgi
       args:
@@ -670,7 +658,6 @@ services:
           memory: 512m
 
   mscgen:
-    container_name: mscgen
     build:
       context: ./cgi
       args:
@@ -694,7 +681,6 @@ services:
           memory: 512m
 
   plantuml:
-    container_name: plantuml
     build:
       context: ./cgi
       args:
@@ -722,11 +708,10 @@ services:
           memory: 1g
 
   ploticus:
-    container_name: ploticus
     build:
       context: ./cgi
       args:
-        APK: freetype-dev fontconfig ttf-freefont
+        APK: freetype-dev fontconfig ttf-freefont zlib-dev
         GIT: https://salsa.debian.org/debian/ploticus
         BRANCH: debian/latest
         BUILD_COMMAND: >-
@@ -760,7 +745,6 @@ services:
           memory: 512m
 
   easytimeline:
-    container_name: easytimeline
     build:
       context: ./cgi
       args:
@@ -805,7 +789,6 @@ services:
           memory: 512m
 
   vega:
-    container_name: vega
     build:
       context: ./cgi
       args:
@@ -833,7 +816,6 @@ services:
           memory: 512m
 
   mermaid:
-    container_name: mermaid
     build:
       context: ./cgi
       args:
@@ -868,7 +850,6 @@ services:
           memory: 1024m
 
   echarts:
-    container_name: echarts
     build:
       context: ./cgi
       args:
@@ -938,7 +919,6 @@ services:
           memory: 512m
 
   bpmn:
-    container_name: bpmn
     image: pierreschwang/bpmn2svg:development
     restart: unless-stopped
     tmpfs:
@@ -955,7 +935,6 @@ services:
           memory: 512m
 
   kroki:
-    container_name: kroki
     image: yuzutech/kroki
     depends_on:
       - kroki_mermaid
@@ -977,7 +956,6 @@ services:
           memory: 1g
 
   kroki_mermaid:
-    container_name: kroki_mermaid
     image: yuzutech/kroki-mermaid
     restart: unless-stopped
     tmpfs:
@@ -991,7 +969,6 @@ services:
           memory: 512m
 
   kroki_bpmn:
-    container_name: kroki_bpmn
     image: yuzutech/kroki-bpmn
     restart: unless-stopped
     tmpfs:
@@ -1005,7 +982,6 @@ services:
           memory: 512m
 
   kroki_excalidraw:
-    container_name: kroki_excalidraw
     image: yuzutech/kroki-excalidraw
     restart: unless-stopped
     tmpfs:
@@ -1019,7 +995,6 @@ services:
           memory: 512m
 
   pdfminer:
-    container_name: pdfminer
     build:
       context: ./cgi
       args:
@@ -1043,7 +1018,6 @@ services:
           memory: 512m
 
   zint:
-    container_name: zint
     build:
       context: ./cgi
       args:

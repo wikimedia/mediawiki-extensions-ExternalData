@@ -202,7 +202,7 @@ class Math extends Base {
 		if ( $params['decorate'] === false ) {
 			return $maxima;
 		}
-		$input = $params['showinput'] !== false ? ' grind(_)$' : '';
+		$input = $params['showinput'] ? '' : ' grind(_)$';
 		$suffix = '[$;]';
 		$label = '[^:\s]+?:';
 
