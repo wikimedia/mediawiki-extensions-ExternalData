@@ -574,6 +574,7 @@ services:
     build:
       context: ./cgi
       args:
+        ALPINE: edge
         APK: asymptote@community asymptote-doc@community imagemagick@community
         COMMAND: >-
           TMP=$$( mktemp -u '/home/www-data/asyXXXXXX' ) &&

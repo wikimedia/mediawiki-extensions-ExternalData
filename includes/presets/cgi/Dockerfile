@@ -1,16 +1,23 @@
-FROM alpine:latest
+ARG ALPINE=latest
+FROM alpine:$ALPINE
 LABEL maintainer="Alexander Mashin alex_mashin@list.ru"
 LABEL description="Universal image for dockerising applications as HTTP CGI servers. To be used with MediaWiki extensions External Data and Mathjax"
 LABEL version="0.2"
 
 # Get busybox httpd:
 RUN apk add --update --no-cache busybox-extras bash
-ARG APK_BRANCH=edge
 ARG APK_CDN=https://dl-cdn.alpinelinux.org/alpine
-ARG APK_REPOS='main community testing'
+ARG ALPINE=latest
 ARG APK=
 RUN set -eux && \
-	for TAG in $APK_REPOS; do \
+	echo '@testing $APK_CDN/edge/testing' >> /etc/apk/repositories && \
+	if [ "$ALPINE" = 'edge' ]; then \
+		APK_BRANCH='edge'; \
+	else \
+		APK_BRANCH=$( cat /etc/alpine-release ) && \
+		APK_BRANCH="v${APK_BRANCH%.*}"; \
+	fi && \
+	for TAG in main community; do \
 		echo "@$TAG $APK_CDN/$APK_BRANCH/$TAG" >> /etc/apk/repositories; \
 	done && \
 	apk update && \
