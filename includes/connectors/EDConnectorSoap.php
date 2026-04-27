@@ -65,7 +65,6 @@ class EDConnectorSoap extends EDConnectorHttp {
 		static $log_errors_client = true;
 		static $log_errors_request = true;
 		try {
-			// @phan-suppress-next-next-line PhanUndeclaredClassMethod Optional extension
 			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 			$client = @new SoapClient( $url, $this->options );
 		} catch ( Exception $e ) {
@@ -86,7 +85,6 @@ class EDConnectorSoap extends EDConnectorHttp {
 			return null;
 		}
 		if ( $result ) {
-			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
 			$this->headers = self::headers( $client->__getLastResponseHeaders() );
 			$response = $this->responseName;
 			return $result->$response;

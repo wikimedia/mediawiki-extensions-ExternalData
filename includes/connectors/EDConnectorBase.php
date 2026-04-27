@@ -518,12 +518,10 @@ abstract class EDConnectorBase {
 				$supplemented['host'] = $supplemented['components']['host'];
 			}
 			// Second-level domain is likely to be both a throttle key and an index to find a throttle key or interval.
-			// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
 			if ( isset( $supplemented['host'] ) ) {
 				if ( preg_match( '/(?<=^|\.)\w+\.\w+$/', $supplemented['host'], $matches ) ) {
 					$supplemented['2nd_lvl_domain'] = $matches[0];
 				} else {
-					// @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset text saying why it was suppressed
 					$supplemented['2nd_lvl_domain'] = $supplemented['host'];
 				}
 			}
@@ -734,7 +732,6 @@ abstract class EDConnectorBase {
 			$params['data'] ??= "$id=__text";
 			$params['format'] = 'text';
 			$title = method_exists( $parser, 'getPage' ) ? $parser->getPage() : $parser->getTitle();
-			// @phan-suppress-next-line SecurityCheck-ReDoS
 			$connector = self::getConnector( 'get_external_data', $params, $title );
 			if ( !$connector->errors() ) {
 				if ( $connector->run() ) {

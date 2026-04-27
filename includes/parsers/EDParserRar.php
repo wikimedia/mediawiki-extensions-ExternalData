@@ -42,13 +42,12 @@ class EDParserRar extends EDParserArchive {
 		try {
 			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 			$result = RarArchive::open( $temp );
-		// @phan-suppress-next-line PhanUndeclaredClassMethod,PhanUndeclaredClassCatch Optional extension.
+		// @phan-suppress-next-line PhanUndeclaredClassCatch
 		} catch ( RarException $e ) {
 			throw new EDParserException(
 				'external-data-archive-could-not-read',
 				self::EXT[0],
 				'', // will be filled out by EDParserArchive::__invoke()
-				// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 				$e->getMessage()
 			);
 		}
@@ -86,15 +85,13 @@ class EDParserRar extends EDParserArchive {
 	 */
 	protected function read( string $file ) {
 		try {
-			// @phan-suppress-next-line PhanParamTooFewInternal This might actually be a bug in Phan.
 			$entry = $this->archive->getEntry( $file );
-		// @phan-suppress-next-line PhanUndeclaredClassMethod,PhanUndeclaredClassCatch Optional extension.
+		// @phan-suppress-next-line PhanUndeclaredClassCatch
 		} catch ( RarException $e ) {
 			throw new EDParserException(
 				'external-data-archive-could-not-extract',
 				self::EXT[0],
 				$file,
-				// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension.
 				$e->getMessage()
 			);
 		}

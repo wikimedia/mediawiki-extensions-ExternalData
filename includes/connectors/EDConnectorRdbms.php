@@ -81,11 +81,6 @@ abstract class EDConnectorRdbms extends EDConnectorComposed {
 			$this->error( 'externaldata-db-invalid-query', $this->getQuery(), $e->getMessage() );
 			return null;
 		}
-		if ( !$rows ) {
-			// No result.
-			$this->error( 'externaldata-db-invalid-query', $this->getQuery(), $this->database->lastError() );
-			return null;
-		}
 		return $rows;
 	}
 

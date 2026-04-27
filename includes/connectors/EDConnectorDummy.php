@@ -25,5 +25,6 @@ class EDConnectorDummy extends EDConnectorBase {
 	 */
 	public function run() {
 		// Do nothing.
+		return true;
 	}
 }

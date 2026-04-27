@@ -160,7 +160,7 @@ abstract class EDConnectorDb extends EDConnectorBase {
 		foreach ( $rows as $row ) {
 			foreach ( $row as $column => $_ ) {
 				$external = $aliases[$column] ?? $column;
-				$result[$external] = $result[$external] ?? [];
+				$result[$external] ??= [];
 				// Can be both array and object.
 				$result[$external][] = self::processField( ( (array)$row )[$column] );
 			}

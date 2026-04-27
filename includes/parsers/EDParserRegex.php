@@ -30,7 +30,6 @@ class EDParserRegex extends EDParserBase {
 		// Validate regex.
 		// Run regular expression against null and compare results with false.
 		// @see https://stackoverflow.com/a/12941133.
-		// @phan-suppress-next-line PhanTypeMismatchArgumentInternalReal, PhanTypeMismatchArgumentInternalProbablyReal
 		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 		if ( @preg_match( $regex, '' ) !== false ) {
 			// A valid regular expression.

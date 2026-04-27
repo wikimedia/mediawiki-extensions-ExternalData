@@ -168,6 +168,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return MongoDB\Client|null
 	 */
+	// @phan-suppress-next-line PhanUndeclaredTypeReturnType
 	protected function connect(): ?MongoDB\Client {
 		// Use try/catch to suppress error messages, which would show
 		// the MongoDB connect string, which may have sensitive
@@ -185,6 +186,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 	 *
 	 * @return MongoDB\Collection|null A MongoDB collection.
 	 */
+	// @phan-suppress-next-line PhanUndeclaredTypeReturnType
 	protected function fetch(): ?MongoDB\Collection {
 		$this->mongoClient = $this->connect();
 		if ( !$this->mongoClient ) {
@@ -208,7 +210,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 	 */
 	protected function find( $collection, array $filter, array $columns, array $sort, int $limit ): ?array {
 		try {
-			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
+			// @phan-suppress-next-line PhanUndeclaredClassMethod
 			$found = $collection->find( $filter, [ 'sort' => $sort, 'limit' => $limit ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-db-could-not-connect', $e->getMessage() );
@@ -227,7 +229,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 	 */
 	protected function aggregate( $collection, array $aggregate ) {
 		try {
-			// @phan-suppress-next-line PhanUndeclaredClassMethod, PhanUndeclaredMethod Optional extension.
+			// @phan-suppress-next-line PhanUndeclaredClassMethod
 			return $collection->aggregate( $aggregate, [ 'useCursor' => true ] )->toArray();
 		} catch ( Exception $e ) {
 			$this->error( 'externaldata-mongodb-aggregation-failed', $e->getMessage() );
@@ -299,7 +301,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 			$cast_doc = (array)$doc;
 			foreach ( $this->columns as $column ) {
 				$external = array_search( $column, $aliases ) ?: $column;
-				$values[$column] = $values[$column] ?? [];
+				$values[$column] ??= [];
 				if ( strstr( $external, "." ) ) {
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),

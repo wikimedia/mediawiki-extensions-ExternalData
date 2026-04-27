@@ -85,9 +85,7 @@ class EDConnectorExe extends EDConnectorBase {
 		global $wgTmpDirectory;
 		if ( $wgTmpDirectory && isset( $args['temp'] ) && is_string( $args['temp'] ) ) {
 			$hash = hash( 'fnv1a64', $this->input );
-			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable WTF?
 			$this->tempFile = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $args['temp'] );
-			// @phan-suppress-next-line PhanPossiblyUndeclaredVariable WTF?
 			$command = str_replace( '$tmp$', "$wgTmpDirectory/$hash", $command );
 		}
 

@@ -60,12 +60,12 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		// HTTP options.
 		$this->options = $args['options'] ?? [];
 		global $wgHTTPTimeout;
-		$this->options['HTTPTimeout'] = $this->options['HTTPTimeout'] ?? $wgHTTPTimeout;
+		$this->options['HTTPTimeout'] ??= $wgHTTPTimeout;
 		global $wgHTTPConnectTimeout;
-		$this->options['HTTPConnectTimeout'] = $this->options['HTTPConnectTimeout'] ?? $wgHTTPConnectTimeout;
+		$this->options['HTTPConnectTimeout'] ??= $wgHTTPConnectTimeout;
 		if ( isset( $args['allow ssl'] ) ) {
-			$this->options['sslVerifyCert'] = $this->options['sslVerifyCert'] ?? false;
-			$this->options['followRedirects'] = $this->options['followRedirects'] ?? false;
+			$this->options['sslVerifyCert'] ??= false;
+			$this->options['followRedirects'] ??= false;
 		}
 
 		// Throttling.
