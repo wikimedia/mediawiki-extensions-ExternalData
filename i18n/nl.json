@@ -30,7 +30,7 @@
 	"externaldata-db-could-not-connect": "Fout: het was niet mogelijk met de database te verbinden ($1).",
 	"externaldata-db-unknown-database": "Fout: De met ID $1 opgegeven database kon niet worden geselecteerd.",
 	"externaldata-db-no-return-values": "Fout: er zijn geen return-waarden ingesteld.",
-	"externaldata-db-invalid-query": "De zoekopdracht $1 is ongeldig ($2).",
+	"externaldata-db-invalid-query": "De zoekopdracht $1 is onjuist ($2).",
 	"externaldata-db-too-many-joins": "Het aantal JOIN-voorwaarden (nu $1) mag niet groter zijn dan het aantal tabellen ($2)",
 	"externaldata-db-invalid-join": "Ongeldige JOIN-voorwaarde $1: elk onderdeel moet een “=”-teken bevatten.",
 	"externaldata-db-empty-rowset": "De aanvraag $1 heeft een lege rijenverzameling opgeleverd.",
