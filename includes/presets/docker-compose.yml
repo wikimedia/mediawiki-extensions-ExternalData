@@ -22,6 +22,7 @@ services:
     networks:
       # ...
       # Networks shared with containers:
+      converter:
       mongodb:
       mssqlserver:
       postgresql:
@@ -102,6 +103,64 @@ services:
       resources:
         limits:
           memory: 512m
+
+  #
+  # Image converter adding a watermark.
+  # A dockerised image conversion service.
+  # To use, set
+  # $wgCustomConvertCommand = '/usr/local/bin/convert.sh %s %w %h %d "' . $wgCookiePrefix . '"';
+  # and create /usr/local/bin/convert.sh:
+  # #!/bin/sh
+  # set -eux
+  # SOURCE="$1"
+  # WIDTH="$2"
+  # HEIGHT="$3"
+  # DESTINATION="$4"
+  # WATERMARK="$5"
+  # TYPE=${SOURCE#*.}
+  # curl --data-binary "@$SOURCE" --output "$DESTINATION" \
+  #     "http://converter/cgi-bin/cgi.sh?type=$TYPE&width=$WIDTH&height=$HEIGHT&watermark=$WATERMARK"
+  #
+  converter:
+    build:
+      context: ./services/cgi
+      args:
+        APK: graphicsmagick@community
+        COMMAND: |
+          WM=''
+          if [ -n "$$watermark" ]; then
+              for EXT in svg webp png gif jpeg jpg; do
+                  if [ -f "/usr/local/share/watermarks/$$watermark/watermark.$$EXT" ]; then
+                      WM="/usr/local/share/watermarks/$$watermark/watermark.$$EXT"
+                      break
+                  fi
+              done
+          fi
+          if [ -z "$$WM" ]; then
+              /usr/bin/gm convert "$$type:-" -resize "$${width}x$${height}" "$$type:-"
+          else
+              /usr/bin/gm composite -resize "$${width}x$${height}" -tile "$$WM" "$$type:-" "$$type:-"
+          fi
+        VERSION_COMMAND: /usr/bin/gm version | head -n5
+        CONTENT_TYPE: image/$$type
+    restart: unless-stopped
+    environment:
+      BINARY: 1
+    tmpfs:
+      - /tmp
+    volumes:
+      - logos_wikiproject:/usr/local/share/watermarks/wikiproject:ro
+    networks:
+      converter:
+    cpu_shares: 1024
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  #
+  # Databases
+  #
 
   # MS SQL Server:
   mssqlserver:
@@ -386,7 +445,7 @@ services:
           ))" &&
           cat "$$TMP.html" |
           sed -E 's%<img src="([^"]+\.svg)"\s+alt="\1">%\n\1\n%g' |
-          sed -E 's%^(.+\.svg)$%cat /home/www-data/\1%eg' |
+          sed -E 's%^(.+\.svg)$$%cat /home/www-data/\1%eg' |
           sed -E 's/<\?xml\s+version="1.0"\s+encoding="utf-8"\s+standalone="no"\?>//gi' |
           sed -E 's/<h1>.*?<\/h1>//i' &&
           sleep 1 && rm -f /home/www-data/*.svg "$$TMP.m" "$$TMP.html"
@@ -446,7 +505,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024m
+          memory: 2048m
 
   yacas:
     build:
@@ -480,6 +539,7 @@ services:
     build:
       context: ./cgi
       args:
+        ALPINE: edge
         APK: >-
           gmp-dev mpfr-dev pari-dev libxext-dev libpng-dev jpeg-dev readline-dev
           libx11-dev libxt-dev libxft-dev libao-dev fltk-dev mesa-dev gsl-dev ruby
@@ -575,7 +635,21 @@ services:
       context: ./cgi
       args:
         ALPINE: edge
-        APK: asymptote@community asymptote-doc@community imagemagick@community
+        APK: patch asymptote@community asymptote-doc@community imagemagick@community
+        STARTUP: |
+          patch -d /etc/ImageMagick-7 <<'PATCH'
+          --- delegates.xml.orig	2026-04-16 18:30:31.122123097 -0400
+          +++ delegates.xml	2026-04-16 18:29:38.661850697 -0400
+          @@ -103,7 +103,7 @@
+             <delegate decode="ppt" command="&apos;libreoffice&apos; --convert-to pdf --outdir `dirname &apos;%i&apos;` &apos;%i&apos; 2&gt; &apos;%u&apos;; /bin/mv &apos;%i.pdf&apos; &apos;%o&apos;"/>
+             <delegate decode="pptx" command="&apos;libreoffice&apos; --convert-to pdf --outdir `dirname &apos;%i&apos;` &apos;%i&apos; 2&gt; &apos;%u&apos;; /bin/mv &apos;%i.pdf&apos; &apos;%o&apos;"/>
+             <delegate decode="ps" encode="prt" command="&apos;lpr&apos; &apos;%i&apos;"/>
+          -  <delegate decode="ps:alpha" stealth="True" command="&apos;gs&apos; -sstdout=%%stderr -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &apos;-sDEVICE=png16malpha&apos; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &apos;-r%s&apos; %s &apos;-sOutputFile=%s&apos; &apos;-f%s&apos; &apos;-f%s&apos;"/>
+          +  <delegate decode="ps:alpha" stealth="True" command="&apos;gs&apos; -sstdout=%%stderr -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 -dALLOWPSTRANSPARENCY &apos;-sDEVICE=png16malpha&apos; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &apos;-r%s&apos; %s &apos;-sOutputFile=%s&apos; &apos;-f%s&apos; &apos;-f%s&apos;"/>
+             <delegate decode="ps:cmyk" stealth="True" command="&apos;gs&apos; -sstdout=%%stderr -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &apos;-sDEVICE=pamcmyk32&apos; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &apos;-r%s&apos; %s &apos;-sOutputFile=%s&apos; &apos;-f%s&apos; &apos;-f%s&apos;"/>
+             <delegate decode="ps:color" stealth="True" command="&apos;gs&apos; -sstdout=%%stderr -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &apos;-sDEVICE=png16m&apos; -dTextAlphaBits=%u -dGraphicsAlphaBits=%u &apos;-r%s&apos; %s &apos;-sOutputFile=%s&apos; &apos;-f%s&apos; &apos;-f%s&apos;"/>
+             <delegate decode="ps" encode="eps" mode="bi" command="&apos;gs&apos; -sstdout=%%stderr -dQUIET -dSAFER -dBATCH -dNOPAUSE -dNOPROMPT -dMaxBitmap=500000000 -dAlignToPixels=0 -dGridFitTT=2 &apos;-sDEVICE=eps2write&apos; &apos;-sOutputFile=%o&apos; &apos;-f%i&apos;"/>
+          PATCH
         COMMAND: >-
           TMP=$$( mktemp -u '/home/www-data/asyXXXXXX' ) &&
           /usr/bin/asy -q -inlineimage -webgl2 -f "$$output" -o "$$TMP" - &&
@@ -691,7 +765,7 @@ services:
           http://beta.plantuml.net/plantuml-jlatexmath.zip
         COMMAND: java -jar /usr/share/java/plantuml.jar -tsvg -charset UTF-8 -p -theme "$$theme"
         CONTENT_TYPE: text/svg
-        VERSION_COMMAND: java -jar /usr/share/java/plantuml.jar -version | sed '/^\s*$/d' | head -n-1
+        VERSION_COMMAND: java -jar /usr/share/java/plantuml.jar -version | sed '/^\s*$$/d' | head -n-1
     environment:
       LOG4J_FORMAT_MSG_NO_LOOKUPS: true
     restart: unless-stopped
@@ -718,7 +792,7 @@ services:
         BUILD_COMMAND: >-
           cd src &&
           sed -i 's/CC = gcc/CC = gcc -std=gnu17/' Makefile &&
-          make -j$(( $( nproc --all ) * 2 )) && make install
+          make -j$$(( $$( nproc --all ) * 2 )) && make install
         WGET: https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
         COMMAND: >-
           /usr/local/bin/pl -stdin -outlabel "$$title" -tightcrop -textsize "$$fontsize" -font 'FreeSans'
@@ -755,7 +829,7 @@ services:
         BUILD_COMMAND: >-
           cd src &&
           sed -i 's/CC = gcc/CC = gcc -std=gnu17/' Makefile &&
-          make -j$(( $( nproc --all ) * 2 )) && make install
+          make -j$$(( $$( nproc --all ) * 2 )) && make install
         WGET: >-
           https://github.com/alex-mashin/svg_mouseover_js/archive/refs/heads/master.zip
           https://raw.githubusercontent.com/wikimedia/mediawiki-extensions-timeline/master/scripts/EasyTimeline.pl
@@ -1043,6 +1117,8 @@ services:
 
 
 volumes:
+  # Path to a folder that may contain watermark.* for a wiki project.
+  logos_wikiproject:
   # Databases:
   mongodb:
   mssqlserver:
@@ -1092,6 +1168,7 @@ secrets:
 # $wgExternalDataSource['...']['url'] and $wgExternalDataSource['...']['version url'].
 networks:
   # ...
+  converter:
   mongodb:
   mssqlserver:
   postgresql:

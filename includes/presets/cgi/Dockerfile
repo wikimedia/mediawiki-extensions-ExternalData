@@ -10,7 +10,7 @@ ARG APK_CDN=https://dl-cdn.alpinelinux.org/alpine
 ARG ALPINE=latest
 ARG APK=
 RUN set -eux && \
-	echo '@testing $APK_CDN/edge/testing' >> /etc/apk/repositories && \
+	echo "@testing $APK_CDN/edge/testing" >> /etc/apk/repositories && \
 	if [ "$ALPINE" = 'edge' ]; then \
 		APK_BRANCH='edge'; \
 	else \
@@ -184,7 +184,7 @@ RUN set -eux && \
 						make install || \
 						for FILE in ./*; do \
 							if [ -x "$FILE" ]; then \
-								cp "$FILE" "/usr/bin/"; \
+								cp -r "$FILE" "/usr/bin/"; \
 							fi; \
 						done \
 					) && ( make clean || true ); \
