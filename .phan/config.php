@@ -6,5 +6,8 @@ $cfg['suppress_issue_types'] = array_merge( $cfg['suppress_issue_types'], [
 	'PhanUndeclaredExtendedClass', // Extensions only suggested.
 	'PhanParamSuspiciousOrder', // Need this.
 	'PhanUnusedVariableCaughtException', // requires pure php8+, MW 1.42
+	// Phan can be run on installations with different optional dependencies installed;
+	// therefore PhanUndeclaredClassMethod is sometimes used and sometimes not.
+	'UnusedPluginSuppression'
 ] );
 return $cfg;

@@ -43,7 +43,7 @@ trait EDConnectorCached {
 	 * @param int $seconds Cache for so many seconds.
 	 * @param bool $stale Allow using stale cache.
 	 */
-	private function setupCache( $seconds, $stale ) {
+	private function setupCache( int $seconds, bool $stale ) {
 		// Take into account the obsolete setting $edgCacheTable.
 		$cache_table = self::setting( 'CacheTable' ) ?: 'ed_url_cache';
 		self::$cacheSize = self::setting( 'CacheSize' ) ?: 0;
@@ -118,7 +118,7 @@ trait EDConnectorCached {
 	 * @param string $key The key to hash.
 	 * @return string The hashed key.
 	 */
-	private static function hash( $key ) {
+	private static function hash( string $key ): string {
 		return strlen( $key ) > 254 ? hash( 'fnv1a64', $key ) : $key;
 	}
 
@@ -129,7 +129,7 @@ trait EDConnectorCached {
 	 * @param string $key Cache key.
 	 * @return string|null The cached value; null if none.
 	 */
-	private function cached( $key ) {
+	private function cached( string $key ): ?string {
 		// Check the cache (only the first 254 chars of the url).
 		$row = self::$replicaDB->selectRow(
 			self::$cacheTable,

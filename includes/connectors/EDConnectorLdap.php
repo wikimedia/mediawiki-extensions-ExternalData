@@ -168,7 +168,7 @@ class EDConnectorLdap extends EDConnectorBase {
 		self::throwWarnings();
 		try {
 			$sr = ldap_search( $this->connection, $this->baseDn, $this->filter, array_values( $this->mappings() ) );
-		} catch ( MWException $e ) {
+		} catch ( Exception $e ) {
 			return $e->getMessage();
 		} finally {
 			self::stopThrowingWarnings();
