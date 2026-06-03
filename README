@@ -1,6 +1,6 @@
 External Data extension
 
-        Version 3.6
+        Version 3.6.1
         Yaron Koren, Alexander Mashin and (many) others
 
 This is free software licensed under the GNU General Public License. Please
@@ -29,6 +29,8 @@ The extension defines the following parser functions:
 * `#get_inline_data` - parses the passed text without connecting to any external
   services
 * `#get_external_data` - can do all of the above
+
+The following parser functions are also defined, but deprecated:
 * `#external_value` - displays the value of any retrieved variable, or the first
   value if it's an array
 * `#for_external_table` - applies processing onto multiple rows retrieved by any
@@ -52,10 +54,6 @@ external variables `__json` or `__xml` are used) row-based tables of values:
 Additionally, the extension allows wiki admins to define their own tags for
 programs set up to run in tag  emulation mode, which handle both the
 retrieval and display of data.
-
-The extension defines a special page, 'GetData', which exports selected
-rows from a wiki page that holds CSV data, in a format that is readable by
-#get_web_data.
 
 For more information, see the extension homepage at:
 https://www.mediawiki.org/wiki/Extension:External_Data
