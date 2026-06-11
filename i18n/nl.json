@@ -21,7 +21,7 @@
 	"externaldata-ldap-unable-to-bind": "Met de gebruikersnaam en het wachtwoord die zijn ingesteld voor het LDAP-domein $1 is de binding aan dit domein niet mogelijk.",
 	"externaldata-ldap-base-dn-not-defined": "Basis-DN niet ingesteld voor LDAP-domein $1.",
 	"externaldata-xml-error": "XML-fout: $1 op regel $2",
-	"externaldata-web-invalid-format": "Ongeldige indeling: \"$1\"",
+	"externaldata-web-invalid-format": "Incorrecte indeling: \"$1\"",
 	"externaldata-invalid-format": "Fout: ongeldige $1 ($2).",
 	"externaldata-invalid-format-explicit": "Fout: “$1” is geen geldige $2 ($3).",
 	"externaldata-db-incomplete-information": "Fout: onvolledige informatie voor de database met ID $1 ($2).",
