@@ -142,8 +142,8 @@ class EDParserXMLwithXPath extends EDParserXML {
 	 * @return array Filtered nodes,
 	 */
 	private static function filterEmptyNodes( array $nodes ): array {
-		return array_filter( $nodes, static function ( $node ) {
-			return trim( $node[0] ) !== '' || count( $node->attributes() ) > 0;
+		return array_filter( $nodes, static function ( SimpleXMLElement $node ): bool {
+			return trim( $node[0] ) !== '' || count( $node->attributes() ?? [] ) > 0;
 		} );
 	}
 
