@@ -218,8 +218,8 @@ class EDParserFunctions {
 			array_shift( $args );
 		}
 		$fetched = null;
-		if ( count( $args ) > 0 ) {
-			// Other parameters are passed; likely, the standalone mode:
+		if ( count( $args ) > 0 && EDConnectorBase::sourceSet( $args ) ) {
+			// Other parameters are passed; likely, the standalone mode.
 			$args['data'] ??= "$variable=$variable";
 			$title = method_exists( 'Parser', 'getPage' ) ? $parser->getPage() : $parser->getTitle();
 			$fetched = self::emulateGetExternalData( $args, $title );
