@@ -90,7 +90,8 @@ trait EDConnectorThrottled {
 	 * @param float $when When to reparse the page.
 	 */
 	private function planPurge( $when ) {
-		$queue_group = MediaWikiServices::getInstance()->getJobQueueGroup();
+		$services = MediaWikiServices::getInstance();
+		$queue_group = $services->getJobQueueGroup();
 		$params = [
 			'title' => $this->title->getText(),
 			'namespace' => $this->title->getNamespace(),
@@ -103,6 +104,6 @@ trait EDConnectorThrottled {
 				break;
 			}
 		}
-		$queue_group->lazyPush( Job::factory( 'edReparse', $params ) );
+		$queue_group->lazyPush( $services->getJobFactory()->newJob( 'edReparse', $params ) );
 	}
 }
