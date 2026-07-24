@@ -302,7 +302,7 @@ class EDConnectorMongodb extends EDConnectorComposed {
 			foreach ( $this->columns as $column ) {
 				$external = array_search( $column, $aliases ) ?: $column;
 				$values[$column] ??= [];
-				if ( strstr( $external, "." ) ) {
+				if ( str_contains( $external, '.' ) ) {
 					// If the exact path of the value was
 					// specified using dots (e.g., "a.b.c"),
 					// get the value that way.

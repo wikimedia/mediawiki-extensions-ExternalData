@@ -32,12 +32,14 @@ class EDConnectorDirectory extends EDConnectorPath {
 		// Parameters specific to {{#get_file_data:}} / mw.ext.externalData.getFileData.
 		$this->directory = $args[self::ID_PARAM] ?? null;
 		if ( isset( $args['path'] ) ) {
-			if ( is_dir( $args['path'] ) || substr( $args['path'], 0, 7 ) === 'phar://' ) {
+			if ( is_dir( $args['path'] ) || str_starts_with( $args['path'], 'phar://' ) ) {
 				$this->real_directory = $args['path'];
 				// Add trailing slash:
-				$final = substr( $this->real_directory, -1 );
-				$this->real_directory
-					.= $final === DIRECTORY_SEPARATOR || $final === '/' ? '' : DIRECTORY_SEPARATOR;
+				if ( !str_ends_with( $this->real_directory, DIRECTORY_SEPARATOR ) &&
+					!str_ends_with( $this->real_directory, '/' )
+				) {
+					$this->real_directory .= DIRECTORY_SEPARATOR;
+				}
 			} else {
 				// Not a directory.
 				$this->error( 'externaldata-not-a-directory', $this->directory );

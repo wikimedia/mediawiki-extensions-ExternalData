@@ -298,13 +298,11 @@ class EDParserFunctions {
 	 * Actually render the #for_external_table parser function. The "template" is passed as the first parameter.
 	 * @param array $columns
 	 * @param string $body
-	 * @param array $macros
+	 * @param array[] $macros
 	 * @return string
 	 */
 	private static function actuallyForExternalTableFirst( array $columns, string $body, array $macros ): string {
-		$num_loops = self::numLoops( $columns, array_map( static function ( $set ) {
-			return $set['var'];
-		}, $macros ) );
+		$num_loops = self::numLoops( $columns, array_column( $macros, 'var' ) );
 
 		$loops = [];
 		for ( $loop = 0; $loop < $num_loops; $loop++ ) {

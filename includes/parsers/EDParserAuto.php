@@ -25,16 +25,13 @@ class EDParserAuto extends EDParserBase {
 		parent::__construct( $params, $headers );
 
 		// Get a list of all available non-abstract EDParser* classes.
-		self::$parsers = array_filter( array_unique( array_map( static function ( array $record ) {
-			return $record[1];
-		}, self::setting( 'Parsers' ) ) ), static function ( $name ) {
+		self::$parsers = array_filter(
+			array_unique( array_column( self::setting( 'Parsers' ), 1 ) ),
 			// We don't need EDParserAuto and the parser should be available.
-			return $name !== __CLASS__ && $name::available();
-		} );
+			static fn ( $name ) => $name !== __CLASS__ && $name::available()
+		);
 		// Too successful formats will be tried last.
-		usort( self::$parsers, static function ( $a, $b ) {
-			return $a::GENERICITY <=> $b::GENERICITY;
-		} );
+		usort( self::$parsers, static fn ( $a, $b ) => $a::GENERICITY <=> $b::GENERICITY );
 
 		// We need a copy of all parameters and setting, since we don't know which we will need.
 		$this->args = $params;

@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\ExternalData\Tests\Integration;
 
-use ExtensionRegistry;
+use EDScribunto;
 use MediaWikiIntegrationTestCase;
 use ReflectionClass;
 use ReflectionException;
@@ -16,18 +16,15 @@ use ReflectionException;
  * @author Claire
  */
 class ScribuntoTest extends MediaWikiIntegrationTestCase {
-	/** @var string $class Name of the tested class. */
-	protected static $class = 'EDScribunto';
+	/** @var class-string<EDScribunto> $class Name of the tested class. */
+	protected static $class = EDScribunto::class;
 
 	/**
 	 * @stable for overriding
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-
-		if ( !ExtensionRegistry::getInstance()->isLoaded( 'Scribunto' ) ) {
-			$this->markTestSkipped( 'Extension:Scribunto is not loaded' );
-		}
+		$this->markTestSkippedIfExtensionNotLoaded( 'Scribunto' );
 	}
 
 	/**

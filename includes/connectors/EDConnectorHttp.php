@@ -201,13 +201,13 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 		}
 		if ( is_array( $allowed ) ) {
 			foreach ( $allowed as $match ) {
-				if ( strpos( $url, $match ) === 0 ) {
+				if ( str_starts_with( $url, $match ) ) {
 					return true;
 				}
 			}
 			return false;
 		} else {
-			return strpos( $url, $allowed ) === 0;
+			return str_starts_with( $url, $allowed );
 		}
 	}
 

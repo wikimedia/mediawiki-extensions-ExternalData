@@ -32,9 +32,7 @@ class EDConnectorPostgresql extends EDConnectorRdbms {
 	 * @return array
 	 */
 	private function quote( array $fields ): array {
-		return array_map( function ( $string ) {
-			return $this->database->addIdentifierQuotes( $string );
-		}, $fields );
+		return array_map( $this->database->addIdentifierQuotes( ... ), $fields );
 	}
 
 	/**
