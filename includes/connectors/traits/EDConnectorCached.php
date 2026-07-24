@@ -1,6 +1,9 @@
 <?php
 
 use MediaWiki\MediaWikiServices;
+use Wikimedia\Rdbms\IDatabase;
+use Wikimedia\Rdbms\IMaintainableDatabase;
+use Wikimedia\Rdbms\IReadableDatabase;
 
 /**
  * A trait to be used by cached connectors.
@@ -17,10 +20,8 @@ trait EDConnectorCached {
 	// Cache variables.
 	/** @var bool $cacheIsUp Is the cache set up? */
 	private static $cacheIsUp;
-	/** @var \Wikimedia\Rdbms\IDatabase $primaryDB Connection to primary database. */
-	private static $primaryDB;
-	/** @var \Wikimedia\Rdbms\IDatabase $replicaDB Connection to primary database. */
-	private static $replicaDB;
+	private static IDatabase $primaryDB;
+	private static IReadableDatabase $replicaDB;
 	/** @var string|null $cacheTable Cache table name. */
 	private static $cacheTable;
 	/** @var int Number of seconds before cache expires. */
@@ -52,11 +53,12 @@ trait EDConnectorCached {
 		$this->cacheExpires = $seconds;
 		$this->allowStaleCache = $stale;
 		if ( self::$cacheIsUp ) {
-			$lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
-			self::$primaryDB = $lb->getConnection( DB_PRIMARY );
-			self::$replicaDB = $lb->getConnection( DB_REPLICA );
-			// @phan-suppress-next-line PhanUndeclaredMethod
-			if ( !self::$replicaDB->tableExists( self::$cacheTable, __METHOD__ ) ) {
+			$dbProvider = MediaWikiServices::getInstance()->getConnectionProvider();
+			self::$primaryDB = $dbProvider->getPrimaryDatabase();
+			self::$replicaDB = $dbProvider->getReplicaDatabase();
+			if ( self::$replicaDB instanceof IMaintainableDatabase &&
+				!self::$replicaDB->tableExists( self::$cacheTable, __METHOD__ )
+			) {
 				self::$cacheIsUp = false;
 			}
 		}
