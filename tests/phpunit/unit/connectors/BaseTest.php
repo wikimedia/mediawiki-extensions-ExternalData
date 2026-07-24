@@ -10,7 +10,7 @@ use MediaWiki\Title\Title;
  * Test for the abstract class EDConnectorBase.
  *
  * @group Standalone
- * @covers EDConnectorBase
+ * @covers \EDConnectorBase
  *
  * @author Alexander Mashin
  */

@@ -10,7 +10,7 @@ use ReflectionException;
 /**
  * Test for the class EDScribunto.
  *
- * @covers EDScribunto
+ * @covers \EDScribunto
  *
  * @author Alexander Mashin
  * @author Claire

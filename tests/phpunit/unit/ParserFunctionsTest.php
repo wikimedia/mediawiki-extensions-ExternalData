@@ -12,7 +12,7 @@ require_once 'Base.php';
  *
  * @group Standalone
  * @group Database
- * @covers EDParserFunctions
+ * @covers \EDParserFunctions
  *
  * @author Alexander Mashin
  */

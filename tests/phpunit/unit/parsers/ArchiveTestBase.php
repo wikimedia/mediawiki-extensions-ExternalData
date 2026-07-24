@@ -7,7 +7,7 @@ require_once 'TestBase.php';
  * Class for the tests of EDParserArchive.
  *
  * @group Standalone
- * @covers EDParserArchive
+ * @covers \EDParserArchive
  *
  * @author Alexander Mashin
  */

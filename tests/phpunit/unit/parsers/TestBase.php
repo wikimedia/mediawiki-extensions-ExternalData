@@ -9,7 +9,7 @@ use MediaWiki\Extension\ExternalData\Tests\Unit\Base;
  * Base class for the tests of EDParser*.
  *
  * @group Standalone
- * @covers EDParserBase
+ * @covers \EDParserBase
  *
  * @author Alexander Mashin
  */
@@ -20,7 +20,7 @@ abstract class TestBase extends Base {
 	/**
 	 * Test EDParserBase::__invoke().
 	 *
-	 * @covers EDParserBase::__invoke
+	 * @covers \EDParserBase::__invoke
 	 *
 	 * @param string $text File to parse as a string.
 	 * @param array $args Relevant Parameters to a parser function.
@@ -46,7 +46,7 @@ abstract class TestBase extends Base {
 	/**
 	 * Test EDParserBase::__invoke() for parser exceptions.
 	 *
-	 * @covers EDParserBase::__invoke
+	 * @covers \EDParserBase::__invoke
 	 *
 	 * @param string $text File to parse as a string.
 	 * @param array $args Relevant Parameters to a parser function.

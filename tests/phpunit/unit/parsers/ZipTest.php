@@ -7,7 +7,7 @@ require_once 'ArchiveTestBase.php';
  * Test for the class EDParserZip.
  *
  * @group Standalone
- * @covers EDParserZip
+ * @covers \EDParserZip
  *
  * @author Alexander Mashin
  */
@@ -30,7 +30,7 @@ class ZipTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserZip::__invoke().
 	 *
-	 * @covers EDParserZip::__invoke
+	 * @covers \EDParserZip::__invoke
 	 * @dataProvider provideInvoke
 	 *
 	 * @param string $archive Archive file as a string variable.
@@ -54,7 +54,7 @@ class ZipTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserZip::__invoke() for parser exceptions.
 	 *
-	 * @covers EDParserZip::__invoke
+	 * @covers \EDParserZip::__invoke
 	 * @dataProvider provideInvokeExceptions
 	 *
 	 * @param string $archive File to parse as a string.

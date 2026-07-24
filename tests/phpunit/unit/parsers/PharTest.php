@@ -7,7 +7,7 @@ require_once 'ArchiveTestBase.php';
  * Test for the class EDParserPhar.
  *
  * @group Standalone
- * @covers EDParserPhar
+ * @covers \EDParserPhar
  *
  * @author Alexander Mashin
  */
@@ -30,7 +30,7 @@ class PharTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserPhar::__invoke().
 	 *
-	 * @covers EDParserPhar::__invoke
+	 * @covers \EDParserPhar::__invoke
 	 * @dataProvider provideInvoke
 	 *
 	 * @param string $archive Archive file as a string variable.
@@ -54,7 +54,7 @@ class PharTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserPhar::__invoke() for parser exceptions.
 	 *
-	 * @covers EDParserPhar::__invoke
+	 * @covers \EDParserPhar::__invoke
 	 * @dataProvider provideInvokeExceptions
 	 *
 	 * @param string $archive File to parse as a string.

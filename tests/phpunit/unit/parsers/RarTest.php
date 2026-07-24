@@ -7,7 +7,7 @@ require_once 'ArchiveTestBase.php';
  * Test for the class EDParserRar.
  *
  * @group Standalone
- * @covers EDParserRar
+ * @covers \EDParserRar
  *
  * @author Alexander Mashin
  */
@@ -30,7 +30,7 @@ class RarTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserRar::__invoke().
 	 *
-	 * @covers EDParserRar::__invoke
+	 * @covers \EDParserRar::__invoke
 	 * @dataProvider provideInvoke
 	 *
 	 * @param string $archive Archive file as a string variable.
@@ -54,7 +54,7 @@ class RarTest extends ArchiveTestBase {
 	/**
 	 * Test EDParserRar::__invoke() for parser exceptions.
 	 *
-	 * @covers EDParserRar::__invoke
+	 * @covers \EDParserRar::__invoke
 	 * @dataProvider provideInvokeExceptions
 	 *
 	 * @param string $archive File to parse as a string.
