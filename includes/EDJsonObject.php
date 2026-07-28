@@ -89,6 +89,7 @@ class EDJsonObject {
 	private $hasDiverged = false;
 
 	/**
+	 * Class constructor.
 	 * If $json is null the json object contained
 	 * will be initialized empty.
 	 *
