@@ -201,6 +201,23 @@ abstract class EDConnectorBase {
 	 * @return array
 	 */
 	protected static function applyWikiWideSettings( array $wiki_wide, array $supplemented ): array {
+		// Force supplemented param name to the same case as the wiki-wide param.
+		// Map for wiki-wide params: 'lowercase' => 'OriginalCase'.
+		$wiki_wide_keys = array_keys( $wiki_wide );
+		$wiki_wide_map = array_combine( array_map( 'strtolower', $wiki_wide_keys ), $wiki_wide_keys );
+		// Map for supplemented params: 'OriginalCase' => 'LowerCase'.
+		$supplemented_keys = array_keys( $supplemented );
+		$supplemented_map = array_combine( $supplemented_keys, array_map( 'strtolower', $supplemented_keys ) );
+
+		foreach ( $supplemented_map as $supplemented_original => $lower ) {
+			if (
+				isset( $wiki_wide_map[$lower] ) &&
+				( $wiki_wide_original = $wiki_wide_map[$lower] ) !== $supplemented_original
+			) {
+				$supplemented[$wiki_wide_original] = $supplemented[$supplemented_original];
+				unset( $supplemented[$supplemented_original] );
+			}
+		}
 		foreach ( $wiki_wide as $param => $value ) {
 			if ( $value !== null ) {
 				$supplemented[$param] = $value;
