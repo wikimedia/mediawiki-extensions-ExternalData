@@ -293,6 +293,12 @@
 		"CacheSize": {
 			"description": "Maximum cache size in bytes. 0 means no limit.",
 			"value": 0
+		},
+		"DisabledClasses": {
+			"description": "A list of EDConnector... and EDParser... classes that need to be removed from it to work; with reasons for disabling.",
+			"value": {
+				"EDConnectorExe": "instead of giving access to a local program, consider using web access to a containerised application (see <code>includes/presets</code> for examples)."
+			}
 		}
 	},
 	"TestAutoloadNamespaces": {

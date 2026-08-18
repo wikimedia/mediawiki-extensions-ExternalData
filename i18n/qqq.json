@@ -15,6 +15,7 @@
 		]
 	},
 	"externaldata-desc": "{{desc|name=External Data|url=https://www.mediawiki.org/wiki/Extension:External_Data}}",
+	"externaldata-disabled": "The error message shown, is a class in $wgExternalDataDisabledClasses, is chosen either as a connector, or as a parser.\n$1 is the class name,\n$2 is the message with reasons for disabling from the same variable.",
 	"externaldata-no-param-specified": "The error message if a parameter to some parser function is not set. Parameters:\n* $1 - parameter name. any one of the following: <code>url</code>, <code>data</code>, <code>filter</code>, <code>domain</code>, <code>db</code>, <code>from</code>",
 	"externaldata-param-type-error": "The error message if a parameter of a wrong type has been passed. Parameters:/n* $1 is the parameter name,\n* $2 is the expected type, i.e. integer.",
 	"externaldata-processing-exception": "The error message shown if one of the preprocessors or postprocessors defined for the data source threw an exception. $1 contains exception details",

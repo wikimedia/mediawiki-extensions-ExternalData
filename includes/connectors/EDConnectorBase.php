@@ -77,6 +77,14 @@ abstract class EDConnectorBase {
 	 * @param Title $title A Title object.
 	 */
 	protected function __construct( array &$args, Title $title ) {
+		// Check for deprecation.
+		global $wgExternalDataDisabledClasses;
+		$class = static::class;
+		$reason = $wgExternalDataDisabledClasses[$class] ?? null;
+		if ( $reason ) {
+			$this->error( 'externaldata-disabled', $class, $reason );
+		}
+
 		// Bring keys to lowercase:
 		$args = self::paramToArray( $args, true );
 

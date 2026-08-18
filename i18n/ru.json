@@ -12,6 +12,7 @@
 		]
 	},
 	"externaldata-desc": "Позволяет получать структурированные данные с внешних адресов, баз данных и других источников",
+	"externaldata-disabled": "Класс <code>$1</code> устарел: $2. Чтобы использовать <code>$1</code>, несмотря на это, администратору вики следует убрать ключ <code>$1</code> из переменной <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "Не указан параметр «$1».",
 	"externaldata-param-type-error": "Параметр $1 должен быть типа $2.",
 	"externaldata-processing-exception": "Во время исполнения пре- или постпроцессора было выброшено исключение: $1",

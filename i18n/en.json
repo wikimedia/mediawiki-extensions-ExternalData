@@ -5,6 +5,7 @@
 		]
 	},
 	"externaldata-desc": "Allows for retrieving structured data from external URLs, databases and other sources",
+	"externaldata-disabled": "The class <code>$1</code> is disabled: $2. To enable it, a wiki administrator will have to remove this class from the <code>$wgExternalDataDisabledClasses</code> configuration setting.",
 	"externaldata-no-param-specified": "Error: No \"$1\" parameter specified.",
 	"externaldata-param-type-error": "Error: Parameter $1 must be of the type $2.",
 	"externaldata-processing-exception": "An exception was thrown while running preprocessor or postprocessor: $1",
