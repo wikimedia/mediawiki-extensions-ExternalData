@@ -44,6 +44,8 @@ class EDScribunto extends LibraryBase {
 	 * @return array Depending on success, [ 'values' => [values]/null, 'errors' => null/[error messages] ].
 	 */
 	private static function fetch( $func, array $arguments, Title $title ): array {
+		// Unlike parser functions, parameter names are not trimmed automatically. Doing it now.
+		$arguments = array_combine( array_map( 'trim', array_keys( $arguments ) ), array_values( $arguments ) );
 		$connector = EDConnectorBase::getConnector( $func, $arguments, $title );
 
 		$values = null;
