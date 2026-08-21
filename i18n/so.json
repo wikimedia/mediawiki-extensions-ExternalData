@@ -5,6 +5,7 @@
 		]
 	},
 	"externaldata-desc": "Waxay oggolaanaysaa in laga soo saaro xog qaabaysan ilo dibadda ah sida URL-yada, xog ururin iyo ilo kale",
+	"externaldata-disabled": "Fasalka <code>$1</code> waa naafo: $2. Si loo hawlgeliyo, maamulaha wiki-ga waa inuu fasalkan ka saaraa dejinta qaabaynta <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "Cilad: Lama sheegin cabbirka \"$1\".",
 	"externaldata-param-type-error": "Cilad: Cabbirka $1 waa inuu noqdaa nooca $2.",
 	"externaldata-processing-exception": "Waxaa dhacay khalad marka la fulinayay hor-processor ama postprocessor: $1",

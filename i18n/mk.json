@@ -5,6 +5,7 @@
 		]
 	},
 	"externaldata-desc": "Овозможува добивање структурирани податоци од надворешни URL-адреси, бази на податоци и други извори",
+	"externaldata-disabled": "Класата <code>$1</code> е оневозможена: $2. За да ја овозможите ќе треба администратор да ја отстрани оваа класа од поставката <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "Грешка: Го немате укажано параметарот „$1“.",
 	"externaldata-param-type-error": "Грешка: Параметарот $1 мора да биде од видот $2.",
 	"externaldata-processing-exception": "Се јави исклучок при работата на предобработувачот или пообработувачот: $1",

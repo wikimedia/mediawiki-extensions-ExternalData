@@ -13,6 +13,7 @@
 		]
 	},
 	"externaldata-desc": "Ermöglicht das Abrufen strukturierter Daten von externen URLs, Datenbanken und anderen Quellen",
+	"externaldata-disabled": "Die Klasse <code>$1</code> ist deaktiviert: $2. Um sie zu aktivieren, muss ein Wiki-Administrator diese Klasse aus der Konfigurationseinstellung <code>$wgExternalDataDisabledClasses</code> entfernen.",
 	"externaldata-no-param-specified": "Fehler: Kein Parameter „$1“ angegeben.",
 	"externaldata-param-type-error": "Fehler: Parameter $1 muss vom Typ $2 sein.",
 	"externaldata-processing-exception": "Beim Ausführen des Präprozessors oder Postprozessors ist eine Ausnahme aufgetreten: $1",

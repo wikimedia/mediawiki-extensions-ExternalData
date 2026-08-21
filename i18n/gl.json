@@ -6,6 +6,7 @@
 		]
 	},
 	"externaldata-desc": "Permite a recuperación de datos estruturados a partir de enderezos URL externos, bases de datos e outras fontes",
+	"externaldata-disabled": "A clase <code>$1</code> está desactivada: $2. Para activala, unha persoa da administración do wiki terá que eliminar esta clase da configuración <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "Erro: Non se especificou o parámetro «$1».",
 	"externaldata-param-type-error": "Erro: O parámetro «$1» debe ser de tipo «$2».",
 	"externaldata-processing-exception": "Produciuse unha excepción ao executar o preprocesador ou o posprocesador: $1",
