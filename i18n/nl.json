@@ -10,6 +10,7 @@
 		]
 	},
 	"externaldata-desc": "Maakt het mogelijk gegevens van externe URL's, database en andere externe bronnen op te halen",
+	"externaldata-disabled": "De klasse <code>$1</code> is uitgeschakeld: $2. Om deze in te schakelen, moet een wikibeheerder deze klasse verwijderen uit de configuratie-instelling <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "Fout: er is geen parameter \"$1\" opgegeven.",
 	"externaldata-param-type-error": "Fout: Parameter $1 moet van het type $2 zijn.",
 	"externaldata-processing-exception": "Er is een fout opgetreden tijdens de voor- of naverwerking: $1",
