@@ -21,5 +21,6 @@
 	"externaldata-mongodb-unknown-collection": "Feeler:Onbekannte MongoDB Sammlung $1.",
 	"externaldata-undefined-file": "De Fichier $1 ass net definéiert.",
 	"externaldata-missing-file": "De Fichier $1 feelt.",
+	"externaldata-illegal-parameter": "Feeler: De Parameter $1 huet den onzouléissege Wäert $2.",
 	"externaldata-no-template": "Feeler: keng Schabloun spezifizéiert,"
 }
