@@ -12,6 +12,7 @@
 		]
 	},
 	"externaldata-desc": "외부 URL, 데이터베이스 및 다른 출처에서 구조화된 데이터를 가져올 수 있게 하기",
+	"externaldata-disabled": "<code>$1</code> 클래스가 비활성화되어 있습니다: $2. 이를 활성화하려면 위키 관리자가 <code>$wgExternalDataDisabledClasses</code> 구성 설정에서 이 클래스를 제거해야 합니다.",
 	"externaldata-no-param-specified": "오류: 지정된 \"$1\" 매개변수가 없습니다.",
 	"externaldata-param-type-error": "오류: $1 매개변수는 $2 유형에 속해야 합니다.",
 	"externaldata-processing-exception": "전처리 또는 후처리 실행 중 예외가 발생했습니다: $1",
