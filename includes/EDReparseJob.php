@@ -1,5 +1,5 @@
 <?php
-use MediaWiki\MediaWikiServices;
+use MediaWiki\Page\WikiPageFactory;
 
 /**
  * A job that reparses a wiki page, if time is come.
@@ -10,8 +10,13 @@ class EDReparseJob extends Job {
 	/**
 	 * @param string $command Command string
 	 * @param array $params
+	 * @param WikiPageFactory $wikiPageFactory
 	 */
-	public function __construct( $command, array $params ) {
+	public function __construct(
+		$command,
+		array $params,
+		private readonly WikiPageFactory $wikiPageFactory,
+	) {
 		parent::__construct( $command, $params );
 		$this->removeDuplicates = true;
 	}
@@ -26,8 +31,7 @@ class EDReparseJob extends Job {
 		$now = (int)ceil( microtime( true ) );
 		$title = $this->getTitle();
 		if ( $ready <= $now && $title ) {
-			$success = MediaWikiServices::getInstance()->getWikiPageFactory()
-				->newFromTitle( $title )->doPurge();
+			$success = $this->wikiPageFactory->newFromTitle( $title )->doPurge();
 		} else {
 			// This should only be executed, if the job queue does not support delayed jobs.
 			// All we can do in this situation is to purge caches.

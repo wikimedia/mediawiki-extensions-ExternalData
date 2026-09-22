@@ -107,7 +107,14 @@
 		"SoftwareInfo": "main",
 		"LoadExtensionSchemaUpdates": "schema"
 	},
-	"JobClasses": { "edReparse": "EDReparseJob" },
+	"JobClasses": {
+		"edReparse": {
+			"class": "EDReparseJob",
+			"services": [
+				"WikiPageFactory"
+			]
+		}
+	},
 	"callback": "ExternalData\\Hooks::onRegistration",
 	"config_prefix": "wgExternalData",
 	"config": {
