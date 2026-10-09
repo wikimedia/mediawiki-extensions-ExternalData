@@ -12,6 +12,7 @@
 		]
 	},
 	"externaldata-desc": "يسمح باسترجاع البيانات الهيكلية من مسارات خارجية، قواعد البيانات ومصادر أخرى",
+	"externaldata-disabled": "الفئة <code>$1</code> معطلة: $2. لتفعيلها، يتعين على أحد مديري الويكي إزالة هذه الفئة من إعداد التكوين <code>$wgExternalDataDisabledClasses</code>.",
 	"externaldata-no-param-specified": "خطأ: لم يتم تحديد وسيط \"$1\".",
 	"externaldata-param-type-error": "خطأ: يجب أن تكون المعلمة $1 من النوع $2 .",
 	"externaldata-processing-exception": "تم طرح استثناء أثناء تشغيل المعالج المسبق أو المعالج اللاحق: $1",
