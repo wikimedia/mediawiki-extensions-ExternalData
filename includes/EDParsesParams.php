@@ -95,7 +95,7 @@ trait EDParsesParams {
 			}
 			// This works only with integrated connectors.
 			if ( $value === null ) {
-				if ( $parameter_present && $params[$key] !== null ) {
+				if ( $parameter_present && $params[$key] !== null && $key !== '__pf' ) {
 					return false;
 				}
 				continue;

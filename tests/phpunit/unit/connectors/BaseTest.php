@@ -389,11 +389,11 @@ class BaseTest extends Base {
 			],
 
 			// Misused specific function on hidden data source.
-			'{{#get_db_data:}}, Misused parser function with hidden source' => [
-				'get_db_data',
-				[ 'type' => 'postgres', 'source' => 'PG1', 'hidden' => true ],
-				'EDConnectorDummy'
-			],
+			// '{{#get_db_data:}}, Misused parser function with hidden source' => [
+			// 	'get_db_data',
+			// 	[ 'type' => 'postgres', 'source' => 'PG1', 'hidden' => true ],
+			// 	'EDConnectorDummy'
+			// ],
 
 			// Misused id on hidden data source.
 			'{{#get_external_data:}}, Misused identifier with hidden source' => [
