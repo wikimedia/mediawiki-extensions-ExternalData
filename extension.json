@@ -294,8 +294,8 @@
 			]
 		},
 		"AllowGetters": {
-			"description": "Drop all {{#get_*_data:}} functions and all mw.ext.getExternalData.get*Data() except mw.ext.getExternalData.getExternalData()",
-			"value": true
+			"description": "Enable the source-specific {{#get_*_data:}} parser functions and mw.ext.getExternalData.get*Data() Lua functions",
+			"value": false
 		},
 		"CacheSize": {
 			"description": "Maximum cache size in bytes. 0 means no limit.",

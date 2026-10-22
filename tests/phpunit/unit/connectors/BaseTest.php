@@ -538,7 +538,7 @@ class BaseTest extends Base {
 	public function testGetConnectorClass( string $name, array $args, string $class, ?array $source = null ) {
 		$args['format'] = 'text';
 		$args['data'] = 'text=__text';
-		self::restoreGlobals();
+		self::setGlobals( array_merge( self::$backup, [ 'wgExternalDataAllowGetters' => true ] ) );
 		$mock = $this->mock( $args, true );
 		$supplemented = $mock->supplement( $args, Title::makeTitle( 0, 'Dummy' ) );
 		$supplemented = $mock->applyWikiWide( $source ?? [], $supplemented );
