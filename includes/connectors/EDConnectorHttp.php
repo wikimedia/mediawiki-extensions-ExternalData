@@ -194,10 +194,11 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 	 *
 	 * @todo Rethink.
 	 */
-	private static function isURLAllowed( string $url, $allowed ) {
+	private static function isURLAllowed( string $url, $allowed ): bool {
 		// this code is based on Parser::maybeMakeExternalImage().
 		if ( !$allowed ) {
-			return true;
+			// URL must be contained in the whitelist.
+			return false;
 		}
 		if ( is_array( $allowed ) ) {
 			foreach ( $allowed as $match ) {
@@ -207,7 +208,7 @@ abstract class EDConnectorHttp extends EDConnectorBase {
 			}
 			return false;
 		} else {
-			return str_starts_with( $url, $allowed );
+			return $allowed === '*' || str_starts_with( $url, $allowed );
 		}
 	}
 
