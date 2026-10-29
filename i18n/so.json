@@ -43,7 +43,7 @@
 	"externaldata-url-hooks-aborted": "Hook-ga '$1' waa la joojiyay, waxaana soo celiyay khaladaad: $2",
 	"externaldata-url-not-fetched": "Cilad markii xog laga soo qaadayay URL $1: $2.",
 	"externaldata-url-unknown-error": "Cilad aan la aqoon ayaa dhacday marka xog laga soo qaadayay URL $1.",
-	"externaldata-url-not-allowed": "URL $1 looma oggola wiki-kan.",
+	"externaldata-url-not-allowed": "URL $1 lagama oggola wikigan; waa inaad ku darto, ama domain-kiisa, <code>$wgExternalDataAllowedSources</code>.",
 	"externaldata-caught-exception-soap": "Waxaa la qabtay khalad $1 markii la samaynayay SOAP client.",
 	"externaldata-parsing-html-failed": "Lama falanqeyn karo HTML:\n $1",
 	"externaldata-caught-exception-parsing-html": "Waxaa la qabtay khalad marka HTML la falanqeynayay. Farriinta khaladku waa &quot;$1&quot;.",

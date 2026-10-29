@@ -51,7 +51,7 @@
 	"externaldata-url-hooks-aborted": "Der Hook „$1“ ist abgebrochen und hat Fehler zurückgegeben: $2",
 	"externaldata-url-not-fetched": "Fehler beim Abrufen von Daten von URL $1: $2.",
 	"externaldata-url-unknown-error": "Unbekannter Fehler beim Abrufen von Daten von URL $1.",
-	"externaldata-url-not-allowed": "Die URL $1 ist in diesem Wiki nicht erlaubt.",
+	"externaldata-url-not-allowed": "Die URL $1 ist in diesem Wiki nicht erlaubt; du musst diese oder deren Domain zu <code>$wgExternalDataAllowedSources</code> hinzufügen.",
 	"externaldata-caught-exception-soap": "Ausnahme $1 beim Erstellen des SOAP-Clients abgefangen.",
 	"externaldata-parsing-html-failed": "HTML konnte nicht geparst werden:\n $1",
 	"externaldata-caught-exception-parsing-html": "Ausnahme beim Parsen von HTML abgefangen. Die Fehlermeldung lautet „$1“.",

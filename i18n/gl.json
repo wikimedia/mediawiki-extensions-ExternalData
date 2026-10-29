@@ -44,7 +44,7 @@
 	"externaldata-url-hooks-aborted": "Interrompeuse o asociador «$1», que devolveu os seguintes erros: $2",
 	"externaldata-url-not-fetched": "Produciuse un erro ao obter os datos do enderezo URL «$1»: $2.",
 	"externaldata-url-unknown-error": "Produciuse un erro descoñecido ao obter datos do enderezo URL «$1».",
-	"externaldata-url-not-allowed": "O enderezo URL «$1» non está permitido neste wiki.",
+	"externaldata-url-not-allowed": "O enderezo URL «$1» non está permitido neste wiki; debes engadilo ou engadir o seu dominio a <code>$wgExternalDataAllowedSources</code>.",
 	"externaldata-caught-exception-soap": "Detectouse a excepción «$1» ao crear o cliente SOAP.",
 	"externaldata-parsing-html-failed": "Non se puido analizar o HTML:\n $1",
 	"externaldata-caught-exception-parsing-html": "Detectáronse excepcións ao analizar o HTML. A mensaxe de erro é «$1».",
