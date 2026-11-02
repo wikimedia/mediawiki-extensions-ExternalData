@@ -48,7 +48,7 @@
 	"externaldata-url-hooks-aborted": "De hook ‘$1’ is afgebroken en retourneerde fouten: $2",
 	"externaldata-url-not-fetched": "Fout bij het ophalen van gegevens van URL $1: $2.",
 	"externaldata-url-unknown-error": "Onbekende fout bij het ophalen van gegevens van URL $1.",
-	"externaldata-url-not-allowed": "URL $1 is niet toegestaan op deze wiki.",
+	"externaldata-url-not-allowed": "URL $1 is niet toegestaan op deze wiki; de URL of het bijbehorende domein moet worden toegevoegd aan <code>$wgExternalDataAllowedSources</code>.",
 	"externaldata-caught-exception-soap": "Uitzondering $1 aangetroffen tijdens het aanmaken van SOAP-client.",
 	"externaldata-parsing-html-failed": "Kon de HTML niet verwerken:\n $1",
 	"externaldata-caught-exception-parsing-html": "Er is een fout opgetreden bij het verwerken van de HTML. De foutmelding is “$1”.",
