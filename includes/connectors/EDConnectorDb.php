@@ -91,15 +91,11 @@ abstract class EDConnectorDb extends EDConnectorBase {
 	 * @param array $params Supplemented parameters.
 	 */
 	protected function setCredentials( array $params ) {
-		$this->credentials['user'] = isset( $params['user file'] ) && file_exists( $params['user file'] )
-				? trim( file_get_contents( $params['user file'] ) )
-				: $params['user' ] ?? null;
+		$this->credentials['user'] = $params['user' ] ?? null;
 		if ( $this->credentials['user'] === null ) {
-			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'user/user file' );
+			$this->error( 'externaldata-db-incomplete-information', $this->dbId, 'user' );
 		}
-		$this->credentials['password'] = isset( $params['password file'] ) && file_exists( $params['password file'] )
-			? trim( file_get_contents( $params['password file'] ) )
-			: $params['password' ] ?? null;
+		$this->credentials['password'] = $params['password' ] ?? null;
 		if ( isset( $params[ 'name' ] ) ) {
 			$this->credentials['dbname'] = $params['name'];
 		} else {

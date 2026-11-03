@@ -767,8 +767,6 @@ volumes:
 
 # Secrets should be mounted into data sources containers and MediaWiki one,
 # or otherwise be made available to MediaWiki, if it is not dockerised.
-# They are made known to MediaWiki by $wgExternalDataSources['...']['user file']
-# and $wgExternalDataSources['...']['password file'] settings.
 secrets:
   # MongoDB:
   mongodb_password:
