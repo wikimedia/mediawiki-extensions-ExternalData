@@ -99,17 +99,13 @@ class Test extends Base {
 		'postgresql' => [
 			'server' => 'postgresql',
 			'type' => 'postgres',
-			'name' => 'dvdrental',
-			'user file' => '/run/secrets/postgresql_user',
-			'password file' => '/run/secrets/postgresql_password',
+			'name' => 'dvdrental'
 		],
 		// Connection to a test PostreSQL database 'dvdrental' with prepared statements.
 		'postgresql_prepared' => [
 			'server' => 'postgresql',
 			'type' => 'postgres',
 			'name' => 'dvdrental',
-			'user file' => '/run/secrets/postgresql_user',
-			'password file' => '/run/secrets/postgresql_password',
 			'prepared' => <<<'POSTGRE1'
 				SELECT title, description, length FROM film WHERE length < $1 ORDER BY length DESC LIMIT 25;
 			POSTGRE1
@@ -120,8 +116,6 @@ class Test extends Base {
 			'server' => 'mssqlserver,1433',
 			'type' => 'odbc',
 			'name' => 'Northwind',
-			'user file' => '/run/secrets/mssqlserver_user',
-			'password file' => '/run/secrets/mssqlserver_password',
 			'trust server certificate' => true
 		],
 		// Connection to MSSQL 'Northwind' DB with running in the container 'mssqlserver' with prepared statements.
@@ -130,8 +124,6 @@ class Test extends Base {
 			'server' => 'mssqlserver,1433',
 			'type' => 'odbc',
 			'name' => 'Northwind',
-			'user file' => '/run/secrets/mssqlserver_user',
-			'password file' => '/run/secrets/mssqlserver_password',
 			'trust server certificate' => true,
 			'prepared' => <<<'ODBC'
 				SELECT TOP 10 TitleOfCourtesy, FirstName, LastName, Title, City, COUNT(OrderID) AS NoOrders
@@ -146,8 +138,7 @@ class Test extends Base {
 			'type' => 'mongodb',
 			'name' => 'test',
 			'server' => 'mongodb:27017',
-			'user' => 'wikiuser',
-			'password file' => '/run/secrets/mongodb_password'
+			'user' => 'wikiuser'
 		],
 		'file' => [
 			'path' => __DIR__ . '/../../extension.json'
@@ -165,7 +156,7 @@ class Test extends Base {
 	 */
 	public static function sources( $mode = null ): array {
 		global $wgDBserver, $wgDBname, $wgDBuser, $wgDBpassword;
-		return self::SOURCES + [
+		$sources = self::SOURCES + [
 			// An example data source giving access to MW database with prepared statements.
 			'local' => [
 				'server' => $wgDBserver,
@@ -211,5 +202,18 @@ class Test extends Base {
 				]
 			]
 		];
+		foreach ( [ 'postgresql', 'mssqlserver', 'mongodb' ] as $secret ) {
+			foreach ( [ 'user', 'password' ] as $credential ) {
+				$file = "/run/secrets/{$secret}_{$credential}";
+				if ( file_exists( $file ) ) {
+					foreach ( [ $secret, "{$secret}_prepared" ] as $source ) {
+						if ( isset( $sources[$source] ) ) {
+							$sources[$source][$credential] ??= trim( file_get_contents( $file ) );
+						}
+					}
+				}
+			}
+		}
+		return $sources;
 	}
 }
