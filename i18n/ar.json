@@ -50,7 +50,7 @@
 	"externaldata-url-hooks-aborted": "تم إحباط الخطاف ' $1 ' ، وعرض الأخطاء: $2",
 	"externaldata-url-not-fetched": "خطأ أثناء جلب البيانات من URL $1 : $2 .",
 	"externaldata-url-unknown-error": "خطأ غير معروف أثناء جلب البيانات من URL $1 .",
-	"externaldata-url-not-allowed": "URL $1 غير مسموح به في هذا الويكي.",
+	"externaldata-url-not-allowed": "لا يُسمح باستخدام عنوان URL $1 في هذه الويكي؛ يجب عليك إضافته، أو نطاقه، إلى <code>$wgExternalDataAllowedSources</code> .",
 	"externaldata-caught-exception-soap": "تم اكتشاف استثناء $1 أثناء إنشاء عميل SOAP.",
 	"externaldata-parsing-html-failed": "لم نتمكن من تحليل HTML:\n $1",
 	"externaldata-caught-exception-parsing-html": "تم اكتشاف استثناء أثناء تحليل HTML. رسالة الخطأ هي \" $1 \".",

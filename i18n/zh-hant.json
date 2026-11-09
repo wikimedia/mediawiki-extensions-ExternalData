@@ -3,6 +3,7 @@
 		"authors": [
 			"Kly",
 			"LNDDYL",
+			"LowensteinYang",
 			"SunAfterRain",
 			"Winston Sung",
 			"列维劳德"
@@ -46,7 +47,7 @@
 	"externaldata-url-hooks-aborted": "掛勾「$1」中止，回傳錯誤：$2",
 	"externaldata-url-not-fetched": "在取得來自 URL $1的資料時發生錯誤：$2。",
 	"externaldata-url-unknown-error": "在取得來自 URL $1 的資料時發生未知錯誤。",
-	"externaldata-url-not-allowed": "URL $1 在此 wiki 上不被允許。",
+	"externaldata-url-not-allowed": "此維基不允許出現URL $1；您必須將它(或它的網域)新增至 <code>$wgExternalDataAllowedSources</code>。",
 	"externaldata-caught-exception-soap": "在建立 SOAP 客戶端時捕獲到異常 $1。",
 	"externaldata-parsing-html-failed": "無法解析 HTML：\n$1",
 	"externaldata-caught-exception-parsing-html": "捕獲解析 HTML 時的例外狀況。錯誤訊息為 &quot;$1&quot;。",
