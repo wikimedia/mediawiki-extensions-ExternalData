@@ -54,7 +54,7 @@
 	"externaldata-url-hooks-aborted": "“$1”挂钩中止，返回错误：$2",
 	"externaldata-url-not-fetched": "从URL“$1”获取数据时出错：$2。",
 	"externaldata-url-unknown-error": "从URL“$1”获取数据时出现未知错误。",
-	"externaldata-url-not-allowed": "此wiki不允许URL“$1”。",
+	"externaldata-url-not-allowed": "此wiki不允许出现URL $1；您必须将其或其域名添加到<code>$wgExternalDataAllowedSources</code>。",
 	"externaldata-caught-exception-soap": "创建SOAP客户端时捕获异常$1。",
 	"externaldata-parsing-html-failed": "无法解析HTML：\n $1",
 	"externaldata-caught-exception-parsing-html": "解析HTML时捕获异常。错误消息是“$1”。",
