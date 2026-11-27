@@ -382,6 +382,13 @@ abstract class EDConnectorBase {
 		}
 		unset( $sources["load all presets"] );
 
+		// Fill up absent URL field from sources keys.
+		foreach ( $sources as $source => &$settings ) {
+			if ( !isset( $settings['url'] ) && filter_var( $source, FILTER_VALIDATE_URL ) ) {
+				$settings['url'] = $source;
+			}
+		}
+
 		self::$sources = $sources;
 	}
 
@@ -579,6 +586,21 @@ abstract class EDConnectorBase {
 		// Set default values.
 		if ( isset( $wiki_wide['params'] ) ) {
 			$supplemented = self::setDefaults( $supplemented, $wiki_wide['params'], $title );
+		}
+
+		// If the configured data source contains a URL, it is assumed to be whitelisted.
+		if ( isset( $wiki_wide['url'] ) && count( $wiki_wide['allowed urls'] ?? [] ) === 0 ) {
+			$parsed = parse_url( $wiki_wide['url'] );
+			$scheme = $parsed['scheme'] ?? 'https';
+			$host = $parsed['host'] ?? '';
+			$port = $parsed['port'] ?? null;
+			if ( $port ) {
+				$host = "$host:$port";
+			}
+			$path = $parsed['path'] ?? '';
+			if ( $host ) {
+				$wiki_wide['allowed urls'][] = "$scheme://$host$path";
+			}
 		}
 
 		// Substitute user-supplied parameters into wiki-wide, where they contain wildcards.
